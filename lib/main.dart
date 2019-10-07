@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:hatchery/manager/main_manager.dart';
+import 'package:scoped_model/scoped_model.dart';
 
+import 'configs.dart';
+import 'manager/ad_manager.dart';
+import 'test/a_model.dart';
 import 'test/counter.dart';
+import 'test/test_model.dart';
 
-void main() => runApp(MyApp());
+void main() {
+//  setupLocator();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return ScopedModel<AppManager>(
+        model: AppManager(),
+        child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(primarySwatch: Colors.blue),
+            home: ScopedModel<AdManager>(
+              model: AdManager(),
+              child: MyHomePage(title: 'Flutter Demo Home Page'),
+            )));
   }
 }
 
@@ -30,7 +43,45 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    return ScopedModel<TestModel>(
+      model: TestModel(),
+      child: _test(),
+    );
+  }
+
+  _test() {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            ScopedModelDescendant<AppManager>(
+              builder: (context, child, model) => Text("app=${model.m}"),
+            ),
+            ScopedModelDescendant<AdManager>(
+              builder: (context, child, model) => Text("ad=${model.ad}"),
+            )
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ScopedModel.of<AppManager>(context).apptest();
+          ScopedModel.of<AdManager>(context).test();
+        },
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  _getMobx() {
+    Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
