@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home.dart';
+import 'package:hatchery/business/splash/splash_model.dart';
 import 'package:page_view_indicator/page_view_indicator.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../configs.dart';
@@ -14,7 +16,13 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _splashPage("images/welcome.png", "test", context);
+    return ScopedModel(
+      model: SplashModel(),
+      child: ScopedModelDescendant<SplashModel>(
+        builder: (context, child, model) =>
+            _splashPage(model.splashUrl, model.splashTip, context),
+      ),
+    );
   }
 
   void _gotoHomePage(BuildContext context) => Navigator.pushReplacement(
@@ -31,7 +39,7 @@ class SplashPage extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: ExactAssetImage('images/welcome.png'), fit: BoxFit.cover),
+            image: ExactAssetImage(image), fit: BoxFit.cover),
       ),
     );
   }

@@ -16,3 +16,5 @@ void setupLocator() {
   locator.registerFactory<TestModel>(() => TestModel());
   locator.registerFactory<AppManager>(() => AppManager());
 }
+
+const APP_TITLE = "泰达希尔";
