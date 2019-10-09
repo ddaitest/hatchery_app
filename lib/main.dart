@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hatchery/manager/main_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import 'business/splash/splash.dart';
 import 'configs.dart';
 import 'manager/ad_manager.dart';
 import 'test/a_model.dart';
@@ -10,7 +11,6 @@ import 'test/counter.dart';
 import 'test/test_model.dart';
 
 void main() {
-//  setupLocator();
   runApp(MyApp());
 }
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(primarySwatch: Colors.blue),
             home: ScopedModel<AdManager>(
               model: AdManager(),
-              child: MyHomePage(title: 'Flutter Demo Home Page'),
+              child: SplashPage(),
             )));
   }
 }

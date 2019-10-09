@@ -5,12 +5,20 @@ class AppManager extends Model {
 
   int get m => _m;
 
-  void apptest(){
+  void apptest() {
     _m++;
     notifyListeners();
   }
 
-  AppManager() {
+//  AppManager() {
+//    print("MainManager init $hashCode");
+//  }
+
+  static final AppManager _instance = AppManager._create();
+
+  factory AppManager() => _instance;
+
+  AppManager._create() {
     print("MainManager init $hashCode");
   }
 }
