@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/theme.dart';
 import 'package:hatchery/common/widget/page_title.dart';
+import 'package:hatchery/test/test_page.dart';
 
 import '../../configs.dart';
+import 'first_page.dart';
 
 class HomePage extends StatefulWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -47,25 +49,7 @@ class HomeState extends State<HomePage>
       key: _scaffoldKey,
       titleAlign: TextAlign.center,
       leading: Container(),
-//      leading: Builder(builder: (BuildContext context) {
-//        return IconButton(
-//          color: colorPrimary,
-//          icon: Icon(Icons.list),
-//          iconSize: 35,
-//          onPressed: () => Scaffold.of(context).openDrawer(),
-//        );
-//      }),
       body: _getBody(),
-//        floatingActionButton: FloatingActionButton.extended(
-//          elevation: 4.0,
-//          backgroundColor: colorPrimary,
-//          icon: const Icon(Icons.add),
-//          label: const Text('发布'),
-//          onPressed: () {
-//            _gotoPublish();
-//          },
-//        ),
-//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         notchMargin: 4.0,
@@ -84,9 +68,9 @@ class HomeState extends State<HomePage>
   _getBody() {
     return TabBarView(
       children: <Widget>[
-        TEST ? Container() : Container(),
-        Container(),
-        Container(),
+        TestPage(info: "TestPage"),
+        SecondPage(),
+        ThirdPage(),
       ],
       controller: controller,
     );
