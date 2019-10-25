@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/theme.dart';
 import 'package:hatchery/common/widget/page_title.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/test/test_page.dart';
 
-import '../../configs.dart';
 import 'first_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -45,7 +45,7 @@ class HomeState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     return getMyScaffold(
-      APP_TITLE,
+      Flavors.strings.title,
       key: _scaffoldKey,
       titleAlign: TextAlign.center,
       leading: Container(),

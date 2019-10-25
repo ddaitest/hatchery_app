@@ -1,6 +1,6 @@
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/material.dart';
 
-class AppManager extends Model {
+class AppManager extends ChangeNotifier {
   int _m = 0;
 
   int get m => _m;
@@ -9,10 +9,6 @@ class AppManager extends Model {
     _m++;
     notifyListeners();
   }
-
-//  AppManager() {
-//    print("MainManager init $hashCode");
-//  }
 
   static final AppManager _instance = AppManager._create();
 

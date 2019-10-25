@@ -1,6 +1,7 @@
-import 'package:scoped_model/scoped_model.dart';
 
-class AdManager extends Model {
+import 'package:flutter/foundation.dart';
+
+class AdManager extends ChangeNotifier {
   int _ad = 0;
 
   int get ad => _ad;

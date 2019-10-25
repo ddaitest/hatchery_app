@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/theme.dart';
-import 'package:hatchery/common/widget/info_view.dart';
 import 'package:provider/provider.dart';
 
 class TestPage extends StatelessWidget {
