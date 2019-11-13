@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hatchery/business/home/home_page.dart';
 import 'package:hatchery/common/theme.dart';
 import 'package:hatchery/common/widget/page_title.dart';
 import 'package:hatchery/flavors/Flavors.dart';
@@ -56,8 +57,8 @@ class HomeState extends State<HomePage>
         child: TabBar(
           tabs: <Tab>[
             Tab(child: Text("首页", style: fontPhone)),
-            Tab(child: Text("周边", style: fontPhone)),
             Tab(child: Text("服务", style: fontPhone)),
+            Tab(child: Text("周边", style: fontPhone)),
           ],
           controller: controller,
         ),
@@ -68,9 +69,9 @@ class HomeState extends State<HomePage>
   _getBody() {
     return TabBarView(
       children: <Widget>[
-        TestPage(info: "TestPage"),
-        SecondPage(),
-        ThirdPage(),
+        HomeTab(),
+        HomeTab(),
+        HomeTab(),
       ],
       controller: controller,
     );
