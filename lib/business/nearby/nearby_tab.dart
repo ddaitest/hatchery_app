@@ -1,255 +1,154 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:hatchery/manager/beans.dart';
 
 class NearbyTab extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return new NearbyTabState();
-  }
+  NearbyTabState createState() => NearbyTabState();
 }
 
-class NearbyTabState extends State<NearbyTab> with AutomaticKeepAliveClientMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-
-  bool refreshing = false;
-
-//  bool loading = false;
-
-  _refreshList(Function done) {
-//    model.queryList(pageType, true, done: done);
-  }
-
-  _loadMoreList(Function done) {
-//    model.queryList(pageType, false, done: done);
-  }
-
-  Future _onRefresh() {
-    return Future(() {
-      if (!refreshing) {
-        refreshing = true;
-        print("ERROR. _onRefresh");
-        _refreshList(() {
-          refreshing = false;
-        });
-      }
-    });
-  }
-
-  _onLoadMore() {
-//    print("INFO. _onLoadMore $loading");
-//    if (!loading) {
-//      loading = true;
-//      print("ERROR. _onLoadMore");
-//      _loadMoreList(() {
-//        loading = false;
-//      });
-//    }
-  }
-
+class NearbyTabState extends State<NearbyTab> {
+  String title = "万科四季花城";
+  Color mainColor = Colors.orange[500];
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      body: getBodyView(context),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    refreshing = false;
-//    loading = false;
-//    Future.delayed(Duration.zero, () {
-//      var x = MainModel.of(context);
-//      //加载 list 数据
-//      _onRefresh();
-//      //加载 banner 数据
-//      x.queryBanner(pageType);
-//    });
-  }
-
-  getBodyView(BuildContext context) {
-    var views = <Widget>[];
-    //添加搜索
-//    var searchCondition = model.getSearchCondition(pageType);
-//    print("getBodyView searchCondition=$searchCondition");
-//    if (searchCondition != null) {
-//      views.add(getSearchView(
-//        searchCondition,
-//            () {
-//          _gotoSearch();
-//        },
-//            () {
-//          model.updateSearchCondition(pageType, null);
-//        },
-//      ));
-//    }
-    //添加列表
-    views.add(Expanded(child: _getScrollBody()));
-
-    return Container(
-      child: Column(children: views),
-      color: Colors.white,
-    );
-  }
-
-  /// View: 列表。
-  _getScrollBody() {
-//    var status = model.getPageStatus(pageType);
-//    if (status == PageDataStatus.READY) {
-    if (1 == 1) {
-      return RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: _onRefresh,
-//        child: _list(),
-        child: _scrollViewWrapper(),
-      );
-    } else {
-      return Center(child: CircularProgressIndicator());
-    }
-  }
-
-  _scrollViewWrapper() {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification scrollInfo) {
-        if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-          _onLoadMore();
-        }
-        return false;
-      },
-//      child: _list(),
-      child: _scrollView(),
-    );
-  }
-
-  Widget _scrollView() {
-    final views = <Widget>[];
-
-    //添加banner
-    List<BannerInfo> info = List<BannerInfo>();
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    if (info != null && info.length > 0) {
-      views.add(
-        SliverPersistentHeader(
-          delegate: _SliverAppBarDelegate(_getBannerView(info), 120, 120),
-          floating: false,
-          pinned: false,
-        ),
-      );
-    }
-
-    views.add(_list());
-    return CustomScrollView(
-      slivers: views,
-    );
-  }
-
-  Widget _list() {
-//    List<Article> data = model.getListData(pageType);
-//    final enablePullUp = model.getHasMore(pageType);
-    final enablePullUp = false;
-    List<Article> data = List<Article>();
-    data.add(Article(title: "AAA"));
-    data.add(Article(title: "bbb"));
-    data.add(Article(title: "ccc"));
-    data.add(Article(title: "ddd"));
-    data.add(Article(title: "eee"));
-    var size = 10;
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) => index == data.length
-          ? _getLoadMore()
-          : ListTile(
-              title: Text(data[index].title),
+    return Scaffold(
+        appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: mainColor,
+            title: Container(
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.location_on),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0),
+                    child: Text(title),
+                  )
+                ],
+              ),
             ),
-      childCount: enablePullUp ? data.length + 1 : data.length,
-    ));
-  }
-
-  _getLoadMore() {
-    return Container(
-        color: Colors.greenAccent,
-        child: FlatButton(
-          child: Text("Load More"),
-          onPressed: _onLoadMore,
+            actions: <Widget>[
+              Icon(
+                Icons.settings_overscan,
+                size: 25,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 5.0),
+                child: Icon(
+                  Icons.search,
+                  size: 25,
+                ),
+              )
+            ]),
+        body: Column(
+          children: <Widget>[
+            Container(
+              height: 80,
+              decoration: BoxDecoration(
+                color: mainColor,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _topButtons(Icons.account_balance, Colors.white, "生活缴费",
+                      Colors.black, null),
+                  _topButtons(Icons.live_help, Colors.white, "访客通行",
+                      Colors.black, null),
+                  _topButtons(
+                      Icons.android, Colors.white, "物业报事", Colors.black, null),
+                  _topButtons(
+                      Icons.language, Colors.white, "代收包裹", Colors.black, null),
+                ],
+              ),
+            ),
+            Container(
+              height: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _topButtons(Icons.account_balance, Colors.purple, "生活缴费",
+                      Colors.black, null),
+                  _topButtons(
+                      Icons.live_help, Colors.blue, "访客通行", Colors.black, null),
+                  _topButtons(
+                      Icons.android, Colors.red, "物业报事", Colors.black, null),
+                  _topButtons(
+                      Icons.language, Colors.brown, "代收包裹", Colors.black, null),
+                ],
+              ),
+            ),
+            Divider(
+              height: 2,
+              indent: 10,
+              endIndent: 10,
+              color: Colors.grey[400],
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 20),
+              width: MediaQuery.of(context).size.width - 20,
+              height: 140.0,
+              child: Swiper(
+                itemBuilder: _swiperBuilder,
+                itemCount: 3,
+                pagination: SwiperPagination(
+                  builder: DotSwiperPaginationBuilder(
+                    color: Colors.grey,
+                    activeColor: Colors.white,
+                  ),
+                ),
+                scrollDirection: Axis.horizontal,
+                autoplay: true,
+                onTap: null,
+              ),
+            ),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width - 20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "福利铺",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  GestureDetector(
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                    onTap: null,
+                  )
+                ],
+              ),
+            )
+          ],
         ));
   }
 
-
-  /// View: Banner
-  _getBannerView(List<BannerInfo> infos) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 120,
-      child: new Swiper(
-        itemBuilder: (BuildContext context, int index) {
-          return ClipRRect(
-            borderRadius: new BorderRadius.circular(8.0),
-            child: Image(
-              image: new CachedNetworkImageProvider(infos[index].image),
-              fit: BoxFit.fitWidth,
-            ),
-          );
-        },
-        itemHeight: 120,
-        itemCount: infos.length,
-        viewportFraction: 0.8,
-        scale: 0.9,
-        pagination: new SwiperPagination(),
-        control: new SwiperControl(),
-        onTap: (index) {
-          try {
-//            launchcaller(infos[index].action);
-          } catch (id) {}
-        },
+  _topButtons(IconName, IconColor, String name, nameColor, tapValue) {
+    return MaterialButton(
+      onPressed: tapValue,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            IconName,
+            size: 35,
+            color: IconColor,
+          ),
+          Text(
+            name,
+            style: TextStyle(color: nameColor, fontSize: 12),
+          ),
+        ],
       ),
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this.subView, this.minHeight, this.maxHeight);
-
-  final Widget subView;
-  final double minHeight;
-  final double maxHeight;
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new Container(
-      child: subView,
-    );
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
+  Widget _swiperBuilder(BuildContext context, int index) {
+    return (Image.network(
+      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1567166278211&di=e53f633ce2be1b59a305259121e0f905&imgtype=0&src=http%3A%2F%2Fpicapi.zhituad.com%2Fphoto%2F67%2F17%2F00FBD.jpg",
+      fit: BoxFit.fill,
+    ));
   }
 }
