@@ -53,31 +53,13 @@ class NearbyTabState extends State<NearbyTab> {
           color: Colors.grey[400],
         ),
         Container(
-          padding: const EdgeInsets.only(top: 20),
-          width: MediaQuery.of(context).size.width - 20,
-          height: 140.0,
-          child: Swiper(
-            itemBuilder: _swiperBuilder,
-            itemCount: 3,
-            pagination: SwiperPagination(
-              builder: DotSwiperPaginationBuilder(
-                color: Colors.grey,
-                activeColor: Colors.white,
-              ),
-            ),
-            scrollDirection: Axis.horizontal,
-            autoplay: true,
-            onTap: null,
-          ),
-        ),
-        Container(
           height: 50,
           width: MediaQuery.of(context).size.width - 20,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "福利铺",
+                "推荐",
                 style: TextStyle(fontSize: 20),
               ),
               GestureDetector(
