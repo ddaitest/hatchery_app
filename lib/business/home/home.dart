@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hatchery/business/home/home_page.dart';
+import 'package:hatchery/business/home/home_tab.dart';
+import 'package:hatchery/business/nearby/nearby_tab.dart';
+import 'package:hatchery/business/service/service_tab.dart';
 import 'package:hatchery/common/theme.dart';
 import 'package:hatchery/common/widget/page_title.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/test/test_page.dart';
-
-import 'first_page.dart';
 
 class HomePage extends StatefulWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -70,8 +70,8 @@ class HomeState extends State<HomePage>
     return TabBarView(
       children: <Widget>[
         HomeTab(),
-        HomeTab(),
-        HomeTab(),
+        ServiceTab(),
+        NearbyTab(),
       ],
       controller: controller,
     );
