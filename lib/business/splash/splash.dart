@@ -17,7 +17,7 @@ class SplashState extends State<SplashPage> {
   Timer _timer;
 
   //倒计时数值
-  var countdownTime = 1;
+  var countdownTime = 0;
 
   //页面初始化状态的方法
   @override
@@ -33,7 +33,7 @@ class SplashState extends State<SplashPage> {
     final call = (timer) {
       setState(() {
         print("###### $countdownTime");
-        if (countdownTime < 1) {
+        if (countdownTime <= 1) {
           _timer.cancel();
         } else {
           countdownTime -= 1;
@@ -77,11 +77,11 @@ class SplashState extends State<SplashPage> {
               right: 20.0,
               //控件透明度 0.0完全透明，1.0完全不透明
               child: Opacity(
-                opacity: 0.8,
+                opacity: 0.4,
                 child: FlatButton(
-                  color: Colors.grey,
+                  color: Colors.black,
                   colorBrightness: Brightness.dark,
-                  splashColor: Colors.grey,
+                  splashColor: Colors.black,
                   child: Text("跳过 $countdownTime"),
                   onPressed: () {
                     _gotoHomePage(context);

@@ -8,121 +8,91 @@ class NearbyTab extends StatefulWidget {
 
 class NearbyTabState extends State<NearbyTab> {
   String title = "万科四季花城";
-  Color mainColor = Colors.orange[500];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            elevation: 0.0,
-            backgroundColor: mainColor,
-            title: Container(
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.location_on),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Text(title),
-                  )
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              Icon(
-                Icons.settings_overscan,
-                size: 25,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 5.0),
-                child: Icon(
-                  Icons.search,
-                  size: 25,
-                ),
-              )
-            ]),
         body: Column(
-          children: <Widget>[
-            Container(
-              height: 80,
-              decoration: BoxDecoration(
-                color: mainColor,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _topButtons(Icons.account_balance, Colors.white, "生活缴费",
-                      Colors.black, null),
-                  _topButtons(Icons.live_help, Colors.white, "访客通行",
-                      Colors.black, null),
-                  _topButtons(
-                      Icons.android, Colors.white, "物业报事", Colors.black, null),
-                  _topButtons(
-                      Icons.language, Colors.white, "代收包裹", Colors.black, null),
-                ],
+      children: <Widget>[
+        Container(
+          height: 80,
+          decoration: BoxDecoration(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _topButtons(Icons.account_balance, Colors.black, "物业服务",
+                  Colors.black, null),
+              _topButtons(
+                  Icons.live_help, Colors.black, "家电维修", Colors.black, null),
+              _topButtons(
+                  Icons.android, Colors.black, "保姆月嫂", Colors.black, null),
+              _topButtons(
+                  Icons.language, Colors.black, "洗车", Colors.black, null),
+            ],
+          ),
+        ),
+        Container(
+          height: 80,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _topButtons(Icons.account_balance, Colors.purple, "便民服务",
+                  Colors.black, null),
+              _topButtons(
+                  Icons.live_help, Colors.blue, "房屋租售", Colors.black, null),
+              _topButtons(
+                  Icons.android, Colors.red, "各种服务", Colors.black, null),
+              _topButtons(
+                  Icons.language, Colors.brown, "其他", Colors.black, null),
+            ],
+          ),
+        ),
+        Divider(
+          height: 2,
+          indent: 10,
+          endIndent: 10,
+          color: Colors.grey[400],
+        ),
+        Container(
+          padding: const EdgeInsets.only(top: 20),
+          width: MediaQuery.of(context).size.width - 20,
+          height: 140.0,
+          child: Swiper(
+            itemBuilder: _swiperBuilder,
+            itemCount: 3,
+            pagination: SwiperPagination(
+              builder: DotSwiperPaginationBuilder(
+                color: Colors.grey,
+                activeColor: Colors.white,
               ),
             ),
-            Container(
-              height: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _topButtons(Icons.account_balance, Colors.purple, "生活缴费",
-                      Colors.black, null),
-                  _topButtons(
-                      Icons.live_help, Colors.blue, "访客通行", Colors.black, null),
-                  _topButtons(
-                      Icons.android, Colors.red, "物业报事", Colors.black, null),
-                  _topButtons(
-                      Icons.language, Colors.brown, "代收包裹", Colors.black, null),
-                ],
+            scrollDirection: Axis.horizontal,
+            autoplay: true,
+            onTap: null,
+          ),
+        ),
+        Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width - 20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "福利铺",
+                style: TextStyle(fontSize: 20),
               ),
-            ),
-            Divider(
-              height: 2,
-              indent: 10,
-              endIndent: 10,
-              color: Colors.grey[400],
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 20),
-              width: MediaQuery.of(context).size.width - 20,
-              height: 140.0,
-              child: Swiper(
-                itemBuilder: _swiperBuilder,
-                itemCount: 3,
-                pagination: SwiperPagination(
-                  builder: DotSwiperPaginationBuilder(
-                    color: Colors.grey,
-                    activeColor: Colors.white,
-                  ),
+              GestureDetector(
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 15,
                 ),
-                scrollDirection: Axis.horizontal,
-                autoplay: true,
                 onTap: null,
-              ),
-            ),
-            Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width - 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "福利铺",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  GestureDetector(
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.grey,
-                      size: 15,
-                    ),
-                    onTap: null,
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
+              )
+            ],
+          ),
+        )
+      ],
+    ));
   }
 
   _topButtons(IconName, IconColor, String name, nameColor, tapValue) {
