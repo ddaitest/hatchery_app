@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home.dart';
@@ -32,7 +31,7 @@ class SplashState extends State<SplashPage> {
     countdownTime = SPLASH_TIME;
     final call = (timer) {
       setState(() {
-        print("###### $countdownTime");
+        print("LC => countDown###### $countdownTime");
         if (countdownTime <= 1) {
           _timer.cancel();
         } else {
@@ -93,5 +92,14 @@ class SplashState extends State<SplashPage> {
         ),
       ),
     );
+  }
+
+  //跳转后销毁计时器
+  @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
   }
 }
