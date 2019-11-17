@@ -1,4 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
+import 'package:hatchery/common/api.dart';
+import 'package:hatchery/manager/beans.dart';
+import 'package:flutter/material.dart';
 
 class AppManager extends ChangeNotifier {
   int _m = 0;
@@ -29,4 +34,16 @@ class AppManager extends ChangeNotifier {
     "6": "各种服务",
     "7": "其他",
   };
+
+  ///周边数据
+  queryNearbyData() async {
+    Response response = await API.queryNearbyList();
+    final parsed = json.decode(response.data);
+    var resultCode = parsed['code'] ?? 0;
+    var resultData = parsed['result'][0]['content'];
+    if (resultCode == 200 && resultData != null) {
+//      var newData = NearbyInfo.fromJson(resultData[0]);
+      return resultData;
+    }
+  }
 }
