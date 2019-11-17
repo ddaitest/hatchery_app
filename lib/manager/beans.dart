@@ -34,12 +34,18 @@ class AdInfo {
 }
 
 class Article {
-  Article({this.id, this.title});
+  Article(
+      {this.id,
+      this.title,
+      this.thumbnail,
+      this.summary,
+      this.publishOn,
+      this.webUrl});
+
   String id;
   String webUrl;
   String title;
   String thumbnail;
-  String summary;
+  String summary = "...";
   num publishOn;
-
 }

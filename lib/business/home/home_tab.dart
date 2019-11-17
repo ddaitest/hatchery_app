@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/manager/beans.dart';
 
 class HomeTab extends StatefulWidget {
@@ -162,23 +163,35 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _list() {
+    final thumbnail =
+        "https://upload-images.jianshu.io/upload_images/10392521-682342d2186572c0.jpg-mobile?imageMogr2/auto-orient/strip|imageView2/2/w/750/format/webp";
+    final summary =
+        "前段时间一直在进行hybrid app的调优工作，主要工作集中在webview的优化。工程实践虽然离不开方法论的指导，但到了具体实施仍然千差万别。webview优化存在典型的加载时间与优化难度负相关的关系。这次调优，我们也分别从纯前端层面以及Xcode/Java层面进行双向优化的工作。相较而言，纯前端优化有更多传统、经典的方法论作为指导，效果更容易获取。而Xcode/Java层，就需要更多的借鉴和自我创新。今天这篇文章，记录下前端，既纯h5层面可以优化的部分思路。";
 //    List<Article> data = model.getListData(pageType);
 //    final enablePullUp = model.getHasMore(pageType);
     final enablePullUp = false;
     List<Article> data = List<Article>();
-    data.add(Article(title: "AAA"));
-    data.add(Article(title: "bbb"));
-    data.add(Article(title: "ccc"));
-    data.add(Article(title: "ddd"));
-    data.add(Article(title: "eee"));
+    data.add(Article(title: "AAA", thumbnail: thumbnail, summary: summary));
+    data.add(Article(title: "bbb", thumbnail: thumbnail, summary: summary));
+    data.add(Article(title: "ccc", thumbnail: thumbnail, summary: summary));
+    data.add(Article(title: "ddd", thumbnail: thumbnail, summary: summary));
+    data.add(Article(title: "eee", thumbnail: thumbnail, summary: summary));
     var size = 10;
     return SliverList(
         delegate: SliverChildBuilderDelegate(
       (BuildContext context, int index) => index == data.length
           ? _getLoadMore()
-          : ListTile(
-              title: Text(data[index].title),
-            ),
+//          : ListTile(
+//              onLongPress: () {},
+//              isThreeLine: true,
+//              subtitle: Text("AAAASDASDASDSADASDA"),
+//              title: Text(data[index].title),
+//              trailing: Icon(Icons.ac_unit),
+//              onTap: () {
+//                print("${data[index].title}");
+//              },
+//            ),
+          : ArticleItem(data[index], () {}),
       childCount: enablePullUp ? data.length + 1 : data.length,
     ));
   }
@@ -191,7 +204,6 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
           onPressed: _onLoadMore,
         ));
   }
-
 
   /// View: Banner
   _getBannerView(List<BannerInfo> infos) {
