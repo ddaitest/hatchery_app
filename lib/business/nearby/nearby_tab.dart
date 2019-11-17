@@ -17,11 +17,6 @@ class NearbyTabState extends State<NearbyTab> {
   @override
   void initState() {
     super.initState();
-    getListData();
-  }
-
-  getListData() async {
-    subjects = await AppManager().queryNearbyData();
   }
 
   @override
@@ -44,13 +39,13 @@ class NearbyTabState extends State<NearbyTab> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 _topButtons(Icons.account_balance, Colors.black,
-                    manager.NearbyTopMap["0"], Colors.black, null),
+                    manager.ServiceTopMap["0"], Colors.black, null),
                 _topButtons(Icons.live_help, Colors.black,
-                    manager.NearbyTopMap["1"], Colors.black, null),
+                    manager.ServiceTopMap["1"], Colors.black, null),
                 _topButtons(Icons.android, Colors.black,
-                    manager.NearbyTopMap["2"], Colors.black, null),
+                    manager.ServiceTopMap["2"], Colors.black, null),
                 _topButtons(Icons.language, Colors.black,
-                    manager.NearbyTopMap["3"], Colors.black, null),
+                    manager.ServiceTopMap["3"], Colors.black, null),
               ],
             ),
           ),
@@ -60,13 +55,13 @@ class NearbyTabState extends State<NearbyTab> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 _topButtons(Icons.account_balance, Colors.black,
-                    manager.NearbyTopMap["4"], Colors.black, null),
+                    manager.ServiceTopMap["4"], Colors.black, null),
                 _topButtons(Icons.live_help, Colors.black,
-                    manager.NearbyTopMap["5"], Colors.black, null),
+                    manager.ServiceTopMap["5"], Colors.black, null),
                 _topButtons(Icons.android, Colors.black,
-                    manager.NearbyTopMap["6"], Colors.black, null),
+                    manager.ServiceTopMap["6"], Colors.black, null),
                 _topButtons(Icons.language, Colors.black,
-                    manager.NearbyTopMap["7"], Colors.black, null),
+                    manager.ServiceTopMap["7"], Colors.black, null),
               ],
             ),
           ),
@@ -110,56 +105,8 @@ class NearbyTabState extends State<NearbyTab> {
               ],
             ),
           ),
-          getListViewContainer(),
         ],
       )),
-    );
-  }
-
-  getListViewContainer() {
-    if (subjects.length == 0) {
-      //loading
-      return CupertinoActivityIndicator();
-    }
-    return ListView.builder(
-        //item 的数量
-        itemCount: subjects.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              getItemContainerView(subjects[index]),
-              //下面的灰色分割线
-              Container(
-                height: 10,
-                color: Color.fromARGB(255, 234, 233, 234),
-              )
-            ],
-          );
-        });
-  }
-
-  getItemContainerView(var subject) {
-    var imgUrl = subject['images']['medium'];
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(5.0),
-      child: Row(
-        children: <Widget>[
-          getImage(imgUrl),
-        ],
-      ),
-    );
-  }
-
-  getImage(var imgUrl) {
-    return Container(
-      decoration: BoxDecoration(
-          image:
-              DecorationImage(image: NetworkImage(imgUrl), fit: BoxFit.cover),
-          borderRadius: BorderRadius.all(Radius.circular(5.0))),
-      margin: EdgeInsets.only(left: 8, top: 3, right: 8, bottom: 3),
-      width: 100.0,
     );
   }
 

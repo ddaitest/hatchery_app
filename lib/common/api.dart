@@ -27,7 +27,7 @@ class API {
   }
 
   ///周边list数据
-  static queryNearbyList() {
+  static queryServiceList() {
     return dio.get("musicRankings");
   }
 }

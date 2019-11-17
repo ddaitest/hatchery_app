@@ -1,255 +1,196 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:provider/provider.dart';
+import 'package:hatchery/manager/app_manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hatchery/manager/beans.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return new ServiceTabState();
-  }
+  ServiceTabState createState() => ServiceTabState();
 }
 
-class ServiceTabState extends State<ServiceTab> with AutomaticKeepAliveClientMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-
-  bool refreshing = false;
-
-//  bool loading = false;
-
-  _refreshList(Function done) {
-//    model.queryList(pageType, true, done: done);
-  }
-
-  _loadMoreList(Function done) {
-//    model.queryList(pageType, false, done: done);
-  }
-
-  Future _onRefresh() {
-    return Future(() {
-      if (!refreshing) {
-        refreshing = true;
-        print("ERROR. _onRefresh");
-        _refreshList(() {
-          refreshing = false;
-        });
-      }
-    });
-  }
-
-  _onLoadMore() {
-//    print("INFO. _onLoadMore $loading");
-//    if (!loading) {
-//      loading = true;
-//      print("ERROR. _onLoadMore");
-//      _loadMoreList(() {
-//        loading = false;
-//      });
-//    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      body: getBodyView(context),
-    );
-  }
+class ServiceTabState extends State<ServiceTab> {
+  var subjects;
+  List<ServiceListInfo> subjectLists = [];
 
   @override
   void initState() {
     super.initState();
-    refreshing = false;
-//    loading = false;
-//    Future.delayed(Duration.zero, () {
-//      var x = MainModel.of(context);
-//      //加载 list 数据
-//      _onRefresh();
-//      //加载 banner 数据
-//      x.queryBanner(pageType);
-//    });
+    _getListData();
   }
 
-  getBodyView(BuildContext context) {
-    var views = <Widget>[];
-    //添加搜索
-//    var searchCondition = model.getSearchCondition(pageType);
-//    print("getBodyView searchCondition=$searchCondition");
-//    if (searchCondition != null) {
-//      views.add(getSearchView(
-//        searchCondition,
-//            () {
-//          _gotoSearch();
-//        },
-//            () {
-//          model.updateSearchCondition(pageType, null);
-//        },
-//      ));
-//    }
-    //添加列表
-    views.add(Expanded(child: _getScrollBody()));
+  _getListData() async {
+    subjects = await AppManager().queryServiceData();
+    setState(() {
+      subjectLists = subjects['result'][0]['content']
+          .map<ServiceListInfo>((json) => ServiceListInfo.fromJson(json))
+          .toList();
+      print('LC -> ${subjectLists[0].picSmall}');
+    });
+  }
 
-    return Container(
-      child: Column(children: views),
-      color: Colors.white,
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      builder: (context) => AppManager(),
+      child: _ServicePage(context),
     );
   }
 
-  /// View: 列表。
-  _getScrollBody() {
-//    var status = model.getPageStatus(pageType);
-//    if (status == PageDataStatus.READY) {
-    if (1 == 1) {
-      return RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: _onRefresh,
-//        child: _list(),
-        child: _scrollViewWrapper(),
-      );
-    } else {
-      return Center(child: CircularProgressIndicator());
-    }
-  }
-
-  _scrollViewWrapper() {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification scrollInfo) {
-        if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-          _onLoadMore();
-        }
-        return false;
-      },
-//      child: _list(),
-      child: _scrollView(),
-    );
-  }
-
-  Widget _scrollView() {
-    final views = <Widget>[];
-
-    //添加banner
-    List<BannerInfo> info = List<BannerInfo>();
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    if (info != null && info.length > 0) {
-      views.add(
-        SliverPersistentHeader(
-          delegate: _SliverAppBarDelegate(_getBannerView(info), 120, 120),
-          floating: false,
-          pinned: false,
-        ),
-      );
-    }
-
-    views.add(_list());
-    return CustomScrollView(
-      slivers: views,
-    );
-  }
-
-  Widget _list() {
-//    List<Article> data = model.getListData(pageType);
-//    final enablePullUp = model.getHasMore(pageType);
-    final enablePullUp = false;
-    List<Article> data = List<Article>();
-    data.add(Article(title: "AAA"));
-    data.add(Article(title: "bbb"));
-    data.add(Article(title: "ccc"));
-    data.add(Article(title: "ddd"));
-    data.add(Article(title: "eee"));
-    var size = 10;
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) => index == data.length
-          ? _getLoadMore()
-          : ListTile(
-              title: Text(data[index].title),
+  _ServicePage(BuildContext context) {
+    return Consumer<AppManager>(
+      builder: (context, manager, child) => Scaffold(
+          body: Column(
+        children: <Widget>[
+          Container(
+            height: 80,
+            decoration: BoxDecoration(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _topButtons(Icons.account_balance, Colors.black,
+                    manager.ServiceTopMap["0"], Colors.black, null),
+                _topButtons(Icons.live_help, Colors.black,
+                    manager.ServiceTopMap["1"], Colors.black, null),
+                _topButtons(Icons.android, Colors.black,
+                    manager.ServiceTopMap["2"], Colors.black, null),
+                _topButtons(Icons.language, Colors.black,
+                    manager.ServiceTopMap["3"], Colors.black, null),
+              ],
             ),
-      childCount: enablePullUp ? data.length + 1 : data.length,
-    ));
+          ),
+          Container(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _topButtons(Icons.account_balance, Colors.black,
+                    manager.ServiceTopMap["4"], Colors.black, null),
+                _topButtons(Icons.live_help, Colors.black,
+                    manager.ServiceTopMap["5"], Colors.black, null),
+                _topButtons(Icons.android, Colors.black,
+                    manager.ServiceTopMap["6"], Colors.black, null),
+                _topButtons(Icons.language, Colors.black,
+                    manager.ServiceTopMap["7"], Colors.black, null),
+              ],
+            ),
+          ),
+          Divider(
+            height: 2,
+            indent: 10,
+            endIndent: 10,
+            color: Colors.grey[400],
+          ),
+          Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width - 20,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        "| ",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 25),
+                      ),
+                      Text(
+                        "推荐",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.grey,
+                    size: 15,
+                  ),
+                  onTap: null,
+                ),
+              ],
+            ),
+          ),
+          getListViewContainer(),
+        ],
+      )),
+    );
   }
 
-  _getLoadMore() {
-    return Container(
-        color: Colors.greenAccent,
-        child: FlatButton(
-          child: Text("Load More"),
-          onPressed: _onLoadMore,
-        ));
-  }
-
-
-  /// View: Banner
-  _getBannerView(List<BannerInfo> infos) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 120,
-      child: new Swiper(
+  getListViewContainer() {
+    if (subjectLists.length == 0) {
+      //loading
+      return CupertinoActivityIndicator();
+    }
+    return ListView.builder(
+        //item 的数量
+        itemCount: subjectLists.length,
+        shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
-          return ClipRRect(
-            borderRadius: new BorderRadius.circular(8.0),
-            child: Image(
-              image: new CachedNetworkImageProvider(infos[index].image),
-              fit: BoxFit.fitWidth,
-            ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+//              Text(subjectLists[index].title),
+              getItemContainerView(subjectLists[index]),
+              //下面的灰色分割线
+              Container(
+                height: 10,
+                color: Color.fromARGB(255, 234, 233, 234),
+              )
+            ],
           );
-        },
-        itemHeight: 120,
-        itemCount: infos.length,
-        viewportFraction: 0.8,
-        scale: 0.9,
-        pagination: new SwiperPagination(),
-        control: new SwiperControl(),
-        onTap: (index) {
-          try {
-//            launchcaller(infos[index].action);
-          } catch (id) {}
-        },
+        });
+  }
+
+  getItemContainerView(var subject) {
+    var imgUrl = subject.picSmall;
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(5.0),
+      child: Row(
+        children: <Widget>[
+          getImage(imgUrl),
+        ],
       ),
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this.subView, this.minHeight, this.maxHeight);
-
-  final Widget subView;
-  final double minHeight;
-  final double maxHeight;
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new Container(
-      child: subView,
+  getImage(var imgUrl) {
+    return Container(
+      child: CachedNetworkImage(
+        height: 90,
+        width: 90,
+        imageUrl: imgUrl,
+        fit: BoxFit.fill,
+      ),
+      margin: EdgeInsets.only(left: 8, top: 3, right: 8, bottom: 3),
+      width: 100.0,
     );
   }
 
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
+  _topButtons(IconName, IconColor, String name, nameColor, tapValue) {
+    return MaterialButton(
+      onPressed: tapValue,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            IconName,
+            size: 35,
+            color: IconColor,
+          ),
+          Text(
+            name,
+            style: TextStyle(color: nameColor, fontSize: 12),
+          ),
+        ],
+      ),
+    );
   }
 }

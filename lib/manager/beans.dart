@@ -34,16 +34,23 @@ class AdInfo {
 }
 
 class Article {
-  Article({this.id, this.title});
+  Article(
+      {this.id,
+      this.title,
+      this.thumbnail,
+      this.summary,
+      this.publishOn,
+      this.webUrl});
+
   String id;
   String webUrl;
   String title;
   String thumbnail;
-  String summary;
+  String summary = "...";
   num publishOn;
 }
 
-class NearbyInfo {
+class ServiceListInfo {
   String allRate;
   String songId;
   String rankChange;
@@ -55,7 +62,7 @@ class NearbyInfo {
   String picBig;
   String albumTitle;
 
-  NearbyInfo(
+  ServiceListInfo(
       {this.allRate,
       this.songId,
       this.rankChange,
@@ -67,7 +74,7 @@ class NearbyInfo {
       this.picBig,
       this.albumTitle});
 
-  NearbyInfo.fromJson(Map<String, dynamic> json) {
+  ServiceListInfo.fromJson(Map<String, dynamic> json) {
     allRate = json['all_rate'];
     songId = json['song_id'];
     rankChange = json['rank_change'];

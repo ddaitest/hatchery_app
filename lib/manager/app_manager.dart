@@ -23,8 +23,8 @@ class AppManager extends ChangeNotifier {
 //    print("MainManager init $hashCode");
 //  }
 //
-  //周边顶部
-  var NearbyTopMap = {
+  ///服务tab顶部
+  var ServiceTopMap = {
     "0": "物业服务",
     "1": "家电维修",
     "2": "保姆月嫂",
@@ -35,15 +35,13 @@ class AppManager extends ChangeNotifier {
     "7": "其他",
   };
 
-  ///周边数据
-  queryNearbyData() async {
-    Response response = await API.queryNearbyList();
+  ///服务tab数据
+  queryServiceData() async {
+    Response response = await API.queryServiceList();
     final parsed = json.decode(response.data);
     var resultCode = parsed['code'] ?? 0;
-    var resultData = parsed['result'][0]['content'];
-    if (resultCode == 200 && resultData != null) {
-//      var newData = NearbyInfo.fromJson(resultData[0]);
-      return resultData;
+    if (resultCode == 200 && parsed != null) {
+      return parsed;
     }
   }
 }
