@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
@@ -41,111 +40,107 @@ class ServiceTabState extends State<ServiceTab> {
 
   _ServicePage(BuildContext context) {
     return Consumer<AppManager>(
-      builder: (context, manager, child) => Scaffold(
-          body: Column(
-        children: <Widget>[
-          Container(
-            height: 80,
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                _topButtons(Icons.account_balance, Colors.black,
-                    manager.ServiceTopMap["0"], Colors.black, null),
-                _topButtons(Icons.live_help, Colors.black,
-                    manager.ServiceTopMap["1"], Colors.black, null),
-                _topButtons(Icons.android, Colors.black,
-                    manager.ServiceTopMap["2"], Colors.black, null),
-                _topButtons(Icons.language, Colors.black,
-                    manager.ServiceTopMap["3"], Colors.black, null),
-              ],
-            ),
-          ),
-          Container(
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                _topButtons(Icons.account_balance, Colors.black,
-                    manager.ServiceTopMap["4"], Colors.black, null),
-                _topButtons(Icons.live_help, Colors.black,
-                    manager.ServiceTopMap["5"], Colors.black, null),
-                _topButtons(Icons.android, Colors.black,
-                    manager.ServiceTopMap["6"], Colors.black, null),
-                _topButtons(Icons.language, Colors.black,
-                    manager.ServiceTopMap["7"], Colors.black, null),
-              ],
-            ),
-          ),
-          Divider(
-            height: 2,
-            indent: 10,
-            endIndent: 10,
-            color: Colors.grey[400],
-          ),
-          Container(
-            height: 50,
-            width: MediaQuery.of(context).size.width - 20,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        builder: (context, manager, child) => Column(
               children: <Widget>[
                 Container(
+                  height: 80,
+                  decoration: BoxDecoration(),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Text(
-                        "| ",
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 25),
+                      _topButtons(Icons.account_balance, Colors.black,
+                          manager.ServiceTopMap["0"], Colors.black, null),
+                      _topButtons(Icons.live_help, Colors.black,
+                          manager.ServiceTopMap["1"], Colors.black, null),
+                      _topButtons(Icons.android, Colors.black,
+                          manager.ServiceTopMap["2"], Colors.black, null),
+                      _topButtons(Icons.language, Colors.black,
+                          manager.ServiceTopMap["3"], Colors.black, null),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 80,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      _topButtons(Icons.account_balance, Colors.black,
+                          manager.ServiceTopMap["4"], Colors.black, null),
+                      _topButtons(Icons.live_help, Colors.black,
+                          manager.ServiceTopMap["5"], Colors.black, null),
+                      _topButtons(Icons.android, Colors.black,
+                          manager.ServiceTopMap["6"], Colors.black, null),
+                      _topButtons(Icons.language, Colors.black,
+                          manager.ServiceTopMap["7"], Colors.black, null),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 10,
+                  color: Color.fromARGB(255, 234, 233, 234),
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width - 20,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              "| ",
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 25),
+                            ),
+                            Text(
+                              "推荐",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        "推荐",
-                        style: TextStyle(fontSize: 20),
+                      GestureDetector(
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
+                        onTap: null,
                       ),
                     ],
                   ),
                 ),
-                GestureDetector(
-                  child: Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                  onTap: null,
-                ),
+                getListViewContainer(),
               ],
-            ),
-          ),
-          getListViewContainer(),
-        ],
-      )),
-    );
+            ));
   }
 
   getListViewContainer() {
     if (subjectLists.length == 0) {
-      //loading
+      ///loading
       return CupertinoActivityIndicator();
     }
-    return ListView.builder(
-        //item 的数量
-        itemCount: subjectLists.length,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-//              Text(subjectLists[index].title),
-              getItemContainerView(subjectLists[index]),
-              //下面的灰色分割线
-              Container(
-                height: 10,
-                color: Color.fromARGB(255, 234, 233, 234),
-              )
-            ],
-          );
-        });
+    return Expanded(
+        child: ListView.builder(
+            itemCount: subjectLists.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  getItemContainerView(subjectLists[index]),
+
+                  ///下面的灰色分割线
+                  Divider(
+                    height: 2,
+                    color: Colors.grey[400],
+                  ),
+                ],
+              );
+            }));
   }
 
   getItemContainerView(var subject) {
@@ -156,6 +151,42 @@ class ServiceTabState extends State<ServiceTab> {
       child: Row(
         children: <Widget>[
           getImage(imgUrl),
+          Expanded(
+            child: getInfoView(subject),
+            flex: 1,
+          ),
+        ],
+      ),
+    );
+  }
+
+  getInfoView(var subject) {
+    return Container(
+      height: 90,
+      alignment: Alignment.topLeft,
+      child: Column(
+        children: <Widget>[
+          getTitleView(subject),
+        ],
+      ),
+    );
+  }
+
+  getTitleView(subject) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 250,
+            child: Text(
+              subject.title,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+          )
         ],
       ),
     );
