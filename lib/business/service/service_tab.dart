@@ -23,9 +23,7 @@ class ServiceTabState extends State<ServiceTab> {
   _getListData() async {
     subjects = await AppManager().queryServiceData();
     setState(() {
-      subjectLists = subjects['result'][0]['content']
-          .map<ServiceListInfo>((json) => ServiceListInfo.fromJson(json))
-          .toList();
+      subjectLists = subjects;
       print('LC -> ${subjectLists[0].picSmall}');
     });
   }
@@ -40,82 +38,92 @@ class ServiceTabState extends State<ServiceTab> {
 
   _ServicePage(BuildContext context) {
     return Consumer<AppManager>(
-        builder: (context, manager, child) => Column(
-              children: <Widget>[
-                Container(
-                  height: 80,
-                  decoration: BoxDecoration(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      _topButtons(Icons.account_balance, Colors.black,
-                          manager.ServiceTopMap["0"], Colors.black, null),
-                      _topButtons(Icons.live_help, Colors.black,
-                          manager.ServiceTopMap["1"], Colors.black, null),
-                      _topButtons(Icons.android, Colors.black,
-                          manager.ServiceTopMap["2"], Colors.black, null),
-                      _topButtons(Icons.language, Colors.black,
-                          manager.ServiceTopMap["3"], Colors.black, null),
-                    ],
-                  ),
+        builder: (context, manager, child) => _pageTopView(manager));
+  }
+
+//  _getBody(manager) {
+//    return ListView(
+//      children: <Widget>[_pageTopView(manager)],
+//    );
+//  }
+
+  _pageTopView(manager) {
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 80,
+          decoration: BoxDecoration(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _topButtons(Icons.account_balance, Colors.black,
+                  manager.ServiceTopMap["0"], Colors.black, null),
+              _topButtons(Icons.live_help, Colors.black,
+                  manager.ServiceTopMap["1"], Colors.black, null),
+              _topButtons(Icons.android, Colors.black,
+                  manager.ServiceTopMap["2"], Colors.black, null),
+              _topButtons(Icons.language, Colors.black,
+                  manager.ServiceTopMap["3"], Colors.black, null),
+            ],
+          ),
+        ),
+        Container(
+          height: 80,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _topButtons(Icons.account_balance, Colors.black,
+                  manager.ServiceTopMap["4"], Colors.black, null),
+              _topButtons(Icons.live_help, Colors.black,
+                  manager.ServiceTopMap["5"], Colors.black, null),
+              _topButtons(Icons.android, Colors.black,
+                  manager.ServiceTopMap["6"], Colors.black, null),
+              _topButtons(Icons.language, Colors.black,
+                  manager.ServiceTopMap["7"], Colors.black, null),
+            ],
+          ),
+        ),
+        Container(
+          height: 10,
+          color: Color.fromARGB(255, 234, 233, 234),
+        ),
+        Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width - 20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      "| ",
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 25),
+                    ),
+                    Text(
+                      "推荐",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
                 ),
-                Container(
-                  height: 80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      _topButtons(Icons.account_balance, Colors.black,
-                          manager.ServiceTopMap["4"], Colors.black, null),
-                      _topButtons(Icons.live_help, Colors.black,
-                          manager.ServiceTopMap["5"], Colors.black, null),
-                      _topButtons(Icons.android, Colors.black,
-                          manager.ServiceTopMap["6"], Colors.black, null),
-                      _topButtons(Icons.language, Colors.black,
-                          manager.ServiceTopMap["7"], Colors.black, null),
-                    ],
-                  ),
+              ),
+              GestureDetector(
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 15,
                 ),
-                Container(
-                  height: 10,
-                  color: Color.fromARGB(255, 234, 233, 234),
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width - 20,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              "| ",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 25),
-                            ),
-                            Text(
-                              "推荐",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.grey,
-                          size: 15,
-                        ),
-                        onTap: null,
-                      ),
-                    ],
-                  ),
-                ),
-                getListViewContainer(),
-              ],
-            ));
+                onTap: null,
+              ),
+            ],
+          ),
+        ),
+        getListViewContainer(),
+      ],
+    );
   }
 
   getListViewContainer() {
@@ -147,13 +155,12 @@ class ServiceTabState extends State<ServiceTab> {
     var imgUrl = subject.picSmall;
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(5.0),
       child: Row(
         children: <Widget>[
           getImage(imgUrl),
-          Expanded(
+          Container(
             child: getInfoView(subject),
-            flex: 1,
+            width: MediaQuery.of(context).size.width - 116,
           ),
         ],
       ),
@@ -176,17 +183,17 @@ class ServiceTabState extends State<ServiceTab> {
     return Container(
       child: Row(
         children: <Widget>[
-          Container(
-            width: 250,
+          Expanded(
             child: Text(
               subject.title,
+              textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
-          )
+          ),
         ],
       ),
     );
