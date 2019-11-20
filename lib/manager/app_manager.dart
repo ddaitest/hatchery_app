@@ -40,7 +40,7 @@ class AppManager extends ChangeNotifier {
     Response response = await ApiForServicePage.queryServiceList();
     final parsed = json.decode(response.data);
     var resultCode = parsed['code'] ?? 0;
-    var resultData = parsed['result'][0]['content'];
+    var resultData = parsed['result'][1]['content'];
     if (resultCode == 200 && resultData != null) {
       var newData = resultData
           .map<ServiceListInfo>((json) => ServiceListInfo.fromJson(json))
