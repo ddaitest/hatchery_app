@@ -37,7 +37,7 @@ class AppManager extends ChangeNotifier {
 
   ///服务tab数据
   queryServiceData() async {
-    Response response = await API.queryServiceList();
+    Response response = await ApiForServicePage.queryServiceList();
     final parsed = json.decode(response.data);
     var resultCode = parsed['code'] ?? 0;
     var resultData = parsed['result'][0]['content'];

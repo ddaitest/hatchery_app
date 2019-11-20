@@ -38,14 +38,17 @@ class ServiceTabState extends State<ServiceTab> {
 
   _ServicePage(BuildContext context) {
     return Consumer<AppManager>(
-        builder: (context, manager, child) => _pageTopView(manager));
+        builder: (context, manager, child) => _getBody(manager));
   }
 
-//  _getBody(manager) {
-//    return ListView(
-//      children: <Widget>[_pageTopView(manager)],
-//    );
-//  }
+  _getBody(manager) {
+    return ListView(
+      children: <Widget>[
+        _pageTopView(manager),
+        _getListViewContainer(),
+      ],
+    );
+  }
 
   _pageTopView(manager) {
     return Column(
@@ -121,34 +124,33 @@ class ServiceTabState extends State<ServiceTab> {
             ],
           ),
         ),
-        getListViewContainer(),
       ],
     );
   }
 
-  getListViewContainer() {
+  _getListViewContainer() {
     if (subjectLists.length == 0) {
       ///loading
       return CupertinoActivityIndicator();
     }
-    return Expanded(
-        child: ListView.builder(
-            itemCount: subjectLists.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  getItemContainerView(subjectLists[index]),
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: subjectLists.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              getItemContainerView(subjectLists[index]),
 
-                  ///下面的灰色分割线
-                  Divider(
-                    height: 2,
-                    color: Colors.grey[400],
-                  ),
-                ],
-              );
-            }));
+              ///下面的灰色分割线
+              Divider(
+                height: 2,
+                color: Colors.grey[400],
+              ),
+            ],
+          );
+        });
   }
 
   getItemContainerView(var subject) {
