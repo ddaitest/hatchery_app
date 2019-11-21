@@ -2,78 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home_tab.dart';
 import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
-import 'package:hatchery/common/theme.dart';
-import 'package:hatchery/common/widget/page_title.dart';
-import 'package:hatchery/flavors/Flavors.dart';
-import 'package:hatchery/test/test_page.dart';
+import 'package:hatchery/flavors/default.dart';
 
 class HomePage extends StatefulWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
-  HomeState createState() => HomeState();
+  HomePageState createState() => HomePageState();
 }
 
-class HomeState extends State<HomePage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  TabController controller;
-  int page = 0;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class HomePageState extends State<HomePage> {
+  int _tabIndex = 0;
+  var tabImages;
+  var appBarTitles = ['首页', '服务', '周边'];
+  var _pageController;
 
-  @override
-  bool get wantKeepAlive => true;
+  final List<Widget> tabBodies = [
+    HomeTab(),
+    ServiceTab(),
+    NearbyTab(),
+  ];
 
   @override
   void initState() {
+    _pageController = new PageController(initialPage: 0);
     super.initState();
-    controller = TabController(length: 3, vsync: this);
-    controller.addListener(() {
-      print("DDAI= controller.index=${controller.index}");
-      setState(() {
-        page = controller.index;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    // Dispose of the Tab Controller
-    controller.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return getMyScaffold(
-      Flavors.strings.title,
-      key: _scaffoldKey,
-      titleAlign: TextAlign.center,
-      leading: Container(),
-      body: _getBody(),
-      bottomNavigationBar: BottomAppBar(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        notchMargin: 4.0,
-        child: TabBar(
-          tabs: <Tab>[
-            Tab(child: Text("首页", style: fontPhone)),
-            Tab(child: Text("服务", style: fontPhone)),
-            Tab(child: Text("周边", style: fontPhone)),
-          ],
-          controller: controller,
+    return Scaffold(
+        body: PageView(
+          controller: _pageController,
+          children: tabBodies,
+          onPageChanged: (index) {
+            _tabIndex = index;
+          },
         ),
-      ),
-    );
-  }
-
-  _getBody() {
-    return TabBarView(
-      children: <Widget>[
-        HomeTab(),
-        ServiceTab(),
-        NearbyTab(),
-      ],
-      controller: controller,
-    );
+        appBar: AppBar(
+          title: Text(
+            Strings().title,
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home), title: Text(appBarTitles[0])),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.room_service), title: Text(appBarTitles[1])),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.near_me), title: Text(appBarTitles[2])),
+          ],
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _tabIndex,
+          iconSize: 24.0,
+          //点击事件
+          onTap: (index) {
+            setState(() {
+              _tabIndex = index;
+            });
+            _pageController.animateToPage(index,
+                duration: Duration(milliseconds: 500),
+                curve: ElasticOutCurve(4));
+          },
+        ));
   }
 }

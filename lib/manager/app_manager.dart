@@ -23,6 +23,8 @@ class AppManager extends ChangeNotifier {
 //    print("MainManager init $hashCode");
 //  }
 //
+  ///小区名称
+
   ///服务tab顶部
   var ServiceTopMap = {
     "0": "物业服务",

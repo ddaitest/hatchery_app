@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
-
 import 'business/splash/splash.dart';
 
 void main() {
