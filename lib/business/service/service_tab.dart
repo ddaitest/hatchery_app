@@ -4,6 +4,8 @@ import 'package:hatchery/manager/app_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:community_material_icon/community_material_icon.dart';
+import 'package:hatchery/common/widget/webview_common.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
@@ -17,11 +19,11 @@ class ServiceTabState extends State<ServiceTab> {
   @override
   void initState() {
     super.initState();
-    _getListData();
+    _getListData(0);
   }
 
-  _getListData() async {
-    subjects = await AppManager().queryServiceData();
+  _getListData(int num) async {
+    subjects = await AppManager().queryServiceData(num);
     setState(() {
       subjectLists = subjects;
       print('LC -> ${subjectLists[0].picSmall}');
@@ -59,14 +61,14 @@ class ServiceTabState extends State<ServiceTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _topButtons(Icons.account_balance, Colors.black,
-                  manager.ServiceTopMap["0"], Colors.black, null),
+              _topButtons(CommunityMaterialIcons.account_card_details,
+                  Colors.black, manager.ServiceTopMap["0"], Colors.black, 0),
               _topButtons(Icons.live_help, Colors.black,
-                  manager.ServiceTopMap["1"], Colors.black, null),
+                  manager.ServiceTopMap["1"], Colors.black, 1),
               _topButtons(Icons.android, Colors.black,
-                  manager.ServiceTopMap["2"], Colors.black, null),
+                  manager.ServiceTopMap["2"], Colors.black, 2),
               _topButtons(Icons.language, Colors.black,
-                  manager.ServiceTopMap["3"], Colors.black, null),
+                  manager.ServiceTopMap["3"], Colors.black, 3),
             ],
           ),
         ),
@@ -76,13 +78,13 @@ class ServiceTabState extends State<ServiceTab> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _topButtons(Icons.account_balance, Colors.black,
-                  manager.ServiceTopMap["4"], Colors.black, null),
+                  manager.ServiceTopMap["4"], Colors.black, 4),
               _topButtons(Icons.live_help, Colors.black,
-                  manager.ServiceTopMap["5"], Colors.black, null),
+                  manager.ServiceTopMap["5"], Colors.black, 5),
               _topButtons(Icons.android, Colors.black,
-                  manager.ServiceTopMap["6"], Colors.black, null),
+                  manager.ServiceTopMap["6"], Colors.black, 6),
               _topButtons(Icons.language, Colors.black,
-                  manager.ServiceTopMap["7"], Colors.black, null),
+                  manager.ServiceTopMap["7"], Colors.black, 7),
             ],
           ),
         ),
@@ -155,16 +157,24 @@ class ServiceTabState extends State<ServiceTab> {
 
   getItemContainerView(var subject) {
     var imgUrl = subject.picSmall;
-    return Container(
-      width: double.infinity,
-      child: Row(
-        children: <Widget>[
-          getImage(imgUrl),
-          Container(
-            child: getInfoView(subject),
-            width: MediaQuery.of(context).size.width - 116,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => WebViewPage('https://www.baidu.com')),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        child: Row(
+          children: <Widget>[
+            getImage(imgUrl),
+            Container(
+                child: getInfoView(subject),
+                width: MediaQuery.of(context).size.width - 116),
+          ],
+        ),
       ),
     );
   }
@@ -214,9 +224,11 @@ class ServiceTabState extends State<ServiceTab> {
     );
   }
 
-  _topButtons(IconName, IconColor, String name, nameColor, tapValue) {
+  _topButtons(IconName, IconColor, String name, nameColor, int tapNum) {
     return MaterialButton(
-      onPressed: tapValue,
+      onPressed: () {
+        _getListData(tapNum);
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
