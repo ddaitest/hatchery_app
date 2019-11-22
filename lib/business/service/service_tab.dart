@@ -14,7 +14,7 @@ class ServiceTab extends StatefulWidget {
 
 class ServiceTabState extends State<ServiceTab> {
   var subjects;
-  var subjectLists = List<ServiceListInfo>();
+  List<ServiceListInfo> subjectLists = [];
 
   @override
   void initState() {
@@ -25,9 +25,7 @@ class ServiceTabState extends State<ServiceTab> {
   _getListData(int num) async {
     subjects = await AppManager().queryServiceData(num);
     setState(() {
-      subjectLists.addAll(subjects);
-      subjectLists.addAll(subjects);
-      subjectLists.addAll(subjects);
+      subjectLists = subjects;
       print('LC -> ${subjectLists[0].picSmall}');
     });
   }
