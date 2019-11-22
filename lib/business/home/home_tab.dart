@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/manager/beans.dart';
+import 'dart:math' as math;
 
 class HomeTab extends StatefulWidget {
   @override
@@ -76,34 +77,33 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   }
 
   getBodyView(BuildContext context) {
-    var views = <Widget>[];
-    //添加搜索
-//    var searchCondition = model.getSearchCondition(pageType);
-//    print("getBodyView searchCondition=$searchCondition");
-//    if (searchCondition != null) {
-//      views.add(getSearchView(
-//        searchCondition,
-//            () {
-//          _gotoSearch();
-//        },
-//            () {
-//          model.updateSearchCondition(pageType, null);
-//        },
-//      ));
-//    }
-    //添加列表
-    views.add(Expanded(child: _getScrollBody()));
-
     return Container(
-      child: Column(children: views),
       color: Colors.white,
+      child: Column(children: [_getBanner(), Expanded(child: _getList())]),
     );
   }
 
+  _getBanner() {
+    List<BannerInfo> info = List<BannerInfo>();
+    info.add(BannerInfo(
+        id: "id",
+        image: "https://v1.vuepress.vuejs.org/hero.png",
+        action: "http://baidu.com"));
+    info.add(BannerInfo(
+        id: "id",
+        image: "https://v1.vuepress.vuejs.org/hero.png",
+        action: "http://baidu.com"));
+    info.add(BannerInfo(
+        id: "id",
+        image: "https://v1.vuepress.vuejs.org/hero.png",
+        action: "http://baidu.com"));
+    return _getBannerView(info);
+  }
+
   /// View: 列表。
-  _getScrollBody() {
-//    var status = model.getPageStatus(pageType);
-//    if (status == PageDataStatus.READY) {
+  _getList() {
+    //    var status = model.getPageStatus(pageType);
+    //    if (status == PageDataStatus.READY) {
     if (1 == 1) {
       return RefreshIndicator(
         key: _refreshIndicatorKey,
@@ -124,41 +124,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         }
         return false;
       },
-//      child: _list(),
-      child: _scrollView(),
-    );
-  }
-
-  Widget _scrollView() {
-    final views = <Widget>[];
-
-    //添加banner
-    List<BannerInfo> info = List<BannerInfo>();
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    if (info != null && info.length > 0) {
-      views.add(
-        SliverPersistentHeader(
-          delegate: _SliverAppBarDelegate(_getBannerView(info), 120, 120),
-          floating: false,
-          pinned: false,
-        ),
-      );
-    }
-
-    views.add(_list());
-    return CustomScrollView(
-      slivers: views,
+      child: _list(),
+//      child: _scrollView(),
     );
   }
 
@@ -177,23 +144,12 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     data.add(Article(title: "ddd", thumbnail: thumbnail, summary: summary));
     data.add(Article(title: "eee", thumbnail: thumbnail, summary: summary));
     var size = 10;
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) => index == data.length
-          ? _getLoadMore()
-//          : ListTile(
-//              onLongPress: () {},
-//              isThreeLine: true,
-//              subtitle: Text("AAAASDASDASDSADASDA"),
-//              title: Text(data[index].title),
-//              trailing: Icon(Icons.ac_unit),
-//              onTap: () {
-//                print("${data[index].title}");
-//              },
-//            ),
-          : ArticleItem(data[index], () {}),
-      childCount: enablePullUp ? data.length + 1 : data.length,
-    ));
+    return ListView.separated(
+        itemBuilder: (context, index) => ArticleItem(data[index], () {}),
+        separatorBuilder: (context, index) => Divider(
+              color: Colors.black,
+            ),
+        itemCount: data.length);
   }
 
   _getLoadMore() {
@@ -237,31 +193,4 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this.subView, this.minHeight, this.maxHeight);
-
-  final Widget subView;
-  final double minHeight;
-  final double maxHeight;
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new Container(
-      child: subView,
-    );
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
-  }
 }

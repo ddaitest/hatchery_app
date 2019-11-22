@@ -9,6 +9,21 @@ class Strings {
 }
 
 class TextStyles {
+  final TextStyle title =
+      const TextStyle(fontSize: 27.0, color: Colors.black87);
+
+  final TextStyle title1 =
+  const TextStyle(fontSize: 20.0, color: Colors.black87);
+
+  final TextStyle title2 =
+  const TextStyle(fontSize: 18.0, color: Colors.black87);
+
+  final TextStyle content =
+  const TextStyle(fontSize: 16.0, color: Colors.black54);
+
+  final TextStyle secondary =
+  const TextStyle(fontSize: 16.0, color: Colors.black38);
+
   final TextStyle splashFont = const TextStyle(
       fontSize: 27.0,
       height: 1.5,
@@ -26,5 +41,6 @@ class TextStyles {
 }
 
 class Sizes {
-  final articleThumbnail = 80.0;
+  final articleItemHeight = 120.0;
+  final articleThumbnail = 100.0;
 }
