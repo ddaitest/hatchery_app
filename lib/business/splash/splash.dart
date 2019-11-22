@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home.dart';
 import 'package:hatchery/manager/splash_manager.dart';
@@ -26,6 +26,9 @@ class SplashState extends State<SplashPage> {
     startCountdown();
   }
 
+  void _gotoHomePage(BuildContext context) => Navigator.pushReplacement(
+      context, MaterialPageRoute(builder: (context) => HomePage()));
+
   //倒计时方法
   startCountdown() {
     countdownTime = SPLASH_TIME;
@@ -34,6 +37,7 @@ class SplashState extends State<SplashPage> {
         print("LC => countDown###### $countdownTime");
         if (countdownTime <= 1) {
           _timer.cancel();
+          _gotoHomePage(context);
         } else {
           countdownTime -= 1;
         }
@@ -50,13 +54,7 @@ class SplashState extends State<SplashPage> {
     );
   }
 
-  void _gotoHomePage(BuildContext context) => Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => HomePage()));
-
   _splashPage(BuildContext context) {
-    Timer(const Duration(seconds: SPLASH_TIME), () {
-      _gotoHomePage(context);
-    });
     return Consumer<SplashManager>(
       builder: (context, manager, child) => Container(
         constraints: BoxConstraints.expand(),
