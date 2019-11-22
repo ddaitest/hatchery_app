@@ -40,16 +40,7 @@ class ServiceTabState extends State<ServiceTab> {
 
   _ServicePage(BuildContext context) {
     return Consumer<AppManager>(
-        builder: (context, manager, child) => _getBody(manager));
-  }
-
-  _getBody(manager) {
-    return ListView(
-      children: <Widget>[
-        _pageTopView(manager),
-        _getListViewContainer(),
-      ],
-    );
+        builder: (context, manager, child) => _pageTopView(manager));
   }
 
   _pageTopView(manager) {
@@ -126,6 +117,7 @@ class ServiceTabState extends State<ServiceTab> {
             ],
           ),
         ),
+        _getListViewContainer(),
       ],
     );
   }
@@ -135,24 +127,25 @@ class ServiceTabState extends State<ServiceTab> {
       ///loading
       return CupertinoActivityIndicator();
     }
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: subjectLists.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              getItemContainerView(subjectLists[index]),
+    return Expanded(
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: subjectLists.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                getItemContainerView(subjectLists[index]),
 
-              ///下面的灰色分割线
-              Divider(
-                height: 2,
-                color: Colors.grey[400],
-              ),
-            ],
-          );
-        });
+                ///下面的灰色分割线
+                Divider(
+                  height: 2,
+                  color: Colors.grey[400],
+                ),
+              ],
+            );
+          }),
+    );
   }
 
   getItemContainerView(var subject) {
