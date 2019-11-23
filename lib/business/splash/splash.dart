@@ -9,37 +9,16 @@ class SplashPage extends StatefulWidget {
 }
 
 class SplashState extends State<SplashPage> {
-//  Timer _timer;
-
-  //倒计时数值
-//  var countdownTime = 0;
-
   //页面初始化状态的方法
   @override
   void initState() {
-//    SplashManager().startCountdown();
     super.initState();
   }
 
-  void gotoHomePage(BuildContext gh) => Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => HomePage()));
-
-  //倒计时方法
-//  startCountdown() {
-//    countdownTime = SPLASH_TIME;
-//    final call = (timer) {
-//      setState(() {
-//        print("LC => countDown###### $countdownTime");
-//        if (countdownTime <= 1) {
-//          _timer.cancel();
-//          _gotoHomePage();
-//        } else {
-//          countdownTime -= 1;
-//        }
-//      });
-//    };
-//    _timer = Timer.periodic(Duration(seconds: 1), call);
-//  }
+  void gotoHomePage(BuildContext bc) async {
+    Future.microtask(() => Navigator.pushReplacement(
+        bc, MaterialPageRoute(builder: (bc) => HomePage())));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +54,7 @@ class SplashState extends State<SplashPage> {
                   colorBrightness: Brightness.dark,
                   splashColor: Colors.black,
                   child: Consumer<SplashManager>(builder: (cdt, manager, cd) {
-                    if (manager.countdownTime < 1) {
+                    if (manager.countdownTime == 1) {
                       gotoHomePage(cdt);
                     }
                     return Text("跳过 ${manager.countdownTime}");
