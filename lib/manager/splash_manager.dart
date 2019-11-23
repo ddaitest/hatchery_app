@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
-import 'package:hatchery/configs.dart';
-import 'package:hatchery/business/splash/splash.dart';
+import 'package:flutter/material.dart';
+import 'package:hatchery/business/home/home.dart';
 
 class SplashManager extends ChangeNotifier {
   String _splashUrl = 'images/welcome.png';
@@ -12,27 +13,29 @@ class SplashManager extends ChangeNotifier {
 
   String get splashTip => _splashTip;
 
-  Timer _timer;
+  int countdownTime = 5;
 
-  //倒计时数值
-  var _countdownTime = 5;
+  SplashManager() {
+    _startCountdown();
+  }
 
-  int get countdownTime => _countdownTime;
-  Timer get timer => _timer;
+  Timer timer;
 
-  //倒计时方法
-  startCountdown() {
-    _countdownTime = SPLASH_TIME;
-    final call = (timer) {
-      print("LC => countDown###### $_countdownTime");
-      if (_countdownTime <= 0) {
-        _timer.cancel();
-        SplashState().gotoHomePage();
-      } else {
-        _countdownTime--;
-        notifyListeners();
+  /// 初始化
+  _startCountdown() async {
+    final timeUp = (Timer timer) {
+      countdownTime--;
+      notifyListeners();
+      if (countdownTime < 0) {
+        timer.cancel();
       }
     };
-    _timer = Timer.periodic(Duration(seconds: 1), call);
+    timer = Timer.periodic(Duration(seconds: 1), timeUp);
   }
+
+//  @override
+//  void dispose() {
+//    timer.cancel();
+//    super.dispose();
+//  }
 }

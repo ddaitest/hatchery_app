@@ -17,11 +17,11 @@ class SplashState extends State<SplashPage> {
   //页面初始化状态的方法
   @override
   void initState() {
-    SplashManager().startCountdown();
+//    SplashManager().startCountdown();
     super.initState();
   }
 
-  void gotoHomePage() => Navigator.pushReplacement(
+  void gotoHomePage(BuildContext sp) => Navigator.pushReplacement(
       context, MaterialPageRoute(builder: (context) => HomePage()));
 
   //倒计时方法
@@ -74,9 +74,14 @@ class SplashState extends State<SplashPage> {
                   color: Colors.black,
                   colorBrightness: Brightness.dark,
                   splashColor: Colors.black,
-                  child: Text("跳过 ${manager.countdownTime}"),
+                  child: Consumer<SplashManager>(builder: (ct, manager, c) {
+                    if (manager.countdownTime < 1) {
+                      gotoHomePage(ct);
+                    }
+                    return Text("跳过 ${manager.countdownTime}");
+                  }),
                   onPressed: () {
-                    gotoHomePage();
+                    gotoHomePage(context);
                   },
                 ),
               ),
