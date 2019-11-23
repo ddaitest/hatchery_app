@@ -1,11 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home.dart';
 import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
-
-import '../../configs.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -13,38 +9,37 @@ class SplashPage extends StatefulWidget {
 }
 
 class SplashState extends State<SplashPage> {
-  Timer _timer;
+//  Timer _timer;
 
   //倒计时数值
-  var countdownTime = 0;
+//  var countdownTime = 0;
 
   //页面初始化状态的方法
   @override
   void initState() {
+    SplashManager().startCountdown();
     super.initState();
-    //开启倒计时
-    startCountdown();
   }
 
-  void _gotoHomePage(BuildContext context) => Navigator.pushReplacement(
+  void gotoHomePage() => Navigator.pushReplacement(
       context, MaterialPageRoute(builder: (context) => HomePage()));
 
   //倒计时方法
-  startCountdown() {
-    countdownTime = SPLASH_TIME;
-    final call = (timer) {
-      setState(() {
-        print("LC => countDown###### $countdownTime");
-        if (countdownTime <= 1) {
-          _timer.cancel();
-          _gotoHomePage(context);
-        } else {
-          countdownTime -= 1;
-        }
-      });
-    };
-    _timer = Timer.periodic(Duration(seconds: 1), call);
-  }
+//  startCountdown() {
+//    countdownTime = SPLASH_TIME;
+//    final call = (timer) {
+//      setState(() {
+//        print("LC => countDown###### $countdownTime");
+//        if (countdownTime <= 1) {
+//          _timer.cancel();
+//          _gotoHomePage();
+//        } else {
+//          countdownTime -= 1;
+//        }
+//      });
+//    };
+//    _timer = Timer.periodic(Duration(seconds: 1), call);
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +74,9 @@ class SplashState extends State<SplashPage> {
                   color: Colors.black,
                   colorBrightness: Brightness.dark,
                   splashColor: Colors.black,
-                  child: Text("跳过 $countdownTime"),
+                  child: Text("跳过 ${manager.countdownTime}"),
                   onPressed: () {
-                    _gotoHomePage(context);
+                    gotoHomePage();
                   },
                 ),
               ),
@@ -96,8 +91,8 @@ class SplashState extends State<SplashPage> {
   @override
   void dispose() {
     super.dispose();
-    if (_timer != null) {
-      _timer.cancel();
+    if (SplashManager().timer != null) {
+      SplashManager().timer.cancel();
     }
   }
 }
