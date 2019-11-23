@@ -21,7 +21,7 @@ class SplashState extends State<SplashPage> {
     super.initState();
   }
 
-  void gotoHomePage(BuildContext sp) => Navigator.pushReplacement(
+  void gotoHomePage(BuildContext gh) => Navigator.pushReplacement(
       context, MaterialPageRoute(builder: (context) => HomePage()));
 
   //倒计时方法
@@ -74,9 +74,9 @@ class SplashState extends State<SplashPage> {
                   color: Colors.black,
                   colorBrightness: Brightness.dark,
                   splashColor: Colors.black,
-                  child: Consumer<SplashManager>(builder: (ct, manager, c) {
+                  child: Consumer<SplashManager>(builder: (cdt, manager, cd) {
                     if (manager.countdownTime < 1) {
-                      gotoHomePage(ct);
+                      gotoHomePage(cdt);
                     }
                     return Text("跳过 ${manager.countdownTime}");
                   }),
@@ -96,8 +96,6 @@ class SplashState extends State<SplashPage> {
   @override
   void dispose() {
     super.dispose();
-    if (SplashManager().timer != null) {
-      SplashManager().timer.cancel();
-    }
+    SplashManager().timer.cancel();
   }
 }

@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hatchery/configs.dart';
 import 'package:hatchery/business/home/home.dart';
+import 'package:hatchery/business/splash/splash.dart';
 
 class SplashManager extends ChangeNotifier {
   String _splashUrl = 'images/welcome.png';
@@ -13,7 +15,7 @@ class SplashManager extends ChangeNotifier {
 
   String get splashTip => _splashTip;
 
-  int countdownTime = 5;
+  int countdownTime = SPLASH_TIME;
 
   SplashManager() {
     _startCountdown();
@@ -24,10 +26,12 @@ class SplashManager extends ChangeNotifier {
   /// 初始化
   _startCountdown() async {
     final timeUp = (Timer timer) {
-      countdownTime--;
-      notifyListeners();
-      if (countdownTime < 0) {
+      print("LC countdownTime ==> $countdownTime");
+      if (countdownTime < 1) {
         timer.cancel();
+      } else {
+        countdownTime--;
+        notifyListeners();
       }
     };
     timer = Timer.periodic(Duration(seconds: 1), timeUp);
