@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:hatchery/manager/app_manager.dart';
+import 'package:hatchery/manager/serivce_manager.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
@@ -13,33 +12,21 @@ class ServiceTab extends StatefulWidget {
 }
 
 class ServiceTabState extends State<ServiceTab> {
-  var subjects;
-  List<ServiceListInfo> subjectLists = [];
-
   @override
   void initState() {
     super.initState();
-    _getListData(0);
-  }
-
-  _getListData(int num) async {
-    subjects = await AppManager().queryServiceData(num);
-    setState(() {
-      subjectLists = subjects;
-      print('LC -> ${subjectLists[0].picSmall}');
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => AppManager(),
+      builder: (context) => SeriveManager(),
       child: _ServicePage(context),
     );
   }
 
   _ServicePage(BuildContext context) {
-    return Consumer<AppManager>(
+    return Consumer<SeriveManager>(
         builder: (context, manager, child) => _pageTopView(manager));
   }
 
@@ -123,119 +110,120 @@ class ServiceTabState extends State<ServiceTab> {
   }
 
   _getListViewContainer() {
-    if (subjectLists.length == 0) {
-      ///loading
-      return CupertinoActivityIndicator();
-    }
-    return Expanded(
-      child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: subjectLists.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                getItemContainerView(subjectLists[index]),
+    return Consumer<SeriveManager>(builder: (glvc, manager, glv) {
+      if (manager.total == 0) {
+        ///loading
+        return CupertinoActivityIndicator();
+      } else {
+        return Expanded(
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: manager.total,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      getItemContainerView(glvc, manager.subjectLists[index]),
 
-                ///下面的灰色分割线
-                Divider(
-                  height: 2,
-                  color: Colors.grey[400],
-                ),
-              ],
-            );
-          }),
-    );
+                      ///下面的灰色分割线
+                      Divider(
+                        height: 2,
+                        color: Colors.grey[400],
+                      ),
+                    ],
+                  );
+                }));
+      }
+    });
   }
+}
 
-  getItemContainerView(var subject) {
-    var imgUrl = subject.picSmall;
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => WebViewPage('https://www.baidu.com')),
-        );
-      },
-      child: Container(
-        width: double.infinity,
-        child: Row(
-          children: <Widget>[
-            getImage(imgUrl),
-            Container(
-                child: getInfoView(subject),
-                width: MediaQuery.of(context).size.width - 116),
-          ],
-        ),
-      ),
-    );
-  }
-
-  getInfoView(var subject) {
-    return Container(
-      height: 90,
-      alignment: Alignment.topLeft,
-      child: Column(
-        children: <Widget>[
-          getTitleView(subject),
-        ],
-      ),
-    );
-  }
-
-  getTitleView(subject) {
-    return Container(
+getItemContainerView(BuildContext gicv, var subject) {
+  var imgUrl = subject.picSmall;
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        gicv,
+        MaterialPageRoute(
+            builder: (context) => WebViewPage('https://www.baidu.com')),
+      );
+    },
+    child: Container(
+      width: double.infinity,
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: Text(
-              subject.title,
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+          getImage(imgUrl),
+          Container(
+              child: getInfoView(subject),
+              width: MediaQuery.of(gicv).size.width - 116),
+        ],
+      ),
+    ),
+  );
+}
+
+getInfoView(var subject) {
+  return Container(
+    height: 90,
+    alignment: Alignment.topLeft,
+    child: Column(
+      children: <Widget>[
+        getTitleView(subject),
+      ],
+    ),
+  );
+}
+
+getTitleView(subject) {
+  return Container(
+    child: Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            subject.title,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+getImage(var imgUrl) {
+  return Container(
+    child: CachedNetworkImage(
+      height: 90,
+      width: 90,
+      imageUrl: imgUrl,
+      fit: BoxFit.fill,
+    ),
+    margin: EdgeInsets.only(left: 8, top: 3, right: 8, bottom: 3),
+    width: 100.0,
+  );
+}
+
+_topButtons(IconName, IconColor, String name, nameColor, int tapNum) {
+  return Consumer<SeriveManager>(
+      builder: (context, manager, child) => MaterialButton(
+            onPressed: () {
+              manager.getListData(tapNum);
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  IconName,
+                  size: 35,
+                  color: IconColor,
+                ),
+                Text(
+                  name,
+                  style: TextStyle(color: nameColor, fontSize: 12),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  getImage(var imgUrl) {
-    return Container(
-      child: CachedNetworkImage(
-        height: 90,
-        width: 90,
-        imageUrl: imgUrl,
-        fit: BoxFit.fill,
-      ),
-      margin: EdgeInsets.only(left: 8, top: 3, right: 8, bottom: 3),
-      width: 100.0,
-    );
-  }
-
-  _topButtons(IconName, IconColor, String name, nameColor, int tapNum) {
-    return MaterialButton(
-      onPressed: () {
-        _getListData(tapNum);
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            IconName,
-            size: 35,
-            color: IconColor,
-          ),
-          Text(
-            name,
-            style: TextStyle(color: nameColor, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
+          ));
 }
