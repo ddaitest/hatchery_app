@@ -26,6 +26,9 @@ class SplashManager extends ChangeNotifier {
       print("LC countdownTime ==> $countdownTime");
       if (countdownTime == 1) {
         timer.cancel();
+      }
+      if (countdownTime < 0) {
+        timer.cancel();
       } else {
         countdownTime--;
         notifyListeners();
