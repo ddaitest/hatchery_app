@@ -24,10 +24,7 @@ class SplashManager extends ChangeNotifier {
   _startCountdown() async {
     final timeUp = (Timer timer) {
       print("LC countdownTime ==> $countdownTime");
-      if (countdownTime == 1) {
-        timer.cancel();
-      }
-      if (countdownTime < 0) {
+      if (countdownTime <= 1) {
         timer.cancel();
       } else {
         countdownTime--;
@@ -35,5 +32,10 @@ class SplashManager extends ChangeNotifier {
       }
     };
     timer = Timer.periodic(Duration(seconds: 1), timeUp);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
