@@ -1,8 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
-import 'package:hatchery/common/api.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
 
 class AppManager extends ChangeNotifier {
@@ -10,20 +6,13 @@ class AppManager extends ChangeNotifier {
 
   int get m => _m;
 
-//  void apptest() {
-//    _m++;
-//    notifyListeners();
-//  }
-//
-//  static final AppManager _instance = AppManager._create();
-//
-//  factory AppManager() => _instance;
-//
-//  AppManager._create() {
-//    print("MainManager init $hashCode");
-//  }
-//
-  ///小区名称
+  String _splashUrl = 'images/welcome.png';
+
+  String get splashUrl => _splashUrl;
+
+  String _webviewUrl = 'https://www.baidu.com/';
+
+  String get WebViewUrl => _webviewUrl;
 
   ///服务tab顶部
   var ServiceTopMap = {
@@ -36,18 +25,31 @@ class AppManager extends ChangeNotifier {
     "6": "各种服务",
     "7": "其他",
   };
+}
 
-  ///服务tab数据
-  queryServiceData(int num) async {
-    Response response = await ApiForServicePage.queryServiceList();
-    final parsed = json.decode(response.data);
-    var resultCode = parsed['code'] ?? 0;
-    var resultData = parsed['result'][num]['content'];
-    if (resultCode == 200 && resultData != null) {
-      var newData = resultData
-          .map<ServiceListInfo>((json) => ServiceListInfo.fromJson(json))
-          .toList();
-      return newData;
-    }
-  }
+///跳转动画
+class SlideRightRoute extends PageRouteBuilder {
+  final Widget page;
+  SlideRightRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(-1, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
 }

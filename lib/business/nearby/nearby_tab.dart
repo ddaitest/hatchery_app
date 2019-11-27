@@ -1,11 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:hatchery/manager/app_manager.dart';
-import 'package:hatchery/manager/splash_manager.dart';
-import 'package:http/http.dart' as http;
+import 'package:hatchery/manager/serivce_manager.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hatchery/manager/beans.dart';
 
 class NearbyTab extends StatefulWidget {
   @override
@@ -22,13 +18,13 @@ class NearbyTabState extends State<NearbyTab> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => AppManager(),
+      builder: (context) => SeriveManager(),
       child: _nearbyPage(context),
     );
   }
 
   _nearbyPage(BuildContext context) {
-    return Consumer<AppManager>(
+    return Consumer<SeriveManager>(
       builder: (context, manager, child) => Scaffold(
           body: Column(
         children: <Widget>[

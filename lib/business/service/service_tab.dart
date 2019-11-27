@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/serivce_manager.dart';
+import 'package:hatchery/manager/app_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
@@ -19,8 +20,15 @@ class ServiceTabState extends State<ServiceTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => SeriveManager(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          builder: (context) => SeriveManager(),
+        ),
+        ChangeNotifierProvider(
+          builder: (context) => AppManager(),
+        ),
+      ],
       child: _ServicePage(context),
     );
   }
@@ -123,7 +131,14 @@ class ServiceTabState extends State<ServiceTab> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      getItemContainerView(glvc, manager.subjectLists[index]),
+                      getItemContainerView(
+                          glvc, manager.subjectLists[index], manager),
+                      getItemContainerView(
+                          glvc, manager.subjectLists[index], manager),
+                      getItemContainerView(
+                          glvc, manager.subjectLists[index], manager),
+                      getItemContainerView(
+                          glvc, manager.subjectLists[index], manager),
 
                       ///下面的灰色分割线
                       Divider(
@@ -138,28 +153,29 @@ class ServiceTabState extends State<ServiceTab> {
   }
 }
 
-getItemContainerView(BuildContext gicv, var subject) {
+getItemContainerView(BuildContext gicv, var subject, manager) {
   var imgUrl = subject.picSmall;
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        gicv,
-        MaterialPageRoute(
-            builder: (context) => WebViewPage('https://www.baidu.com')),
-      );
-    },
-    child: Container(
-      width: double.infinity,
-      child: Row(
-        children: <Widget>[
-          getImage(imgUrl),
-          Container(
-              child: getInfoView(subject),
-              width: MediaQuery.of(gicv).size.width - 116),
-        ],
-      ),
-    ),
-  );
+  return Consumer<AppManager>(
+      builder: (glvc, manager, glv) => GestureDetector(
+            onTap: () {
+              Navigator.push(
+                gicv,
+                MaterialPageRoute(
+                    builder: (context) => WebViewPage(manager.WebViewUrl)),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              child: Row(
+                children: <Widget>[
+                  getImage(imgUrl),
+                  Container(
+                      child: getInfoView(subject),
+                      width: MediaQuery.of(gicv).size.width - 116),
+                ],
+              ),
+            ),
+          ));
 }
 
 getInfoView(var subject) {

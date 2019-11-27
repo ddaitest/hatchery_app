@@ -10,10 +10,10 @@ class SplashPage extends StatefulWidget {
 
 class SplashState extends State<SplashPage> {
   //页面初始化状态的方法
-  @override
-  void initState() {
-    super.initState();
-  }
+//  @override
+//  void initState() {
+//    super.initState();
+//  }
 
   void gotoHomePage(BuildContext bc) async {
     Future.microtask(() => Navigator.pushReplacement(
@@ -55,7 +55,7 @@ class SplashState extends State<SplashPage> {
                   splashColor: Colors.black,
                   child: Consumer<SplashManager>(builder: (cdt, manager, cd) {
                     if (manager.countdownTime == 1) {
-                      gotoHomePage(cdt);
+                      gotoHomePage(context);
                     }
                     return Text("跳过 ${manager.countdownTime}");
                   }),
@@ -69,12 +69,5 @@ class SplashState extends State<SplashPage> {
         ),
       ),
     );
-  }
-
-  //跳转后销毁计时器
-  @override
-  void dispose() {
-    super.dispose();
-    SplashManager().timer.cancel();
   }
 }
