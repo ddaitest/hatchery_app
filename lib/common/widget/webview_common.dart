@@ -45,7 +45,7 @@ class _WebViewPageState extends State<WebViewPage> {
         onPageFinished: (url) {
           _controller.evaluateJavascript("document.title").then((result) {
             setState(() {
-              _title = result;
+              _title = result.replaceAll('"', "");
             });
           });
         },

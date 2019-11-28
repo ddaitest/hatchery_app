@@ -1,38 +1,29 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
-import 'package:hatchery/common/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:hatchery/manager/serivce_manager.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:community_material_icon/community_material_icon.dart';
+import 'package:hatchery/common/widget/webview_common.dart';
 
-class TestPage extends StatelessWidget {
-  final String info;
-
-  const TestPage({
-    Key key,
-    @required this.info,
-  }) : super(key: key);
-
-  void test1() {}
-
+class ServiceTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => TestModel(),
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 20),
-            Consumer<TestModel>(
-              builder: (context, model, child) => Row(
-                children: <Widget>[
-                  Text("Total price: ${model.total}"),
-                  getButtonBig("TEST", onPressed: () {
-                    model.add(Boy());
-                  }),
-                ],
-              ),
+    return SafeArea(
+      child: Material(
+        child: CustomScrollView(
+          slivers: [
+            SliverPersistentHeader(
+              delegate: MySliverAppBar(expandedHeight: 200),
+              pinned: true,
             ),
-            SizedBox(height: 20),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, index) => ListTile(
+                  title: Text("Index: $index"),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -40,20 +31,111 @@ class TestPage extends StatelessWidget {
   }
 }
 
-class Boy {
-  String name;
-  int age;
+class MySliverAppBar extends SliverPersistentHeaderDelegate {
+  final double expandedHeight;
+
+  MySliverAppBar({@required this.expandedHeight});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Stack(
+      fit: StackFit.expand,
+      overflow: Overflow.visible,
+      children: [
+        Image.network(
+          "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+          fit: BoxFit.cover,
+        ),
+        Opacity(
+          opacity: shrinkOffset / expandedHeight,
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _topButtons(CommunityMaterialIcons.account_card_details,
+                    Colors.white, "物业服务", Colors.white, 0),
+                _topButtons(CommunityMaterialIcons.account_card_details,
+                    Colors.white, "物业服务", Colors.white, 0),
+                _topButtons(CommunityMaterialIcons.account_card_details,
+                    Colors.white, "物业服务", Colors.white, 0),
+                _topButtons(CommunityMaterialIcons.account_card_details,
+                    Colors.white, "物业服务", Colors.white, 0),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          child: Opacity(
+            opacity: (1 - shrinkOffset / expandedHeight),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                        _topButtons(CommunityMaterialIcons.account_card_details,
+                            Colors.red, "设施保修", Colors.white, 0),
+                      ],
+                    ),
+                  ),
+                ]),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  double get maxExtent => expandedHeight;
+
+  @override
+  double get minExtent => kToolbarHeight;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 }
 
-class TestModel extends ChangeNotifier {
-  final List<Boy> _boys = [];
-
-  UnmodifiableListView<Boy> get boys => UnmodifiableListView(_boys);
-
-  int get total => _boys.length;
-
-  void add(Boy boy) {
-    _boys.add(boy);
-    notifyListeners();
-  }
+_topButtons(IconName, IconColor, String name, nameColor, int tapNum) {
+  return MaterialButton(
+    onPressed: () {
+//      manager.getListData(tapNum);
+    },
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(
+          IconName,
+          size: 35,
+          color: IconColor,
+        ),
+        Text(
+          name,
+          style: TextStyle(color: nameColor, fontSize: 12),
+        ),
+      ],
+    ),
+  );
 }
