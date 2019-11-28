@@ -33,6 +33,12 @@ class ServiceTabState extends State<ServiceTab> {
     );
   }
 
+  Future<Null> RefreshData() async {
+    await Future.delayed(Duration(seconds: 1), () {
+      return SeriveManager();
+    });
+  }
+
   _ServicePage(BuildContext context) {
     return Consumer<SeriveManager>(
         builder: (context, manager, child) => _pageTopView(manager));
@@ -124,6 +130,9 @@ class ServiceTabState extends State<ServiceTab> {
         return CupertinoActivityIndicator();
       } else {
         return Expanded(
+          child: RefreshIndicator(
+            onRefresh: RefreshData,
+            displacement: 20,
             child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: manager.total,
@@ -147,9 +156,16 @@ class ServiceTabState extends State<ServiceTab> {
                       ),
                     ],
                   );
-                }));
+                }),
+          ),
+        );
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
 

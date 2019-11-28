@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home.dart';
 import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hatchery/common/widget/webview_common.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -34,12 +36,23 @@ class SplashState extends State<SplashPage> {
         constraints: BoxConstraints.expand(),
         child: Stack(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Image.asset(
-                manager.splashUrl,
-                fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WebViewPage(manager.splashGoto)),
+                );
+                manager.timer.cancel();
+              },
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: CachedNetworkImage(
+                  imageUrl: manager.splashUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Positioned(
@@ -61,6 +74,7 @@ class SplashState extends State<SplashPage> {
                   }),
                   onPressed: () {
                     gotoHomePage(context);
+                    manager.timer.cancel();
                   },
                 ),
               ),
@@ -69,5 +83,10 @@ class SplashState extends State<SplashPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

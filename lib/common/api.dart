@@ -34,7 +34,7 @@ class ApiForServicePage {
 
 class ApiForAD {
   static Dio dio = Dio(BaseOptions(
-      baseUrl: "https://api.apiopen.top/",
+      baseUrl: "http://127.0.0.1/:5000/",
       connectTimeout: 5000,
       receiveTimeout: 3000,
       responseType: ResponseType.plain));
@@ -57,8 +57,8 @@ class ApiForAD {
     }
   }
 
-  ///周边list数据
-  static queryServiceList() {
-    return dio.get("musicRankings");
+  ///广告相关数据
+  static queryAdList() {
+    return dio.get("api/ad/", queryParameters: {});
   }
 }
