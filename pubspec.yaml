@@ -38,6 +38,11 @@ dependencies:
   flutter_swiper: ^1.1.6
   equatable: ^0.6.1
   dio: ^3.0.4
+  image_picker: ^0.6.2+1
+  flutter_bugly:
+    git:
+      url: git://github.com/crazecoder/flutter_bugly.git
+      ref: dev
 #  flutter_jpush: ^0.0.4
 #  flutter_umeng_analytics_fork: ^0.0.3
   flutter_webview_plugin: ^0.3.8

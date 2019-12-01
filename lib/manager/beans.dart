@@ -168,3 +168,45 @@ class Data {
     return data;
   }
 }
+
+class phoneNumberInfo {
+  List<Numberlist> numberlist;
+
+  phoneNumberInfo({this.numberlist});
+
+  phoneNumberInfo.fromJson(Map<String, dynamic> json) {
+    if (json['numberlist'] != null) {
+      numberlist = new List<Numberlist>();
+      json['numberlist'].forEach((v) {
+        numberlist.add(new Numberlist.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.numberlist != null) {
+      data['numberlist'] = this.numberlist.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Numberlist {
+  String phone;
+  String des;
+
+  Numberlist({this.phone, this.des});
+
+  Numberlist.fromJson(Map<String, dynamic> json) {
+    phone = json['phone'];
+    des = json['des'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['phone'] = this.phone;
+    data['des'] = this.des;
+    return data;
+  }
+}

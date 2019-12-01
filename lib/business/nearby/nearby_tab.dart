@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:hatchery/manager/serivce_manager.dart';
+import 'package:hatchery/manager/nearby_manager.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NearbyTab extends StatefulWidget {
   @override
@@ -18,111 +20,46 @@ class NearbyTabState extends State<NearbyTab> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => SeriveManager(),
-      child: _nearbyPage(context),
+      builder: (context) => NearbyManager(),
+      child: _bodyContainer(context),
     );
   }
 
-  _nearbyPage(BuildContext context) {
-    return Consumer<SeriveManager>(
-      builder: (context, manager, child) => Scaffold(
-          body: Column(
-        children: <Widget>[
-          Container(
-            height: 80,
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                _topButtons(Icons.account_balance, Colors.black,
-                    manager.ServiceTopMap["0"], Colors.black, null),
-                _topButtons(Icons.live_help, Colors.black,
-                    manager.ServiceTopMap["1"], Colors.black, null),
-                _topButtons(Icons.android, Colors.black,
-                    manager.ServiceTopMap["2"], Colors.black, null),
-                _topButtons(Icons.language, Colors.black,
-                    manager.ServiceTopMap["3"], Colors.black, null),
-              ],
-            ),
-          ),
-          Container(
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                _topButtons(Icons.account_balance, Colors.black,
-                    manager.ServiceTopMap["4"], Colors.black, null),
-                _topButtons(Icons.live_help, Colors.black,
-                    manager.ServiceTopMap["5"], Colors.black, null),
-                _topButtons(Icons.android, Colors.black,
-                    manager.ServiceTopMap["6"], Colors.black, null),
-                _topButtons(Icons.language, Colors.black,
-                    manager.ServiceTopMap["7"], Colors.black, null),
-              ],
-            ),
-          ),
-          Divider(
-            height: 2,
-            indent: 10,
-            endIndent: 10,
-            color: Colors.grey[400],
-          ),
-          Container(
-            height: 50,
-            width: MediaQuery.of(context).size.width - 20,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "| ",
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 25),
-                      ),
-                      Text(
-                        "推荐",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  child: Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                  onTap: null,
-                ),
-              ],
-            ),
-          ),
-        ],
-      )),
+  _bodyContainer(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(children: [_bannerContainer(context)]),
     );
   }
 
-  _topButtons(IconName, IconColor, String name, nameColor, tapValue) {
-    return MaterialButton(
-      onPressed: tapValue,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            IconName,
-            size: 35,
-            color: IconColor,
-          ),
-          Text(
-            name,
-            style: TextStyle(color: nameColor, fontSize: 12),
-          ),
-        ],
-      ),
-    );
+  _bannerContainer(BuildContext context) {
+    return Consumer<NearbyManager>(
+        builder: (context, manager, child) => Container(
+              margin: EdgeInsets.only(top: 10),
+              height: 120,
+              child: Swiper(
+                autoplay: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image(
+                      image:
+                          CachedNetworkImageProvider(manager.bannerList[index]),
+                      fit: BoxFit.fitWidth,
+                    ),
+                  );
+                },
+                itemHeight: 120,
+                itemCount: manager.bannerTotal,
+                viewportFraction: 0.8,
+                scale: 0.9,
+                pagination: SwiperPagination(),
+                onTap: (index) {
+                  try {
+//            launchcaller(infos[index].action);
+                  } catch (id) {}
+                },
+              ),
+            ));
   }
 }

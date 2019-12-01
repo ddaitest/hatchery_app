@@ -38,11 +38,12 @@ class SplashState extends State<SplashPage> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
+//                Navigator.pop(context);
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WebViewPage(manager.splashGoto)),
+                      builder: (context) =>
+                          WebViewPage(manager.splashGoto, '/home')),
                 );
                 manager.timer.cancel();
               },

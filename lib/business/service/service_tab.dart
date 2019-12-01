@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hatchery/business/home/phone_numbers.dart';
+import 'package:hatchery/business/home/report_something.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/serivce_manager.dart';
 import 'package:hatchery/manager/app_manager.dart';
@@ -73,10 +75,51 @@ class ServiceTabState extends State<ServiceTab> {
                   manager.ServiceTopMap["4"], Colors.black, 4),
               _topButtons(Icons.live_help, Colors.black,
                   manager.ServiceTopMap["5"], Colors.black, 5),
-              _topButtons(Icons.android, Colors.black,
-                  manager.ServiceTopMap["6"], Colors.black, 6),
-              _topButtons(Icons.language, Colors.black,
-                  manager.ServiceTopMap["7"], Colors.black, 7),
+              MaterialButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PhoneNumbersPage()),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.language,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      manager.ServiceTopMap["7"],
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              MaterialButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReportSomethingPage()),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.language,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      manager.ServiceTopMap["7"],
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -177,7 +220,8 @@ getItemContainerView(BuildContext gicv, var subject, manager) {
               Navigator.push(
                 gicv,
                 MaterialPageRoute(
-                    builder: (context) => WebViewPage(manager.WebViewUrl)),
+                    builder: (context) =>
+                        WebViewPage(manager.WebViewUrl, null)),
               );
             },
             child: Container(
