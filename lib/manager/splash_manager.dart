@@ -4,13 +4,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/configs.dart';
 import 'package:dio/dio.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'package:hatchery/common/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashManager extends ChangeNotifier {
   String _splashUrl =
       'https://img.zcool.cn/community/012de8571049406ac7251f05224c19.png@1280w_1l_2o_100sh.png';
   String _splashGoto = 'https://www.sina.com.cn';
+
+  bool _agreementData;
+  bool get AgreementData => _agreementData;
 
   String get splashUrl => _splashUrl;
   String get splashGoto => _splashGoto;
@@ -19,9 +22,21 @@ class SplashManager extends ChangeNotifier {
 
   SplashManager() {
     _startCountdown();
+    getLocalData();
   }
 
   Timer timer;
+
+  setLocalData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool('agreementData', true);
+  }
+
+  getLocalData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    _agreementData = sharedPreferences.getBool('agreementData') ?? null;
+    print("LC -> $_agreementData");
+  }
 
   /// 初始化
   _startCountdown() async {
