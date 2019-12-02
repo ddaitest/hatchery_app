@@ -193,18 +193,21 @@ class phoneNumberInfo {
 }
 
 class Numberlist {
+  String name;
   String phone;
   String des;
 
-  Numberlist({this.phone, this.des});
+  Numberlist({this.name, this.phone, this.des});
 
   Numberlist.fromJson(Map<String, dynamic> json) {
+    name = json['id'];
     phone = json['phone'];
     des = json['des'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = this.name;
     data['phone'] = this.phone;
     data['des'] = this.des;
     return data;

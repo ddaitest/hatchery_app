@@ -3,6 +3,7 @@ import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
 import 'business/splash/splash.dart';
+import 'business/home/home.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
       title: Flavors.strings.title,
       theme: ThemeData(primarySwatch: Colors.blue),
       home: SplashPage(),
+      routes: {
+        '/home': (context) => HomePage(),
+      },
     );
   }
 }

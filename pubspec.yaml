@@ -26,6 +26,7 @@ dependencies:
   http: ^0.12.0+2
   intl: 0.15.8
   url_launcher: 5.0.1
+  share: ^0.6.3+3
   flutter_datetime_picker: ^1.2.6
   cached_network_image: ^1.1.1
   shared_preferences: ^0.5.3+4
@@ -39,10 +40,6 @@ dependencies:
   equatable: ^0.6.1
   dio: ^3.0.4
   image_picker: ^0.6.2+1
-  flutter_bugly:
-    git:
-      url: git://github.com/crazecoder/flutter_bugly.git
-      ref: dev
 #  flutter_jpush: ^0.0.4
 #  flutter_umeng_analytics_fork: ^0.0.3
   flutter_webview_plugin: ^0.3.8

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
 
 class PhoneNumbersPage extends StatefulWidget {
   @override
@@ -51,14 +52,33 @@ class PhoneNumbersState extends State<PhoneNumbersPage> {
             shrinkWrap: true,
             itemCount: manager.total,
             itemBuilder: (BuildContext context, int index) {
-              return _listitem(manager);
+              return _listitem(context, manager.PhoneNumbersList[index]);
             }));
   }
 
-  _listitem(manager) {
-    return ListTile(
-      title: Text("#####"),
-      subtitle: Text("#####"),
-    );
+  _listitem(BuildContext context, data) {
+    return Consumer<AppManager>(builder: (context, manager, child) {
+      if (manager.total == 0) {
+        ///loading
+        return CupertinoActivityIndicator();
+      } else {
+        return Container(
+            padding: const EdgeInsets.only(top: 8),
+            child: ListTile(
+              trailing: Icon(Icons.keyboard_arrow_right),
+              title: Text(
+                data.name,
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text("${data.phone}\n${data.des}"),
+              onTap: () {
+                manager.callPhoneNum(data.phone);
+              },
+              onLongPress: () {
+                manager.shareFrame("${data.name}\n${data.phone}");
+              },
+            ));
+      }
+    });
   }
 }
