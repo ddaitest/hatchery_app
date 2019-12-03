@@ -12,6 +12,7 @@ class PhoneNumbersState extends State<PhoneNumbersPage> {
   @override
   void initState() {
     super.initState();
+    AppManager().showToast("长按复制号码");
   }
 
   @override
@@ -74,6 +75,7 @@ class PhoneNumbersState extends State<PhoneNumbersPage> {
                 manager.callPhoneNum(data.phone);
               },
               onLongPress: () {
+                manager.copyData(data.phone);
                 manager.shareFrame("${data.name}\n${data.phone}");
               },
             ));

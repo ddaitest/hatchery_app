@@ -6,6 +6,7 @@ import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
+import 'package:flutter/services.dart';
 
 class AppManager extends ChangeNotifier {
   int _m = 0;
@@ -43,6 +44,10 @@ class AppManager extends ChangeNotifier {
         backgroundColor: Color(0x99000000),
         textColor: Colors.white,
         fontSize: 15.0);
+  }
+
+  copyData(String text) {
+    Clipboard.setData(ClipboardData(text: text));
   }
 
   callPhoneNum(String number) async {
