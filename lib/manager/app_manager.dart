@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
 
 class AppManager extends ChangeNotifier {
   int _m = 0;
@@ -24,9 +26,13 @@ class AppManager extends ChangeNotifier {
       UnmodifiableListView(_phoneNumbersList);
 
   var _phoneNumbers =
-      '{"numberlist":[{ "phone":"18510336249" , "des":"服务时间8：00 至 22：00" },{ "phone":"18510336247" , "des":"服务时间6：00 至 19：00" },{ "phone":"18510336248" , "des":"服务时间7：00 至 20：00" }]}';
+      '{"numberlist":[{"id":"物业电话", "phone":"18510336249","des":"服务时间8：00 至 22：00" },{"id":"居委会电话","phone":"18510336247", "des":"服务时间6：00 至 19：00" },{"id":"供热电话","phone":"18510336248" , "des":"服务时间7：00 至 20：00" }]}';
 
   int get total => _phoneNumbersList.length;
+
+  AppManager() {
+    queryPhoneNumData();
+  }
 
   showToast(String title) {
     Fluttertoast.showToast(
@@ -39,11 +45,22 @@ class AppManager extends ChangeNotifier {
         fontSize: 15.0);
   }
 
+  callPhoneNum(String number) async {
+    if (await canLaunch("tel:${number}")) {
+      await launch("tel:${number}");
+    } else {
+      throw 'Could not launch $number';
+    }
+  }
+
+  shareFrame(String contents) {
+    Share.share(contents);
+  }
+
   queryPhoneNumData() async {
     final parsed = json.decode(_phoneNumbers)['numberlist'];
     _phoneNumbersList =
         parsed.map<Numberlist>((json) => Numberlist.fromJson(json)).toList();
-    print("LC -> ${total}");
     notifyListeners();
   }
 }

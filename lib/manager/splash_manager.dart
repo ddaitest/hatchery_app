@@ -21,8 +21,8 @@ class SplashManager extends ChangeNotifier {
   int countdownTime = SPLASH_TIME;
 
   SplashManager() {
-    _startCountdown();
     getLocalData();
+    _startCountdown();
   }
 
   Timer timer;
@@ -35,6 +35,7 @@ class SplashManager extends ChangeNotifier {
   getLocalData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     _agreementData = sharedPreferences.getBool('agreementData') ?? null;
+    notifyListeners();
     print("LC -> $_agreementData");
   }
 
@@ -42,7 +43,7 @@ class SplashManager extends ChangeNotifier {
   _startCountdown() async {
     final timeUp = (Timer timer) {
       print("LC countdownTime ==> $countdownTime");
-      if (countdownTime <= 1) {
+      if (countdownTime < 1) {
         timer.cancel();
       } else {
         countdownTime--;

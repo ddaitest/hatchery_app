@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 
 class PhoneNumbersPage extends StatefulWidget {
@@ -72,10 +71,10 @@ class PhoneNumbersState extends State<PhoneNumbersPage> {
               ),
               subtitle: Text("${data.phone}\n${data.des}"),
               onTap: () {
-//                manager.callPhoneNum(data.phone);
+                manager.callPhoneNum(data.phone);
               },
               onLongPress: () {
-//                manager.shareFrame("${data.name}\n${data.phone}");
+                manager.shareFrame("${data.name}\n${data.phone}");
               },
             ));
       }
