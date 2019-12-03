@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:hatchery/configs.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class SplashManager extends ChangeNotifier {
   String _splashUrl =
@@ -27,11 +29,13 @@ class SplashManager extends ChangeNotifier {
 
   Timer timer;
 
+  /// 设置协议是否同意标识
   setLocalData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool('agreementData', true);
   }
 
+  /// 获取协议是否同意标识
   getLocalData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     _agreementData = sharedPreferences.getBool('agreementData') ?? null;
@@ -39,7 +43,7 @@ class SplashManager extends ChangeNotifier {
     print("LC -> $_agreementData");
   }
 
-  /// 初始化
+  /// 开屏倒计时
   _startCountdown() async {
     final timeUp = (Timer timer) {
       print("LC countdownTime ==> $countdownTime");
@@ -53,7 +57,7 @@ class SplashManager extends ChangeNotifier {
     timer = Timer.periodic(Duration(seconds: 1), timeUp);
   }
 
-  /// 初始化
+  /// 获取开屏广告数据
   queryAdData() async {
     print("LC -> #####");
     Response response = await ApiForAD.queryAdList();
@@ -67,6 +71,17 @@ class SplashManager extends ChangeNotifier {
 //          .map<ServiceListInfo>((json) => ServiceListInfo.fromJson(json))
 //          .toList();
       notifyListeners();
+    }
+  }
+
+  Future<void> exitApp() async {
+    if (Platform.isAndroid) {
+      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    } else if (Platform.isIOS) {
+      exit(0);
+    } else {
+      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      exit(0);
     }
   }
 

@@ -4,7 +4,6 @@ import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
-import 'package:flutter/services.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -154,8 +153,8 @@ class SplashState extends State<SplashPage> {
                             height: 10,
                           ),
                           GestureDetector(
-                            onTap: () async {
-                              await exitApp();
+                            onTap: () {
+                              manager.exitApp();
                             },
                             child: Text(
                               "不同意并退出App",
@@ -174,10 +173,6 @@ class SplashState extends State<SplashPage> {
         );
       }
     });
-  }
-
-  static Future<void> exitApp() async {
-    await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
   @override
