@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/phone_numbers.dart';
 import 'package:hatchery/business/home/report_something.dart';
+import 'package:hatchery/business/upgrade/upgrade.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/serivce_manager.dart';
 import 'package:hatchery/manager/app_manager.dart';
@@ -73,8 +74,29 @@ class ServiceTabState extends State<ServiceTab> {
             children: <Widget>[
               _topButtons(Icons.account_balance, Colors.black,
                   manager.ServiceTopMap["4"], Colors.black, 4),
-              _topButtons(Icons.live_help, Colors.black,
-                  manager.ServiceTopMap["5"], Colors.black, 5),
+              MaterialButton(
+                onPressed: () {
+                  upgradeCard(context);
+//                  Navigator.push(
+//                    context,
+//                    MaterialPageRoute(builder: (context) => UpdataPage()),
+//                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.language,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      manager.ServiceTopMap["6"],
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
               MaterialButton(
                 onPressed: () {
                   Navigator.push(

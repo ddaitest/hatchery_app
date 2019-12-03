@@ -213,3 +213,36 @@ class Numberlist {
     return data;
   }
 }
+
+class updataiInfo {
+  String code;
+  bool mustUpdate;
+  bool showUpdate;
+  String updateMessage;
+  String updateUrl;
+
+  updataiInfo(
+      {this.code,
+      this.mustUpdate,
+      this.showUpdate,
+      this.updateMessage,
+      this.updateUrl});
+
+  updataiInfo.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    mustUpdate = json['must_update'];
+    showUpdate = json['show_update'];
+    updateMessage = json['update_message'];
+    updateUrl = json['update_url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['must_update'] = this.mustUpdate;
+    data['show_update'] = this.showUpdate;
+    data['update_message'] = this.updateMessage;
+    data['update_url'] = this.updateUrl;
+    return data;
+  }
+}
