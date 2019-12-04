@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/phone_numbers.dart';
 import 'package:hatchery/business/home/report_something.dart';
-import 'package:hatchery/business/upgrade/upgrade.dart';
+import 'package:hatchery/common/widget/upgrade.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/serivce_manager.dart';
 import 'package:hatchery/manager/app_manager.dart';
@@ -77,10 +77,6 @@ class ServiceTabState extends State<ServiceTab> {
               MaterialButton(
                 onPressed: () {
                   upgradeCard(context);
-//                  Navigator.push(
-//                    context,
-//                    MaterialPageRoute(builder: (context) => UpdataPage()),
-//                  );
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

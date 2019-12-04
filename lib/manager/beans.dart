@@ -194,7 +194,7 @@ class Numberlist {
 }
 
 class updataiInfo {
-  String code;
+  int code;
   bool mustUpdate;
   bool showUpdate;
   String updateMessage;
