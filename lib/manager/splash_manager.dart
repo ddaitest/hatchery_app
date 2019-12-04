@@ -60,7 +60,7 @@ class SplashManager extends ChangeNotifier {
   /// 获取开屏广告数据
   queryAdData() async {
     print("LC -> #####");
-    Response response = await ApiForAD.queryAdList();
+    Response response = await Api.queryAdList();
     final parsed = json.decode(response.data);
     print("LC -> $parsed");
     var resultCode = parsed['code'] ?? 0;

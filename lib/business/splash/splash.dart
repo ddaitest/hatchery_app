@@ -117,8 +117,8 @@ class SplashState extends State<SplashPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => WebViewPage(
-                                    "https://www.baidu.com/", null)),
+                                builder: (context) =>
+                                    WebViewPage("http://www.baidu.com", null)),
                           );
                         },
                         child: Text("《隐私政策》",

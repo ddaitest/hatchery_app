@@ -32,9 +32,9 @@ class ApiForServicePage {
   }
 }
 
-class ApiForAD {
+class Api {
   static Dio dio = Dio(BaseOptions(
-      baseUrl: "http://127.0.0.1/:5000/",
+      baseUrl: "http://daivp.com:82/",
       connectTimeout: 5000,
       receiveTimeout: 3000,
       responseType: ResponseType.plain));
@@ -57,8 +57,18 @@ class ApiForAD {
     }
   }
 
-  ///广告相关数据
+  ///广告相关
   static queryAdList() {
-    return dio.get("api/ad/", queryParameters: {});
+    return dio.get("api/addata.json", queryParameters: {});
+  }
+
+  ///热线电话相关
+  static queryPhoneNumList() {
+    return dio.get("api/phoneNumbers.json", queryParameters: {});
+  }
+
+  ///升级相关
+  static queryUpgradeList() {
+    return dio.get("api/upgrade.json", queryParameters: {});
   }
 }

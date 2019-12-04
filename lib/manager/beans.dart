@@ -104,27 +104,6 @@ class ServiceListInfo {
 }
 
 class AdListInfo {
-  String code;
-  Data data;
-
-  AdListInfo({this.code, this.data});
-
-  AdListInfo.fromJson(Map<String, dynamic> json) {
-    code = json['code'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
-}
-
-class Data {
   int cardIndex;
   String id;
   String listGoto;
@@ -134,7 +113,7 @@ class Data {
   String splashGoto;
   String splashUrl;
 
-  Data(
+  AdListInfo(
       {this.cardIndex,
       this.id,
       this.listGoto,
@@ -144,7 +123,7 @@ class Data {
       this.splashGoto,
       this.splashUrl});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  AdListInfo.fromJson(Map<String, dynamic> json) {
     cardIndex = json['card_index'];
     id = json['id'];
     listGoto = json['list_goto'];
