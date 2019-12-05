@@ -29,15 +29,7 @@ upgradeCard(BuildContext context) async {
                 child: Text(manager.UpdataLists[0].updateMessage),
               ),
               actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    '取消',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                _mustBeClose(context, manager),
                 FlatButton(
                   child: Text(
                     '更新',
@@ -52,4 +44,18 @@ upgradeCard(BuildContext context) async {
           ));
     },
   );
+}
+
+_mustBeClose(context, mm) {
+  if (mm.UpdataLists[0].mustUpdate == false) {
+    return FlatButton(
+      child: Text(
+        '取消',
+        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
 }

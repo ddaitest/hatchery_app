@@ -193,21 +193,21 @@ class Numberlist {
   }
 }
 
-class updataiInfo {
-  int code;
+class updataInfo {
+  String code;
   bool mustUpdate;
   bool showUpdate;
   String updateMessage;
   String updateUrl;
 
-  updataiInfo(
+  updataInfo(
       {this.code,
       this.mustUpdate,
       this.showUpdate,
       this.updateMessage,
       this.updateUrl});
 
-  updataiInfo.fromJson(Map<String, dynamic> json) {
+  updataInfo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     mustUpdate = json['must_update'];
     showUpdate = json['show_update'];
