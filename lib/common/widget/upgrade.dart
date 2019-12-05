@@ -26,7 +26,7 @@ upgradeCard(BuildContext context) async {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: SingleChildScrollView(
-                child: Text(manager.UpdataLists[0].updateMessage),
+                child: Text(manager.UpdataLists[0].updateMessage ?? ""),
               ),
               actions: <Widget>[
                 _mustBeClose(context, manager),
@@ -47,7 +47,8 @@ upgradeCard(BuildContext context) async {
 }
 
 _mustBeClose(context, mm) {
-  if (mm.UpdataLists[0].mustUpdate == false) {
+  bool choice = mm.UpdataLists[0].mustUpdate ?? true;
+  if (choice == false) {
     return FlatButton(
       child: Text(
         '取消',

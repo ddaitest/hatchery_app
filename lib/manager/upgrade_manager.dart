@@ -18,6 +18,8 @@ class UpgradeManager extends ChangeNotifier {
   UnmodifiableListView<updataInfo> get UpdataLists =>
       UnmodifiableListView(_updataLists);
 
+  int get total => _updataLists.length;
+
   UpgradeManager() {
     queryUpdataData();
   }
@@ -29,11 +31,11 @@ class UpgradeManager extends ChangeNotifier {
     var resultData = parsed[0] ?? null;
     if (resultCode == "200" && resultData != null) {
       print('LC ###### -> $resultData');
-      _updataLists = resultData
-          .map<updataInfo>((value) => updataInfo.fromJson(value))
-          .toList();
-//      add(resultData);
-      print('LC ###### -> ${_updataLists[0].updateUrl}');
+//      _updataLists = resultData
+//          .map<updataInfo>((value) => updataInfo.fromJson(value))
+//          .toList();
+      add(updataInfo.fromJson(resultData));
+      print('LC @@@@-> ${_updataLists}');
     }
 
 //    notifyListeners();
@@ -41,7 +43,7 @@ class UpgradeManager extends ChangeNotifier {
 
   void add(updataInfo item) {
     _updataLists.add(item);
-//    notifyListeners();
+    notifyListeners();
   }
 
 //  Future<void> DownloadApp() {
