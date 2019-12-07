@@ -8,6 +8,8 @@ import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:hatchery/manager/beans.dart';
+import 'dart:collection';
 
 class SplashManager extends ChangeNotifier {
   String _splashUrl =
@@ -17,13 +19,18 @@ class SplashManager extends ChangeNotifier {
   bool _agreementData;
   bool get AgreementData => _agreementData;
 
-  String get splashUrl => _splashUrl;
-  String get splashGoto => _splashGoto;
+  List<AdListInfo> _adLists = [];
+
+  UnmodifiableListView<AdListInfo> get AdLists =>
+      UnmodifiableListView(_adLists);
+
+  int get total => _adLists.length;
 
   int countdownTime = SPLASH_TIME;
 
   SplashManager() {
     getLocalData();
+    queryAdData();
     _startCountdown();
   }
 
@@ -54,24 +61,26 @@ class SplashManager extends ChangeNotifier {
         notifyListeners();
       }
     };
-    timer = Timer.periodic(Duration(seconds: 1), timeUp);
+    timer = Timer.periodic(Duration(seconds: 1000), timeUp);
   }
 
   /// 获取开屏广告数据
   queryAdData() async {
-    print("LC -> #####");
     Response response = await Api.queryAdList();
     final parsed = json.decode(response.data);
-    print("LC -> $parsed");
     var resultCode = parsed['code'] ?? 0;
-    var resultData = parsed['data']['splash_url'];
+    var resultData = parsed['data'] ?? null;
     if (resultCode == 200 && resultData != null) {
-      print("LC -> $resultData");
 //      _splashUrl = resultData
 //          .map<ServiceListInfo>((json) => ServiceListInfo.fromJson(json))
 //          .toList();
-      notifyListeners();
+      add(AdListInfo.fromJson(resultData));
     }
+  }
+
+  void add(AdListInfo item) {
+    _adLists.add(item);
+    notifyListeners();
   }
 
   Future<void> exitApp() async {

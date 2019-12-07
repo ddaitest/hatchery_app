@@ -26,9 +26,9 @@ class UpgradeManager extends ChangeNotifier {
 
   queryUpdataData() async {
     Response response = await Api.queryUpgradeList();
-    final parsed = json.decode(response.data);
-    var resultCode = parsed[0]['code'] ?? "0";
-    var resultData = parsed[0] ?? null;
+    final parsed = json.decode(response.data)[0];
+    var resultCode = parsed['code'] ?? "0";
+    var resultData = parsed ?? null;
     if (resultCode == "200" && resultData != null) {
       print('LC ###### -> $resultData');
 //      _updataLists = resultData

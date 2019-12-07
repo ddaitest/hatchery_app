@@ -42,8 +42,8 @@ class SplashState extends State<SplashPage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            WebViewPage(manager.splashGoto, '/home')),
+                        builder: (context) => WebViewPage(
+                            manager.AdLists[0].splashGoto, '/home')),
                   );
                   manager.timer.cancel();
                 },
@@ -51,7 +51,7 @@ class SplashState extends State<SplashPage> {
                   width: double.infinity,
                   height: double.infinity,
                   child: CachedNetworkImage(
-                    imageUrl: manager.splashUrl,
+                    imageUrl: manager.AdLists[0].splashUrl,
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -16,32 +16,41 @@ upgradeCard(BuildContext context) async {
     builder: (BuildContext context) {
       return ChangeNotifierProvider(
           builder: (context) => UpgradeManager(),
-          child: Consumer<UpgradeManager>(
-            builder: (context, manager, child) => AlertDialog(
-              title: Text(
-                "发现新版本!",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              content: SingleChildScrollView(
-                child: Text(manager.UpdataLists[0].updateMessage ?? ""),
-              ),
-              actions: <Widget>[
-                _mustBeClose(context, manager),
-                FlatButton(
-                  child: Text(
-                    '更新',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+          child: Consumer<UpgradeManager>(builder: (xx, manager, yy) {
+            if (manager.total != 0) {
+              return AlertDialog(
+                title: Text(
+                  "发现新版本!",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start,
                 ),
-              ],
-            ),
-          ));
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                content: SingleChildScrollView(
+                  child: Text(manager.UpdataLists[0]?.updateMessage ?? ""),
+                ),
+                actions: <Widget>[
+                  _mustBeClose(context, manager),
+                  FlatButton(
+                    child: Text(
+                      '更新',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            } else {
+              return Container(
+                color: Colors.transparent,
+                height: 0,
+                width: 0,
+              );
+            }
+          }));
     },
   );
 }
