@@ -12,10 +12,7 @@ import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
 
 class SplashManager extends ChangeNotifier {
-  String _splashUrl =
-      'https://img.zcool.cn/community/012de8571049406ac7251f05224c19.png@1280w_1l_2o_100sh.png';
-  String _splashGoto = 'https://www.sina.com.cn';
-
+  Timer timer;
   bool _agreementData;
   bool get AgreementData => _agreementData;
 
@@ -25,16 +22,17 @@ class SplashManager extends ChangeNotifier {
       UnmodifiableListView(_adLists);
 
   int get total => _adLists.length;
+  int get ResultCode => resultCode;
 
   int countdownTime = SPLASH_TIME;
+  var parsed;
+  int resultCode;
+  String _responseData;
 
   SplashManager() {
     getLocalData();
     queryAdData();
-    _startCountdown();
   }
-
-  Timer timer;
 
   /// 设置协议是否同意标识
   setLocalData() async {
@@ -50,8 +48,20 @@ class SplashManager extends ChangeNotifier {
     print("LC -> $_agreementData");
   }
 
+  /// 存广告json
+  saveAdJson(AdJson) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString('ad_json', AdJson);
+  }
+
+  /// 取广告json
+  getAdJson(AdJson) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    _responseData = sharedPreferences.getString(AdJson) ?? null;
+  }
+
   /// 开屏倒计时
-  _startCountdown() async {
+  startCountdown() async {
     final timeUp = (Timer timer) {
       print("LC countdownTime ==> $countdownTime");
       if (countdownTime < 1) {
@@ -61,19 +71,22 @@ class SplashManager extends ChangeNotifier {
         notifyListeners();
       }
     };
-    timer = Timer.periodic(Duration(seconds: 1000), timeUp);
+    timer = Timer.periodic(Duration(seconds: 1), timeUp);
   }
 
   /// 获取开屏广告数据
   queryAdData() async {
     Response response = await Api.queryAdList();
-    final parsed = json.decode(response.data);
-    var resultCode = parsed['code'] ?? 0;
-    var resultData = parsed['data'] ?? null;
-    if (resultCode == 200 && resultData != null) {
-//      _splashUrl = resultData
-//          .map<ServiceListInfo>((json) => ServiceListInfo.fromJson(json))
-//          .toList();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    _responseData = sharedPreferences.getString('ad_json') ?? null;
+    if (response.data != null) {
+      saveAdJson(response.data);
+      print("LC responseData ==> $_responseData");
+    }
+    if (_responseData != null) {
+      parsed = json.decode(_responseData);
+      resultCode = parsed['code'] ?? 0;
+      var resultData = parsed['data'] ?? null;
       add(AdListInfo.fromJson(resultData));
     }
   }
