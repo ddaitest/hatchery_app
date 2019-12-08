@@ -1,12 +1,10 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:hatchery/business/home/phone_numbers.dart';
-import 'package:hatchery/business/home/report_something.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/upgrade_manager.dart';
-import 'package:hatchery/manager/app_manager.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:community_material_icon/community_material_icon.dart';
-import 'package:hatchery/common/widget/webview_common.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///升级弹窗ui
 upgradeCard(BuildContext context) async {
@@ -21,7 +19,7 @@ upgradeCard(BuildContext context) async {
               return AlertDialog(
                 title: Text(
                   "发现新版本!",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.start,
                 ),
                 shape: RoundedRectangleBorder(
@@ -38,17 +36,14 @@ upgradeCard(BuildContext context) async {
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      manager.DownloadApp(manager.UpdataLists[0].android_url,
+                          manager.UpdataLists[0].ios_url);
                     },
                   ),
                 ],
               );
             } else {
-              return Container(
-                color: Colors.transparent,
-                height: 0,
-                width: 0,
-              );
+              return CupertinoActivityIndicator();
             }
           }));
     },

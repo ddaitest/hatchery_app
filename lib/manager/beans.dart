@@ -149,69 +149,41 @@ class AdListInfo {
 }
 
 class phoneNumberInfo {
-  List<Numberlist> numberlist;
-
-  phoneNumberInfo({this.numberlist});
-
-  phoneNumberInfo.fromJson(Map<String, dynamic> json) {
-    if (json['numberlist'] != null) {
-      numberlist = new List<Numberlist>();
-      json['numberlist'].forEach((v) {
-        numberlist.add(new Numberlist.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.numberlist != null) {
-      data['numberlist'] = this.numberlist.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Numberlist {
   String name;
   String phone;
   String des;
 
-  Numberlist({this.name, this.phone, this.des});
+  phoneNumberInfo({this.name, this.phone, this.des});
 
-  Numberlist.fromJson(Map<String, dynamic> json) {
+  phoneNumberInfo.fromJson(Map<String, dynamic> json) {
     name = json['id'];
     phone = json['phone'];
     des = json['des'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = this.name;
-    data['phone'] = this.phone;
-    data['des'] = this.des;
-    return data;
-  }
 }
 
 class updataInfo {
-  String code;
+  int code;
   bool mustUpdate;
   bool showUpdate;
   String updateMessage;
-  String updateUrl;
+  String android_url;
+  String ios_url;
 
   updataInfo(
       {this.code,
       this.mustUpdate,
       this.showUpdate,
       this.updateMessage,
-      this.updateUrl});
+      this.android_url,
+      this.ios_url});
 
   updataInfo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     mustUpdate = json['must_update'];
     showUpdate = json['show_update'];
     updateMessage = json['update_message'];
-    updateUrl = json['update_url'];
+    android_url = json['android_url'];
+    ios_url = json['ios_url'];
   }
 }
