@@ -4,14 +4,17 @@ import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
 import 'business/splash/splash.dart';
 import 'business/home/home.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 
-void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(builder: (context) => AppManager()),
-    ],
-    child: MyApp(),
-  ));
+void main() async {
+  FlutterBugly.postCatchedException(() {
+    runApp(MyApp());
+  });
+
+  FlutterBugly.init(
+    androidAppId: "41d23c0115",
+    iOSAppId: "7274afdfed",
+  );
 }
 
 class MyApp extends StatelessWidget {
