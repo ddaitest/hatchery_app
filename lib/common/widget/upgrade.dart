@@ -38,6 +38,7 @@ upgradeCard(BuildContext context) async {
                     onPressed: () {
                       manager.DownloadApp(manager.UpdataLists[0].android_url,
                           manager.UpdataLists[0].ios_url);
+                      Navigator.of(context).pop();
                     },
                   ),
                 ],
