@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'business/splash/splash.dart';
 import 'business/home/home.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:flutter_jpush/flutter_jpush.dart';
 
 void main() async {
   FlutterBugly.postCatchedException(() {
@@ -15,6 +16,7 @@ void main() async {
     androidAppId: "41d23c0115",
     iOSAppId: "7274afdfed",
   );
+  _startupJpush();
 }
 
 class MyApp extends StatelessWidget {
@@ -30,4 +32,10 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+void _startupJpush() async {
+  print("初始化jpush...");
+  await FlutterJPush.startup();
+  print("初始化jpush成功!");
 }

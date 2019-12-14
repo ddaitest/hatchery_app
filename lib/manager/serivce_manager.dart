@@ -5,6 +5,7 @@ import 'package:hatchery/common/api.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
+import 'package:hatchery/common/widget/upgrade.dart';
 
 class SeriveManager extends ChangeNotifier {
   List<ServiceListInfo> _subjectLists = [];
@@ -29,6 +30,10 @@ class SeriveManager extends ChangeNotifier {
     "6": "各种服务",
     "7": "其他",
   };
+
+  showUpgradeCard(value) {
+    upgradeCard(value);
+  }
 
   getListData(int num) async {
     await queryServiceData(num);

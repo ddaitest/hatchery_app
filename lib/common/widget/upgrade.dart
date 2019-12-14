@@ -1,13 +1,10 @@
-import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/upgrade_manager.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 ///升级弹窗ui
-upgradeCard(BuildContext context) async {
+Future<void> upgradeCard(BuildContext context) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: true, // user must tap button!
