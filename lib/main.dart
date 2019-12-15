@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:hatchery/manager/app_manager.dart';
-import 'package:provider/provider.dart';
 import 'business/splash/splash.dart';
 import 'business/home/home.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
