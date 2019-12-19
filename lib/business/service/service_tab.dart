@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
+import 'package:hatchery/common/widget/local_notifications.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
@@ -72,8 +73,28 @@ class ServiceTabState extends State<ServiceTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _topButtons(Icons.account_balance, Colors.black,
-                  manager.ServiceTopMap["4"], Colors.black, 4),
+              MaterialButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.language,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      manager.ServiceTopMap["6"],
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
               MaterialButton(
                 onPressed: () {
                   upgradeCard(context);
