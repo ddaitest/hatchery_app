@@ -72,3 +72,34 @@ class Api {
     return dio.get("api/upgrade.json", queryParameters: {});
   }
 }
+
+class ApiForNearby {
+  static Dio dio = Dio(BaseOptions(
+      baseUrl: "http://123.206.176.51:5000/",
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      responseType: ResponseType.plain));
+
+  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
+    onRequest: (RequestOptions options) {
+      return options;
+    },
+    onResponse: (Response response) {
+      return response; // continue
+    },
+    onError: (DioError e) {
+      return e; //continue
+    },
+  );
+
+  static init() {
+    if (!dio.interceptors.contains(_interceptorsWrapper)) {
+      dio.interceptors.add(_interceptorsWrapper);
+    }
+  }
+
+  ///list数据相关
+  static queryIgnList(String num) {
+    return dio.get("/data/ign/?page=" + num, queryParameters: {});
+  }
+}

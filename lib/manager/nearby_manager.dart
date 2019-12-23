@@ -17,6 +17,40 @@ class NearbyManager extends ChangeNotifier {
 
   int get bannerTotal => _bannerList.length;
 
+  List<IgnDataInfo> _subjectLists = [];
+
+  UnmodifiableListView<IgnDataInfo> get subjectLists =>
+      UnmodifiableListView(_subjectLists);
+
+  int get total => _subjectLists.length;
+
+  NearbyManager() {
+    getListData("1");
+  }
+
+  getListData(String num) async {
+    await queryIgnData(num);
+    print('LC -> ${_subjectLists[0].title}');
+  }
+
+  ///附近tab数据
+  queryIgnData(String num) async {
+    Response response = await ApiForNearby.queryIgnList(num);
+    if (response.data != null) {
+      final parsed = json.decode(response.data)['data'] ?? null;
+//      var resultCode = parsed['code'] ?? 0;
+      for (var x in parsed) {
+        add(IgnDataInfo.fromJson(x));
+      }
+//      print("LC->#### ${_phoneNumbersList}");
+    }
+  }
+
+  void add(IgnDataInfo item) {
+    _subjectLists.add(item);
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     super.dispose();

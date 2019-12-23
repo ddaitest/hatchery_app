@@ -187,3 +187,19 @@ class updataInfo {
     ios_url = json['ios_url'];
   }
 }
+
+class IgnDataInfo {
+  String gotoUrl;
+  String img;
+  String score;
+  String title;
+
+  IgnDataInfo({this.gotoUrl, this.img, this.score, this.title});
+
+  IgnDataInfo.fromJson(Map<String, dynamic> json) {
+    gotoUrl = json['goto_url'];
+    img = json['img'];
+    score = json['score'];
+    title = json['title'];
+  }
+}
