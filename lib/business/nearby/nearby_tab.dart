@@ -87,34 +87,35 @@ class NearbyTabState extends State<NearbyTab> {
         return CupertinoActivityIndicator();
       } else {
         return Expanded(
-            child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              glvc,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      WebViewPage("http://www.sina.com.cn", null)),
-            );
-          },
           child: ListView.builder(
               shrinkWrap: true,
               itemCount: manager.total,
               itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    getItemContainerView(
-                        glvc, manager.subjectLists[index], manager),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      glvc,
+                      MaterialPageRoute(
+                          builder: (context) => WebViewPage(
+                              manager.subjectLists[index].gotoUrl, null)),
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      getItemContainerView(
+                          glvc, manager.subjectLists[index], manager),
 
-                    ///下面的灰色分割线
-                    Divider(
-                      height: 2,
-                      color: Colors.grey[400],
-                    ),
-                  ],
+                      ///下面的灰色分割线
+                      Divider(
+                        height: 2,
+                        color: Colors.grey[400],
+                      ),
+                    ],
+                  ),
                 );
               }),
-        ));
+        );
       }
     });
   }

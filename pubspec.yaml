@@ -42,10 +42,11 @@ dependencies:
   image_picker: ^0.6.2+1
   flutter_jpush: ^0.0.4
 #  flutter_umeng_analytics_fork: ^0.0.3
-  flutter_bugly:
-    git:
-      url: git://github.com/crazecoder/flutter_bugly.git
-      ref: dev
+#  flutter_bugly:
+#    git:
+#      url: git://github.com/crazecoder/flutter_bugly.git
+#      ref: dev
+  flutter_bugly: 0.2.8
   flutter_webview_plugin: ^0.3.8
   package_info: ^0.4.0+6
   page_view_indicator: ^2.0.2
