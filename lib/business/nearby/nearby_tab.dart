@@ -26,7 +26,7 @@ class NearbyTabState extends State<NearbyTab> {
     );
   }
 
-  Future<Null> RefreshData() async {
+  Future<Null> _RefreshData() async {
     await Future.delayed(Duration(seconds: 1), () {
       return NearbyManager();
     });
@@ -34,7 +34,7 @@ class NearbyTabState extends State<NearbyTab> {
 
   _bodyContainer(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: RefreshData,
+        onRefresh: _RefreshData,
         displacement: 20,
         child: Container(
           color: Colors.white,
