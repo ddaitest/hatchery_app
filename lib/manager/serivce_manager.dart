@@ -32,7 +32,7 @@ class SeriveManager extends ChangeNotifier {
   };
 
   showUpgradeCard(value) {
-    upgradeCard(value);
+    LocalNotificationWidgetState().upgradeCard(value);
   }
 
   getListData(int num) async {

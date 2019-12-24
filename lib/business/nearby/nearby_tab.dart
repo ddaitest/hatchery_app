@@ -11,7 +11,11 @@ class NearbyTab extends StatefulWidget {
   NearbyTabState createState() => NearbyTabState();
 }
 
-class NearbyTabState extends State<NearbyTab> {
+class NearbyTabState extends State<NearbyTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   var subjects = [];
   @override
   void initState() {

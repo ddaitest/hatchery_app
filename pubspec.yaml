@@ -58,6 +58,7 @@ dependencies:
   webview_flutter: ^0.3.15+1
   flutter_local_notifications: ^0.8.4+3
   rxdart: ^0.22.6
+  path_provider: ^1.4.5
 
 dev_dependencies:
   flutter_test:
