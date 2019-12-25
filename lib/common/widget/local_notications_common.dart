@@ -20,7 +20,7 @@ Future showSilentNotification(
   int id = 0,
 }) =>
     _showNotification(notifications,
-        title: title, body: body, id: id, type: _ongoing);
+        title: title, body: body, id: id, type: _noSound);
 
 NotificationDetails get _ongoing {
   final androidChannelSpecifics = AndroidNotificationDetails(

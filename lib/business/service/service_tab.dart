@@ -12,6 +12,7 @@ import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/common/widget/local_notications_common.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hatchery/business/home/home.dart';
+import 'package:dio/dio.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
@@ -24,10 +25,12 @@ class ServiceTabState extends State<ServiceTab>
   @override
   bool get wantKeepAlive => true;
 
+//  int count;
+//  int total;
+
   @override
   void initState() {
     super.initState();
-
     final settingsAndroid = AndroidInitializationSettings('app_icon');
     final settingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: (id, title, body, payload) =>
@@ -38,7 +41,9 @@ class ServiceTabState extends State<ServiceTab>
         onSelectNotification: onSelectNotification);
   }
 
-  Future onSelectNotification(String payload) async => await Navigator.push(
+  @override
+  Future onSelectNotification(String payload) async =>
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
@@ -56,6 +61,23 @@ class ServiceTabState extends State<ServiceTab>
       ],
       child: _ServicePage(context),
     );
+  }
+
+  downloadFile(urlPath, savePath) async {
+    Dio dio = Dio();
+    Response response;
+    try {
+      response = await dio.download(urlPath, savePath,
+          onReceiveProgress: (int count, int total) {
+        //进度
+        double final_count = ((count / total) * 100);
+        print("${final_count.toInt()}%");
+      });
+      print('downloadFile success---------${response.data}');
+    } on DioError catch (e) {
+      print('downloadFile error---------$e');
+    }
+    return response.data;
   }
 
   Future<Null> RefreshData() async {
@@ -95,8 +117,14 @@ class ServiceTabState extends State<ServiceTab>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               MaterialButton(
-                onPressed: () => showSilentNotification(notifications,
-                    title: '新版本下载中...', body: 'SilentBody', id: 30),
+                onPressed: () {
+                  //https://blog.csdn.net/shayubuhuifei/article/details/51314806
+                  showSilentNotification(notifications,
+                      title: '新版本下载中...', body: '######%', id: 30);
+                  downloadFile(
+                      'https://dldir1.qq.com/weixin/android/weixin709android1560.apk',
+                      '/storage/emulated/0/weixin709android1560.apk');
+                },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
