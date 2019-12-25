@@ -114,7 +114,7 @@ class ServiceTabState extends State<ServiceTab>
               ),
               MaterialButton(
                 onPressed: () {
-                  LocalNotificationWidgetState().upgradeCard(context);
+                  upgradeCard(context);
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
