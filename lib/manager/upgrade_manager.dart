@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UpgradeManager extends ChangeNotifier {
   List<updataInfo> _updataLists = [];
@@ -18,6 +21,7 @@ class UpgradeManager extends ChangeNotifier {
   int get total => _updataLists.length;
 
   UpgradeManager() {
+    _localPath();
     queryUpdataData();
   }
 
@@ -36,22 +40,76 @@ class UpgradeManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> DownloadApp(android_url, ios_url) {
+  ///下载策略
+  Future<void> DownloadApp(ios_url) {
     if (Platform.isAndroid) {
-      gotoDownloadPage(android_url);
+      _downloadFile(_updataLists[0].android_url, _localPath());
     } else if (Platform.isIOS) {
-      gotoDownloadPage(ios_url);
+      _gotoAppStorePage(ios_url);
     } else {
-      gotoDownloadPage(android_url);
+      print('LC -> 平台判定失败');
     }
   }
 
-  gotoDownloadPage(String url) async {
+  ///获取本地路径
+  Future _localPath() async {
+    try {
+      var appDocDir = (await getExternalStorageDirectory()).path;
+      return appDocDir;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  ///ios跳转至Appstore
+  _gotoAppStorePage(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  ///网络权限申请
+  Future requestPermission() async {
+    // 申请权限
+    await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+
+    // 申请结果
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.storage);
+
+    if (permission == PermissionStatus.granted) {
+      print("有权限");
+      return true;
+    } else {
+      print("权限申请失败");
+      return false;
+    }
+  }
+
+  ///下载前需先拿到path
+  _downloadFile(urlPath, localPath) async {
+    requestPermission().then((result) {
+      if (result.toString() == 'true') {
+        _localPath().then((info) async {
+          Dio dio = Dio();
+          Response response;
+          try {
+            print('LC -> ' + '${info}' + '/hatchery.apk');
+            response = await dio.download(urlPath, '${info}' + '/hatchery.apk',
+                onReceiveProgress: (int count, int total) {
+              //进度
+              print("$count/$total");
+            });
+            OpenFile.open('$info' + '/hatchery.apk');
+          } on DioError catch (e) {
+            print('downloadFile error---------$e');
+          }
+          return response.data;
+        });
+      }
+    });
   }
 
   @override
