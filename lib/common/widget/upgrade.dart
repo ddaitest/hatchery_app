@@ -9,7 +9,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 Future<void> upgradeCard(BuildContext context) async {
   return showDialog<void>(
     context: context,
-    barrierDismissible: true, // user must tap button!
+    barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return ChangeNotifierProvider(
           builder: (context) => UpgradeManager(),
@@ -37,10 +37,9 @@ Future<void> upgradeCard(BuildContext context) async {
                     onPressed: () {
                       _checkNetworkType().then((info) {
                         print('LC- >' + info.toString());
-                        if (info.toString() == 'true') {
+                        if (info) {
                           Navigator.of(context).pop();
                           manager.DownloadApp(manager.UpdataLists[0].ios_url);
-                          _downloadProgress(context, manager);
                         } else {
                           Navigator.of(context).pop();
                           CellularDataCheck(context, manager);
@@ -92,7 +91,6 @@ Future<void> CellularDataCheck(BuildContext context, cdc) async {
               onPressed: () {
                 cdc.DownloadApp(cdc.UpdataLists[0].ios_url);
                 Navigator.of(context).pop();
-                _downloadProgress(context, cdc);
               },
             ),
             FlatButton(
@@ -105,22 +103,6 @@ Future<void> CellularDataCheck(BuildContext context, cdc) async {
           ],
         );
       });
-}
-
-_downloadProgress(context, dlp) {
-  ProgressDialog pr;
-  pr = ProgressDialog(context, type: ProgressDialogType.Download);
-  pr.update(
-    message: '正在下载...',
-    progressWidget: CircularProgressIndicator(),
-//    progress: dlp.FinalCount ?? 0,
-    maxProgress: 100,
-    progressTextStyle: TextStyle(
-        color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-    messageTextStyle: TextStyle(
-        color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-  );
-  return pr.show();
 }
 
 _mustBeClose(context, mm) {

@@ -24,7 +24,6 @@ class UpgradeManager extends ChangeNotifier {
   double get FinalCount => finalCount;
 
   UpgradeManager() {
-    _localPath();
     queryUpdataData();
   }
 
@@ -94,7 +93,7 @@ class UpgradeManager extends ChangeNotifier {
   ///下载前需先拿到path
   _downloadFile(urlPath, localPath) async {
     requestPermission().then((result) {
-      if (result.toString() == 'true') {
+      if (result) {
         _localPath().then((info) async {
           Dio dio = Dio();
           Response response;
