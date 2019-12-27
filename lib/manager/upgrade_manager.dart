@@ -19,6 +19,8 @@ class UpgradeManager extends ChangeNotifier {
       UnmodifiableListView(_updataLists);
 
   int get total => _updataLists.length;
+  double finalCount;
+  double get FinalCount => finalCount;
 
   UpgradeManager() {
     _localPath();
@@ -96,11 +98,14 @@ class UpgradeManager extends ChangeNotifier {
           Dio dio = Dio();
           Response response;
           try {
-            print('LC -> ' + '${info}' + '/hatchery.apk');
-            response = await dio.download(urlPath, '${info}' + '/hatchery.apk',
+            print('LC -> ' + '$info' + '/hatchery.apk');
+            response = await dio.download(urlPath, '$info' + '/hatchery.apk',
                 onReceiveProgress: (int count, int total) {
-              //进度
-              print("$count/$total");
+              finalCount = (count ~/ total).toDouble();
+              notifyListeners();
+
+              ///进度
+              print("$FinalCount%");
             });
             OpenFile.open('$info' + '/hatchery.apk');
           } on DioError catch (e) {

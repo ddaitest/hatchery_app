@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:hatchery/manager/upgrade_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 ///升级弹窗ui
 Future<void> upgradeCard(BuildContext context) async {
@@ -40,6 +40,7 @@ Future<void> upgradeCard(BuildContext context) async {
                         if (info.toString() == 'true') {
                           Navigator.of(context).pop();
                           manager.DownloadApp(manager.UpdataLists[0].ios_url);
+                          _downloadProgress(context, manager);
                         } else {
                           Navigator.of(context).pop();
                           CellularDataCheck(context, manager);
@@ -91,6 +92,7 @@ Future<void> CellularDataCheck(BuildContext context, cdc) async {
               onPressed: () {
                 cdc.DownloadApp(cdc.UpdataLists[0].ios_url);
                 Navigator.of(context).pop();
+                _downloadProgress(context, cdc);
               },
             ),
             FlatButton(
@@ -103,6 +105,22 @@ Future<void> CellularDataCheck(BuildContext context, cdc) async {
           ],
         );
       });
+}
+
+_downloadProgress(context, dlp) {
+  ProgressDialog pr;
+  pr = ProgressDialog(context, type: ProgressDialogType.Download);
+  pr.update(
+    message: '正在下载...',
+    progressWidget: CircularProgressIndicator(),
+//    progress: dlp.FinalCount ?? 0,
+    maxProgress: 100,
+    progressTextStyle: TextStyle(
+        color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+    messageTextStyle: TextStyle(
+        color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+  );
+  return pr.show();
 }
 
 _mustBeClose(context, mm) {
