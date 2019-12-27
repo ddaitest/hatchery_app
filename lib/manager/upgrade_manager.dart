@@ -20,6 +20,7 @@ class UpgradeManager extends ChangeNotifier {
 
   int get total => _updataLists.length;
   double finalCount;
+
   double get FinalCount => finalCount;
 
   UpgradeManager() {
@@ -43,11 +44,11 @@ class UpgradeManager extends ChangeNotifier {
   }
 
   ///下载策略
-  Future<void> DownloadApp(ios_url) {
+  Future<void> DownloadApp(iosUrl) {
     if (Platform.isAndroid) {
       _downloadFile(_updataLists[0].android_url, _localPath());
     } else if (Platform.isIOS) {
-      _gotoAppStorePage(ios_url);
+      _gotoAppStorePage(iosUrl);
     } else {
       print('LC -> 平台判定失败');
     }
@@ -101,8 +102,7 @@ class UpgradeManager extends ChangeNotifier {
             print('LC -> ' + '$info' + '/hatchery.apk');
             response = await dio.download(urlPath, '$info' + '/hatchery.apk',
                 onReceiveProgress: (int count, int total) {
-              finalCount = (count ~/ total).toDouble();
-              notifyListeners();
+              finalCount = (((count / total) * 100).toInt()).toDouble();
 
               ///进度
               print("$FinalCount%");
