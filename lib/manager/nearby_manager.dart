@@ -24,18 +24,18 @@ class NearbyManager extends ChangeNotifier {
 
   int get total => _subjectLists.length;
 
-  NearbyManager() {
-    getListData("1");
+  NearbyManager({int num = 1}) {
+    queryIgnData(num);
   }
 
-  getListData(String num) async {
-    await queryIgnData(num);
-    print('LC -> ${_subjectLists[0].title}');
-  }
+//  getListData(String num) async {
+//    await queryIgnData();
+//    print('LC -> ${_subjectLists[0].title}');
+//  }
 
   ///附近tab数据
-  queryIgnData(String num) async {
-    Response response = await ApiForNearby.queryIgnList(num);
+  queryIgnData(int num) async {
+    Response response = await ApiForNearby.queryIgnList(num.toString());
     if (response.data != null) {
       final parsed = json.decode(response.data)['data'] ?? null;
 //      var resultCode = parsed['code'] ?? 0;

@@ -11,7 +11,11 @@ class NearbyTab extends StatefulWidget {
   NearbyTabState createState() => NearbyTabState();
 }
 
-class NearbyTabState extends State<NearbyTab> {
+class NearbyTabState extends State<NearbyTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   var subjects = [];
   @override
   void initState() {
@@ -26,7 +30,7 @@ class NearbyTabState extends State<NearbyTab> {
     );
   }
 
-  Future<Null> RefreshData() async {
+  Future<Null> _RefreshData() async {
     await Future.delayed(Duration(seconds: 1), () {
       return NearbyManager();
     });
@@ -34,7 +38,7 @@ class NearbyTabState extends State<NearbyTab> {
 
   _bodyContainer(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: RefreshData,
+        onRefresh: _RefreshData,
         displacement: 20,
         child: Container(
           color: Colors.white,

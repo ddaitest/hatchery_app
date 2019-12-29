@@ -9,18 +9,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
-import 'package:hatchery/common/widget/local_notifications.dart';
+import 'package:hatchery/business/home/home.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
   ServiceTabState createState() => ServiceTabState();
 }
 
-class ServiceTabState extends State<ServiceTab> {
+class ServiceTabState extends State<ServiceTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
   }
+
+  @override
+  Future onSelectNotification(String payload) async =>
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +85,7 @@ class ServiceTabState extends State<ServiceTab> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               MaterialButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                },
+                onPressed: () {},
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -244,6 +250,15 @@ class ServiceTabState extends State<ServiceTab> {
       }
     });
   }
+
+  Widget title(String text) => Container(
+        margin: EdgeInsets.symmetric(vertical: 4),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.title,
+          textAlign: TextAlign.center,
+        ),
+      );
 
   @override
   void dispose() {
