@@ -26,7 +26,11 @@ class SplashManager extends ChangeNotifier {
 
   int countdownTime = SPLASH_TIME;
   var parsed;
+  var newParsed;
+  var result;
+  var newResultData;
   int resultCode;
+  String statesMessage;
   String _responseData;
 
   SplashManager() {
@@ -45,23 +49,23 @@ class SplashManager extends ChangeNotifier {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     _agreementData = sharedPreferences.getBool('agreementData') ?? null;
     notifyListeners();
-    print("LC -> $_agreementData");
   }
 
   /// 存广告json
   saveAdJson(AdJson) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('ad_json', AdJson);
+    sharedPreferences.setString('splashAd_json', AdJson);
   }
 
   /// 取广告json
   getAdJson(AdJson) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     _responseData = sharedPreferences.getString(AdJson) ?? null;
+    return _responseData;
   }
 
   /// 开屏倒计时
-  startCountdown() async {
+  startCountdown() {
     final timeUp = (Timer timer) {
       print("LC countdownTime ==> $countdownTime");
       if (countdownTime < 1) {
@@ -76,18 +80,32 @@ class SplashManager extends ChangeNotifier {
 
   /// 获取开屏广告数据
   queryAdData() async {
-    Response response = await Api.queryAdList();
+    Response response = await Api.querySplashList();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    _responseData = sharedPreferences.getString('ad_json') ?? null;
-    if (response.data != null) {
-      saveAdJson(response.data);
-      print("LC responseData ==> $_responseData");
-    }
+    result = response.data;
+    _responseData = sharedPreferences.getString('splashAd_json') ?? null;
     if (_responseData != null) {
       parsed = json.decode(_responseData);
-      resultCode = parsed['code'] ?? 0;
-      var resultData = parsed['data'] ?? null;
+      var resultData = parsed['result'][0];
       add(AdListInfo.fromJson(resultData));
+      newParsed = json.decode(result);
+      resultCode = newParsed['code'] ?? 0;
+      statesMessage = parsed['info'] ?? null;
+      var newResultData = newParsed['result'][0] ?? null;
+      if (resultCode == 200 && statesMessage == 'OK' && newResultData != null) {
+        print('LC resultData-> $newResultData');
+        saveAdJson(newResultData);
+      }
+    } else {
+      parsed = json.decode(result);
+      resultCode = parsed['code'] ?? 0;
+      statesMessage = parsed['info'] ?? null;
+      var resultData = parsed['result'][0] ?? null;
+      if (resultCode == 200 && statesMessage == 'OK' && resultData != null) {
+        print('LC resultData-> $resultData');
+        saveAdJson(newResultData);
+        add(AdListInfo.fromJson(resultData));
+      }
     }
   }
 

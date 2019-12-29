@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 
+var basicAuth =
+    'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzgyMzI3ODYsInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwiVVNFUiIsIkFETUlOIl0sImp0aSI6IjJhZDQyYmFmLTQyOGYtNDQ4Zi04NzBlLWY4YzY4MjY5ZTE5MCIsImNsaWVudF9pZCI6ImFwcGNsaWVudCIsInNjb3BlIjpbIm9wZW5pZCJdfQ.gvfaWW7dq6p3ovMSb1C3n_bA_3OQtQdRpb41MR6CrlKqzuMdpZKqxA4rFgPEtVzCof2wMKy2MAW-lY6mDqH_kyyRosGV2DLjSWG3uXhd4KpryKj9Cc8dZWTPcxaISp6q0EH-XjWtAMsI94419gtjhvRAfQKO_IDVH9HeTQkAcClJ9j_qwNpMWpJ0XTkwHb3rb_gVl_DE8icfU5s-Vl5gVL3SnUeMwTpRl6pGg9mVg_gYd43rHPaQJD3YFzJc7JnGKhngOUJlmo6lKHyMVS2-3n1yiA_YLgKttfS5JbgOgLydfAALK8Qv2qRQhHn4vVb4iI2AsC3hk3ZTxFD083usMQ';
+
 class ApiForServicePage {
   static Dio dio = Dio(BaseOptions(
       baseUrl: "https://api.apiopen.top/",
@@ -34,10 +37,12 @@ class ApiForServicePage {
 
 class Api {
   static Dio dio = Dio(BaseOptions(
-      baseUrl: "http://daivp.com:82/",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-      responseType: ResponseType.plain));
+    baseUrl: "http://39.96.16.125:8001/",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+    responseType: ResponseType.plain,
+    headers: {"Authorization": basicAuth},
+  ));
 
   static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
     onRequest: (RequestOptions options) {
@@ -57,9 +62,9 @@ class Api {
     }
   }
 
-  ///广告相关
-  static queryAdList() {
-    return dio.get("api/addata.json", queryParameters: {});
+  ///开屏相关
+  static querySplashList() {
+    return dio.get("api/advertisement/get/ad", queryParameters: {});
   }
 
   ///热线电话相关

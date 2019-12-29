@@ -104,47 +104,34 @@ class ServiceListInfo {
 }
 
 class AdListInfo {
-  int cardIndex;
   String id;
-  String listGoto;
-  String listUrl;
-  String showCardGoto;
-  String showCardUrl;
-  String splashGoto;
-  String splashUrl;
+  String description;
+  int status;
+  String clientId;
+  int updateTime;
+  int createTime;
+  String imgUrl;
+  String webUrl;
 
   AdListInfo(
-      {this.cardIndex,
-      this.id,
-      this.listGoto,
-      this.listUrl,
-      this.showCardGoto,
-      this.showCardUrl,
-      this.splashGoto,
-      this.splashUrl});
+      {this.id,
+      this.description,
+      this.status,
+      this.clientId,
+      this.updateTime,
+      this.createTime,
+      this.imgUrl,
+      this.webUrl});
 
   AdListInfo.fromJson(Map<String, dynamic> json) {
-    cardIndex = json['card_index'];
     id = json['id'];
-    listGoto = json['list_goto'];
-    listUrl = json['list_url'];
-    showCardGoto = json['showCard_goto'];
-    showCardUrl = json['showCard_url'];
-    splashGoto = json['splash_goto'];
-    splashUrl = json['splash_url'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['card_index'] = this.cardIndex;
-    data['id'] = this.id;
-    data['list_goto'] = this.listGoto;
-    data['list_url'] = this.listUrl;
-    data['showCard_goto'] = this.showCardGoto;
-    data['showCard_url'] = this.showCardUrl;
-    data['splash_goto'] = this.splashGoto;
-    data['splash_url'] = this.splashUrl;
-    return data;
+    description = json['description'];
+    status = json['status'];
+    clientId = json['client_id'];
+    updateTime = json['update_time'];
+    createTime = json['create_time'];
+    imgUrl = json['img_url'];
+    webUrl = json['web_url'];
   }
 }
 
