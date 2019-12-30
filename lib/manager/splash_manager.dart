@@ -65,7 +65,7 @@ class SplashManager extends ChangeNotifier {
   }
 
   /// 开屏倒计时
-  startCountdown() {
+  Future startCountdown() async {
     final timeUp = (Timer timer) {
       print("LC countdownTime ==> $countdownTime");
       if (countdownTime < 1) {
@@ -93,18 +93,20 @@ class SplashManager extends ChangeNotifier {
       statesMessage = parsed['info'] ?? null;
       var newResultData = newParsed['result'][0] ?? null;
       if (resultCode == 200 && statesMessage == 'OK' && newResultData != null) {
-        print('LC resultData-> $newResultData');
-        saveAdJson(newResultData);
+        print('LC resultData1-> $newResultData');
+        saveAdJson(result);
       }
     } else {
       parsed = json.decode(result);
       resultCode = parsed['code'] ?? 0;
       statesMessage = parsed['info'] ?? null;
-      var resultData = parsed['result'][0] ?? null;
-      if (resultCode == 200 && statesMessage == 'OK' && resultData != null) {
-        print('LC resultData-> $resultData');
-        saveAdJson(newResultData);
-        add(AdListInfo.fromJson(resultData));
+      var newResultData = parsed['result'][0] ?? null;
+      if (resultCode == 200 && statesMessage == 'OK' && newResultData != null) {
+        print('LC resultData2-> $newResultData');
+        saveAdJson(result);
+        add(AdListInfo.fromJson(newResultData));
+      } else {
+        add(AdListInfo.fromJson(json.decode(_responseData)['result'][0]));
       }
     }
   }

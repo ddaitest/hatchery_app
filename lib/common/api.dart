@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 
 var basicAuth =
     'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzgyMzI3ODYsInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwiVVNFUiIsIkFETUlOIl0sImp0aSI6IjJhZDQyYmFmLTQyOGYtNDQ4Zi04NzBlLWY4YzY4MjY5ZTE5MCIsImNsaWVudF9pZCI6ImFwcGNsaWVudCIsInNjb3BlIjpbIm9wZW5pZCJdfQ.gvfaWW7dq6p3ovMSb1C3n_bA_3OQtQdRpb41MR6CrlKqzuMdpZKqxA4rFgPEtVzCof2wMKy2MAW-lY6mDqH_kyyRosGV2DLjSWG3uXhd4KpryKj9Cc8dZWTPcxaISp6q0EH-XjWtAMsI94419gtjhvRAfQKO_IDVH9HeTQkAcClJ9j_qwNpMWpJ0XTkwHb3rb_gVl_DE8icfU5s-Vl5gVL3SnUeMwTpRl6pGg9mVg_gYd43rHPaQJD3YFzJc7JnGKhngOUJlmo6lKHyMVS2-3n1yiA_YLgKttfS5JbgOgLydfAALK8Qv2qRQhHn4vVb4iI2AsC3hk3ZTxFD083usMQ';
+var contentType = 'application/json';
 
 class ApiForServicePage {
   static Dio dio = Dio(BaseOptions(
@@ -106,5 +107,38 @@ class ApiForNearby {
   ///list数据相关
   static queryIgnList(String num) {
     return dio.get("/data/ign/?page=" + num, queryParameters: {});
+  }
+}
+
+class ApiForReportSt {
+  static Dio dio = Dio(BaseOptions(
+    baseUrl: "http://39.96.16.125:8001/",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+    responseType: ResponseType.plain,
+    headers: {"Authorization": basicAuth, "Content-Type": contentType},
+  ));
+
+  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
+    onRequest: (RequestOptions options) {
+      return options;
+    },
+    onResponse: (Response response) {
+      return response; // continue
+    },
+    onError: (DioError e) {
+      return e; //continue
+    },
+  );
+
+  static init() {
+    if (!dio.interceptors.contains(_interceptorsWrapper)) {
+      dio.interceptors.add(_interceptorsWrapper);
+    }
+  }
+
+  ///报事报修post
+  static postReportData(postData) {
+    return dio.post("api/feedback/create/help", data: postData);
   }
 }

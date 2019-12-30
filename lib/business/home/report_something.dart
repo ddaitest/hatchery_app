@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:hatchery/manager/report_st_manager.dart';
 
 class ReportSomethingPage extends StatefulWidget {
   @override
@@ -21,13 +22,13 @@ class ReportSomethingState extends State<ReportSomethingPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => AppManager(),
+      builder: (context) => ReportStManager(),
       child: _ScaffoldView(),
     );
   }
 
   _ScaffoldView() {
-    return Consumer<AppManager>(
+    return Consumer<ReportStManager>(
       builder: (context, manager, child) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -50,7 +51,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
   }
 
   _bodyView(manager) {
-    return Consumer<AppManager>(
+    return Consumer<ReportStManager>(
         builder: (body, manager, bodychild) => Form(
             key: _formkey,
             child: SingleChildScrollView(
@@ -59,6 +60,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                   color: Colors.white,
                   padding: const EdgeInsets.all(20),
                   child: TextFormField(
+                    autofocus: true,
                     maxLines: 5,
                     maxLength: 500,
                     maxLengthEnforced: false,
@@ -67,9 +69,11 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                       hintText: '请输入遇到的问题。',
                     ),
                     // ignore: missing_return
-                    validator: (inputValue) {
-                      if (inputValue.isEmpty) {
+                    validator: (Value) {
+                      if (Value.isEmpty) {
                         return '请输入内容';
+                      } else {
+                        inputValue = Value;
                       }
                     },
                   ),
@@ -87,7 +91,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                         style: TextStyle(color: Colors.red, fontSize: 16),
                       ),
                       Text(
-                        "  联系电话     ",
+                        " 联系电话 ",
                         style: TextStyle(fontSize: 16),
                       ),
                       Expanded(
@@ -107,11 +111,16 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                             }
                             if (phoneValue.isEmpty) {
                               return '请输入手机号码';
+                            } else {
+                              inputPhoneNumberValue = phoneValue;
                             }
                           },
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly, //只输入数字
                           ],
+                          onSaved: (value) {
+                            value = inputPhoneNumberValue;
+                          },
                         ),
                       ),
                     ],
@@ -135,7 +144,15 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                     ),
                     onPressed: () {
                       if (_formkey.currentState.validate()) {
-                        return null;
+                        manager.postBody['message'] = inputValue;
+                        manager.postBody['contact'] = inputPhoneNumberValue;
+                        manager.postReportStData().then((info) {
+                          if (info) {
+                            manager.showToast("提交成功");
+                          } else {
+                            manager.showToast("提交失败，请重试");
+                          }
+                        });
                       } else {
                         manager.showToast("请输入正确的信息");
                       }

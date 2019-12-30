@@ -190,3 +190,15 @@ class IgnDataInfo {
     title = json['title'];
   }
 }
+
+class ReportSt {
+  int code;
+  String info;
+
+  ReportSt({this.code, this.info});
+
+  ReportSt.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    info = json['info'];
+  }
+}

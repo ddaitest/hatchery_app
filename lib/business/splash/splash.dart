@@ -80,7 +80,7 @@ class SplashState extends State<SplashPage> {
                     height: MediaQuery.of(context).size.height - 150,
                     child: CachedNetworkImage(
                       imageUrl: manager.AdLists[0].imgUrl,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
