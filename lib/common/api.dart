@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-
-var basicAuth =
-    'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzgyMzI3ODYsInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwiVVNFUiIsIkFETUlOIl0sImp0aSI6IjJhZDQyYmFmLTQyOGYtNDQ4Zi04NzBlLWY4YzY4MjY5ZTE5MCIsImNsaWVudF9pZCI6ImFwcGNsaWVudCIsInNjb3BlIjpbIm9wZW5pZCJdfQ.gvfaWW7dq6p3ovMSb1C3n_bA_3OQtQdRpb41MR6CrlKqzuMdpZKqxA4rFgPEtVzCof2wMKy2MAW-lY6mDqH_kyyRosGV2DLjSWG3uXhd4KpryKj9Cc8dZWTPcxaISp6q0EH-XjWtAMsI94419gtjhvRAfQKO_IDVH9HeTQkAcClJ9j_qwNpMWpJ0XTkwHb3rb_gVl_DE8icfU5s-Vl5gVL3SnUeMwTpRl6pGg9mVg_gYd43rHPaQJD3YFzJc7JnGKhngOUJlmo6lKHyMVS2-3n1yiA_YLgKttfS5JbgOgLydfAALK8Qv2qRQhHn4vVb4iI2AsC3hk3ZTxFD083usMQ';
-var contentType = 'application/json';
+import 'package:hatchery/configs.dart';
 
 class ApiForServicePage {
   static Dio dio = Dio(BaseOptions(
@@ -42,7 +39,7 @@ class Api {
     connectTimeout: 5000,
     receiveTimeout: 3000,
     responseType: ResponseType.plain,
-    headers: {"Authorization": basicAuth},
+    headers: {"Authorization": BASIC_AUTH},
   ));
 
   static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
@@ -116,7 +113,7 @@ class ApiForReportSt {
     connectTimeout: 5000,
     receiveTimeout: 3000,
     responseType: ResponseType.plain,
-    headers: {"Authorization": basicAuth, "Content-Type": contentType},
+    headers: {"Authorization": BASIC_AUTH, "Content-Type": CONTENT_TYPE},
   ));
 
   static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(

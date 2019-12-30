@@ -4,11 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hatchery/configs.dart';
 
 class ReportStManager extends ChangeNotifier {
   String result;
   var parsed;
-  Map<String, String> postBody = {"name": "LC"};
+  Map<String, String> postBody = {"name": "$APP_ID"};
 
   ///报事报修发送
   Future postReportStData() async {
@@ -17,7 +18,7 @@ class ReportStManager extends ChangeNotifier {
     result = response.data;
     parsed = jsonDecode(result);
     print('code ${parsed['code']}');
-    if (result != null && parsed['code'] == 200 && parsed['info'] == 'ok') {
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
       return true;
     } else {
       return false;

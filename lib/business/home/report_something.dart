@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/manager/report_st_manager.dart';
@@ -85,14 +84,18 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                   color: Colors.white,
                   padding: const EdgeInsets.all(10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Text(
-                        " * ",
+                        " *  ",
                         style: TextStyle(color: Colors.red, fontSize: 16),
                       ),
                       Text(
-                        " 联系电话 ",
+                        "联系电话",
                         style: TextStyle(fontSize: 16),
+                      ),
+                      Container(
+                        width: 20,
                       ),
                       Expanded(
                         child: TextFormField(
@@ -149,6 +152,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                         manager.postReportStData().then((info) {
                           if (info) {
                             manager.showToast("提交成功");
+                            Navigator.pop(context);
                           } else {
                             manager.showToast("提交失败，请重试");
                           }
