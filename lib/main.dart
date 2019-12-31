@@ -6,15 +6,16 @@ import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_jpush/flutter_jpush.dart';
 
 void main() async {
-  FlutterBugly.postCatchedException(() {
-    runApp(MyApp());
-  });
-
-  FlutterBugly.init(
-    androidAppId: "41d23c0115",
-    iOSAppId: "7274afdfed",
-  );
-  _startupJpush();
+//  FlutterBugly.postCatchedException(() {
+//    runApp(MyApp());
+//  });
+//
+//  FlutterBugly.init(
+//    androidAppId: "41d23c0115",
+//    iOSAppId: "7274afdfed",
+//  );
+//  _startupJpush();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

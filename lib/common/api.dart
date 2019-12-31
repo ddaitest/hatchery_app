@@ -4,10 +4,12 @@ import 'package:hatchery/configs.dart';
 
 class ApiForServicePage {
   static Dio dio = Dio(BaseOptions(
-      baseUrl: "https://api.apiopen.top/",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-      responseType: ResponseType.plain));
+    baseUrl: "http://39.96.16.125:8001/",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+    responseType: ResponseType.plain,
+    headers: {"Authorization": BASIC_AUTH},
+  ));
 
   static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
     onRequest: (RequestOptions options) {
@@ -27,9 +29,9 @@ class ApiForServicePage {
     }
   }
 
-  ///周边list数据
-  static queryServiceList() {
-    return dio.get("musicRankings");
+  ///服务list数据
+  static queryServiceList(parameters) {
+    return dio.get("api/feed/get/feeds", queryParameters: parameters);
   }
 }
 

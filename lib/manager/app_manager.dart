@@ -15,10 +15,6 @@ class AppManager extends ChangeNotifier {
 
   int get m => _m;
 
-  String _webviewUrl = 'https://www.baidu.com/';
-
-  String get WebViewUrl => _webviewUrl;
-
   List<phoneNumberInfo> _phoneNumbersList = [];
 
   UnmodifiableListView<phoneNumberInfo> get PhoneNumbersList =>

@@ -14,11 +14,11 @@ import 'dart:collection';
 class SplashManager extends ChangeNotifier {
   Timer timer;
   bool _agreementData;
-  bool get AgreementData => _agreementData;
+  bool get agreementData => _agreementData;
 
   List<AdListInfo> _adLists = [];
 
-  UnmodifiableListView<AdListInfo> get AdLists =>
+  UnmodifiableListView<AdListInfo> get adLists =>
       UnmodifiableListView(_adLists);
 
   int get total => _adLists.length;

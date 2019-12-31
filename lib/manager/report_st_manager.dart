@@ -13,7 +13,6 @@ class ReportStManager extends ChangeNotifier {
 
   ///报事报修发送
   Future postReportStData() async {
-    print(postBody);
     Response response = await ApiForReportSt.postReportData(postBody);
     result = response.data;
     parsed = jsonDecode(result);

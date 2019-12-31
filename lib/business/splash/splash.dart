@@ -33,9 +33,11 @@ class SplashState extends State<SplashPage> {
 
   _splashPage(BuildContext context) {
     return Consumer<SplashManager>(builder: (context, manager, child) {
-      if (manager.AgreementData == true) {
+      if (manager.agreementData == true) {
         if (manager.total != 0) {
-          manager.timer.cancel();
+          if (manager.timer != null) {
+            manager.timer.cancel();
+          }
           manager.startCountdown();
           return Container(
             constraints: BoxConstraints.expand(),
@@ -71,7 +73,7 @@ class SplashState extends State<SplashPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              WebViewPage(manager.AdLists[0].webUrl, '/home')),
+                              WebViewPage(manager.adLists[0].webUrl, '/home')),
                     );
                     manager.timer.cancel();
                   },
@@ -79,7 +81,7 @@ class SplashState extends State<SplashPage> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height - 150,
                     child: CachedNetworkImage(
-                      imageUrl: manager.AdLists[0].imgUrl,
+                      imageUrl: manager.adLists[0].imgUrl,
                       fit: BoxFit.fill,
                     ),
                   ),

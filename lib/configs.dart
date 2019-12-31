@@ -1,5 +1,11 @@
 const int APP_ID = 001;
 
+const String HOME_TAB_NUMBER = 'a01';
+
+const String SERVICE_TAB_NUMBER = '5dfe04a070492f05963a1ed1';
+
+const String NEARBY_TAB_NUMBER = 'a03';
+
 const bool TEST = true;
 
 const int SPLASH_TIME = TEST ? 4 : 3;
