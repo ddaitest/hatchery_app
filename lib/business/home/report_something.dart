@@ -55,37 +55,27 @@ class ReportSomethingState extends State<ReportSomethingPage> {
             key: _formkey,
             child: SingleChildScrollView(
               child: Column(children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.all(20),
-                      child: TextFormField(
-                        autofocus: true,
-                        maxLines: 5,
-                        maxLength: 500,
-                        maxLengthEnforced: false,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: '请输入遇到的问题。',
-                        ),
-                        // ignore: missing_return
-                        validator: (Value) {
-                          if (Value.isEmpty) {
-                            return '请输入内容';
-                          } else {
-                            inputValue = Value;
-                          }
-                        },
-                      ),
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(20),
+                  child: TextFormField(
+                    autofocus: true,
+                    maxLines: 5,
+                    maxLength: 500,
+                    maxLengthEnforced: false,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: '请输入遇到的问题。',
                     ),
-                    Positioned(
-                      width: 20.0,
-                      bottom: 10.0,
-                      left: 20.0,
-                      child: Icon(Icons.add),
-                    ),
-                  ],
+                    // ignore: missing_return
+                    validator: (Value) {
+                      if (Value.isEmpty) {
+                        return '请输入内容';
+                      } else {
+                        inputValue = Value;
+                      }
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 10,
