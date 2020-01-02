@@ -24,6 +24,22 @@ class ReportStManager extends ChangeNotifier {
     }
   }
 
+  ///报事报修图片上传
+  Future uploadReportStImage(imagePath) async {
+    FormData formdata = FormData.fromMap({
+      "file": await MultipartFile.fromFile(imagePath, filename: 'file.jpg')
+    });
+    Response response = await ApiForReportSt.uploadReportImage(formdata);
+    result = response.data;
+    parsed = jsonDecode(result);
+    print('result $parsed');
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      return parsed['result'];
+    } else {
+      showToast('图片上传失败,请重试');
+    }
+  }
+
   showToast(String title) {
     Fluttertoast.showToast(
         msg: title,

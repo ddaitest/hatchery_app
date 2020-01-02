@@ -140,4 +140,9 @@ class ApiForReportSt {
   static postReportData(postData) {
     return dio.post("api/feedback/create/help", data: postData);
   }
+
+  ///报事报修图片上传
+  static uploadReportImage(formdata) {
+    return dio.post("files/upload", data: formdata);
+  }
 }

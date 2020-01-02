@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/manager/report_st_manager.dart';
+import 'package:community_material_icon/community_material_icon.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ReportSomethingPage extends StatefulWidget {
   @override
@@ -12,6 +16,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   String inputValue;
   String inputPhoneNumberValue;
+  String imageUrl;
 
   @override
   void initState() {
@@ -49,6 +54,43 @@ class ReportSomethingState extends State<ReportSomethingPage> {
     );
   }
 
+  Future getImageByGallery() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print('LC->image.path###${image.path}');
+    ReportStManager().uploadReportStImage(image.path).then((info) {
+      setState(() {
+        imageUrl = info.toString();
+        print('LC->###########$imageUrl');
+      });
+    });
+  }
+
+  Future getImageByCamera() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.camera);
+    print('LC->image.path###${image.path}');
+    ReportStManager().uploadReportStImage(image.path).then((info) {
+      setState(() {
+        imageUrl = info.toString();
+        print('LC->###########$imageUrl');
+      });
+    });
+  }
+
+  void showActionSheet({BuildContext context, Widget child}) {
+    showCupertinoModalPopup<String>(
+      context: context,
+      builder: (BuildContext context) => child,
+    ).then((String value) {
+      if (value != null) {
+        if (value == "Camera") {
+          getImageByCamera();
+        } else if (value == "Gallery") {
+          getImageByGallery();
+        }
+      }
+    });
+  }
+
   _bodyView(manager) {
     return Consumer<ReportStManager>(
         builder: (body, manager, bodychild) => Form(
@@ -60,8 +102,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                   padding: const EdgeInsets.all(20),
                   child: TextFormField(
                     autofocus: true,
-                    maxLines: 5,
-                    maxLength: 500,
+                    maxLines: 3,
                     maxLengthEnforced: false,
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -77,6 +118,50 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                     },
                   ),
                 ),
+                Container(
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 350, 5),
+                      child: FlatButton(
+                          onPressed: () {
+                            showActionSheet(
+                              context: context,
+                              child: CupertinoActionSheet(
+                                title: const Text('选择图片'),
+                                //message: const Text('Please select the best mode from the options below.'),
+                                actions: <Widget>[
+                                  CupertinoActionSheetAction(
+                                    child: const Text('相册'),
+                                    onPressed: () {
+                                      Navigator.pop(context, 'Gallery');
+                                    },
+                                  ),
+                                  CupertinoActionSheetAction(
+                                    child: const Text('照相机'),
+                                    onPressed: () {
+                                      Navigator.pop(context, 'Camera');
+                                    },
+                                  ),
+                                ],
+                                cancelButton: CupertinoActionSheetAction(
+                                  child: const Text('取消'),
+                                  isDefaultAction: true,
+                                  onPressed: () {
+                                    Navigator.pop(context, 'Cancel');
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                          child: imageUrl == null
+                              ? Icon(
+                                  CommunityMaterialIcons.image_outline,
+                                  color: Colors.grey[400],
+                                  size: 50,
+                                )
+                              : Image.network(imageUrl)),
+                    )),
                 SizedBox(
                   height: 10,
                 ),
