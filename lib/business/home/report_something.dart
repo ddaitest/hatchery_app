@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:hatchery/manager/report_st_manager.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:hatchery/common/tools.dart';
 
 class ReportSomethingPage extends StatefulWidget {
   @override
@@ -56,24 +57,46 @@ class ReportSomethingState extends State<ReportSomethingPage> {
 
   Future getImageByGallery() async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print('LC->image.path###${image.path}');
-    ReportStManager().uploadReportStImage(image.path).then((info) {
-      setState(() {
-        imageUrl = info.toString();
-        print('LC->###########$imageUrl');
+    print('LC->image.lengthSync()###${image.lengthSync()}');
+    if (image.lengthSync() > 2080000) {
+      compressionImage(image.path).then((value) {
+        print('LC->image.value###${value}');
+        ReportStManager().uploadReportStImage(value).then((info) {
+          setState(() {
+            imageUrl = info.toString();
+            print('LC->###########$imageUrl');
+          });
+        });
       });
-    });
+    } else {
+      ReportStManager().uploadReportStImage(image.path).then((info) {
+        setState(() {
+          imageUrl = info.toString();
+          print('LC->###########$imageUrl');
+        });
+      });
+    }
   }
 
   Future getImageByCamera() async {
     File image = await ImagePicker.pickImage(source: ImageSource.camera);
-    print('LC->image.path###${image.path}');
-    ReportStManager().uploadReportStImage(image.path).then((info) {
-      setState(() {
-        imageUrl = info.toString();
-        print('LC->###########$imageUrl');
+    if (image.lengthSync() > 2080000) {
+      compressionImage(image.path).then((value) {
+        ReportStManager().uploadReportStImage(value).then((info) {
+          setState(() {
+            imageUrl = info.toString();
+            print('LC->###########$imageUrl');
+          });
+        });
       });
-    });
+    } else {
+      ReportStManager().uploadReportStImage(image.path).then((info) {
+        setState(() {
+          imageUrl = info.toString();
+          print('LC->###########$imageUrl');
+        });
+      });
+    }
   }
 
   void showActionSheet({BuildContext context, Widget child}) {
@@ -89,6 +112,36 @@ class ReportSomethingState extends State<ReportSomethingPage> {
         }
       }
     });
+  }
+
+  _actionSheetMemu() {
+    return showActionSheet(
+      context: context,
+      child: CupertinoActionSheet(
+        title: const Text('选择图片'),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: const Text('相册'),
+            onPressed: () {
+              Navigator.pop(context, 'Gallery');
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('照相机'),
+            onPressed: () {
+              Navigator.pop(context, 'Camera');
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: const Text('取消'),
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context, 'Cancel');
+          },
+        ),
+      ),
+    );
   }
 
   _bodyView(manager) {
@@ -119,49 +172,35 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                   ),
                 ),
                 Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 350, 5),
-                      child: FlatButton(
-                          onPressed: () {
-                            showActionSheet(
-                              context: context,
-                              child: CupertinoActionSheet(
-                                title: const Text('选择图片'),
-                                //message: const Text('Please select the best mode from the options below.'),
-                                actions: <Widget>[
-                                  CupertinoActionSheetAction(
-                                    child: const Text('相册'),
-                                    onPressed: () {
-                                      Navigator.pop(context, 'Gallery');
-                                    },
-                                  ),
-                                  CupertinoActionSheetAction(
-                                    child: const Text('照相机'),
-                                    onPressed: () {
-                                      Navigator.pop(context, 'Camera');
-                                    },
-                                  ),
-                                ],
-                                cancelButton: CupertinoActionSheetAction(
-                                  child: const Text('取消'),
-                                  isDefaultAction: true,
-                                  onPressed: () {
-                                    Navigator.pop(context, 'Cancel');
-                                  },
-                                ),
+                  color: Colors.white,
+                  width: MediaQuery.of(context).size.width,
+                  child: Align(
+                    alignment: const Alignment(-0.95, 1.0),
+                    child: imageUrl == null
+                        ? GestureDetector(
+                            onTap: () {
+                              _actionSheetMemu();
+                            },
+                            child: Icon(
+                              CommunityMaterialIcons.image_outline,
+                              color: Colors.grey[400],
+                              size: 50,
+                            ))
+                        : GestureDetector(
+                            onTap: () {
+                              _actionSheetMemu();
+                            },
+                            child: Container(
+                              width: 150,
+                              height: 200,
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.fill,
                               ),
-                            );
-                          },
-                          child: imageUrl == null
-                              ? Icon(
-                                  CommunityMaterialIcons.image_outline,
-                                  color: Colors.grey[400],
-                                  size: 50,
-                                )
-                              : Image.network(imageUrl)),
-                    )),
+                            ),
+                          ),
+                  ),
+                ),
                 SizedBox(
                   height: 10,
                 ),
@@ -234,6 +273,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                       if (_formkey.currentState.validate()) {
                         manager.postBody['message'] = inputValue;
                         manager.postBody['contact'] = inputPhoneNumberValue;
+                        manager.postBody['image'] = imageUrl;
                         manager.postReportStData().then((info) {
                           if (info) {
                             manager.showToast("提交成功");

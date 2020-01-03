@@ -221,7 +221,7 @@ class ServiceTabState extends State<ServiceTab>
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      getItemContainerView(
+                      _getItemContainerView(
                           glvc, manager.subjectLists[index], manager),
 
                       ///下面的灰色分割线
@@ -253,7 +253,7 @@ class ServiceTabState extends State<ServiceTab>
   }
 }
 
-getItemContainerView(BuildContext gicv, var subject, manager) {
+_getItemContainerView(BuildContext gicv, var subject, manager) {
   var imgUrl = subject.image;
   return Consumer<ServiceManager>(
       builder: (glvc, manager, glv) => GestureDetector(
@@ -270,9 +270,9 @@ getItemContainerView(BuildContext gicv, var subject, manager) {
               width: double.infinity,
               child: Row(
                 children: <Widget>[
-                  getImage(imgUrl),
+                  _getImage(imgUrl),
                   Container(
-                      child: getInfoView(subject),
+                      child: _getInfoView(subject),
                       width: MediaQuery.of(gicv).size.width - 116),
                 ],
               ),
@@ -280,19 +280,19 @@ getItemContainerView(BuildContext gicv, var subject, manager) {
           ));
 }
 
-getInfoView(var subject) {
+_getInfoView(var subject) {
   return Container(
     height: 90,
     alignment: Alignment.topLeft,
     child: Column(
       children: <Widget>[
-        getTitleView(subject),
+        _getTitleView(subject),
       ],
     ),
   );
 }
 
-getTitleView(subject) {
+_getTitleView(subject) {
   return Container(
     child: Row(
       children: <Widget>[
@@ -310,7 +310,7 @@ getTitleView(subject) {
   );
 }
 
-getImage(var imgUrl) {
+_getImage(var imgUrl) {
   return Container(
     child: CachedNetworkImage(
       height: 90,
