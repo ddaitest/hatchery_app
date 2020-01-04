@@ -44,10 +44,10 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        ndk {
-            //设置支持的SO库架构
-            abiFilters 'armeabi-v7a'//'arm64-v8a', 'x86', 'x86_64'
-        }
+//        ndk {
+//            //设置支持的SO库架构
+//            abiFilters 'armeabi-v7a'//'arm64-v8a', 'x86', 'x86_64'
+//        }
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
                 JPUSH_APPKEY : "a1f964ef7fa9723b1a328fec", // NOTE: JPush 上注册的包名对应的 Appkey.

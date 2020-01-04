@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/flavors/Flavors.dart';
+import 'package:hatchery/routers.dart';
 import 'business/splash/splash.dart';
 import 'business/home/home.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
@@ -17,61 +18,84 @@ void main() async {
 //    iOSAppId: "7274afdfed",
 //  );
 //  _startupJpush();
-  runApp(MyApp());
+  Routers.setupRouter();
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AppManager>(
+        create: (_) => AppManager(),//添加全局Manager
+      )
+    ],
+    child: MyApp(),
+  ));
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.inactive: // 处于这种状态的应用程序应该假设它们可能在任何时候暂停。
-        print("LC -> ################# inactive");
-        break;
-      case AppLifecycleState.resumed: // 应用程序可见，前台
-        print("LC -> ################# resumed");
-        break;
-      case AppLifecycleState.paused: // 应用程序不可见，后台
-        print("LC -> ################# paused");
-        break;
-      case AppLifecycleState.suspending: // 申请将暂时暂停
-        print("LC -> ################# suspending");
-        break;
-    }
-  }
-
+class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => AppManager(),
-      child: MaterialApp(
-        title: Flavors.strings.title,
-        theme: ThemeData(primarySwatch: Colors.blue),
-        home: SplashPage(),
-        routes: {
-          '/home': (context) => HomePage(),
-        },
+    return MaterialApp(
+      title: Flavors.strings.title,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      initialRoute: '/splash',
+      onGenerateRoute: Routers.router.generator,
     );
   }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
 }
+
+//class MyApp extends StatefulWidget {
+//  @override
+//  _MyAppState createState() => _MyAppState();
+//}
+//
+//class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+//  @override
+//  void initState() {
+//    super.initState();
+//    WidgetsBinding.instance.addObserver(this);
+//  }
+
+//  @override
+//  void didChangeAppLifecycleState(AppLifecycleState state) {
+//    switch (state) {
+//      case AppLifecycleState.inactive: // 处于这种状态的应用程序应该假设它们可能在任何时候暂停。
+//        print("LC -> ################# inactive");
+//        break;
+//      case AppLifecycleState.resumed: // 应用程序可见，前台
+//        print("LC -> ################# resumed");
+//        break;
+//      case AppLifecycleState.paused: // 应用程序不可见，后台
+//        print("LC -> ################# paused");
+//        break;
+////      case AppLifecycleState.suspending: // 申请将暂时暂停
+////        print("LC -> ################# suspending");
+////        break;
+//      case AppLifecycleState.detached:
+//        print("LC -> ################# detached");
+//        break;
+//    }
+//  }
+
+  // This widget is the root of your application.
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      title: Flavors.strings.title,
+//      theme: ThemeData(primarySwatch: Colors.blue),
+//      home: SplashPage(),
+//      routes: {
+//        '/home': (context) => HomePage(),
+//      },
+//    );
+//  }
+//
+//  @override
+//  void dispose() {
+//    WidgetsBinding.instance.removeObserver(this);
+//    super.dispose();
+//  }
+//}
 
 void _startupJpush() async {
   print("初始化jpush...");

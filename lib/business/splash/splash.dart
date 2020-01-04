@@ -6,37 +6,25 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 
-class SplashPage extends StatefulWidget {
-  @override
-  SplashState createState() => SplashState();
-}
-
-class SplashState extends State<SplashPage> {
-//  页面初始化状态的方法
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void gotoHomePage(BuildContext bc) async {
-    Future.microtask(() => Navigator.pushReplacement(
-        bc, MaterialPageRoute(builder: (bc) => HomePage())));
-  }
-
+class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => SplashManager(),
+      create: (context) => SplashManager(context),
       child: _splashPage(context),
     );
   }
+
+//  void gotoHomePage(BuildContext bc) => Navigator.pushReplacementNamed(bc, '/');
 
   _splashPage(BuildContext context) {
     return Consumer<SplashManager>(builder: (context, manager, child) {
       if (manager.agreementData == true) {
         if (manager.total != 0) {
-          manager.timer?.cancel();
-          manager.startCountdown();
+//          if (manager.timer != null) {
+//            manager.timer.cancel();
+//          }
+//          manager.startCountdown();
           return Container(
             constraints: BoxConstraints.expand(),
             child: Stack(
@@ -66,15 +54,7 @@ class SplashState extends State<SplashPage> {
                       ),
                     )),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              WebViewPage(manager.adLists[0].webUrl, '/home')),
-                    );
-                    manager.timer.cancel();
-                  },
+                  onTap: () => manager.clickAD(context),
                   child: Container(
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height - 150,
@@ -97,15 +77,12 @@ class SplashState extends State<SplashPage> {
                       splashColor: Colors.black,
                       child:
                           Consumer<SplashManager>(builder: (cdt, manager, cd) {
-                        if (manager.countdownTime == 0) {
-                          gotoHomePage(context);
-                        }
+//                        if (manager.countdownTime == 0) {
+//                          gotoHomePage(context);
+//                        }
                         return Text("跳过 ${manager.countdownTime}");
                       }),
-                      onPressed: () async {
-                        gotoHomePage(context);
-                        manager.timer.cancel();
-                      },
+                      onPressed: () => manager.skip(context),
                     ),
                   ),
                 ),
@@ -113,10 +90,10 @@ class SplashState extends State<SplashPage> {
             ),
           );
         } else {
-          manager.startCountdown();
-          if (manager.countdownTime == 0) {
-            gotoHomePage(context);
-          }
+//          manager.startCountdown();
+//          if (manager.countdownTime == 0) {
+//            gotoHomePage(context);
+//          }
           return Container(
               width: double.infinity,
               height: double.infinity,
@@ -142,8 +119,7 @@ class SplashState extends State<SplashPage> {
                 ),
               ));
         }
-      }
-      {
+      } else {
         return Container(
           constraints: BoxConstraints.expand(),
           child: Stack(
@@ -203,10 +179,7 @@ class SplashState extends State<SplashPage> {
                                 "确定",
                                 style: TextStyle(fontSize: 16),
                               ),
-                              onPressed: () async {
-                                manager.setLocalData();
-                                gotoHomePage(context);
-                              },
+                              onPressed: () => manager.agree(context),
                             ),
                           ),
                           Container(
@@ -233,10 +206,5 @@ class SplashState extends State<SplashPage> {
         );
       }
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

@@ -37,7 +37,7 @@ class ServiceTabState extends State<ServiceTab>
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => ServiceManager(),
+      create: (context) => ServiceManager(),
       child: _ServicePage(context),
     );
   }
