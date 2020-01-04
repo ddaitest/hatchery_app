@@ -44,8 +44,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       case AppLifecycleState.paused: // 应用程序不可见，后台
         print("LC -> ################# paused");
         break;
-      case AppLifecycleState.suspending: // 申请将暂时暂停
-        print("LC -> ################# suspending");
+//      case AppLifecycleState.suspending: // 申请将暂时暂停
+//        print("LC -> ################# suspending");
+//        break;
+      case AppLifecycleState.detached:
+        print("LC -> ################# detached");
         break;
     }
   }
