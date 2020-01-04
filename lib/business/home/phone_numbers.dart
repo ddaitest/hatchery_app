@@ -18,7 +18,7 @@ class PhoneNumbersState extends State<PhoneNumbersPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => AppManager(),
+      create: (context) => AppManager(),
       child: _ScaffoldView(),
     );
   }

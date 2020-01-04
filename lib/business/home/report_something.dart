@@ -27,7 +27,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => ReportStManager(),
+      create: (context) => ReportStManager(),
       child: _ScaffoldView(),
     );
   }

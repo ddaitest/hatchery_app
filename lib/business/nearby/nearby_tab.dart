@@ -25,7 +25,7 @@ class NearbyTabState extends State<NearbyTab>
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => NearbyManager(),
+      create: (context) => NearbyManager(),
       child: _bodyContainer(context),
     );
   }

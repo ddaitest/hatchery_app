@@ -26,7 +26,7 @@ class SplashState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => SplashManager(),
+      create: (context) => SplashManager(),
       child: _splashPage(context),
     );
   }

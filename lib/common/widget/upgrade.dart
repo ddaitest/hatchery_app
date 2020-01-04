@@ -12,7 +12,7 @@ Future<void> upgradeCard(BuildContext context) async {
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return ChangeNotifierProvider(
-          builder: (context) => UpgradeManager(),
+          create: (context) => UpgradeManager(),
           child: Consumer<UpgradeManager>(builder: (xx, manager, yy) {
             if (manager.total != 0) {
               return AlertDialog(
