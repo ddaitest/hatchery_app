@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +11,16 @@ import 'package:share/share.dart';
 import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppManager extends ChangeNotifier {
   int _m = 0;
 
   int get m => _m;
 
-  String _webviewUrl = 'https://www.baidu.com/';
+  Timer _timer;
 
-  String get WebViewUrl => _webviewUrl;
+  int timing = 1;
 
   List<phoneNumberInfo> _phoneNumbersList = [];
 
@@ -26,9 +29,7 @@ class AppManager extends ChangeNotifier {
 
   int get total => _phoneNumbersList.length;
 
-  AppManager() {
-    queryPhoneNumData();
-  }
+  int timeNow = DateTime.now().millisecondsSinceEpoch;
 
   showToast(String title) {
     Fluttertoast.showToast(
@@ -73,31 +74,15 @@ class AppManager extends ChangeNotifier {
     _phoneNumbersList.add(item);
     notifyListeners();
   }
-}
 
-///跳转动画
-class SlideRightRoute extends PageRouteBuilder {
-  final Widget page;
-  SlideRightRoute({this.page})
-      : super(
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              page,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) =>
-              SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(-1, 0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        );
+  startTiming() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      timing++;
+      print('LC timing ==> $timing');
+    });
+  }
+
+  cancelTimer() {
+    _timer?.cancel();
+  }
 }

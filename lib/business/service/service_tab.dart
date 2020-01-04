@@ -3,7 +3,7 @@ import 'package:hatchery/business/home/phone_numbers.dart';
 import 'package:hatchery/business/home/report_something.dart';
 import 'package:hatchery/common/widget/upgrade.dart';
 import 'package:provider/provider.dart';
-import 'package:hatchery/manager/serivce_manager.dart';
+import 'package:hatchery/manager/service_manager.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -35,27 +35,20 @@ class ServiceTabState extends State<ServiceTab>
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          builder: (context) => SeriveManager(),
-        ),
-        ChangeNotifierProvider(
-          builder: (context) => AppManager(),
-        ),
-      ],
+    return ChangeNotifierProvider(
+      builder: (context) => ServiceManager(),
       child: _ServicePage(context),
     );
   }
 
-  Future<Null> RefreshData() async {
+  Future<Null> refreshData() async {
     await Future.delayed(Duration(seconds: 1), () {
-      return SeriveManager();
+      return ServiceManager();
     });
   }
 
   _ServicePage(BuildContext context) {
-    return Consumer<SeriveManager>(
+    return Consumer<ServiceManager>(
         builder: (context, manager, child) => _pageTopView(manager));
   }
 
@@ -69,13 +62,13 @@ class ServiceTabState extends State<ServiceTab>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _topButtons(CommunityMaterialIcons.account_card_details,
-                  Colors.black, manager.ServiceTopMap["0"], Colors.black, 0),
+                  Colors.black, manager.ServiceTopMap["0"], Colors.black),
               _topButtons(Icons.live_help, Colors.black,
-                  manager.ServiceTopMap["1"], Colors.black, 1),
+                  manager.ServiceTopMap["1"], Colors.black),
               _topButtons(Icons.android, Colors.black,
-                  manager.ServiceTopMap["2"], Colors.black, 2),
+                  manager.ServiceTopMap["2"], Colors.black),
               _topButtons(Icons.language, Colors.black,
-                  manager.ServiceTopMap["3"], Colors.black, 3),
+                  manager.ServiceTopMap["3"], Colors.black),
             ],
           ),
         ),
@@ -212,14 +205,14 @@ class ServiceTabState extends State<ServiceTab>
   }
 
   _getListViewContainer() {
-    return Consumer<SeriveManager>(builder: (glvc, manager, glv) {
+    return Consumer<ServiceManager>(builder: (glvc, manager, glv) {
       if (manager.total == 0) {
         ///loading
         return CupertinoActivityIndicator();
       } else {
         return Expanded(
           child: RefreshIndicator(
-            onRefresh: RefreshData,
+            onRefresh: refreshData,
             displacement: 20,
             child: ListView.builder(
                 shrinkWrap: true,
@@ -228,13 +221,7 @@ class ServiceTabState extends State<ServiceTab>
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      getItemContainerView(
-                          glvc, manager.subjectLists[index], manager),
-                      getItemContainerView(
-                          glvc, manager.subjectLists[index], manager),
-                      getItemContainerView(
-                          glvc, manager.subjectLists[index], manager),
-                      getItemContainerView(
+                      _getItemContainerView(
                           glvc, manager.subjectLists[index], manager),
 
                       ///下面的灰色分割线
@@ -266,25 +253,26 @@ class ServiceTabState extends State<ServiceTab>
   }
 }
 
-getItemContainerView(BuildContext gicv, var subject, manager) {
-  var imgUrl = subject.picSmall;
-  return Consumer<AppManager>(
+_getItemContainerView(BuildContext gicv, var subject, manager) {
+  var imgUrl = subject.image;
+  return Consumer<ServiceManager>(
       builder: (glvc, manager, glv) => GestureDetector(
             onTap: () {
-              Navigator.push(
-                gicv,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        WebViewPage(manager.WebViewUrl, null)),
-              );
+              if (subject.url != null) {
+                Navigator.push(
+                  gicv,
+                  MaterialPageRoute(
+                      builder: (context) => WebViewPage(subject.url, null)),
+                );
+              }
             },
             child: Container(
               width: double.infinity,
               child: Row(
                 children: <Widget>[
-                  getImage(imgUrl),
+                  _getImage(imgUrl),
                   Container(
-                      child: getInfoView(subject),
+                      child: _getInfoView(subject),
                       width: MediaQuery.of(gicv).size.width - 116),
                 ],
               ),
@@ -292,19 +280,19 @@ getItemContainerView(BuildContext gicv, var subject, manager) {
           ));
 }
 
-getInfoView(var subject) {
+_getInfoView(var subject) {
   return Container(
     height: 90,
     alignment: Alignment.topLeft,
     child: Column(
       children: <Widget>[
-        getTitleView(subject),
+        _getTitleView(subject),
       ],
     ),
   );
 }
 
-getTitleView(subject) {
+_getTitleView(subject) {
   return Container(
     child: Row(
       children: <Widget>[
@@ -312,7 +300,7 @@ getTitleView(subject) {
           child: Text(
             subject.title,
             textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.visible,
             style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
@@ -322,7 +310,7 @@ getTitleView(subject) {
   );
 }
 
-getImage(var imgUrl) {
+_getImage(var imgUrl) {
   return Container(
     child: CachedNetworkImage(
       height: 90,
@@ -335,19 +323,17 @@ getImage(var imgUrl) {
   );
 }
 
-_topButtons(IconName, IconColor, String name, nameColor, int tapNum) {
-  return Consumer<SeriveManager>(
+_topButtons(iconName, iconColor, String name, nameColor) {
+  return Consumer<ServiceManager>(
       builder: (context, manager, child) => MaterialButton(
-            onPressed: () {
-              manager.getListData(tapNum);
-            },
+            onPressed: null,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  IconName,
+                  iconName,
                   size: 35,
-                  color: IconColor,
+                  color: iconColor,
                 ),
                 Text(
                   name,

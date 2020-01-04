@@ -51,100 +51,99 @@ class Article {
 }
 
 class ServiceListInfo {
-  String allRate;
-  String songId;
-  String rankChange;
-  String biaoshi;
-  String author;
-  String albumId;
-  String picSmall;
+  String id;
   String title;
-  String picBig;
-  String albumTitle;
+  String image;
+  String thumbnail;
+  String url;
+  String contents;
+  int status;
+  String clientId;
+  int updateTime;
+  int createTime;
+  bool isWeb;
+  String categoryId;
+  String serviceId;
 
   ServiceListInfo(
-      {this.allRate,
-      this.songId,
-      this.rankChange,
-      this.biaoshi,
-      this.author,
-      this.albumId,
-      this.picSmall,
+      {this.id,
       this.title,
-      this.picBig,
-      this.albumTitle});
+      this.image,
+      this.thumbnail,
+      this.url,
+      this.contents,
+      this.status,
+      this.clientId,
+      this.updateTime,
+      this.createTime,
+      this.isWeb,
+      this.categoryId,
+      this.serviceId});
 
   ServiceListInfo.fromJson(Map<String, dynamic> json) {
-    allRate = json['all_rate'];
-    songId = json['song_id'];
-    rankChange = json['rank_change'];
-    biaoshi = json['biaoshi'];
-    author = json['author'];
-    albumId = json['album_id'];
-    picSmall = json['pic_small'];
+    id = json['id'];
     title = json['title'];
-    picBig = json['pic_big'];
-    albumTitle = json['album_title'];
+    image = json['image'];
+    thumbnail = json['thumbnail'];
+    url = json['url'];
+    contents = json['contents'];
+    status = json['status'];
+    clientId = json['client_id'];
+    updateTime = json['update_time'];
+    createTime = json['create_time'];
+    isWeb = json['is_web'];
+    categoryId = json['category_id'];
+    serviceId = json['service_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['all_rate'] = this.allRate;
-    data['song_id'] = this.songId;
-    data['rank_change'] = this.rankChange;
-    data['biaoshi'] = this.biaoshi;
-    data['author'] = this.author;
-    data['album_id'] = this.albumId;
-    data['pic_small'] = this.picSmall;
+    data['id'] = this.id;
     data['title'] = this.title;
-    data['pic_big'] = this.picBig;
-    data['album_title'] = this.albumTitle;
+    data['image'] = this.image;
+    data['thumbnail'] = this.thumbnail;
+    data['url'] = this.url;
+    data['contents'] = this.contents;
+    data['status'] = this.status;
+    data['client_id'] = this.clientId;
+    data['update_time'] = this.updateTime;
+    data['create_time'] = this.createTime;
+    data['is_web'] = this.isWeb;
+    data['category_id'] = this.categoryId;
+    data['service_id'] = this.serviceId;
     return data;
   }
 }
 
 class AdListInfo {
-  int cardIndex;
   String id;
-  String listGoto;
-  String listUrl;
-  String showCardGoto;
-  String showCardUrl;
-  String splashGoto;
-  String splashUrl;
+  String description;
+  int status;
+  String clientId;
+  int updateTime;
+  int createTime;
+  String imgUrl;
+  String webUrl;
 
   AdListInfo(
-      {this.cardIndex,
-      this.id,
-      this.listGoto,
-      this.listUrl,
-      this.showCardGoto,
-      this.showCardUrl,
-      this.splashGoto,
-      this.splashUrl});
+      {this.id,
+      this.description,
+      this.status,
+      this.clientId,
+      this.updateTime,
+      this.createTime,
+      this.imgUrl,
+      this.webUrl});
 
   AdListInfo.fromJson(Map<String, dynamic> json) {
-    cardIndex = json['card_index'];
     id = json['id'];
-    listGoto = json['list_goto'];
-    listUrl = json['list_url'];
-    showCardGoto = json['showCard_goto'];
-    showCardUrl = json['showCard_url'];
-    splashGoto = json['splash_goto'];
-    splashUrl = json['splash_url'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['card_index'] = this.cardIndex;
-    data['id'] = this.id;
-    data['list_goto'] = this.listGoto;
-    data['list_url'] = this.listUrl;
-    data['showCard_goto'] = this.showCardGoto;
-    data['showCard_url'] = this.showCardUrl;
-    data['splash_goto'] = this.splashGoto;
-    data['splash_url'] = this.splashUrl;
-    return data;
+    description = json['description'];
+    status = json['status'];
+    clientId = json['client_id'];
+    updateTime = json['update_time'];
+    createTime = json['create_time'];
+    imgUrl = json['img_url'];
+    webUrl = json['web_url'];
   }
 }
 
@@ -201,5 +200,17 @@ class IgnDataInfo {
     img = json['img'];
     score = json['score'];
     title = json['title'];
+  }
+}
+
+class ReportSt {
+  int code;
+  String info;
+
+  ReportSt({this.code, this.info});
+
+  ReportSt.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    info = json['info'];
   }
 }
