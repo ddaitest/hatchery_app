@@ -1,5 +1,9 @@
 const int APP_ID = 001;
 
+const String SERVICE_ID = '5e089b4abc2d3e1ea9fe637d';
+
+const String FEED_SIZE = '10';
+
 const String HOME_TAB_NUMBER = 'a01';
 
 const String SERVICE_TAB_NUMBER = '5dfe04a070492f05963a1ed1';
