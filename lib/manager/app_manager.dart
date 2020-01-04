@@ -18,10 +18,6 @@ class AppManager extends ChangeNotifier {
 
   int get m => _m;
 
-  Timer _timer;
-
-  int timing = 1;
-
   List<phoneNumberInfo> _phoneNumbersList = [];
 
   UnmodifiableListView<phoneNumberInfo> get PhoneNumbersList =>
@@ -73,16 +69,5 @@ class AppManager extends ChangeNotifier {
   void add(phoneNumberInfo item) {
     _phoneNumbersList.add(item);
     notifyListeners();
-  }
-
-  startTiming() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      timing++;
-      print('LC timing ==> $timing');
-    });
-  }
-
-  cancelTimer() {
-    _timer?.cancel();
   }
 }

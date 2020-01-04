@@ -73,7 +73,7 @@ class Api {
 
   ///升级相关
   static queryUpgradeList() {
-    return dio.get("api/upgrade.json", queryParameters: {});
+    return dio.get("api/versions/check_update", queryParameters: {});
   }
 }
 

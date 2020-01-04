@@ -24,10 +24,19 @@ Future<void> upgradeCard(BuildContext context) async {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 content: SingleChildScrollView(
-                  child: Text(manager.UpdataLists[0]?.updateMessage ?? "修复bug"),
+                  child: Text(manager.UpdataLists[0]?.introduction ?? "修复bug"),
                 ),
                 actions: <Widget>[
-                  _mustBeClose(context, manager),
+                  FlatButton(
+                    child: Text(
+                      '取消',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                   FlatButton(
                     child: Text(
                       '更新',
@@ -39,10 +48,10 @@ Future<void> upgradeCard(BuildContext context) async {
                         print('LC- >' + info.toString());
                         if (info) {
                           Navigator.of(context).pop();
-                          manager.DownloadApp(manager.UpdataLists[0].ios_url);
+                          manager.downloadApp();
                         } else {
                           Navigator.of(context).pop();
-                          CellularDataCheck(context, manager);
+                          cellularDataCheck(context, manager);
                         }
                       });
                     },
@@ -66,7 +75,7 @@ Future _checkNetworkType() async {
   }
 }
 
-Future<void> CellularDataCheck(BuildContext context, cdc) async {
+Future<void> cellularDataCheck(BuildContext context, cdc) async {
   return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -89,7 +98,7 @@ Future<void> CellularDataCheck(BuildContext context, cdc) async {
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                cdc.DownloadApp(cdc.UpdataLists[0].ios_url);
+                cdc.DownloadApp();
                 Navigator.of(context).pop();
               },
             ),
@@ -105,17 +114,17 @@ Future<void> CellularDataCheck(BuildContext context, cdc) async {
       });
 }
 
-_mustBeClose(context, mm) {
-  bool choice = mm.UpdataLists[0].mustUpdate ?? true;
-  if (choice == false) {
-    return FlatButton(
-      child: Text(
-        '取消',
-        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-  }
-}
+//_mustBeClose(context, mm) {
+//  bool choice = mm.UpdataLists[0].mustUpdate ?? true;
+//  if (choice == false) {
+//    return FlatButton(
+//      child: Text(
+//        '取消',
+//        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+//      ),
+//      onPressed: () {
+//        Navigator.of(context).pop();
+//      },
+//    );
+//  }
+//}

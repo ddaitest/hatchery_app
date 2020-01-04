@@ -20,6 +20,8 @@ class UpgradeManager extends ChangeNotifier {
 
   int get total => _updataLists.length;
   double finalCount;
+  String result;
+  var parsed;
 
   double get FinalCount => finalCount;
 
@@ -29,11 +31,14 @@ class UpgradeManager extends ChangeNotifier {
 
   queryUpdataData() async {
     Response response = await Api.queryUpgradeList();
-    final parsed = json.decode(response.data)[0];
-    var resultCode = parsed['code'] ?? 0;
-    var resultData = parsed ?? null;
-    if (resultCode == 200 && resultData != null) {
+    result = response.data;
+    parsed = jsonDecode(result);
+    var resultData = parsed['result'] ?? null;
+    print('resultData $resultData');
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
       add(updataInfo.fromJson(resultData));
+    } else {
+      return null;
     }
   }
 
@@ -43,13 +48,10 @@ class UpgradeManager extends ChangeNotifier {
   }
 
   ///下载策略
-  Future<void> DownloadApp(iosUrl) {
+  Future downloadApp() async {
+    print('LC->#####${_updataLists[0].url}');
     if (Platform.isAndroid) {
-      _downloadFile(_updataLists[0].android_url, _localPath());
-    } else if (Platform.isIOS) {
-      _gotoAppStorePage(iosUrl);
-    } else {
-      print('LC -> 平台判定失败');
+      _downloadFile(_updataLists[0].url, _localPath());
     }
   }
 
@@ -64,13 +66,13 @@ class UpgradeManager extends ChangeNotifier {
   }
 
   ///ios跳转至Appstore
-  _gotoAppStorePage(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+//  _gotoAppStorePage(String url) async {
+//    if (await canLaunch(url)) {
+//      await launch(url);
+//    } else {
+//      throw 'Could not launch $url';
+//    }
+//  }
 
   ///网络权限申请
   Future requestPermission() async {
@@ -96,10 +98,9 @@ class UpgradeManager extends ChangeNotifier {
       if (result) {
         _localPath().then((info) async {
           Dio dio = Dio();
-          Response response;
           try {
             print('LC -> ' + '$info' + '/hatchery.apk');
-            response = await dio.download(urlPath, '$info' + '/hatchery.apk',
+            await dio.download(urlPath, '$info' + '/hatchery.apk',
                 onReceiveProgress: (int count, int total) {
               finalCount = (((count / total) * 100).toInt()).toDouble();
 
@@ -110,7 +111,6 @@ class UpgradeManager extends ChangeNotifier {
           } on DioError catch (e) {
             print('downloadFile error---------$e');
           }
-          return response.data;
         });
       }
     });

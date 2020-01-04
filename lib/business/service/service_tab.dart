@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/phone_numbers.dart';
 import 'package:hatchery/business/home/report_something.dart';
 import 'package:hatchery/common/widget/upgrade.dart';
+import 'package:hatchery/manager/upgrade_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/service_manager.dart';
-import 'package:hatchery/manager/app_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/business/home/home.dart';
+import 'package:package_info/package_info.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
@@ -78,7 +79,9 @@ class ServiceTabState extends State<ServiceTab>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  upgradeCard(context);
+                },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -95,9 +98,7 @@ class ServiceTabState extends State<ServiceTab>
                 ),
               ),
               MaterialButton(
-                onPressed: () {
-                  upgradeCard(context);
-                },
+                onPressed: () {},
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -342,4 +343,10 @@ _topButtons(iconName, iconColor, String name, nameColor) {
               ],
             ),
           ));
+}
+
+_checkVersion() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  int localVersionCode = int.parse(packageInfo.buildNumber) ?? 1;
+  int apiVc = int.parse(UpgradeManager().UpdataLists[0].verson);
 }

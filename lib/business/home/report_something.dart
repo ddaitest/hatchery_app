@@ -60,7 +60,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
     print('LC->image.lengthSync()###${image.lengthSync()}');
     if (image.lengthSync() > 2080000) {
       compressionImage(image.path).then((value) {
-        print('LC->image.value###${value}');
+        print('LC->image.value###$value');
         ReportStManager().uploadReportStImage(value).then((info) {
           setState(() {
             imageUrl = info.toString();
@@ -273,7 +273,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                       if (_formkey.currentState.validate()) {
                         manager.postBody['message'] = inputValue;
                         manager.postBody['contact'] = inputPhoneNumberValue;
-                        manager.postBody['image'] = imageUrl;
+                        manager.postBody['img_url'] = imageUrl;
                         manager.postReportStData().then((info) {
                           if (info) {
                             manager.showToast("提交成功");

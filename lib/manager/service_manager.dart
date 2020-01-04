@@ -17,9 +17,9 @@ class ServiceManager extends ChangeNotifier {
   int get total => _subjectLists.length;
 
   Map<String, String> getParameters = {
-    "service_id": "5e089b4abc2d3e1ea9fe637d",
+    "service_id": SERVICE_ID,
     "category_id": SERVICE_TAB_NUMBER,
-    "size": "10",
+    "size": FEED_SIZE,
   };
 
   String result;

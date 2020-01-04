@@ -35,9 +35,7 @@ class SplashState extends State<SplashPage> {
     return Consumer<SplashManager>(builder: (context, manager, child) {
       if (manager.agreementData == true) {
         if (manager.total != 0) {
-          if (manager.timer != null) {
-            manager.timer.cancel();
-          }
+          manager.timer?.cancel();
           manager.startCountdown();
           return Container(
             constraints: BoxConstraints.expand(),

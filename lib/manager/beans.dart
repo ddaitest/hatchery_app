@@ -162,28 +162,31 @@ class phoneNumberInfo {
 }
 
 class updataInfo {
-  int code;
-  bool mustUpdate;
-  bool showUpdate;
-  String updateMessage;
-  String android_url;
-  String ios_url;
+  String id;
+  String verson;
+  String url;
+  String introduction;
+  String clientId;
+  int updateTime;
+  int createTime;
 
   updataInfo(
-      {this.code,
-      this.mustUpdate,
-      this.showUpdate,
-      this.updateMessage,
-      this.android_url,
-      this.ios_url});
+      {this.id,
+      this.verson,
+      this.url,
+      this.introduction,
+      this.clientId,
+      this.updateTime,
+      this.createTime});
 
   updataInfo.fromJson(Map<String, dynamic> json) {
-    code = json['code'];
-    mustUpdate = json['must_update'];
-    showUpdate = json['show_update'];
-    updateMessage = json['update_message'];
-    android_url = json['android_url'];
-    ios_url = json['ios_url'];
+    id = json['id'];
+    verson = json['verson'];
+    url = json['url'];
+    introduction = json['introduction'];
+    clientId = json['client_id'];
+    updateTime = json['update_time'];
+    createTime = json['create_time'];
   }
 }
 
