@@ -43,6 +43,7 @@ class SplashManager extends ChangeNotifier {
     queryAdData();
     _startCountdown(context);
   }
+
   /// UI动作 点击广告
   void clickAD(BuildContext context) {
     _timer.cancel();
@@ -57,7 +58,7 @@ class SplashManager extends ChangeNotifier {
   }
 
   /// UI动作 同意协议
-  void agree(BuildContext context){
+  void agree(BuildContext context) {
     _setLocalData();
     Navigator.pushReplacementNamed(context, '/');
   }
@@ -80,15 +81,15 @@ class SplashManager extends ChangeNotifier {
   }
 
   /// 存广告json
-  _saveAdJson(AdJson) async {
+  _saveAdJson(adJson) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('splashAd_json', AdJson);
+    sharedPreferences.setString('splashAd_json', adJson);
   }
 
   /// 取广告json
-  getAdJson(AdJson) async {
+  getAdJson(adJson) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    _responseData = sharedPreferences.getString(AdJson) ?? null;
+    _responseData = sharedPreferences.getString(adJson) ?? null;
     return _responseData;
   }
 
@@ -106,8 +107,6 @@ class SplashManager extends ChangeNotifier {
     };
     _timer = Timer.periodic(Duration(seconds: 1), timeUp);
   }
-
-
 
   /// 获取开屏广告数据
   queryAdData() async {

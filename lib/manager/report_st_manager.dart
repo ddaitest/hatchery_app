@@ -9,11 +9,15 @@ import 'package:hatchery/configs.dart';
 class ReportStManager extends ChangeNotifier {
   String result;
   var parsed;
-  Map<String, String> postBody = {"name": "$APP_ID"};
 
   ///报事报修发送
-  Future postReportStData() async {
-    Response response = await ApiForReportSt.postReportData(postBody);
+  Future postReportStData(inputText, contact, imgUrl) async {
+    Response response = await ApiForReportSt.postReportData({
+      "name": "$APP_ID",
+      "message": inputText,
+      "contact": contact,
+      "img_url": imgUrl
+    });
     result = response.data;
     parsed = jsonDecode(result);
     print('code ${parsed['code']}');

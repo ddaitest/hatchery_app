@@ -60,11 +60,9 @@ class ReportSomethingState extends State<ReportSomethingPage> {
     print('LC->image.lengthSync()###${image.lengthSync()}');
     if (image.lengthSync() > 2080000) {
       compressionImage(image.path).then((value) {
-        print('LC->image.value###$value');
         ReportStManager().uploadReportStImage(value).then((info) {
           setState(() {
             imageUrl = info.toString();
-            print('LC->###########$imageUrl');
           });
         });
       });
@@ -72,7 +70,6 @@ class ReportSomethingState extends State<ReportSomethingPage> {
       ReportStManager().uploadReportStImage(image.path).then((info) {
         setState(() {
           imageUrl = info.toString();
-          print('LC->###########$imageUrl');
         });
       });
     }
@@ -85,7 +82,6 @@ class ReportSomethingState extends State<ReportSomethingPage> {
         ReportStManager().uploadReportStImage(value).then((info) {
           setState(() {
             imageUrl = info.toString();
-            print('LC->###########$imageUrl');
           });
         });
       });
@@ -93,7 +89,6 @@ class ReportSomethingState extends State<ReportSomethingPage> {
       ReportStManager().uploadReportStImage(image.path).then((info) {
         setState(() {
           imageUrl = info.toString();
-          print('LC->###########$imageUrl');
         });
       });
     }
@@ -271,10 +266,12 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                     ),
                     onPressed: () {
                       if (_formkey.currentState.validate()) {
-                        manager.postBody['message'] = inputValue;
-                        manager.postBody['contact'] = inputPhoneNumberValue;
-                        manager.postBody['img_url'] = imageUrl;
-                        manager.postReportStData().then((info) {
+                        manager
+                            .postReportStData(
+                                inputValue ?? 'null',
+                                inputPhoneNumberValue ?? 'null',
+                                imageUrl ?? null)
+                            .then((info) {
                           if (info) {
                             manager.showToast("提交成功");
                             Navigator.pop(context);
