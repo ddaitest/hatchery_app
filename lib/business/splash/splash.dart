@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hatchery/business/home/home.dart';
 import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hatchery/common/widget/webview_common.dart';
+import 'package:hatchery/configs.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -15,16 +13,10 @@ class SplashPage extends StatelessWidget {
     );
   }
 
-//  void gotoHomePage(BuildContext bc) => Navigator.pushReplacementNamed(bc, '/');
-
   _splashPage(BuildContext context) {
     return Consumer<SplashManager>(builder: (context, manager, child) {
       if (manager.agreementData == true) {
         if (manager.total != 0) {
-//          if (manager.timer != null) {
-//            manager.timer.cancel();
-//          }
-//          manager.startCountdown();
           return Container(
             constraints: BoxConstraints.expand(),
             child: Stack(
@@ -77,9 +69,6 @@ class SplashPage extends StatelessWidget {
                       splashColor: Colors.black,
                       child:
                           Consumer<SplashManager>(builder: (cdt, manager, cd) {
-//                        if (manager.countdownTime == 0) {
-//                          gotoHomePage(context);
-//                        }
                         return Text("跳过 ${manager.countdownTime}");
                       }),
                       onPressed: () => manager.skip(context),
@@ -90,10 +79,6 @@ class SplashPage extends StatelessWidget {
             ),
           );
         } else {
-//          manager.startCountdown();
-//          if (manager.countdownTime == 0) {
-//            gotoHomePage(context);
-//          }
           return Container(
               width: double.infinity,
               height: double.infinity,
@@ -105,7 +90,7 @@ class SplashPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      "社区名称",
+                      "$COMMUNITY_NAME社区",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 30,
@@ -134,7 +119,7 @@ class SplashPage extends StatelessWidget {
               ),
               AlertDialog(
                 title: Text(
-                  "服务条款和隐私政策提示",
+                  "服务条款和用户协议提示",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -149,15 +134,8 @@ class SplashPage extends StatelessWidget {
                         height: 10,
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    WebViewPage("https://www.baidu.com", null)),
-                          );
-                        },
-                        child: Text("《隐私政策》",
+                        onTap: () => manager.agreementUrl(context),
+                        child: Text("《用户协议》",
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: Colors.blue)),

@@ -63,6 +63,14 @@ class SplashManager extends ChangeNotifier {
     Navigator.pushReplacementNamed(context, '/');
   }
 
+  /// UI动作 同意协议
+  void agreementUrl(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WebViewPage(AGREEMENT, null)),
+    );
+  }
+
   /// 设置协议是否同意标识
   void _setLocalData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -70,7 +78,7 @@ class SplashManager extends ChangeNotifier {
   }
 
   /// 获取协议是否同意标识
-  _getLocalData() {
+  _getLocalData() async {
     SharedPreferences.getInstance().then((sp) {
       _agreementData = sp.getBool('agreementData') ?? false;
       if (!_agreementData) {

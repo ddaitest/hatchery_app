@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/phone_numbers.dart';
 import 'package:hatchery/business/home/report_something.dart';
@@ -17,22 +18,21 @@ class ServiceTab extends StatefulWidget {
   ServiceTabState createState() => ServiceTabState();
 }
 
-class ServiceTabState extends State<ServiceTab>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class ServiceTabState extends State<ServiceTab> {
+//  @override
+//  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
+    _init();
   }
 
-  @override
-  Future onSelectNotification(String payload) async =>
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+  _init() async {
+    Timer(const Duration(seconds: 3), () {
+      upgradeCard(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
