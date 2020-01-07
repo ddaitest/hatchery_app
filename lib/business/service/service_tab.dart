@@ -25,13 +25,7 @@ class ServiceTabState extends State<ServiceTab> {
   @override
   void initState() {
     super.initState();
-    _init();
-  }
-
-  _init() async {
-    Timer(const Duration(seconds: 3), () {
-      upgradeCard(context);
-    });
+    upgradeCard(context);
   }
 
   @override

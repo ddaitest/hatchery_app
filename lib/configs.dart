@@ -30,3 +30,5 @@ const String BASIC_AUTH =
 const String CONTENT_TYPE = 'application/json';
 
 const String AGREEMENT = 'http://39.96.16.125:8081/components/';
+
+const int UPGRADE_LOADING_TIME = 2;

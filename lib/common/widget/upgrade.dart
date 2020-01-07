@@ -1,73 +1,78 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/upgrade_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:hatchery/configs.dart';
 
 ///升级弹窗ui
 Future<void> upgradeCard(context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return ChangeNotifierProvider(
-          create: (context) => UpgradeManager(),
-          child: Consumer<UpgradeManager>(builder: (xx, manager, yy) {
-            if (manager.total != 0) {
-              return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text(
-                      "发现新版本!",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.start,
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    content: SingleChildScrollView(
-                      child:
-                          Text(manager.UpdataLists[0]?.introduction ?? "修复bug"),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text(
-                          '取消',
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
+  Timer(const Duration(seconds: UPGRADE_LOADING_TIME), () {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return ChangeNotifierProvider(
+            create: (context) => UpgradeManager(),
+            child: Consumer<UpgradeManager>(builder: (xx, manager, yy) {
+              if (manager.total != 0) {
+                return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        "发现新版本!",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
                       ),
-                      FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      content: SingleChildScrollView(
                         child: Text(
-                          '更新',
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () {
-                          _checkNetworkType().then((info) {
-                            print('LC- >' + info.toString());
-                            if (info) {
-                              Navigator.of(context).pop();
-                              manager.downloadApp();
-                            } else {
-                              Navigator.of(context).pop();
-                              cellularDataCheck(context, manager);
-                            }
-                          });
-                        },
+                            manager.UpdataLists[0]?.introduction ?? "修复bug"),
                       ),
-                    ],
-                  ) ??
-                  false;
-            } else {
-              return CupertinoActivityIndicator();
-            }
-          }));
-    },
-  );
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            '取消',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text(
+                            '更新',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            _checkNetworkType().then((info) {
+                              print('LC- >' + info.toString());
+                              if (info) {
+                                Navigator.of(context).pop();
+                                manager.downloadApp();
+                              } else {
+                                Navigator.of(context).pop();
+                                cellularDataCheck(context, manager);
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ) ??
+                    false;
+              } else {
+                return CupertinoActivityIndicator();
+              }
+            }));
+      },
+    );
+  });
 }
 
 Future _checkNetworkType() async {
