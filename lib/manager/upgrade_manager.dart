@@ -10,6 +10,7 @@ import 'dart:collection';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:package_info/package_info.dart';
 
 class UpgradeManager extends ChangeNotifier {
   List<updataInfo> _updataLists = [];
@@ -113,6 +114,12 @@ class UpgradeManager extends ChangeNotifier {
         });
       }
     });
+  }
+
+  _checkVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    int localVersionCode = int.parse(packageInfo.buildNumber) ?? 1;
+    int apiVc = int.parse(UpgradeManager().UpdataLists[0].verson);
   }
 
   @override
