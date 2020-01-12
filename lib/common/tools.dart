@@ -5,8 +5,8 @@ Future compressionImage(filePath) async {
   ImageProperties properties =
       await FlutterNativeImage.getImageProperties(filePath);
   File compressedFile = await FlutterNativeImage.compressImage(filePath,
-      quality: 100,
-      targetWidth: 720,
-      targetHeight: (properties.height * 720 / properties.width).round());
-  return compressedFile.path;
+//      quality: 100,  默认70
+      targetWidth: properties.width,
+      targetHeight: properties.height);
+  return compressedFile;
 }

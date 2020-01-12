@@ -73,7 +73,7 @@ class UpgradeManager extends ChangeNotifier {
 //    }
 //  }
 
-  ///网络权限申请
+  ///存储权限申请
   Future requestPermission() async {
     // 申请权限
     await PermissionHandler().requestPermissions([PermissionGroup.storage]);
