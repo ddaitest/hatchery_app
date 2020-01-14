@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:package_info/package_info.dart';
+import 'package:hatchery/common/tools.dart';
 
 class UpgradeManager extends ChangeNotifier {
   List<updataInfo> _updataLists = [];
