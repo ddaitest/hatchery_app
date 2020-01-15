@@ -9,8 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
-import 'package:hatchery/business/home/home.dart';
-import 'package:hatchery/configs.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
@@ -20,6 +18,8 @@ class ServiceTab extends StatefulWidget {
 class ServiceTabState extends State<ServiceTab> {
 //  @override
 //  bool get wantKeepAlive => true;
+  ScrollController _scrollController = ScrollController(); //listview的控制器
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -200,6 +200,13 @@ class ServiceTabState extends State<ServiceTab> {
 
   _getListViewContainer() {
     return Consumer<ServiceManager>(builder: (glvc, manager, glv) {
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          print('滑动到了最底部');
+//          ServiceManager();
+        }
+      });
       if (manager.total == 0) {
         ///loading
         return CupertinoActivityIndicator();
@@ -209,6 +216,7 @@ class ServiceTabState extends State<ServiceTab> {
             onRefresh: refreshData,
             displacement: 20,
             child: ListView.builder(
+                controller: _scrollController,
                 shrinkWrap: true,
                 itemCount: manager.total,
                 itemBuilder: (BuildContext context, int index) {

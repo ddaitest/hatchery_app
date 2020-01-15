@@ -19,6 +19,7 @@ class ServiceManager extends ChangeNotifier {
     "service_id": SERVICE_ID,
     "category_id": SERVICE_TAB_NUMBER,
     "size": FEED_SIZE,
+    "cursor": '',
   };
 
   String result;
@@ -51,6 +52,8 @@ class ServiceManager extends ChangeNotifier {
     parsed = jsonDecode(result);
     var resultData = parsed['result'] ?? null;
     if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      getParameters['cursor'] = resultData.last['id'] ?? '';
+      print("cursor#######${resultData.last['id']}");
       return resultData;
     } else {
       return false;
