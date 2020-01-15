@@ -24,13 +24,31 @@ class ServiceManager extends ChangeNotifier {
 
   String result;
   var parsed;
+  ScrollController scrollController = ScrollController();
+  bool isLoading = false;
 
   ServiceManager() {
     queryServiceData().then((info) {
       for (var x in info) {
         add(ServiceListInfo.fromJson(x));
       }
+      notifyListeners();
     });
+  }
+  getMore() async {
+    if (!isLoading) {
+      isLoading = true;
+      await Future.delayed(Duration(seconds: 1), () {
+        print('加载更多');
+        moreQueryServiceData().then((info) {
+          for (var x in info) {
+            add(ServiceListInfo.fromJson(x));
+          }
+          isLoading = false;
+          notifyListeners();
+        });
+      });
+    }
   }
 
   ///服务tab顶部
@@ -52,8 +70,24 @@ class ServiceManager extends ChangeNotifier {
     parsed = jsonDecode(result);
     var resultData = parsed['result'] ?? null;
     if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
-      getParameters['cursor'] = resultData.last['id'] ?? '';
-      print("cursor#######${resultData.last['id']}");
+      if (resultData.length != 0) {
+        getParameters['cursor'] = resultData.last['id'] ?? null;
+      }
+      return resultData;
+    } else {
+      return false;
+    }
+  }
+
+  Future moreQueryServiceData() async {
+    Response response = await ApiForServicePage.queryServiceList(getParameters);
+    result = response.data;
+    parsed = jsonDecode(result);
+    var resultData = parsed['result'] ?? null;
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      if (resultData.length != 0) {
+        getParameters['cursor'] = resultData.last['id'] ?? null;
+      }
       return resultData;
     } else {
       return false;
@@ -62,11 +96,11 @@ class ServiceManager extends ChangeNotifier {
 
   void add(ServiceListInfo item) {
     _subjectLists.add(item);
-    notifyListeners();
   }
 
   @override
   void dispose() {
     super.dispose();
+    scrollController.dispose();
   }
 }

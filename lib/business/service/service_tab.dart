@@ -15,11 +15,10 @@ class ServiceTab extends StatefulWidget {
   ServiceTabState createState() => ServiceTabState();
 }
 
-class ServiceTabState extends State<ServiceTab> {
-//  @override
-//  bool get wantKeepAlive => true;
-  ScrollController _scrollController = ScrollController(); //listview的控制器
-  bool isLoading = false;
+class ServiceTabState extends State<ServiceTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -200,11 +199,11 @@ class ServiceTabState extends State<ServiceTab> {
 
   _getListViewContainer() {
     return Consumer<ServiceManager>(builder: (glvc, manager, glv) {
-      _scrollController.addListener(() {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
+      manager.scrollController.addListener(() {
+        if (manager.scrollController.position.pixels ==
+            manager.scrollController.position.maxScrollExtent) {
           print('滑动到了最底部');
-//          ServiceManager();
+          manager.getMore();
         }
       });
       if (manager.total == 0) {
@@ -216,28 +215,74 @@ class ServiceTabState extends State<ServiceTab> {
             onRefresh: refreshData,
             displacement: 20,
             child: ListView.builder(
-                controller: _scrollController,
+                controller: manager.scrollController,
                 shrinkWrap: true,
-                itemCount: manager.total,
+                itemCount: manager.total + 1,
+                // ignore: missing_return
                 itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _getItemContainerView(
-                          glvc, manager.subjectLists[index], manager),
+                  if (index < manager.total) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _getItemContainerView(
+                            glvc, manager.subjectLists[index], manager),
 
-                      ///下面的灰色分割线
-                      Divider(
-                        height: 2,
-                        color: Colors.grey[400],
-                      ),
-                    ],
-                  );
+                        ///下面的灰色分割线
+                        Divider(
+                          height: 2,
+                          color: Colors.grey[400],
+                        ),
+                      ],
+                    );
+                  } else if (manager.parsed['result'].length == 0) {
+                    return _noMoreWidget();
+                  } else {
+                    return _getMoreWidget();
+                  }
                 }),
           ),
         );
       }
     });
+  }
+
+  Widget _getMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '加载中...  ',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            CircularProgressIndicator(
+              strokeWidth: 1.0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _noMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '已经是最后一条了',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget title(String text) => Container(
