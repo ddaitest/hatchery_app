@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
+import 'package:hatchery/common/tools.dart';
 
 class SplashManager extends ChangeNotifier {
   /// 是否显示 协议确认UI
@@ -40,6 +41,7 @@ class SplashManager extends ChangeNotifier {
 
   SplashManager(BuildContext context) {
     _getLocalData();
+    sharedDeleteData('showUpgradeCard');
     queryAdData();
     _startCountdown(context);
   }

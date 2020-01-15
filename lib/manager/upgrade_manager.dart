@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/manager/beans.dart';
-import 'dart:collection';
+import 'package:hatchery/common/tools.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,17 +22,22 @@ class UpgradeManager {
 
   double get FinalCount => finalCount;
 
-  ///生命周期内不再请求，没做！
+  ///先判断app生命周期内是否弹过
   isShowUpgradeCard(context) {
-    _queryUpdateData().then((info) {
-      _checkVersion().then((status) {
-        if (status = true) {
-          _downloadFile(_updateLists[0].url, context);
-        }
-      });
+    sharedGetData('showUpgradeCard').then((result) {
+      bool showedCard = result ?? false;
+      print('##############  $showedCard');
+      if (showedCard == false) {
+        _queryUpdateData().then((info) {
+          _checkVersion().then((status) {
+            if (status = true) {
+              _downloadFile(_updateLists[0].url, context);
+            }
+          });
+        });
+      }
     });
   }
-//    upgradeCard(context);
 
   Future _queryUpdateData() async {
     Response response = await Api.queryUpgradeList();
@@ -99,6 +104,7 @@ class UpgradeManager {
   ///下载前需先拿到path
   _downloadFile(urlPath, context) async {
     _requestPermission().then((result) {
+      sharedAddAndUpdate('showUpgradeCard', bool, true);
       if (result) {
         _localPath().then((info) async {
           Dio dio = Dio();
