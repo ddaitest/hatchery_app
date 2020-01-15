@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/phone_numbers.dart';
 import 'package:hatchery/business/home/report_something.dart';
-import 'package:hatchery/common/widget/upgrade.dart';
 import 'package:hatchery/manager/upgrade_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/service_manager.dart';
@@ -11,6 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/business/home/home.dart';
+import 'package:hatchery/configs.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
@@ -24,14 +24,14 @@ class ServiceTabState extends State<ServiceTab> {
   @override
   void initState() {
     super.initState();
-    upgradeCard(context);
+    UpgradeManager().isShowUpgradeCard(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ServiceManager(),
-      child: _ServicePage(context),
+      child: _servicePage(context),
     );
   }
 
@@ -41,7 +41,7 @@ class ServiceTabState extends State<ServiceTab> {
     });
   }
 
-  _ServicePage(BuildContext context) {
+  _servicePage(BuildContext context) {
     return Consumer<ServiceManager>(
         builder: (context, manager, child) => _pageTopView(manager));
   }
@@ -73,7 +73,7 @@ class ServiceTabState extends State<ServiceTab> {
             children: <Widget>[
               MaterialButton(
                 onPressed: () {
-                  upgradeCard(context);
+//                  showUpdateCard(context);
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

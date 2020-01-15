@@ -8,5 +8,5 @@ Future compressionImage(filePath) async {
 //      quality: 100,  默认70
       targetWidth: properties.width,
       targetHeight: properties.height);
-  return compressedFile;
+  return compressedFile.path;
 }

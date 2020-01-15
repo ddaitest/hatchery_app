@@ -5,7 +5,6 @@ import 'package:hatchery/common/api.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
-import 'package:hatchery/common/widget/upgrade.dart';
 import 'package:hatchery/configs.dart';
 
 class ServiceManager extends ChangeNotifier {
@@ -45,17 +44,12 @@ class ServiceManager extends ChangeNotifier {
     "7": "其他",
   };
 
-  showUpgradeCard(value) {
-    upgradeCard(value);
-  }
-
   ///服务tab数据
   Future queryServiceData() async {
     Response response = await ApiForServicePage.queryServiceList(getParameters);
     result = response.data;
     parsed = jsonDecode(result);
     var resultData = parsed['result'] ?? null;
-    print('resultData $resultData');
     if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
       return resultData;
     } else {
