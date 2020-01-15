@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:hatchery/common/tools.dart';
@@ -172,6 +170,7 @@ class UpgradeManager {
                       ),
                       onPressed: () {
                         OpenFile.open('$apkPath' + '/hatchery.apk');
+                        Navigator.of(context).pop();
                       },
                     ),
                   ],
