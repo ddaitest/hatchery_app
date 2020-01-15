@@ -78,9 +78,9 @@ class SplashManager extends ChangeNotifier {
   }
 
   /// 获取协议是否同意标识
-  _getLocalData() async {
+  _getLocalData() {
     SharedPreferences.getInstance().then((sp) {
-      _agreementData = sp.getBool('agreementData') ?? false;
+      _agreementData = sp.getBool('agreementData') ?? true;
       if (!_agreementData) {
         _timer.cancel();
       }
