@@ -5,54 +5,99 @@ import 'package:hatchery/common/api.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
+import 'package:hatchery/configs.dart';
 
 class NearbyManager extends ChangeNotifier {
   List _bannerList = [
-    "https://v1.vuepress.vuejs.org/hero.png",
-    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574975313305&di=04e13c0dfdb9694284a033758013bfe0&imgtype=0&src=http%3A%2F%2Fpic.616pic.com%2Fbg_w1180%2F00%2F06%2F93%2FwadIDUbTQt.jpg",
-    "https://v1.vuepress.vuejs.org/hero.png",
+    "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2930759379,1348658930&fm=26&gp=0.jpg",
+    "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=715079091,2714859735&fm=26&gp=0.jpg",
+    "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2930759379,1348658930&fm=26&gp=0.jpg",
   ];
 
-  UnmodifiableListView get bannerList => UnmodifiableListView(_bannerList);
+  List get bannerList => _bannerList;
 
   int get bannerTotal => _bannerList.length;
 
-  List<IgnDataInfo> _subjectLists = [];
+  List<NearbyListInfo> _subjectLists = [];
 
-  UnmodifiableListView<IgnDataInfo> get subjectLists =>
+  UnmodifiableListView<NearbyListInfo> get subjectLists =>
       UnmodifiableListView(_subjectLists);
 
   int get total => _subjectLists.length;
 
-  NearbyManager({int num = 1}) {
-    queryIgnData(num);
-  }
+  Map<String, String> getParameters = {
+    "service_id": SERVICE_ID,
+    "category_id": SERVICE_TAB_NUMBER,
+    "size": FEED_SIZE,
+    "cursor": '',
+  };
 
-//  getListData(String num) async {
-//    await queryIgnData();
-//    print('LC -> ${_subjectLists[0].title}');
-//  }
+  String result;
+  var parsed;
+  ScrollController scrollController = ScrollController();
+  bool isLoading = false;
 
-  ///附近tab数据
-  queryIgnData(int num) async {
-    Response response = await ApiForNearby.queryIgnList(num.toString());
-    if (response.data != null) {
-      final parsed = json.decode(response.data)['data'] ?? null;
-//      var resultCode = parsed['code'] ?? 0;
-      for (var x in parsed) {
-        add(IgnDataInfo.fromJson(x));
+  NearbyManager() {
+    queryServiceData().then((info) {
+      for (var x in info) {
+        add(NearbyListInfo.fromJson(x));
       }
-//      print("LC->#### ${_phoneNumbersList}");
+      notifyListeners();
+    });
+  }
+  getMore() async {
+    if (!isLoading) {
+      isLoading = true;
+      await Future.delayed(Duration(seconds: 1), () {
+        moreQueryServiceData().then((info) {
+          for (var x in info) {
+            add(NearbyListInfo.fromJson(x));
+          }
+          isLoading = false;
+          notifyListeners();
+        });
+      });
     }
   }
 
-  void add(IgnDataInfo item) {
+  ///服务tab数据
+  Future queryServiceData() async {
+    Response response = await ApiForNearbyPage.queryNearbyList(getParameters);
+    result = response.data;
+    parsed = jsonDecode(result);
+    var resultData = parsed['result'] ?? null;
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      if (resultData.length != 0) {
+        getParameters['cursor'] = resultData.last['id'] ?? null;
+      }
+      return resultData;
+    } else {
+      return false;
+    }
+  }
+
+  Future moreQueryServiceData() async {
+    Response response = await ApiForNearbyPage.queryNearbyList(getParameters);
+    result = response.data;
+    parsed = jsonDecode(result);
+    var resultData = parsed['result'] ?? null;
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      if (resultData.length != 0) {
+        getParameters['cursor'] = resultData.last['id'] ?? null;
+      }
+      return resultData;
+    } else {
+      return false;
+    }
+  }
+
+  void add(NearbyListInfo item) {
     _subjectLists.add(item);
-    notifyListeners();
   }
 
   @override
   void dispose() {
     super.dispose();
+    scrollController.dispose();
   }
 }

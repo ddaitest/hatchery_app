@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hatchery/business/home/phone_numbers.dart';
+import 'package:hatchery/business/home/report_something.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/nearby_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 
 class NearbyTab extends StatefulWidget {
@@ -16,7 +20,6 @@ class NearbyTabState extends State<NearbyTab>
   @override
   bool get wantKeepAlive => true;
 
-  var subjects = [];
   @override
   void initState() {
     super.initState();
@@ -26,19 +29,24 @@ class NearbyTabState extends State<NearbyTab>
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => NearbyManager(),
-      child: _bodyContainer(context),
+      child: _nearbyPage(context),
     );
   }
 
-  Future<Null> _RefreshData() async {
+  Future<Null> _refreshData() async {
     await Future.delayed(Duration(seconds: 1), () {
       return NearbyManager();
     });
   }
 
+  _nearbyPage(BuildContext context) {
+    return Consumer<NearbyManager>(
+        builder: (context, manager, child) => _bodyContainer(context));
+  }
+
   _bodyContainer(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: _RefreshData,
+        onRefresh: _refreshData,
         displacement: 20,
         child: Container(
           color: Colors.white,
@@ -86,28 +94,28 @@ class NearbyTabState extends State<NearbyTab>
 
   _getListViewContainer() {
     return Consumer<NearbyManager>(builder: (glvc, manager, glv) {
+      manager.scrollController.addListener(() {
+        if (manager.scrollController.position.pixels ==
+            manager.scrollController.position.maxScrollExtent) {
+          manager.getMore();
+        }
+      });
       if (manager.total == 0) {
         ///loading
         return CupertinoActivityIndicator();
       } else {
         return Expanded(
           child: ListView.builder(
+              controller: manager.scrollController,
               shrinkWrap: true,
-              itemCount: manager.total,
+              itemCount: manager.total + 1,
+              // ignore: missing_return
               itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      glvc,
-                      MaterialPageRoute(
-                          builder: (context) => WebViewPage(
-                              manager.subjectLists[index].gotoUrl, null)),
-                    );
-                  },
-                  child: Column(
+                if (index < manager.total) {
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      getItemContainerView(
+                      _getItemContainerView(
                           glvc, manager.subjectLists[index], manager),
 
                       ///下面的灰色分割线
@@ -116,13 +124,65 @@ class NearbyTabState extends State<NearbyTab>
                         color: Colors.grey[400],
                       ),
                     ],
-                  ),
-                );
+                  );
+                } else if (manager.parsed['result'].length == 0) {
+                  return _noMoreWidget();
+                } else {
+                  return _getMoreWidget();
+                }
               }),
         );
       }
     });
   }
+
+  Widget _getMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '加载中...  ',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            CircularProgressIndicator(
+              strokeWidth: 1.0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _noMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '已经是最后一条了',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget title(String text) => Container(
+        margin: EdgeInsets.symmetric(vertical: 4),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.title,
+          textAlign: TextAlign.center,
+        ),
+      );
 
   @override
   void dispose() {
@@ -130,51 +190,56 @@ class NearbyTabState extends State<NearbyTab>
   }
 }
 
-getItemContainerView(BuildContext gicv, var subject, manager) {
-  var imgUrl = subject.img;
+_getItemContainerView(BuildContext gicv, var subject, manager) {
+  var imgUrl = subject.image;
   return Consumer<NearbyManager>(
-    builder: (glvc, manager, glv) => Container(
-//              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      width: double.infinity,
-      child: Row(
-        children: <Widget>[
-          Container(
-              child: getInfoView(subject),
-              width: MediaQuery.of(gicv).size.width - 116),
-          getImage(imgUrl),
-        ],
+    builder: (glvc, manager, glv) => GestureDetector(
+      onTap: () {
+        if (subject.url != null) {
+          Navigator.push(
+            gicv,
+            MaterialPageRoute(
+                builder: (context) => WebViewPage(subject.url, null)),
+          );
+        }
+      },
+      child: Container(
+        child: Row(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: _getInfoView(subject),
+              width: MediaQuery.of(gicv).size.width - 116,
+            ),
+            _getImage(imgUrl),
+          ],
+        ),
       ),
     ),
   );
 }
 
-getInfoView(var subject) {
+_getInfoView(var subject) {
   return Container(
     height: 90,
     alignment: Alignment.topRight,
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[getTitleView(subject), getScoreView(subject)],
+      children: <Widget>[
+        _getTitleView(subject),
+      ],
     ),
   );
 }
 
-getScoreView(var subject) {
-  return Container(
-    alignment: Alignment.bottomLeft,
-    child: Text("  评分：" + subject.score),
-  );
-}
-
-getTitleView(subject) {
+_getTitleView(subject) {
   return Container(
     child: Row(
       children: <Widget>[
         Expanded(
           child: Text(
             subject.title,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.visible,
             style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
@@ -184,13 +249,13 @@ getTitleView(subject) {
   );
 }
 
-getImage(var imgUrl) {
+_getImage(var imgUrl) {
   return Container(
     child: CachedNetworkImage(
-      height: 58,
-      width: 31,
+      height: 90,
+      width: 90,
       imageUrl: imgUrl,
-      fit: BoxFit.cover,
+      fit: BoxFit.fill,
     ),
     margin: EdgeInsets.only(left: 8, top: 3, right: 8, bottom: 3),
     width: 100.0,

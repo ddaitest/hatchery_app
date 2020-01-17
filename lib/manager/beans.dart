@@ -95,24 +95,6 @@ class ServiceListInfo {
     categoryId = json['category_id'];
     serviceId = json['service_id'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['image'] = this.image;
-    data['thumbnail'] = this.thumbnail;
-    data['url'] = this.url;
-    data['contents'] = this.contents;
-    data['status'] = this.status;
-    data['client_id'] = this.clientId;
-    data['update_time'] = this.updateTime;
-    data['create_time'] = this.createTime;
-    data['is_web'] = this.isWeb;
-    data['category_id'] = this.categoryId;
-    data['service_id'] = this.serviceId;
-    return data;
-  }
 }
 
 class AdListInfo {
@@ -190,19 +172,50 @@ class updataInfo {
   }
 }
 
-class IgnDataInfo {
-  String gotoUrl;
-  String img;
-  String score;
+class NearbyListInfo {
+  String id;
   String title;
+  String image;
+  String thumbnail;
+  String url;
+  String contents;
+  int status;
+  String clientId;
+  int updateTime;
+  int createTime;
+  bool isWeb;
+  String categoryId;
+  String serviceId;
 
-  IgnDataInfo({this.gotoUrl, this.img, this.score, this.title});
+  NearbyListInfo(
+      {this.id,
+      this.title,
+      this.image,
+      this.thumbnail,
+      this.url,
+      this.contents,
+      this.status,
+      this.clientId,
+      this.updateTime,
+      this.createTime,
+      this.isWeb,
+      this.categoryId,
+      this.serviceId});
 
-  IgnDataInfo.fromJson(Map<String, dynamic> json) {
-    gotoUrl = json['goto_url'];
-    img = json['img'];
-    score = json['score'];
+  NearbyListInfo.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     title = json['title'];
+    image = json['image'];
+    thumbnail = json['thumbnail'];
+    url = json['url'];
+    contents = json['contents'];
+    status = json['status'];
+    clientId = json['client_id'];
+    updateTime = json['update_time'];
+    createTime = json['create_time'];
+    isWeb = json['is_web'];
+    categoryId = json['category_id'];
+    serviceId = json['service_id'];
   }
 }
 
