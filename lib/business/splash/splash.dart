@@ -15,7 +15,7 @@ class SplashPage extends StatelessWidget {
 
   _splashPage(BuildContext context) {
     return Consumer<SplashManager>(builder: (context, manager, child) {
-      if (manager.agreementData == true) {
+      if (manager.agreementData) {
         if (manager.total != 0) {
           return Container(
             constraints: BoxConstraints.expand(),

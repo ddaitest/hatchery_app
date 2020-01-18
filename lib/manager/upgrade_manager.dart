@@ -101,7 +101,7 @@ class UpgradeManager {
 
   ///下载前需先拿到path
   _downloadFile(urlPath, context) async {
-    _requestPermission().then((result) {
+    await _requestPermission().then((result) {
       sharedAddAndUpdate('showUpgradeCard', bool, true);
       if (result) {
         _localPath().then((info) async {

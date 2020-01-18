@@ -202,7 +202,6 @@ class ServiceTabState extends State<ServiceTab>
       manager.scrollController.addListener(() {
         if (manager.scrollController.position.pixels ==
             manager.scrollController.position.maxScrollExtent) {
-          print('滑动到了最底部');
           manager.getMore();
         }
       });
