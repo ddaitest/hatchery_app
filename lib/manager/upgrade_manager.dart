@@ -28,7 +28,7 @@ class UpgradeManager {
       if (showedCard == false) {
         _queryUpdateData().then((info) {
           _checkVersion().then((status) {
-            if (status = true) {
+            if (status) {
               _downloadFile(_updateLists[0].url, context);
             }
           });
@@ -130,6 +130,8 @@ class UpgradeManager {
     int apiVc = int.parse(_updateLists[0].verson);
     if (localVersionCode < apiVc) {
       return true;
+    } else {
+      return false;
     }
   }
 

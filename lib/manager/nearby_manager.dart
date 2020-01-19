@@ -8,20 +8,19 @@ import 'dart:collection';
 import 'package:hatchery/configs.dart';
 
 class NearbyManager extends ChangeNotifier {
-  List _bannerList = [
-    "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2930759379,1348658930&fm=26&gp=0.jpg",
-    "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=715079091,2714859735&fm=26&gp=0.jpg",
-    "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2930759379,1348658930&fm=26&gp=0.jpg",
-  ];
-
-  List get bannerList => _bannerList;
-
-  int get bannerTotal => _bannerList.length;
-
   List<NearbyListInfo> _subjectLists = [];
+
+  List<BannerInfo> _bannerLists = [];
 
   UnmodifiableListView<NearbyListInfo> get subjectLists =>
       UnmodifiableListView(_subjectLists);
+
+  UnmodifiableListView<BannerInfo> get bannerLists =>
+      UnmodifiableListView(_bannerLists);
+
+  ScrollController scrollController = ScrollController();
+
+  int get bannerTotal => _bannerLists.length;
 
   int get total => _subjectLists.length;
 
@@ -32,19 +31,29 @@ class NearbyManager extends ChangeNotifier {
     "cursor": '',
   };
 
+  Map<String, String> getBannerParameters = {
+    "category": NEARBY_CATEGORY_ID,
+  };
+
   String result;
   var parsed;
-  ScrollController scrollController = ScrollController();
   bool isLoading = false;
 
   NearbyManager() {
-    queryServiceData().then((info) {
+    queryNearbyBannerData().then((bannerInfo) {
+      for (var i in bannerInfo) {
+        addBanner(BannerInfo.fromJson(i));
+      }
+      notifyListeners();
+    });
+    queryNearbyData().then((info) {
       for (var x in info) {
         add(NearbyListInfo.fromJson(x));
       }
       notifyListeners();
     });
   }
+
   getMore() async {
     if (!isLoading) {
       isLoading = true;
@@ -60,8 +69,21 @@ class NearbyManager extends ChangeNotifier {
     }
   }
 
-  ///服务tab数据
-  Future queryServiceData() async {
+  ///周边banner数据
+  Future queryNearbyBannerData() async {
+    Response response = await ApiForBanner.queryBannerList(getBannerParameters);
+    result = response.data;
+    parsed = jsonDecode(result);
+    var resultData = parsed['result'] ?? null;
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      return resultData;
+    } else {
+      return false;
+    }
+  }
+
+  ///周边tab数据
+  Future queryNearbyData() async {
     Response response = await ApiForNearbyPage.queryNearbyList(getParameters);
     result = response.data;
     parsed = jsonDecode(result);
@@ -77,6 +99,7 @@ class NearbyManager extends ChangeNotifier {
   }
 
   Future moreQueryServiceData() async {
+    print('moreQueryServiceData');
     Response response = await ApiForNearbyPage.queryNearbyList(getParameters);
     result = response.data;
     parsed = jsonDecode(result);
@@ -93,6 +116,10 @@ class NearbyManager extends ChangeNotifier {
 
   void add(NearbyListInfo item) {
     _subjectLists.add(item);
+  }
+
+  void addBanner(BannerInfo item) {
+    _bannerLists.add(item);
   }
 
   @override

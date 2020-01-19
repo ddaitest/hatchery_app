@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hatchery/business/home/phone_numbers.dart';
-import 'package:hatchery/business/home/report_something.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/nearby_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 
 class NearbyTab extends StatefulWidget {
@@ -41,99 +38,106 @@ class NearbyTabState extends State<NearbyTab>
 
   _nearbyPage(BuildContext context) {
     return Consumer<NearbyManager>(
-        builder: (context, manager, child) => _bodyContainer(context));
+        builder: (context, manager, child) => _bodyContainer(context, manager));
   }
 
-  _bodyContainer(BuildContext context) {
-    return RefreshIndicator(
-        onRefresh: _refreshData,
-        displacement: 20,
-        child: Container(
-          color: Colors.white,
-          child: Column(children: [
-            _bannerContainer(context),
-            Container(
-              height: 10,
-              color: Colors.white,
-            ),
-            _getListViewContainer(),
-          ]),
-        ));
-  }
-
-  _bannerContainer(BuildContext context) {
-    return Consumer<NearbyManager>(
-        builder: (context, manager, child) => Container(
-              margin: EdgeInsets.only(top: 10),
-              height: 120,
-              child: Swiper(
-                autoplay: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image(
-                      image:
-                          CachedNetworkImageProvider(manager.bannerList[index]),
-                      fit: BoxFit.fitWidth,
-                    ),
-                  );
-                },
-                itemHeight: 120,
-                itemCount: manager.bannerTotal,
-                viewportFraction: 0.8,
-                scale: 0.9,
-                pagination: SwiperPagination(),
-                onTap: (index) {
-                  try {
-//            launchcaller(infos[index].action);
-                  } catch (id) {}
-                },
-              ),
-            ));
-  }
-
-  _getListViewContainer() {
-    return Consumer<NearbyManager>(builder: (glvc, manager, glv) {
-      manager.scrollController.addListener(() {
-        if (manager.scrollController.position.pixels ==
-            manager.scrollController.position.maxScrollExtent) {
-          manager.getMore();
-        }
-      });
-      if (manager.total == 0) {
-        ///loading
-        return CupertinoActivityIndicator();
-      } else {
-        return Expanded(
-          child: ListView.builder(
-              controller: manager.scrollController,
-              shrinkWrap: true,
-              itemCount: manager.total + 1,
-              // ignore: missing_return
-              itemBuilder: (BuildContext context, int index) {
-                if (index < manager.total) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _getItemContainerView(
-                          glvc, manager.subjectLists[index], manager),
-
-                      ///下面的灰色分割线
-                      Divider(
-                        height: 2,
-                        color: Colors.grey[400],
-                      ),
-                    ],
-                  );
-                } else if (manager.parsed['result'].length == 0) {
-                  return _noMoreWidget();
-                } else {
-                  return _getMoreWidget();
-                }
-              }),
-        );
+  _bodyContainer(context, bc) {
+    bc.scrollController.addListener(() {
+      if (bc.scrollController.position.pixels ==
+          bc.scrollController.position.maxScrollExtent) {
+        bc.getMore();
       }
     });
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      displacement: 20,
+//      child: _getListViewContainer(context, bc),
+      child: ListView(
+//        controller: bc.scrollController,
+        children: <Widget>[
+          _bannerContainer(context, bc),
+          _getListViewContainer(context, bc),
+        ],
+      ),
+    );
+  }
+
+  _bannerContainer(context, sub) {
+    if (sub.bannerTotal == 0) {
+      ///loading
+      return CupertinoActivityIndicator();
+    } else {
+      return Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            height: 120,
+            child: Swiper(
+              autoplay: true,
+              itemBuilder: (BuildContext context, int index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image(
+                    image: CachedNetworkImageProvider(
+                        sub.bannerLists[index].imgUrl),
+                    fit: BoxFit.fitWidth,
+                  ),
+                );
+              },
+              itemHeight: 120,
+              itemCount: sub.bannerTotal,
+              viewportFraction: 0.8,
+              scale: 0.9,
+              pagination: SwiperPagination(),
+              onTap: (index) {
+                if (sub.bannerLists[index].webUrl != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            WebViewPage(sub.bannerLists[index].webUrl, null)),
+                  );
+                }
+              },
+            ),
+          ),
+          Container(
+            height: 10,
+          ),
+        ],
+      );
+    }
+  }
+
+  _getListViewContainer(context, sub) {
+    if (sub.total == 0) {
+      ///loading
+      return CupertinoActivityIndicator();
+    } else {
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: sub.total + 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index < sub.total) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _getItemContainerView(context, sub.subjectLists[index]),
+
+                  ///下面的灰色分割线
+                  Divider(
+                    height: 2,
+                    color: Colors.grey[400],
+                  ),
+                ],
+              );
+            } else if (sub.parsed['result'].length == 0) {
+              return _noMoreWidget();
+            } else {
+              return _getMoreWidget();
+            }
+          });
+    }
   }
 
   Widget _getMoreWidget() {
@@ -190,7 +194,7 @@ class NearbyTabState extends State<NearbyTab>
   }
 }
 
-_getItemContainerView(BuildContext gicv, var subject, manager) {
+_getItemContainerView(BuildContext gicv, var subject) {
   var imgUrl = subject.image;
   return Consumer<NearbyManager>(
     builder: (glvc, manager, glv) => GestureDetector(

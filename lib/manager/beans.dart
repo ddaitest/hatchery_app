@@ -1,16 +1,35 @@
 class BannerInfo {
-  BannerInfo({this.id, this.image, this.action});
+  String id;
+  String description;
+  int status;
+  String clientId;
+  int updateTime;
+  int createTime;
+  String imgUrl;
+  String webUrl;
+  String categoryId;
 
-  String id = "";
-  String image = "";
-  String action = "";
+  BannerInfo(
+      {this.id,
+      this.description,
+      this.status,
+      this.clientId,
+      this.updateTime,
+      this.createTime,
+      this.imgUrl,
+      this.webUrl,
+      this.categoryId});
 
-  factory BannerInfo.fromJson(Map<String, dynamic> json) {
-    return BannerInfo(
-      id: json['id'].toString(),
-      image: json['image'],
-      action: json['action'],
-    );
+  BannerInfo.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    description = json['description'];
+    status = json['status'];
+    clientId = json['client_id'];
+    updateTime = json['update_time'];
+    createTime = json['create_time'];
+    imgUrl = json['img_url'];
+    webUrl = json['web_url'];
+    categoryId = json['category_id'];
   }
 }
 

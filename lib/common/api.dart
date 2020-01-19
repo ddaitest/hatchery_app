@@ -110,6 +110,39 @@ class ApiForNearbyPage {
   }
 }
 
+class ApiForBanner {
+  static Dio dio = Dio(BaseOptions(
+    baseUrl: "http://39.96.16.125:8001/",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+    responseType: ResponseType.plain,
+    headers: {"Authorization": BASIC_AUTH},
+  ));
+
+  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
+    onRequest: (RequestOptions options) {
+      return options;
+    },
+    onResponse: (Response response) {
+      return response; // continue
+    },
+    onError: (DioError e) {
+      return e; //continue
+    },
+  );
+
+  static init() {
+    if (!dio.interceptors.contains(_interceptorsWrapper)) {
+      dio.interceptors.add(_interceptorsWrapper);
+    }
+  }
+
+  ///服务list数据
+  static queryBannerList(parameters) {
+    return dio.get("api/banner/banner_list", queryParameters: parameters);
+  }
+}
+
 class ApiForReportSt {
   static Dio dio = Dio(BaseOptions(
     baseUrl: "http://39.96.16.125:8001/",
