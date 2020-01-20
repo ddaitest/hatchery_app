@@ -3,16 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/manager/beans.dart';
+import 'package:hatchery/manager/splash_manager.dart';
 import 'dart:math' as math;
 
-class HomeTab extends StatefulWidget {
+import 'package:provider/provider.dart';
+
+class HomeTab extends StatelessWidget{
+
+//  @override
+//  State<StatefulWidget> createState() {
+//    return new HomeTabState();
+//  }
+
   @override
-  State<StatefulWidget> createState() {
-    return new HomeTabState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => SplashManager(context),
+      child: _homeView(context),
+    );
+  }
+
+  _homeView(BuildContext context){
+
   }
 }
 
-class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
+class HomeTabState extends State {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
