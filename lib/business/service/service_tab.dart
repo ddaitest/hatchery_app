@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/phone_numbers.dart';
 import 'package:hatchery/business/home/report_something.dart';
-import 'package:hatchery/common/widget/upgrade.dart';
 import 'package:hatchery/manager/upgrade_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/service_manager.dart';
@@ -10,29 +9,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
-import 'package:hatchery/business/home/home.dart';
-import 'package:package_info/package_info.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
   ServiceTabState createState() => ServiceTabState();
 }
 
-class ServiceTabState extends State<ServiceTab> {
-//  @override
-//  bool get wantKeepAlive => true;
+class ServiceTabState extends State<ServiceTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    upgradeCard(context);
+    UpgradeManager().isShowUpgradeCard(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ServiceManager(),
-      child: _ServicePage(context),
+      child: _servicePage(context),
     );
   }
 
@@ -42,7 +40,7 @@ class ServiceTabState extends State<ServiceTab> {
     });
   }
 
-  _ServicePage(BuildContext context) {
+  _servicePage(BuildContext context) {
     return Consumer<ServiceManager>(
         builder: (context, manager, child) => _pageTopView(manager));
   }
@@ -74,7 +72,7 @@ class ServiceTabState extends State<ServiceTab> {
             children: <Widget>[
               MaterialButton(
                 onPressed: () {
-                  upgradeCard(context);
+//                  showUpdateCard(context);
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -201,6 +199,13 @@ class ServiceTabState extends State<ServiceTab> {
 
   _getListViewContainer() {
     return Consumer<ServiceManager>(builder: (glvc, manager, glv) {
+      manager.scrollController.addListener(() {
+        if (manager.scrollController.position.pixels ==
+            manager.scrollController.position.maxScrollExtent) {
+          print('滑动到了最底部');
+          manager.getMore();
+        }
+      });
       if (manager.total == 0) {
         ///loading
         return CupertinoActivityIndicator();
@@ -210,27 +215,74 @@ class ServiceTabState extends State<ServiceTab> {
             onRefresh: refreshData,
             displacement: 20,
             child: ListView.builder(
+                controller: manager.scrollController,
                 shrinkWrap: true,
-                itemCount: manager.total,
+                itemCount: manager.total + 1,
+                // ignore: missing_return
                 itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _getItemContainerView(
-                          glvc, manager.subjectLists[index], manager),
+                  if (index < manager.total) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _getItemContainerView(
+                            glvc, manager.subjectLists[index], manager),
 
-                      ///下面的灰色分割线
-                      Divider(
-                        height: 2,
-                        color: Colors.grey[400],
-                      ),
-                    ],
-                  );
+                        ///下面的灰色分割线
+                        Divider(
+                          height: 2,
+                          color: Colors.grey[400],
+                        ),
+                      ],
+                    );
+                  } else if (manager.parsed['result'].length == 0) {
+                    return _noMoreWidget();
+                  } else {
+                    return _getMoreWidget();
+                  }
                 }),
           ),
         );
       }
     });
+  }
+
+  Widget _getMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '加载中...  ',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            CircularProgressIndicator(
+              strokeWidth: 1.0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _noMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '已经是最后一条了',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget title(String text) => Container(
@@ -337,10 +389,4 @@ _topButtons(iconName, iconColor, String name, nameColor) {
               ],
             ),
           ));
-}
-
-_checkVersion() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  int localVersionCode = int.parse(packageInfo.buildNumber) ?? 1;
-  int apiVc = int.parse(UpgradeManager().UpdataLists[0].verson);
 }

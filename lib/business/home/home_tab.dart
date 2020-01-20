@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/manager/beans.dart';
-import 'package:hatchery/manager/splash_manager.dart';
+import 'package:hatchery/manager/home_manager.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
@@ -14,106 +14,28 @@ class HomeTab extends StatelessWidget{
 //  State<StatefulWidget> createState() {
 //    return new HomeTabState();
 //  }
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
+
+  bool refreshing = false;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => SplashManager(context),
-      child: _homeView(context),
+      create: (context) => HomeManager(context),
+      child: _getBodyView(context),
     );
   }
 
-  _homeView(BuildContext context){
-
-  }
-}
-
-class HomeTabState extends State {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-
-  bool refreshing = false;
-
-//  bool loading = false;
-
-  _refreshList(Function done) {
-//    model.queryList(pageType, true, done: done);
-  }
-
-  _loadMoreList(Function done) {
-//    model.queryList(pageType, false, done: done);
-  }
-
-  Future _onRefresh() {
-    return Future(() {
-      if (!refreshing) {
-        refreshing = true;
-        print("ERROR. _onRefresh");
-        _refreshList(() {
-          refreshing = false;
-        });
-      }
-    });
-  }
-
-  _onLoadMore() {
-//    print("INFO. _onLoadMore $loading");
-//    if (!loading) {
-//      loading = true;
-//      print("ERROR. _onLoadMore");
-//      _loadMoreList(() {
-//        loading = false;
-//      });
-//    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      body: getBodyView(context),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    refreshing = false;
-//    loading = false;
-//    Future.delayed(Duration.zero, () {
-//      var x = MainModel.of(context);
-//      //加载 list 数据
-//      _onRefresh();
-//      //加载 banner 数据
-//      x.queryBanner(pageType);
-//    });
-  }
-
-  getBodyView(BuildContext context) {
+  _getBodyView(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Column(children: [_getBanner(), Expanded(child: _getList())]),
+      child: Column(children: [_getBanner(context), Expanded(child: _getList())]),
     );
   }
 
-  _getBanner() {
-    List<BannerInfo> info = List<BannerInfo>();
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    info.add(BannerInfo(
-        id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
-    return _getBannerView(info);
+  _getBanner(context) {
+    return _getBannerView(Provider.of<HomeManager>(context).banner);
   }
 
   /// View: 列表。
@@ -145,6 +67,46 @@ class HomeTabState extends State {
     );
   }
 
+  _refreshList(Function done) {
+//    model.queryList(pageType, true, done: done);
+  }
+
+  _loadMoreList(Function done) {
+//    model.queryList(pageType, false, done: done);
+  }
+
+  _getLoadMore() {
+    return Container(
+        color: Colors.greenAccent,
+        child: FlatButton(
+          child: Text("Load More"),
+          onPressed: _onLoadMore,
+        ));
+  }
+
+  _onLoadMore() {
+//    print("INFO. _onLoadMore $loading");
+//    if (!loading) {
+//      loading = true;
+//      print("ERROR. _onLoadMore");
+//      _loadMoreList(() {
+//        loading = false;
+//      });
+//    }
+  }
+
+  Future _onRefresh() {
+    return Future(() {
+      if (!refreshing) {
+        refreshing = true;
+        print("ERROR. _onRefresh");
+        _refreshList(() {
+          refreshing = false;
+        });
+      }
+    });
+  }
+
   Widget _list() {
     final thumbnail =
         "https://upload-images.jianshu.io/upload_images/10392521-682342d2186572c0.jpg-mobile?imageMogr2/auto-orient/strip|imageView2/2/w/750/format/webp";
@@ -163,19 +125,12 @@ class HomeTabState extends State {
     return ListView.separated(
         itemBuilder: (context, index) => ArticleItem(data[index], () {}),
         separatorBuilder: (context, index) => Divider(
-              color: Colors.black,
-            ),
+          color: Colors.black,
+        ),
         itemCount: data.length);
   }
 
-  _getLoadMore() {
-    return Container(
-        color: Colors.greenAccent,
-        child: FlatButton(
-          child: Text("Load More"),
-          onPressed: _onLoadMore,
-        ));
-  }
+
 
   /// View: Banner
   _getBannerView(List<BannerInfo> infos) {
@@ -206,7 +161,48 @@ class HomeTabState extends State {
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
+
+//class HomeTabState extends State {
+//  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+//
+//
+//
+////  bool loading = false;
+//
+//
+//
+//
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return new Scaffold(
+//      key: _scaffoldKey,
+//      backgroundColor: Colors.white,
+//      body: getBodyView(context),
+//    );
+//  }
+//
+//  @override
+//  void initState() {
+//    super.initState();
+////    refreshing = false;
+////    loading = false;
+////    Future.delayed(Duration.zero, () {
+////      var x = MainModel.of(context);
+////      //加载 list 数据
+////      _onRefresh();
+////      //加载 banner 数据
+////      x.queryBanner(pageType);
+////    });
+//  }
+//
+//
+//
+//
+//
+//
+//
+//  @override
+//  bool get wantKeepAlive => true;
+//}

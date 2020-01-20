@@ -5,7 +5,6 @@ import 'package:hatchery/common/api.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
-import 'package:hatchery/common/widget/upgrade.dart';
 import 'package:hatchery/configs.dart';
 
 class ServiceManager extends ChangeNotifier {
@@ -20,17 +19,36 @@ class ServiceManager extends ChangeNotifier {
     "service_id": SERVICE_ID,
     "category_id": SERVICE_TAB_NUMBER,
     "size": FEED_SIZE,
+    "cursor": '',
   };
 
   String result;
   var parsed;
+  ScrollController scrollController = ScrollController();
+  bool isLoading = false;
 
   ServiceManager() {
     queryServiceData().then((info) {
       for (var x in info) {
         add(ServiceListInfo.fromJson(x));
       }
+      notifyListeners();
     });
+  }
+  getMore() async {
+    if (!isLoading) {
+      isLoading = true;
+      await Future.delayed(Duration(seconds: 1), () {
+        print('加载更多');
+        moreQueryServiceData().then((info) {
+          for (var x in info) {
+            add(ServiceListInfo.fromJson(x));
+          }
+          isLoading = false;
+          notifyListeners();
+        });
+      });
+    }
   }
 
   ///服务tab顶部
@@ -45,18 +63,31 @@ class ServiceManager extends ChangeNotifier {
     "7": "其他",
   };
 
-  showUpgradeCard(value) {
-    upgradeCard(value);
-  }
-
   ///服务tab数据
   Future queryServiceData() async {
     Response response = await ApiForServicePage.queryServiceList(getParameters);
     result = response.data;
     parsed = jsonDecode(result);
     var resultData = parsed['result'] ?? null;
-    print('resultData $resultData');
     if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      if (resultData.length != 0) {
+        getParameters['cursor'] = resultData.last['id'] ?? null;
+      }
+      return resultData;
+    } else {
+      return false;
+    }
+  }
+
+  Future moreQueryServiceData() async {
+    Response response = await ApiForServicePage.queryServiceList(getParameters);
+    result = response.data;
+    parsed = jsonDecode(result);
+    var resultData = parsed['result'] ?? null;
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+      if (resultData.length != 0) {
+        getParameters['cursor'] = resultData.last['id'] ?? null;
+      }
       return resultData;
     } else {
       return false;
@@ -65,11 +96,11 @@ class ServiceManager extends ChangeNotifier {
 
   void add(ServiceListInfo item) {
     _subjectLists.add(item);
-    notifyListeners();
   }
 
   @override
   void dispose() {
     super.dispose();
+    scrollController.dispose();
   }
 }

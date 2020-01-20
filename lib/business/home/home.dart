@@ -7,6 +7,7 @@ import 'package:hatchery/configs.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:hatchery/test/TestSilver.dart';
+import 'package:hatchery/test/test_provider.dart';
 //import 'package:hatchery/test/test_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,7 +25,8 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   var _pageController;
 
   final List<Widget> tabBodies = [
-    HomeTab(),
+//    HomeTab(),
+    TestProvider(),
     ServiceTab(),
     NearbyTab(),
   ];

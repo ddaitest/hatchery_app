@@ -267,10 +267,8 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                     onPressed: () {
                       if (_formkey.currentState.validate()) {
                         manager
-                            .postReportStData(
-                                inputValue ?? 'null',
-                                inputPhoneNumberValue ?? 'null',
-                                imageUrl ?? null)
+                            .postReportStData(inputValue ?? null,
+                                inputPhoneNumberValue ?? null, imageUrl ?? null)
                             .then((info) {
                           if (info) {
                             manager.showToast("提交成功");

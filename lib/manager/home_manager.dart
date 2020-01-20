@@ -26,12 +26,30 @@ class HomeManager extends ChangeNotifier {
   UnmodifiableListView<Post> get posts => UnmodifiableListView(_posts);
 
   HomeManager(BuildContext context) {
+    _loadBanner();
     _loadData();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  _loadBanner(){
+    List<BannerInfo> info = List<BannerInfo>();
+    info.add(BannerInfo(
+        id: "id",
+        image: "https://v1.vuepress.vuejs.org/hero.png",
+        action: "http://baidu.com"));
+    info.add(BannerInfo(
+        id: "id",
+        image: "https://v1.vuepress.vuejs.org/hero.png",
+        action: "http://baidu.com"));
+    info.add(BannerInfo(
+        id: "id",
+        image: "https://v1.vuepress.vuejs.org/hero.png",
+        action: "http://baidu.com"));
+    _banner.addAll(info);
   }
 
   void _loadData() async {
