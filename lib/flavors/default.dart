@@ -6,6 +6,7 @@ class AppID {
 
 class Strings {
   final title = "默认小区名";
+  final post = "物业公告";
 }
 
 class TextStyles {
@@ -43,4 +44,9 @@ class TextStyles {
 class Sizes {
   final articleItemHeight = 120.0;
   final articleThumbnail = 100.0;
+  final postItemHeight = 60.0;
+}
+
+class Color {
+  final diver = Colors.black87;
 }

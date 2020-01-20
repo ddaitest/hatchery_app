@@ -25,8 +25,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   var _pageController;
 
   final List<Widget> tabBodies = [
-//    HomeTab(),
-    TestProvider(),
+    HomeTab(),
+//    TestProvider(),
+//    TestSilverTab(),
     ServiceTab(),
     NearbyTab(),
   ];
@@ -51,6 +52,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
               });
             },
           ),
+          backgroundColor: Colors.white,
           appBar: AppBar(
             title: Text(
               COMMUNITY_NAME,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 extension ExtendedResponse on Response {
   bool success() {
@@ -21,5 +22,11 @@ extension ExtendedResponse on Response {
     } else {
       return null;
     }
+  }
+}
+
+extension ExtendedWidget on Widget{
+  addSilver(){
+    return SliverToBoxAdapter(child:this);
   }
 }
