@@ -87,16 +87,16 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     List<BannerInfo> info = List<BannerInfo>();
     info.add(BannerInfo(
         id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
+        imgUrl: "https://v1.vuepress.vuejs.org/hero.png",
+        webUrl: "http://baidu.com"));
     info.add(BannerInfo(
         id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
+        imgUrl: "https://v1.vuepress.vuejs.org/hero.png",
+        webUrl: "http://baidu.com"));
     info.add(BannerInfo(
         id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
+        imgUrl: "https://v1.vuepress.vuejs.org/hero.png",
+        webUrl: "http://baidu.com"));
     return _getBannerView(info);
   }
 
@@ -171,7 +171,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
           return ClipRRect(
             borderRadius: new BorderRadius.circular(8.0),
             child: Image(
-              image: new CachedNetworkImageProvider(infos[index].image),
+              image: new CachedNetworkImageProvider(infos[index].imgUrl),
               fit: BoxFit.fitWidth,
             ),
           );
