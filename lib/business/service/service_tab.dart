@@ -213,32 +213,23 @@ class ServiceTabState extends State<ServiceTab>
           child: RefreshIndicator(
             onRefresh: refreshData,
             displacement: 20,
-            child: ListView.builder(
-                controller: manager.scrollController,
-                shrinkWrap: true,
-                itemCount: manager.total + 1,
-                // ignore: missing_return
-                itemBuilder: (BuildContext context, int index) {
-                  if (index < manager.total) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _getItemContainerView(
-                            glvc, manager.subjectLists[index], manager),
-
-                        ///下面的灰色分割线
-                        Divider(
-                          height: 2,
-                          color: Colors.grey[400],
-                        ),
-                      ],
-                    );
-                  } else if (manager.parsed['result'].length == 0) {
-                    return _noMoreWidget();
-                  } else {
-                    return _getMoreWidget();
-                  }
-                }),
+            child: ListView.separated(
+              controller: manager.scrollController,
+              shrinkWrap: true,
+              itemCount: manager.total + 1,
+              // ignore: missing_return
+              itemBuilder: (BuildContext context, int index) {
+                if (index < manager.total) {
+                  return _getItemContainerView(
+                      glvc, manager.subjectLists[index], manager);
+                } else if (manager.parsed['result'].length == 0) {
+                  return _noMoreWidget();
+                } else {
+                  return _getMoreWidget();
+                }
+              },
+              separatorBuilder: (BuildContext context, int index) => Divider(),
+            ),
           ),
         );
       }

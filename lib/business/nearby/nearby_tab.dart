@@ -42,24 +42,12 @@ class NearbyTabState extends State<NearbyTab>
   }
 
   _bodyContainer(context, bc) {
-    bc.scrollController.addListener(() {
-      if (bc.scrollController.position.pixels ==
-          bc.scrollController.position.maxScrollExtent) {
-        bc.getMore();
-      }
-    });
     return RefreshIndicator(
-      onRefresh: _refreshData,
-      displacement: 20,
-//      child: _getListViewContainer(context, bc),
-      child: ListView(
-//        controller: bc.scrollController,
-        children: <Widget>[
-          _bannerContainer(context, bc),
-          _getListViewContainer(context, bc),
-        ],
-      ),
-    );
+        onRefresh: _refreshData,
+        displacement: 20,
+        child: Container(
+          child: _getListViewContainer(context, bc),
+        ));
   }
 
   _bannerContainer(context, sub) {
@@ -114,29 +102,30 @@ class NearbyTabState extends State<NearbyTab>
       ///loading
       return CupertinoActivityIndicator();
     } else {
-      return ListView.builder(
+      return ListView.separated(
+          controller: sub.scrollController,
           shrinkWrap: true,
           itemCount: sub.total + 1,
           itemBuilder: (BuildContext context, int index) {
+            sub.scrollController.addListener(() {
+              if (sub.scrollController.position.pixels ==
+                  sub.scrollController.position.maxScrollExtent) {
+                sub.getMore();
+              }
+            });
             if (index < sub.total) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _getItemContainerView(context, sub.subjectLists[index]),
-
-                  ///下面的灰色分割线
-                  Divider(
-                    height: 2,
-                    color: Colors.grey[400],
-                  ),
-                ],
-              );
+              if (index == 0) {
+                return _bannerContainer(context, sub);
+              } else {
+                return _getItemContainerView(context, sub.subjectLists[index]);
+              }
             } else if (sub.parsed['result'].length == 0) {
               return _noMoreWidget();
             } else {
               return _getMoreWidget();
             }
-          });
+          },
+          separatorBuilder: (BuildContext context, int index) => Divider());
     }
   }
 
