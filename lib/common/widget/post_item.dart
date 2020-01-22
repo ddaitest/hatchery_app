@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hatchery/beans/beans.dart';
 import 'package:hatchery/common/DateUtil.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/beans.dart';
 
-class PostItem extends StatelessWidget {
-  final Post post;
+class NoticeItem extends StatelessWidget {
+  final Notice notice;
   final Function onTap;
 
-  PostItem(this.post, this.onTap);
+  NoticeItem(this.notice, this.onTap);
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +20,9 @@ class PostItem extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text(post.title, maxLines: 2, style: Flavors.styles.content),
+                Text(notice.title, maxLines: 2, style: Flavors.styles.content),
                 Expanded(child: Container(), flex: 1),
-                Text(DateUtil.getDateStrByMs(post.updateTime,format: DateFormat.MONTH_DAY_HOUR_MINUTE),
+                Text(DateUtil.getDateStrByMs(notice.updateTime,format: DateFormat.MONTH_DAY_HOUR_MINUTE),
                     style: Flavors.styles.content),
               ],
             ),

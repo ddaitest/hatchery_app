@@ -13,7 +13,7 @@ import 'package:hatchery/configs.dart';
 import 'package:flutter/cupertino.dart';
 
 class UpgradeManager {
-  List<updataInfo> _updateLists = [];
+  List<UpdateInfo> _updateLists = [];
   double finalCount;
   String result;
   var parsed;
@@ -46,11 +46,11 @@ class UpgradeManager {
     if (parsed['result']['verson'] != null &&
         parsed['code'] == 200 &&
         parsed['info'] == 'OK') {
-      add(updataInfo.fromJson(resultData));
+      add(UpdateInfo.fromJson(resultData));
     }
   }
 
-  void add(updataInfo item) {
+  void add(UpdateInfo item) {
     _updateLists.add(item);
   }
 
@@ -127,7 +127,7 @@ class UpgradeManager {
   Future _checkVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     int localVersionCode = int.parse(packageInfo.buildNumber) ?? 1;
-    int apiVc = int.parse(_updateLists[0].verson);
+    int apiVc = int.parse(_updateLists[0].version);
     if (localVersionCode < apiVc) {
       return true;
     } else {

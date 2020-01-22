@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:hatchery/beans/beans.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/backgourds.dart';
 import 'package:hatchery/common/widget/post_item.dart';
@@ -78,17 +77,17 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _posts() {
-    return Selector<HomeManager, UnmodifiableListView<Post>>(
+    return Selector<HomeManager, UnmodifiableListView<Notice>>(
       selector: (BuildContext context, HomeManager manager) {
         return manager.posts;
       },
-      builder: (BuildContext context, UnmodifiableListView<Post> value,
+      builder: (BuildContext context, UnmodifiableListView<Notice> value,
           Widget child) {
         var postViews = <Widget>[
           _postTitle(),
         ];
-        for (Post d in value) {
-          postViews.add(PostItem(d, () {}));
+        for (Notice d in value) {
+          postViews.add(NoticeItem(d, () {}));
         }
         return Container(
           margin: EdgeInsets.all(10),
