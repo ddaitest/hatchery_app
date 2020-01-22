@@ -8,11 +8,11 @@ import 'dart:collection';
 import 'package:hatchery/configs.dart';
 
 class NearbyManager extends ChangeNotifier {
-  List<NearbyListInfo> _subjectLists = [];
+  List<Article> _subjectLists = [];
 
   List<BannerInfo> _bannerLists = [];
 
-  UnmodifiableListView<NearbyListInfo> get subjectLists =>
+  UnmodifiableListView<Article> get subjectLists =>
       UnmodifiableListView(_subjectLists);
 
   UnmodifiableListView<BannerInfo> get bannerLists =>
@@ -48,7 +48,7 @@ class NearbyManager extends ChangeNotifier {
     });
     queryNearbyData().then((info) {
       for (var x in info) {
-        add(NearbyListInfo.fromJson(x));
+        add(Article.fromJson(x));
       }
       notifyListeners();
     });
@@ -60,7 +60,7 @@ class NearbyManager extends ChangeNotifier {
       await Future.delayed(Duration(seconds: 1), () {
         moreQueryServiceData().then((info) {
           for (var x in info) {
-            add(NearbyListInfo.fromJson(x));
+            add(Article.fromJson(x));
           }
           isLoading = false;
           notifyListeners();
@@ -114,7 +114,7 @@ class NearbyManager extends ChangeNotifier {
     }
   }
 
-  void add(NearbyListInfo item) {
+  void add(Article item) {
     _subjectLists.add(item);
   }
 

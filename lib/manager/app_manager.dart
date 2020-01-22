@@ -18,9 +18,9 @@ class AppManager extends ChangeNotifier {
 
   int get m => _m;
 
-  List<phoneNumberInfo> _phoneNumbersList = [];
+  List<PhoneNumberInfo> _phoneNumbersList = [];
 
-  UnmodifiableListView<phoneNumberInfo> get PhoneNumbersList =>
+  UnmodifiableListView<PhoneNumberInfo> get phoneNumbersList =>
       UnmodifiableListView(_phoneNumbersList);
 
   int get total => _phoneNumbersList.length;
@@ -60,13 +60,13 @@ class AppManager extends ChangeNotifier {
       final parsed = json.decode(response.data)['numberlist'] ?? null;
 //      var resultCode = parsed['code'] ?? 0;
       for (var x in parsed) {
-        add(phoneNumberInfo.fromJson(x));
+        add(PhoneNumberInfo.fromJson(x));
       }
 //      print("LC->#### ${_phoneNumbersList}");
     }
   }
 
-  void add(phoneNumberInfo item) {
+  void add(PhoneNumberInfo item) {
     _phoneNumbersList.add(item);
     notifyListeners();
   }

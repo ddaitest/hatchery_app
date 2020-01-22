@@ -62,7 +62,7 @@ class ArticleItem extends StatelessWidget {
 //      );
 
   _getBottom() => Container(
-        child: Text("${article.publishOn}", style: Flavors.styles.secondary),
+        child: Text("${article.updateTime}", style: Flavors.styles.secondary),
         color: Colors.white,
       );
 
@@ -73,7 +73,7 @@ class ArticleItem extends StatelessWidget {
 
   _getSummary() => Container(
         child:
-            Text(article.summary, maxLines: 2, style: Flavors.styles.content),
+            Text(article.contents, maxLines: 2, style: Flavors.styles.content),
         color: Colors.white,
       );
 

@@ -45,7 +45,7 @@ class ServiceTabState extends State<ServiceTab>
         builder: (context, manager, child) => _pageTopView(manager));
   }
 
-  _pageTopView(manager) {
+  _pageTopView(ServiceManager manager) {
     return Column(
       children: <Widget>[
         Container(

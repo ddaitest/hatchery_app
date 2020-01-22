@@ -180,3 +180,43 @@ class ApiForReportSt {
     return dio.post("files/upload", data: formdata);
   }
 }
+
+class API {
+  static Dio _dio = Dio(BaseOptions(
+      baseUrl: "http://123.206.176.51:5000/",
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      responseType: ResponseType.plain));
+
+  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
+    onRequest: (RequestOptions options) {
+      return options;
+    },
+    onResponse: (Response response) {
+      return response; // continue
+    },
+    onError: (DioError e) {
+      return e; //continue
+    },
+  );
+
+  static init() {
+    if (!_dio.interceptors.contains(_interceptorsWrapper)) {
+      _dio.interceptors.add(_interceptorsWrapper);
+    }
+  }
+
+  static Home home = Home(_dio);
+}
+
+class Home {
+
+  Dio _dio;
+
+  Home(this._dio);
+
+  ///报事报修图片上传
+  getBanners(String category) {
+    return _dio.get("api/banner/banner_list", queryParameters: {"category": category});
+  }
+}

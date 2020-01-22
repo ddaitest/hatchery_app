@@ -4,4 +4,5 @@ class Flavors {
   static final strings = Strings();
   static final styles = TextStyles();
   static final sizes = Sizes();
+  static final colors = Color();
 }

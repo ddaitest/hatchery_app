@@ -38,7 +38,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/splash',
+      initialRoute: '/',
+//      initialRoute: '/splash',
       onGenerateRoute: Routers.router.generator,
     );
   }
