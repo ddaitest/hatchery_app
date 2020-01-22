@@ -90,6 +90,7 @@ flutter:
   assets:
     - images/Upgrade_Card.png
     - images/welcome.png
+    - images/demo/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

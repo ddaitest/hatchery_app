@@ -9,12 +9,16 @@ class Post {
   String summary = "";
   String content = "";
   num status = 1;
-  String client_id = "";
-  num update_time = 0;
-  num create_time = 0;
+  @JsonKey(name: 'client_id')
+  String clientId = "";
+  @JsonKey(name: 'update_time')
+  num updateTime = 0;
+
+  @JsonKey(name: 'create_time')
+  num createTime = 0;
 
   Post(this.id, this.title, this.summary, this.content, this.status,
-      this.client_id, this.update_time, this.create_time);
+      this.clientId, this.updateTime, this.createTime);
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 

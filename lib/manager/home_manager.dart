@@ -45,16 +45,24 @@ class HomeManager extends ChangeNotifier {
     List<BannerInfo> info = List<BannerInfo>();
     info.add(BannerInfo(
         id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
+        imgUrl: "images/demo/banner_demo2.png",
+        webUrl: "http://baidu.com"));
     info.add(BannerInfo(
         id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
+        imgUrl: "images/demo/banner_demo3.jpg",
+        webUrl: "http://baidu.com"));
     info.add(BannerInfo(
         id: "id",
-        image: "https://v1.vuepress.vuejs.org/hero.png",
-        action: "http://baidu.com"));
+        imgUrl: "images/demo/banner_demo4.png",
+        webUrl: "http://baidu.com"));
+    info.add(BannerInfo(
+        id: "id",
+        imgUrl: "images/demo/banner_demo5.jpg",
+        webUrl: "http://baidu.com"));
+    info.add(BannerInfo(
+        id: "id",
+        imgUrl: "images/demo/banner_demo6.jpeg",
+        webUrl: "http://baidu.com"));
     _banner.addAll(info);
   }
 
@@ -100,4 +108,6 @@ class HomeManager extends ChangeNotifier {
     _posts.addAll(data);
     notifyListeners();
   }
+
+  void clickBanner(int index) {}
 }

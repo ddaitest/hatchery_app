@@ -31,50 +31,47 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (1 == 1) {
-      return RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: _onRefresh,
-//        child: _list(),
-        child: CustomScrollView(
-          slivers: <Widget>[
-            _getBanner(context).addSilver(),
-            _posts(),
-            _articles(),
-          ],
-        ),
-      );
-    } else {
-      return Center(child: CircularProgressIndicator());
-    }
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      onRefresh: _onRefresh,
+      child: CustomScrollView(
+        slivers: <Widget>[
+          _banner(context).addSilver(),
+          _posts(),
+          _articles(),
+        ],
+      ),
+    );
   }
 
   /// View: Banner
-  Widget _getBanner(BuildContext context) {
-    List<BannerInfo> banners = Provider.of<HomeManager>(context).banner;
+  Widget _banner(BuildContext context) {
+    HomeManager manager = Provider.of<HomeManager>(context,listen: false);
+    List<BannerInfo> banners = manager.banner;
     return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 120,
+      height: 140,
       child: new Swiper(
         itemBuilder: (BuildContext context, int index) {
+          ImageProvider imageProvider;
+          String imageURL = banners[index].imgUrl;
+          if (imageURL.startsWith("http")) {
+            imageProvider = CachedNetworkImageProvider(imageURL);
+          } else {
+            imageProvider = AssetImage(imageURL);
+          }
           return ClipRRect(
             borderRadius: new BorderRadius.circular(8.0),
-            child: Image(
-              image: new CachedNetworkImageProvider(banners[index].image),
-              fit: BoxFit.fitWidth,
-            ),
+            child: Image(image: imageProvider, fit: BoxFit.fill),
           );
         },
-        itemHeight: 120,
+        itemHeight: 140,
         itemCount: banners.length,
         viewportFraction: 0.8,
         scale: 0.9,
         pagination: new SwiperPagination(),
-        control: new SwiperControl(),
+//        control: new SwiperControl(),
         onTap: (index) {
-          try {
-//            launchcaller(infos[index].action);
-          } catch (id) {}
+          manager.clickBanner(index);
         },
       ),
     );
@@ -101,13 +98,13 @@ class HomeView extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[200],
-                  blurRadius: 10.0,
-                  spreadRadius: 5.0,
-                )
-              ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey[200],
+                blurRadius: 10.0,
+                spreadRadius: 5.0,
+              )
+            ],
             color: Colors.white,
           ),
         ).addSilver();

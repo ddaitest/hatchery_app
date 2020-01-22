@@ -23,7 +23,7 @@ class PostItem extends StatelessWidget {
               children: <Widget>[
                 Text(post.title, maxLines: 2, style: Flavors.styles.content),
                 Expanded(child: Container(), flex: 1),
-                Text(DateUtil.getDateStrByMs(post.update_time,format: DateFormat.MONTH_DAY_HOUR_MINUTE),
+                Text(DateUtil.getDateStrByMs(post.updateTime,format: DateFormat.MONTH_DAY_HOUR_MINUTE),
                     style: Flavors.styles.content),
               ],
             ),

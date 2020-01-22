@@ -108,7 +108,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   '是',
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
-                onPressed: () => Navigator.of(context).pop(true),
+                onPressed: () => exitApp(),
               ),
               FlatButton(
                 child: Text(

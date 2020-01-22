@@ -28,7 +28,7 @@ class UpgradeManager {
       if (showedCard == false) {
         _queryUpdateData().then((info) {
           _checkVersion().then((status) {
-            if (status = true) {
+            if (status) {
               _downloadFile(_updateLists[0].url, context);
             }
           });
@@ -101,7 +101,7 @@ class UpgradeManager {
 
   ///下载前需先拿到path
   _downloadFile(urlPath, context) async {
-    _requestPermission().then((result) {
+    await _requestPermission().then((result) {
       sharedAddAndUpdate('showUpgradeCard', bool, true);
       if (result) {
         _localPath().then((info) async {
@@ -130,6 +130,8 @@ class UpgradeManager {
     int apiVc = int.parse(_updateLists[0].verson);
     if (localVersionCode < apiVc) {
       return true;
+    } else {
+      return false;
     }
   }
 

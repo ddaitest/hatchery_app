@@ -39,7 +39,6 @@ class ServiceManager extends ChangeNotifier {
     if (!isLoading) {
       isLoading = true;
       await Future.delayed(Duration(seconds: 1), () {
-        print('加载更多');
         moreQueryServiceData().then((info) {
           for (var x in info) {
             add(ServiceListInfo.fromJson(x));

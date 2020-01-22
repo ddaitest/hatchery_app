@@ -77,12 +77,14 @@ class Api {
   }
 }
 
-class ApiForNearby {
+class ApiForNearbyPage {
   static Dio dio = Dio(BaseOptions(
-      baseUrl: "http://123.206.176.51:5000/",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-      responseType: ResponseType.plain));
+    baseUrl: "http://39.96.16.125:8001/",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+    responseType: ResponseType.plain,
+    headers: {"Authorization": BASIC_AUTH},
+  ));
 
   static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
     onRequest: (RequestOptions options) {
@@ -102,9 +104,42 @@ class ApiForNearby {
     }
   }
 
-  ///list数据相关
-  static queryIgnList(String num) {
-    return dio.get("/data/ign/?page=" + num, queryParameters: {});
+  ///服务list数据
+  static queryNearbyList(parameters) {
+    return dio.get("api/feed/get/feeds", queryParameters: parameters);
+  }
+}
+
+class ApiForBanner {
+  static Dio dio = Dio(BaseOptions(
+    baseUrl: "http://39.96.16.125:8001/",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+    responseType: ResponseType.plain,
+    headers: {"Authorization": BASIC_AUTH},
+  ));
+
+  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
+    onRequest: (RequestOptions options) {
+      return options;
+    },
+    onResponse: (Response response) {
+      return response; // continue
+    },
+    onError: (DioError e) {
+      return e; //continue
+    },
+  );
+
+  static init() {
+    if (!dio.interceptors.contains(_interceptorsWrapper)) {
+      dio.interceptors.add(_interceptorsWrapper);
+    }
+  }
+
+  ///服务list数据
+  static queryBannerList(parameters) {
+    return dio.get("api/banner/banner_list", queryParameters: parameters);
   }
 }
 

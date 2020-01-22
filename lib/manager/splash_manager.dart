@@ -15,7 +15,7 @@ import 'package:hatchery/common/tools.dart';
 
 class SplashManager extends ChangeNotifier {
   /// 是否显示 协议确认UI
-  bool _agreementData;
+  bool _agreementData = true;
 
   Timer _timer;
 
@@ -61,7 +61,7 @@ class SplashManager extends ChangeNotifier {
 
   /// UI动作 同意协议
   void agree(BuildContext context) {
-    _setLocalData();
+    sharedAddAndUpdate('agreementData', bool, true); // 设置协议是否同意标识
     Navigator.pushReplacementNamed(context, '/');
   }
 
@@ -73,34 +73,15 @@ class SplashManager extends ChangeNotifier {
     );
   }
 
-  /// 设置协议是否同意标识
-  void _setLocalData() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool('agreementData', true);
-  }
-
   /// 获取协议是否同意标识
   _getLocalData() {
-    SharedPreferences.getInstance().then((sp) {
-      _agreementData = sp.getBool('agreementData') ?? true;
+    sharedGetData('agreementData').then((sp) {
+      _agreementData = sp ?? false;
       if (!_agreementData) {
         _timer.cancel();
       }
       notifyListeners();
     });
-  }
-
-  /// 存广告json
-  _saveAdJson(adJson) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('splashAd_json', adJson);
-  }
-
-  /// 取广告json
-  getAdJson(adJson) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    _responseData = sharedPreferences.getString(adJson) ?? null;
-    return _responseData;
   }
 
   /// 开屏倒计时
@@ -121,34 +102,39 @@ class SplashManager extends ChangeNotifier {
   /// 获取开屏广告数据
   queryAdData() async {
     Response response = await Api.querySplashList();
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     result = response.data;
-    _responseData = sharedPreferences.getString('splashAd_json') ?? null;
-    if (_responseData != null) {
-      parsed = json.decode(_responseData);
-      var resultData = parsed['result'][0];
-      add(AdListInfo.fromJson(resultData));
-      newParsed = json.decode(result);
-      resultCode = newParsed['code'] ?? 0;
-      statesMessage = parsed['info'] ?? null;
-      var newResultData = newParsed['result'][0] ?? null;
-      if (resultCode == 200 && statesMessage == 'OK' && newResultData != null) {
-        print('LC resultData1-> $newResultData');
-        _saveAdJson(result);
-      }
-    } else {
-      parsed = json.decode(result);
-      resultCode = parsed['code'] ?? 0;
-      statesMessage = parsed['info'] ?? null;
-      var newResultData = parsed['result'][0] ?? null;
-      if (resultCode == 200 && statesMessage == 'OK' && newResultData != null) {
-        print('LC resultData2-> $newResultData');
-        _saveAdJson(result);
-        add(AdListInfo.fromJson(newResultData));
+    sharedGetData('splashAd_json').then((info) {
+      _responseData = info ?? null;
+      if (_responseData != null) {
+        parsed = json.decode(_responseData);
+        var resultData = parsed['result'][0];
+        add(AdListInfo.fromJson(resultData));
+        newParsed = json.decode(result);
+        resultCode = newParsed['code'] ?? 0;
+        statesMessage = parsed['info'] ?? null;
+        var newResultData = newParsed['result'][0] ?? null;
+        if (resultCode == 200 &&
+            statesMessage == 'OK' &&
+            newResultData != null) {
+          print('LC resultData1-> $newResultData');
+          sharedAddAndUpdate('splashAd_json', String, result);
+        }
       } else {
-        add(AdListInfo.fromJson(json.decode(_responseData)['result'][0]));
+        parsed = json.decode(result);
+        resultCode = parsed['code'] ?? 0;
+        statesMessage = parsed['info'] ?? null;
+        var newResultData = parsed['result'][0] ?? null;
+        if (resultCode == 200 &&
+            statesMessage == 'OK' &&
+            newResultData != null) {
+          print('LC resultData2-> $newResultData');
+          sharedAddAndUpdate('splashAd_json', String, result);
+          add(AdListInfo.fromJson(newResultData));
+        } else {
+          add(AdListInfo.fromJson(json.decode(_responseData)['result'][0]));
+        }
       }
-    }
+    });
   }
 
   void add(AdListInfo item) {
