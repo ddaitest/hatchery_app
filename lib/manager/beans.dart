@@ -221,3 +221,32 @@ class ReportSt {
 
   Map<String, dynamic> toJson() => _$ReportStToJson(this);
 }
+
+class SerivceTopInfo {
+  String id;
+  String title;
+  String icon;
+  String clientId;
+  int updateTime;
+  int createTime;
+  String categoryId;
+
+  SerivceTopInfo(
+      {this.id,
+      this.title,
+      this.icon,
+      this.clientId,
+      this.updateTime,
+      this.createTime,
+      this.categoryId});
+
+  SerivceTopInfo.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    icon = json['icon'];
+    clientId = json['client_id'];
+    updateTime = json['update_time'];
+    createTime = json['create_time'];
+    categoryId = json['category_id'];
+  }
+}

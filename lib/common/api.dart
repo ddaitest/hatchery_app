@@ -28,6 +28,11 @@ class ApiForServicePage {
     }
   }
 
+  ///服务顶部数据
+  static queryServiceTop(parameters) {
+    return dio.get("/api/services/get/services", queryParameters: parameters);
+  }
+
   ///服务list数据
   static queryServiceList(parameters) {
     return dio.get("api/feed/get/feeds", queryParameters: parameters);
@@ -210,13 +215,13 @@ class API {
 }
 
 class Home {
-
   Dio _dio;
 
   Home(this._dio);
 
   ///报事报修图片上传
   getBanners(String category) {
-    return _dio.get("api/banner/banner_list", queryParameters: {"category": category});
+    return _dio
+        .get("api/banner/banner_list", queryParameters: {"category": category});
   }
 }

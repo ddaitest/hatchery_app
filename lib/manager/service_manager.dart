@@ -8,40 +8,66 @@ import 'dart:collection';
 import 'package:hatchery/configs.dart';
 
 class ServiceManager extends ChangeNotifier {
-  List<Article> _subjectLists = [];
+  List<ServiceListInfo> _subjectLists = [];
 
-  UnmodifiableListView<Article> get subjectLists =>
+  UnmodifiableListView<ServiceListInfo> get subjectLists =>
       UnmodifiableListView(_subjectLists);
+
+  List<SerivceTopInfo> _topList = [];
+
+  UnmodifiableListView<SerivceTopInfo> get topList =>
+      UnmodifiableListView(_topList);
 
   int get total => _subjectLists.length;
 
-  Map<String, String> getParameters = {
+  int get topTotal => _topList.length;
+
+  Map<String, String> getListParameters = {
     "service_id": SERVICE_ID,
     "category_id": SERVICE_TAB_NUMBER,
     "size": FEED_SIZE,
     "cursor": '',
   };
 
+  Map<String, String> getTopParameters = {
+    "category_id": SERVICE_CATEGORY_ID,
+    "size": FEED_SIZE,
+  };
+
   String result;
   var parsed;
+
+  String getMoreResult;
+  var getMoreParsed;
+
+  String topResult;
+  var topParsed;
+
   ScrollController scrollController = ScrollController();
   bool isLoading = false;
 
   ServiceManager() {
+    queryServiceTopData().then((info) {
+      for (var x in info) {
+        addTop(SerivceTopInfo.fromJson(x));
+      }
+      notifyListeners();
+    });
     queryServiceData().then((info) {
       for (var x in info) {
-        add(Article.fromJson(x));
+        add(ServiceListInfo.fromJson(x));
       }
       notifyListeners();
     });
   }
+
   getMore() async {
     if (!isLoading) {
       isLoading = true;
       await Future.delayed(Duration(seconds: 1), () {
         moreQueryServiceData().then((info) {
           for (var x in info) {
-            add(Article.fromJson(x));
+            add(ServiceListInfo.fromJson(x));
           }
           isLoading = false;
           notifyListeners();
@@ -50,27 +76,33 @@ class ServiceManager extends ChangeNotifier {
     }
   }
 
-  ///服务tab顶部
-  var ServiceTopMap = {
-    "0": "物业服务",
-    "1": "家电维修",
-    "2": "保姆月嫂",
-    "3": "洗车",
-    "4": "便民服务",
-    "5": "房屋租售",
-    "6": "各种服务",
-    "7": "其他",
-  };
+  ///服务top数据
+  Future queryServiceTopData() async {
+    Response response =
+        await ApiForServicePage.queryServiceTop(getTopParameters);
+    topResult = response.data;
+    topParsed = jsonDecode(topResult);
+    var resultData = parsed['result'] ?? null;
+    print("queryServiceTopData: $topResult");
+    if (topResult != null &&
+        topParsed['code'] == 200 &&
+        topParsed['info'] == 'OK') {
+      return resultData;
+    } else {
+      return false;
+    }
+  }
 
   ///服务tab数据
   Future queryServiceData() async {
-    Response response = await ApiForServicePage.queryServiceList(getParameters);
+    Response response =
+        await ApiForServicePage.queryServiceList(getListParameters);
     result = response.data;
     parsed = jsonDecode(result);
     var resultData = parsed['result'] ?? null;
     if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
       if (resultData.length != 0) {
-        getParameters['cursor'] = resultData.last['id'] ?? null;
+        getListParameters['cursor'] = resultData.last['id'] ?? null;
       }
       return resultData;
     } else {
@@ -78,14 +110,18 @@ class ServiceManager extends ChangeNotifier {
     }
   }
 
+  ///服务tab load more数据
   Future moreQueryServiceData() async {
-    Response response = await ApiForServicePage.queryServiceList(getParameters);
-    result = response.data;
-    parsed = jsonDecode(result);
-    var resultData = parsed['result'] ?? null;
-    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
+    Response response =
+        await ApiForServicePage.queryServiceList(getListParameters);
+    getMoreResult = response.data;
+    getMoreParsed = jsonDecode(getMoreResult);
+    var resultData = getMoreParsed['result'] ?? null;
+    if (getMoreResult != null &&
+        getMoreParsed['code'] == 200 &&
+        getMoreParsed['info'] == 'OK') {
       if (resultData.length != 0) {
-        getParameters['cursor'] = resultData.last['id'] ?? null;
+        getListParameters['cursor'] = resultData.last['id'] ?? null;
       }
       return resultData;
     } else {
@@ -93,8 +129,12 @@ class ServiceManager extends ChangeNotifier {
     }
   }
 
-  void add(Article item) {
+  void add(ServiceListInfo item) {
     _subjectLists.add(item);
+  }
+
+  void addTop(SerivceTopInfo item) {
+    _topList.add(item);
   }
 
   @override
