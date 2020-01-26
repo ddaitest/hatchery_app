@@ -42,7 +42,6 @@ class UpgradeManager {
     result = response.data;
     parsed = jsonDecode(result);
     var resultData = parsed['result'] ?? null;
-    print('resultData $resultData');
     if (parsed['result']['verson'] != null &&
         parsed['code'] == 200 &&
         parsed['info'] == 'OK') {

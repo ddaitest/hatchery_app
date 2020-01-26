@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hatchery/business/home/phone_numbers.dart';
-import 'package:hatchery/business/home/report_something.dart';
 import 'package:hatchery/manager/upgrade_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/service_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 
 class ServiceTab extends StatefulWidget {
@@ -20,6 +17,8 @@ class ServiceTabState extends State<ServiceTab>
   @override
   bool get wantKeepAlive => true;
 
+  List<Widget> topShow = [];
+
   @override
   void initState() {
     super.initState();
@@ -30,171 +29,62 @@ class ServiceTabState extends State<ServiceTab>
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ServiceManager(),
-      child: _servicePage(context),
+      child: _bodyContainer(),
     );
   }
 
-  Future<Null> refreshData() async {
+  Future<Null> _refreshData() async {
     await Future.delayed(Duration(seconds: 1), () {
+      topShow.clear();
       return ServiceManager();
     });
   }
 
-  _servicePage(BuildContext context) {
-    return Consumer<ServiceManager>(
-        builder: (context, manager, child) => _pageTopView(manager));
+  _bodyContainer() {
+    return RefreshIndicator(
+        onRefresh: _refreshData,
+        displacement: 20,
+        child: Container(
+          child: _getListViewContainer(),
+        ));
   }
 
-  _pageTopView(ServiceManager manager) {
-    return Column(
-      children: <Widget>[
-        Container(
-          height: 80,
-          decoration: BoxDecoration(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _topButtons(CommunityMaterialIcons.account_card_details,
-                  Colors.black, manager.ServiceTopMap["0"], Colors.black),
-              _topButtons(Icons.live_help, Colors.black,
-                  manager.ServiceTopMap["1"], Colors.black),
-              _topButtons(Icons.android, Colors.black,
-                  manager.ServiceTopMap["2"], Colors.black),
-              _topButtons(Icons.language, Colors.black,
-                  manager.ServiceTopMap["3"], Colors.black),
-            ],
-          ),
-        ),
-        Container(
-          height: 80,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              MaterialButton(
-                onPressed: () {
-//                  showUpdateCard(context);
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.language,
-                      size: 35,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      manager.ServiceTopMap["6"],
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              MaterialButton(
-                onPressed: () {},
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.language,
-                      size: 35,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      manager.ServiceTopMap["6"],
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PhoneNumbersPage()),
-                  );
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.language,
-                      size: 35,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      manager.ServiceTopMap["7"],
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReportSomethingPage()),
-                  );
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.language,
-                      size: 35,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      manager.ServiceTopMap["7"],
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 10,
-          color: Color.fromARGB(255, 234, 233, 234),
-        ),
-        Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width - 20,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
+  _pageTopView() {
+    topShow.clear();
+    return Selector<ServiceManager, List>(
+        builder: (context, topList, Widget child) {
+          print('######${topList.length}');
+          if (topList.length <= 4) {
+            topList.forEach(
+                (item) => topShow.add(_topButtons(item.icon, item.title)));
+            return Container(
+                height: 60,
+                decoration: BoxDecoration(),
                 child: Row(
-                  children: <Widget>[
-                    Text(
-                      "| ",
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 25),
-                    ),
-                    Text(
-                      "推荐",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.grey,
-                  size: 15,
-                ),
-                onTap: null,
-              ),
-            ],
-          ),
-        ),
-        _getListViewContainer(),
-      ],
-    );
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: topShow));
+          } else {
+            topList.forEach(
+                (item) => topShow.add(_topButtons(item.icon, item.title)));
+            return Column(children: <Widget>[
+              Container(
+                  height: 60,
+                  decoration: BoxDecoration(),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: topShow.sublist(0, 4))),
+              Container(height: 10),
+              Container(
+                  height: 60,
+                  decoration: BoxDecoration(),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: topShow.sublist(4, topList.length)))
+            ]);
+          }
+        },
+        selector: (BuildContext context, ServiceManager manager) =>
+            manager.topList);
   }
 
   _getListViewContainer() {
@@ -209,28 +99,26 @@ class ServiceTabState extends State<ServiceTab>
         ///loading
         return CupertinoActivityIndicator();
       } else {
-        return Expanded(
-          child: RefreshIndicator(
-            onRefresh: refreshData,
-            displacement: 20,
-            child: ListView.separated(
-              controller: manager.scrollController,
-              shrinkWrap: true,
-              itemCount: manager.total + 1,
-              // ignore: missing_return
-              itemBuilder: (BuildContext context, int index) {
-                if (index < manager.total) {
-                  return _getItemContainerView(
-                      glvc, manager.subjectLists[index], manager);
-                } else if (manager.parsed['result'].length == 0) {
-                  return _noMoreWidget();
-                } else {
-                  return _getMoreWidget();
-                }
-              },
-              separatorBuilder: (BuildContext context, int index) => Divider(),
-            ),
-          ),
+        return ListView.separated(
+          controller: manager.scrollController,
+          shrinkWrap: true,
+          itemCount: manager.total + 1,
+          // ignore: missing_return
+          itemBuilder: (BuildContext context, int index) {
+            if (index < manager.total) {
+              if (index == 0) {
+                return _pageTopView();
+              } else {
+                return _getItemContainerView(
+                    glvc, manager.subjectLists[index], manager);
+              }
+            } else if (manager.parsed['result'].length == 0) {
+              return _noMoreWidget();
+            } else {
+              return _getMoreWidget();
+            }
+          },
+          separatorBuilder: (BuildContext context, int index) => Divider(),
         );
       }
     });
@@ -360,23 +248,23 @@ _getImage(var imgUrl) {
   );
 }
 
-_topButtons(iconName, iconColor, String name, nameColor) {
-  return Consumer<ServiceManager>(
-      builder: (context, manager, child) => MaterialButton(
-            onPressed: null,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  iconName,
-                  size: 35,
-                  color: iconColor,
-                ),
-                Text(
-                  name,
-                  style: TextStyle(color: nameColor, fontSize: 12),
-                ),
-              ],
-            ),
-          ));
+_topButtons(iconUrl, String name) {
+  return GestureDetector(
+    onTap: null,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CachedNetworkImage(
+          height: 36.6,
+          width: 32,
+          imageUrl: iconUrl,
+          fit: BoxFit.fill,
+        ),
+        Text(
+          name,
+          style: TextStyle(color: Colors.black, fontSize: 12),
+        ),
+      ],
+    ),
+  );
 }
