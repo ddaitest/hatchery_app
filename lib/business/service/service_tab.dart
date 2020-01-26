@@ -260,11 +260,22 @@ _topButtons(iconUrl, String name) {
           imageUrl: iconUrl,
           fit: BoxFit.fill,
         ),
+        Container(
+          height: 3,
+        ),
         Text(
           name,
           style: TextStyle(color: Colors.black, fontSize: 12),
         ),
       ],
     ),
+  );
+}
+
+_gotoWebPage(BuildContext context, webId) {
+  String webUrl = 'http://39.96.16.125:8081/articles/$webId';
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => WebViewPage(webUrl, null)),
   );
 }

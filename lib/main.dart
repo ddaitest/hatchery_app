@@ -22,7 +22,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<AppManager>(
-        create: (_) => AppManager(),//添加全局Manager
+        create: (_) => AppManager(), //添加全局Manager
       )
     ],
     child: MyApp(),
@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
-//      initialRoute: '/splash',
+//      initialRoute: '/',
+      initialRoute: '/splash',
       onGenerateRoute: Routers.router.generator,
     );
   }
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
 //    }
 //  }
 
-  // This widget is the root of your application.
+// This widget is the root of your application.
 //  @override
 //  Widget build(BuildContext context) {
 //    return MaterialApp(
