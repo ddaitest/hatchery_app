@@ -36,7 +36,7 @@ class NearbyManager extends ChangeNotifier {
   };
 
   String result;
-  var parsed;
+  Map parsed;
   bool isLoading = false;
 
   NearbyManager() {

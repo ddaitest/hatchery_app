@@ -35,13 +35,9 @@ class ServiceManager extends ChangeNotifier {
   };
 
   String result;
-  var parsed;
-
-  String getMoreResult;
-  var getMoreParsed;
-
+  Map parsed;
   String topResult;
-  var topParsed;
+  Map topParsed;
 
   ScrollController scrollController = ScrollController();
   bool isLoading = false;
@@ -114,12 +110,10 @@ class ServiceManager extends ChangeNotifier {
   Future moreQueryServiceData() async {
     Response response =
         await ApiForServicePage.queryServiceList(getListParameters);
-    getMoreResult = response.data;
-    getMoreParsed = jsonDecode(getMoreResult);
-    var resultData = getMoreParsed['result'] ?? null;
-    if (getMoreResult != null &&
-        getMoreParsed['code'] == 200 &&
-        getMoreParsed['info'] == 'OK') {
+    result = response.data;
+    parsed = jsonDecode(result);
+    var resultData = parsed['result'] ?? null;
+    if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
       if (resultData.length != 0) {
         getListParameters['cursor'] = resultData.last['id'] ?? null;
       }
