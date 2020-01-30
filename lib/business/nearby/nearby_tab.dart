@@ -105,7 +105,11 @@ class NearbyTabState extends State<NearbyTab>
   _getListViewContainer(context, sub) {
     if (sub.total == 0) {
       ///loading
-      return CupertinoActivityIndicator();
+      return SpinKitWave(
+        color: Colors.grey,
+        type: SpinKitWaveType.center,
+        size: 30,
+      );
     } else {
       return ListView.separated(
           controller: sub.scrollController,
