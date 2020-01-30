@@ -1,5 +1,9 @@
 const int APP_ID = 001;
 
+const int API_TIMEOUT = 10000;
+
+const String API_HOST = 'http://39.96.16.125:8081/';
+
 const String COMMUNITY_NAME = '玫瑰园';
 
 const String SERVICE_ID = '5e089b4abc2d3e1ea9fe637d';
@@ -29,6 +33,6 @@ const String BASIC_AUTH =
 
 const String CONTENT_TYPE = 'application/json';
 
-const String AGREEMENT = 'http://39.96.16.125:8081/components/';
+const String AGREEMENT = API_HOST + 'components/';
 
 const int UPGRADE_LOADING_TIME = 2;

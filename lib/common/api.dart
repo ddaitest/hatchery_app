@@ -3,8 +3,8 @@ import 'package:hatchery/configs.dart';
 
 class ApiForServicePage {
   static Dio dio = Dio(BaseOptions(
-    baseUrl: "http://39.96.16.125:8001/",
-    connectTimeout: 5000,
+    baseUrl: API_HOST,
+    connectTimeout: API_TIMEOUT,
     receiveTimeout: 3000,
     responseType: ResponseType.plain,
     headers: {"Authorization": BASIC_AUTH},
@@ -41,8 +41,8 @@ class ApiForServicePage {
 
 class Api {
   static Dio dio = Dio(BaseOptions(
-    baseUrl: "http://39.96.16.125:8001/",
-    connectTimeout: 5000,
+    baseUrl: API_HOST,
+    connectTimeout: API_TIMEOUT,
     receiveTimeout: 3000,
     responseType: ResponseType.plain,
     headers: {"Authorization": BASIC_AUTH},
@@ -84,8 +84,8 @@ class Api {
 
 class ApiForNearbyPage {
   static Dio dio = Dio(BaseOptions(
-    baseUrl: "http://39.96.16.125:8001/",
-    connectTimeout: 5000,
+    baseUrl: API_HOST,
+    connectTimeout: API_TIMEOUT,
     receiveTimeout: 3000,
     responseType: ResponseType.plain,
     headers: {"Authorization": BASIC_AUTH},
@@ -117,8 +117,8 @@ class ApiForNearbyPage {
 
 class ApiForBanner {
   static Dio dio = Dio(BaseOptions(
-    baseUrl: "http://39.96.16.125:8001/",
-    connectTimeout: 5000,
+    baseUrl: API_HOST,
+    connectTimeout: API_TIMEOUT,
     receiveTimeout: 3000,
     responseType: ResponseType.plain,
     headers: {"Authorization": BASIC_AUTH},
@@ -150,8 +150,8 @@ class ApiForBanner {
 
 class ApiForReportSt {
   static Dio dio = Dio(BaseOptions(
-    baseUrl: "http://39.96.16.125:8001/",
-    connectTimeout: 5000,
+    baseUrl: API_HOST,
+    connectTimeout: API_TIMEOUT,
     receiveTimeout: 3000,
     responseType: ResponseType.plain,
     headers: {"Authorization": BASIC_AUTH, "Content-Type": CONTENT_TYPE},
@@ -184,34 +184,6 @@ class ApiForReportSt {
   static uploadReportImage(formdata) {
     return dio.post("files/upload", data: formdata);
   }
-}
-
-class API {
-  static Dio _dio = Dio(BaseOptions(
-      baseUrl: "http://123.206.176.51:5000/",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-      responseType: ResponseType.plain));
-
-  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
-      return options;
-    },
-    onResponse: (Response response) {
-      return response; // continue
-    },
-    onError: (DioError e) {
-      return e; //continue
-    },
-  );
-
-  static init() {
-    if (!_dio.interceptors.contains(_interceptorsWrapper)) {
-      _dio.interceptors.add(_interceptorsWrapper);
-    }
-  }
-
-  static Home home = Home(_dio);
 }
 
 class Home {
