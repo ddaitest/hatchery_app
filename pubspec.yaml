@@ -66,6 +66,7 @@ dependencies:
   progress_dialog: ^1.2.0
   flutter_native_image: ^0.0.4
   json_annotation: ^3.0.0
+  flutter_spinkit: ^4.1.1+1
 
 
 dev_dependencies:

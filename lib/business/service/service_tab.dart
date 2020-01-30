@@ -6,18 +6,16 @@ import 'package:hatchery/manager/service_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ServiceTab extends StatefulWidget {
   @override
   ServiceTabState createState() => ServiceTabState();
 }
 
-class ServiceTabState extends State<ServiceTab>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  List<Widget> topShow = [];
+class ServiceTabState extends State<ServiceTab> {
+//  @override
+//  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -35,93 +33,92 @@ class ServiceTabState extends State<ServiceTab>
 
   Future<Null> _refreshData() async {
     await Future.delayed(Duration(seconds: 1), () {
-      topShow.clear();
       return ServiceManager();
     });
   }
 
   _bodyContainer() {
-    return RefreshIndicator(
-        onRefresh: _refreshData,
-        displacement: 20,
-        child: Container(
-          child: _getListViewContainer(),
-        ));
-  }
-
-  _pageTopView() {
-    topShow.clear();
-    return Selector<ServiceManager, List>(
-        builder: (context, topList, Widget child) {
-          print('######${topList.length}');
-          if (topList.length <= 4) {
-            topList.forEach(
-                (item) => topShow.add(_topButtons(item.icon, item.title)));
-            return Container(
-                height: 60,
-                decoration: BoxDecoration(),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: topShow));
-          } else {
-            topList.forEach(
-                (item) => topShow.add(_topButtons(item.icon, item.title)));
-            return Column(children: <Widget>[
-              Container(
-                  height: 60,
-                  decoration: BoxDecoration(),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: topShow.sublist(0, 4))),
-              Container(height: 10),
-              Container(
-                  height: 60,
-                  decoration: BoxDecoration(),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: topShow.sublist(4, topList.length)))
-            ]);
-          }
-        },
-        selector: (BuildContext context, ServiceManager manager) =>
-            manager.topList);
-  }
-
-  _getListViewContainer() {
-    return Consumer<ServiceManager>(builder: (glvc, manager, glv) {
+    return Consumer<ServiceManager>(builder: (context, manager, child) {
       manager.scrollController.addListener(() {
         if (manager.scrollController.position.pixels ==
             manager.scrollController.position.maxScrollExtent) {
           manager.getMore();
         }
       });
-      if (manager.total == 0) {
-        ///loading
-        return CupertinoActivityIndicator();
-      } else {
-        return ListView.separated(
-          controller: manager.scrollController,
-          shrinkWrap: true,
-          itemCount: manager.total + 1,
-          // ignore: missing_return
-          itemBuilder: (BuildContext context, int index) {
-            if (index < manager.total) {
-              if (index == 0) {
-                return _pageTopView();
-              } else {
-                return _getItemContainerView(
-                    glvc, manager.subjectLists[index], manager);
-              }
-            } else if (manager.parsed['result'].length == 0) {
-              return _noMoreWidget();
-            } else {
-              return _getMoreWidget();
-            }
-          },
-          separatorBuilder: (BuildContext context, int index) => Divider(),
-        );
-      }
+      manager.topShow.clear();
+      return RefreshIndicator(
+          onRefresh: _refreshData,
+          displacement: 20,
+          child: _getListViewContainer(manager));
     });
+  }
+
+  _topViewContainer(manager) {
+    manager.topShow.clear();
+    if (manager.topTotal == 0) {
+      return Text('#######');
+    } else if (manager.topTotal <= 4 && manager.topTotal != 0) {
+      print("#######################");
+      manager.topList.forEach(
+          (item) => manager.topShow.add(_topButtons(item.icon, item.title)));
+      return Container(
+          height: 60,
+          decoration: BoxDecoration(),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: manager.topShow));
+    } else {
+      manager.topList.forEach(
+          (item) => manager.topShow.add(_topButtons(item.icon, item.title)));
+      return Column(children: <Widget>[
+        Container(
+            height: 60,
+            decoration: BoxDecoration(),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: manager.topShow.sublist(0, 4))),
+        Container(height: 10),
+        Container(
+            height: 60,
+            decoration: BoxDecoration(),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: manager.topShow.sublist(4, manager.topTotal)))
+      ]);
+    }
+  }
+
+  _getListViewContainer(manager) {
+    if (manager.total == 0) {
+      ///loading
+      return SpinKitWave(
+        color: Colors.grey,
+        type: SpinKitWaveType.center,
+        size: 30,
+      );
+    } else {
+      return ListView.separated(
+        controller: manager.scrollController,
+        shrinkWrap: true,
+        itemCount: manager.total + 1,
+        // ignore: missing_return
+        itemBuilder: (BuildContext context, int index) {
+          if (index < manager.total) {
+            if (index == 0) {
+              return _topViewContainer(manager);
+            } else {
+              return _getItemContainerView(
+                  context, manager.subjectLists[index]);
+            }
+          } else if (manager.parsed['result'].length == 0) {
+            return _noMoreWidget();
+          } else {
+            return _getMoreWidget();
+          }
+        },
+        separatorBuilder: (BuildContext context, int index) => Divider(),
+      );
+    }
   }
 
   Widget _getMoreWidget() {
@@ -178,31 +175,30 @@ class ServiceTabState extends State<ServiceTab>
   }
 }
 
-_getItemContainerView(BuildContext gicv, var subject, manager) {
+_getItemContainerView(BuildContext gicv, var subject) {
   var imgUrl = subject.image;
-  return Consumer<ServiceManager>(
-      builder: (glvc, manager, glv) => GestureDetector(
-            onTap: () {
-              if (subject.url != null) {
-                Navigator.push(
-                  gicv,
-                  MaterialPageRoute(
-                      builder: (context) => WebViewPage(subject.url, null)),
-                );
-              }
-            },
-            child: Container(
-              width: double.infinity,
-              child: Row(
-                children: <Widget>[
-                  _getImage(imgUrl),
-                  Container(
-                      child: _getInfoView(subject),
-                      width: MediaQuery.of(gicv).size.width - 116),
-                ],
-              ),
-            ),
-          ));
+  return GestureDetector(
+    onTap: () {
+      if (subject.url != null) {
+        Navigator.push(
+          gicv,
+          MaterialPageRoute(
+              builder: (context) => WebViewPage(subject.url, null)),
+        );
+      }
+    },
+    child: Container(
+      width: double.infinity,
+      child: Row(
+        children: <Widget>[
+          _getImage(imgUrl),
+          Container(
+              child: _getInfoView(subject),
+              width: MediaQuery.of(gicv).size.width - 116),
+        ],
+      ),
+    ),
+  );
 }
 
 _getInfoView(var subject) {

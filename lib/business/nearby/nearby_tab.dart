@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class NearbyTab extends StatefulWidget {
   @override
@@ -53,7 +54,11 @@ class NearbyTabState extends State<NearbyTab>
   _bannerContainer(context, sub) {
     if (sub.bannerTotal == 0) {
       ///loading
-      return CupertinoActivityIndicator();
+      return SpinKitWave(
+        color: Colors.grey,
+        type: SpinKitWaveType.center,
+        size: 30,
+      );
     } else {
       return Column(
         children: <Widget>[

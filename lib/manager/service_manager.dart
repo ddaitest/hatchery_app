@@ -15,6 +15,8 @@ class ServiceManager extends ChangeNotifier {
 
   List<SerivceTopInfo> _topList = [];
 
+  List<Widget> topShow = [];
+
   UnmodifiableListView<SerivceTopInfo> get topList =>
       UnmodifiableListView(_topList);
 
@@ -60,7 +62,7 @@ class ServiceManager extends ChangeNotifier {
   getMore() async {
     if (!isLoading) {
       isLoading = true;
-      await Future.delayed(Duration(seconds: 1), () {
+      await Future.delayed(Duration(seconds: 0), () {
         moreQueryServiceData().then((info) {
           for (var x in info) {
             add(Article.fromJson(x));
