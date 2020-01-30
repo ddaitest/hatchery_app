@@ -1,8 +1,8 @@
 const int APP_ID = 001;
 
-const int API_TIMEOUT = 10000;
+const int API_TIMEOUT = 8000;
 
-const String API_HOST = 'http://39.96.16.125:8081/';
+const String API_HOST = 'http://39.96.16.125:8001/';
 
 const String COMMUNITY_NAME = '玫瑰园';
 
