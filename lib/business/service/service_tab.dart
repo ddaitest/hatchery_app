@@ -13,9 +13,10 @@ class ServiceTab extends StatefulWidget {
   ServiceTabState createState() => ServiceTabState();
 }
 
-class ServiceTabState extends State<ServiceTab> {
-//  @override
-//  bool get wantKeepAlive => true;
+class ServiceTabState extends State<ServiceTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {

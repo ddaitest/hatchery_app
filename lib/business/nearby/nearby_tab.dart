@@ -190,28 +190,26 @@ class NearbyTabState extends State<NearbyTab>
 
 _getItemContainerView(BuildContext gicv, var subject) {
   var imgUrl = subject.image;
-  return Consumer<NearbyManager>(
-    builder: (glvc, manager, glv) => GestureDetector(
-      onTap: () {
-        if (subject.url != null) {
-          Navigator.push(
-            gicv,
-            MaterialPageRoute(
-                builder: (context) => WebViewPage(subject.url, null)),
-          );
-        }
-      },
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              child: _getInfoView(subject),
-              width: MediaQuery.of(gicv).size.width - 116,
-            ),
-            _getImage(imgUrl),
-          ],
-        ),
+  return GestureDetector(
+    onTap: () {
+      if (subject.url != null) {
+        Navigator.push(
+          gicv,
+          MaterialPageRoute(
+              builder: (context) => WebViewPage(subject.url, null)),
+        );
+      }
+    },
+    child: Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.only(left: 10),
+            child: _getInfoView(subject),
+            width: MediaQuery.of(gicv).size.width - 116,
+          ),
+          _getImage(imgUrl),
+        ],
       ),
     ),
   );

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:hatchery/common/tools.dart';
@@ -22,19 +23,21 @@ class UpgradeManager {
 
   ///先判断app生命周期内是否弹过
   isShowUpgradeCard(context) {
-    sharedGetData('showUpgradeCard').then((result) {
-      bool showedCard = result ?? false;
-      print('##############  $showedCard');
-      if (showedCard == false) {
-        _queryUpdateData().then((info) {
-          _checkVersion().then((status) {
-            if (status) {
-              _downloadFile(_updateLists[0].url, context);
-            }
+    if (Platform.isAndroid) {
+      sharedGetData('showUpgradeCard').then((result) {
+        bool showedCard = result ?? false;
+        print('##############  $showedCard');
+        if (showedCard == false) {
+          _queryUpdateData().then((info) {
+            _checkVersion().then((status) {
+              if (status) {
+                _downloadFile(_updateLists[0].url, context);
+              }
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    }
   }
 
   Future _queryUpdateData() async {
