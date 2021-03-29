@@ -18,27 +18,13 @@ class SplashPage extends StatelessWidget {
   _splashPage(BuildContext context) {
     return Consumer<SplashManager>(builder: (context, manager, child) {
       if (manager.agreementData == null) {
-        return Container(
-          child: Image.asset(
-            'images/welcome.png',
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        );
+        return _fullScreenBackgroundView();
       } else if (manager.agreementData == 1) {
         return Container(
           constraints: BoxConstraints.expand(),
           child: Stack(
             children: <Widget>[
-              Container(
-                child: Image.asset(
-                  'images/welcome.png',
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              _fullScreenBackgroundView(),
               GestureDetector(
                 onTap: () => manager.clickAD(context),
                 child: Container(
@@ -158,6 +144,17 @@ class SplashPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _fullScreenBackgroundView() {
+    return Container(
+      child: Image.asset(
+        'images/welcome.png',
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover,
       ),
     );
   }
