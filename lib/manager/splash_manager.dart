@@ -12,14 +12,15 @@ import 'package:flutter/services.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
 import 'package:hatchery/common/tools.dart';
+import 'package:hatchery/configs.dart';
 
 class SplashManager extends ChangeNotifier {
   /// 是否显示 协议确认UI
-  bool _agreementData = true;
+  int _agreementData;
 
   Timer _timer;
 
-  bool get agreementData => _agreementData;
+  int get agreementData => _agreementData;
 
   List<AdListInfo> _adLists = [];
 
@@ -41,8 +42,8 @@ class SplashManager extends ChangeNotifier {
 
   SplashManager(BuildContext context) {
     _getLocalData();
-    sharedDeleteData('showUpgradeCard');
-    queryAdData();
+    // sharedDeleteData('showUpgradeCard');
+    // queryAdData();
     _startCountdown(context);
   }
 
@@ -59,9 +60,9 @@ class SplashManager extends ChangeNotifier {
     Navigator.pushReplacementNamed(context, '/');
   }
 
-  /// UI动作 同意协议
+  /// 点击"同意协议"按钮
   void agree(BuildContext context) {
-    sharedAddAndUpdate('agreementData', bool, true); // 设置协议是否同意标识
+    sharedAddAndUpdate(Agreement_DATA_KEY, int, 1); // 设置协议是否同意标识
     Navigator.pushReplacementNamed(context, '/');
   }
 
@@ -75,10 +76,13 @@ class SplashManager extends ChangeNotifier {
 
   /// 获取协议是否同意标识
   _getLocalData() {
-    sharedGetData('agreementData').then((sp) {
-      _agreementData = sp ?? false;
-      if (!_agreementData) {
+    sharedGetData(Agreement_DATA_KEY).then((sp) {
+      print("DEBUG=> #### $_agreementData");
+      if (_agreementData == null) {
+        _agreementData = 0;
         _timer.cancel();
+      } else {
+        _agreementData = sp;
       }
       notifyListeners();
     });

@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/routers.dart';
 import 'business/splash/splash.dart';
+import 'business/splash/agreement.dart';
 import 'business/home/home.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:hatchery/common/tools.dart';
+import 'package:hatchery/configs.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_jpush/flutter_jpush.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
+
+bool _agreementDataKey = true;
 
 void main() async {
 //  FlutterBugly.postCatchedException(() {
@@ -19,16 +25,14 @@ void main() async {
 //    iOSAppId: "7274afdfed",
 //  );
 //  _startupJpush();
-  final router = FluroRouter();
-  Routers.setupRouter(router);
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<AppManager>(
-        create: (_) => AppManager(), //添加全局Manager
-      )
-    ],
-    child: MyApp(),
-  ));
+  runApp(
+    ChangeNotifierProvider<AppManager>(
+      create: (_) => AppManager(),
+      child: Consumer<AppManager>(
+        builder: (context, manager, child) => MyApp(),
+      ), //添加全局Manager
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -36,13 +40,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: Flavors.strings.title,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-//      initialRoute: '/',
-      initialRoute: '/splash',
-    );
+        title: Flavors.strings.title,
+        initialRoute: '/splash',
+        routes: {
+          '/': (_) => HomePage(),
+          '/splash': (_) => SplashPage(),
+        });
   }
 }
 

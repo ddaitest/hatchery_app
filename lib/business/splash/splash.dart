@@ -15,95 +15,92 @@ class SplashPage extends StatelessWidget {
 
   _splashPage(BuildContext context) {
     return Consumer<SplashManager>(builder: (context, manager, child) {
-      if (manager.agreementData) {
-        if (manager.total != 0) {
-          return Container(
+      if (manager.agreementData == null) {
+        return Container(
+            width: double.infinity,
+            height: double.infinity,
             constraints: BoxConstraints.expand(),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    constraints: BoxConstraints.expand(),
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            "社区名称",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 30,
-                                decoration: TextDecoration.none),
-                          ),
-                          Icon(
-                            Icons.videogame_asset,
-                            size: 50,
-                          ),
-                        ],
-                      ),
-                    )),
-                GestureDetector(
-                  onTap: () => manager.clickAD(context),
-                  child: Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height - 150,
-                    child: CachedNetworkImage(
-                      imageUrl: manager.adLists[0].imgUrl,
-                      fit: BoxFit.fill,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    "$COMMUNITY_NAME社区",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 30,
+                        decoration: TextDecoration.none),
+                  ),
+                  Icon(
+                    Icons.videogame_asset,
+                    size: 50,
+                  ),
+                ],
+              ),
+            ));
+      } else if (manager.agreementData == 1) {
+        return Container(
+          constraints: BoxConstraints.expand(),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  constraints: BoxConstraints.expand(),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          "社区名称",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30,
+                              decoration: TextDecoration.none),
+                        ),
+                        Icon(
+                          Icons.videogame_asset,
+                          size: 50,
+                        ),
+                      ],
                     ),
+                  )),
+              GestureDetector(
+                onTap: () => manager.clickAD(context),
+                child: Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height - 150,
+                  child: CachedNetworkImage(
+                    imageUrl: manager.adLists[0].imgUrl,
+                    fit: BoxFit.fill,
                   ),
                 ),
-                Positioned(
-                  width: 75.0,
-                  top: 50.0,
-                  right: 20.0,
-                  //控件透明度 0.0完全透明，1.0完全不透明
-                  child: Opacity(
-                    opacity: 0.4,
-                    child: FlatButton(
-                      color: Colors.black,
-                      colorBrightness: Brightness.dark,
-                      splashColor: Colors.black,
-                      child:
-                          Consumer<SplashManager>(builder: (cdt, manager, cd) {
-                        return Text("跳过 ${manager.countdownTime}");
-                      }),
-                      onPressed: () => manager.skip(context),
-                    ),
+              ),
+              Positioned(
+                width: 75.0,
+                top: 50.0,
+                right: 20.0,
+                //控件透明度 0.0完全透明，1.0完全不透明
+                child: Opacity(
+                  opacity: 0.4,
+                  child: FlatButton(
+                    color: Colors.black,
+                    colorBrightness: Brightness.dark,
+                    splashColor: Colors.black,
+                    child: Consumer<SplashManager>(builder: (cdt, manager, cd) {
+                      return Text("跳过 ${manager.countdownTime}");
+                    }),
+                    onPressed: () => manager.skip(context),
                   ),
                 ),
-              ],
-            ),
-          );
-        } else {
-          return Container(
-              width: double.infinity,
-              height: double.infinity,
-              constraints: BoxConstraints.expand(),
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      "$COMMUNITY_NAME社区",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 30,
-                          decoration: TextDecoration.none),
-                    ),
-                    Icon(
-                      Icons.videogame_asset,
-                      size: 50,
-                    ),
-                  ],
-                ),
-              ));
-        }
+              ),
+            ],
+          ),
+        );
       } else {
         return Container(
           constraints: BoxConstraints.expand(),

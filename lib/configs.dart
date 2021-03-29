@@ -33,6 +33,8 @@ const String BASIC_AUTH =
 
 const String CONTENT_TYPE = 'application/json';
 
-const String AGREEMENT = 'http://39.96.16.125:8081/components/';
+const String Agreement_DATA_KEY = 'agreementDataKey4';
+
+const String AGREEMENT = 'https://www.baidu.com/';
 
 const int UPGRADE_LOADING_TIME = 2;
