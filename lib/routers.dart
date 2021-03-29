@@ -5,7 +5,7 @@ import 'business/splash/splash.dart';
 import 'common/page_builder.dart';
 
 class Routers {
-  static Router router = Router();
+  final router = FluroRouter();
 
   static final Map<String, PageBuilder> pageRouters = {
     '/splash': PageBuilder((bundle) => SplashPage()),
@@ -13,11 +13,9 @@ class Routers {
 //    '/home': PageBuilder((bundle) => Second(bundle: bundle)),
   };
 
-  static void setupRouter() {
+  static void setupRouter(FluroRouter router) {
     pageRouters.forEach((k, h) {
       router.define(k, handler: h.getHandler());
     });
   }
 }
-
-

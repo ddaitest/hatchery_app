@@ -10,17 +10,25 @@ class ApiForServicePage {
     headers: {"Authorization": BASIC_AUTH},
   ));
 
-  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
-      return options;
-    },
-    onResponse: (Response response) {
-      return response; // continue
-    },
-    onError: (DioError e) {
-      return e; //continue
-    },
-  );
+  static InterceptorsWrapper _interceptorsWrapper =
+      InterceptorsWrapper(onRequest: (options, handler) {
+    // Do something before request is sent
+    return handler.next(options); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onResponse: (response, handler) {
+    // Do something with response data
+    return handler.next(response); // continue
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onError: (DioError e, handler) {
+    // Do something with response error
+    return handler.next(e); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+  });
 
   static init() {
     if (!dio.interceptors.contains(_interceptorsWrapper)) {
@@ -48,17 +56,25 @@ class Api {
     headers: {"Authorization": BASIC_AUTH},
   ));
 
-  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
-      return options;
-    },
-    onResponse: (Response response) {
-      return response; // continue
-    },
-    onError: (DioError e) {
-      return e; //continue
-    },
-  );
+  static InterceptorsWrapper _interceptorsWrapper =
+      InterceptorsWrapper(onRequest: (options, handler) {
+    // Do something before request is sent
+    return handler.next(options); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onResponse: (response, handler) {
+    // Do something with response data
+    return handler.next(response); // continue
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onError: (DioError e, handler) {
+    // Do something with response error
+    return handler.next(e); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+  });
 
   static init() {
     if (!dio.interceptors.contains(_interceptorsWrapper)) {
@@ -91,17 +107,25 @@ class ApiForNearbyPage {
     headers: {"Authorization": BASIC_AUTH},
   ));
 
-  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
-      return options;
-    },
-    onResponse: (Response response) {
-      return response; // continue
-    },
-    onError: (DioError e) {
-      return e; //continue
-    },
-  );
+  static InterceptorsWrapper _interceptorsWrapper =
+      InterceptorsWrapper(onRequest: (options, handler) {
+    // Do something before request is sent
+    return handler.next(options); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onResponse: (response, handler) {
+    // Do something with response data
+    return handler.next(response); // continue
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onError: (DioError e, handler) {
+    // Do something with response error
+    return handler.next(e); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+  });
 
   static init() {
     if (!dio.interceptors.contains(_interceptorsWrapper)) {
@@ -124,17 +148,25 @@ class ApiForBanner {
     headers: {"Authorization": BASIC_AUTH},
   ));
 
-  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
-      return options;
-    },
-    onResponse: (Response response) {
-      return response; // continue
-    },
-    onError: (DioError e) {
-      return e; //continue
-    },
-  );
+  static InterceptorsWrapper _interceptorsWrapper =
+      InterceptorsWrapper(onRequest: (options, handler) {
+    // Do something before request is sent
+    return handler.next(options); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onResponse: (response, handler) {
+    // Do something with response data
+    return handler.next(response); // continue
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onError: (DioError e, handler) {
+    // Do something with response error
+    return handler.next(e); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+  });
 
   static init() {
     if (!dio.interceptors.contains(_interceptorsWrapper)) {
@@ -157,17 +189,25 @@ class ApiForReportSt {
     headers: {"Authorization": BASIC_AUTH, "Content-Type": CONTENT_TYPE},
   ));
 
-  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
-      return options;
-    },
-    onResponse: (Response response) {
-      return response; // continue
-    },
-    onError: (DioError e) {
-      return e; //continue
-    },
-  );
+  static InterceptorsWrapper _interceptorsWrapper =
+      InterceptorsWrapper(onRequest: (options, handler) {
+    // Do something before request is sent
+    return handler.next(options); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onResponse: (response, handler) {
+    // Do something with response data
+    return handler.next(response); // continue
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onError: (DioError e, handler) {
+    // Do something with response error
+    return handler.next(e); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+  });
 
   static init() {
     if (!dio.interceptors.contains(_interceptorsWrapper)) {
@@ -193,17 +233,25 @@ class API {
       receiveTimeout: 3000,
       responseType: ResponseType.plain));
 
-  static InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
-      return options;
-    },
-    onResponse: (Response response) {
-      return response; // continue
-    },
-    onError: (DioError e) {
-      return e; //continue
-    },
-  );
+  static InterceptorsWrapper _interceptorsWrapper =
+      InterceptorsWrapper(onRequest: (options, handler) {
+    // Do something before request is sent
+    return handler.next(options); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onResponse: (response, handler) {
+    // Do something with response data
+    return handler.next(response); // continue
+    // If you want to reject the request with a error message,
+    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
+  }, onError: (DioError e, handler) {
+    // Do something with response error
+    return handler.next(e); //continue
+    // If you want to resolve the request with some custom data，
+    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
+  });
 
   static init() {
     if (!_dio.interceptors.contains(_interceptorsWrapper)) {

@@ -4,6 +4,7 @@ import 'package:hatchery/routers.dart';
 import 'business/splash/splash.dart';
 import 'business/home/home.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter_jpush/flutter_jpush.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
@@ -18,7 +19,8 @@ void main() async {
 //    iOSAppId: "7274afdfed",
 //  );
 //  _startupJpush();
-  Routers.setupRouter();
+  final router = FluroRouter();
+  Routers.setupRouter(router);
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<AppManager>(
@@ -40,7 +42,6 @@ class MyApp extends StatelessWidget {
       ),
 //      initialRoute: '/',
       initialRoute: '/splash',
-      onGenerateRoute: Routers.router.generator,
     );
   }
 }

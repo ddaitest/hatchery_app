@@ -86,13 +86,9 @@ class UpgradeManager {
   ///存储权限申请
   Future _requestPermission() async {
     // 申请权限
-    await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    var storagePermissionStatus = await Permission.storage.status;
 
-    // 申请结果
-    PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.storage);
-
-    if (permission == PermissionStatus.granted) {
+    if (storagePermissionStatus.isGranted) {
       print("有权限");
       return true;
     } else {

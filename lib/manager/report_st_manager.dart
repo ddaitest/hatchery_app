@@ -49,7 +49,7 @@ class ReportStManager extends ChangeNotifier {
         msg: title,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: Color(0x99000000),
         textColor: Colors.white,
         fontSize: 15.0);

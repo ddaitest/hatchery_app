@@ -56,10 +56,12 @@ class ReportSomethingState extends State<ReportSomethingPage> {
   }
 
   Future getImageByGallery() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print('LC->image.lengthSync()###${image.lengthSync()}');
-    if (image.lengthSync() > 2080000) {
-      compressionImage(image.path).then((value) {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    File _image = File(pickedFile.path);
+    print('LC->image.lengthSync()###${_image.lengthSync()}');
+    if (_image.lengthSync() > 2080000) {
+      compressionImage(pickedFile.path).then((value) {
         ReportStManager().uploadReportStImage(value).then((info) {
           setState(() {
             imageUrl = info.toString();
@@ -67,7 +69,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
         });
       });
     } else {
-      ReportStManager().uploadReportStImage(image.path).then((info) {
+      ReportStManager().uploadReportStImage(pickedFile.path).then((info) {
         setState(() {
           imageUrl = info.toString();
         });
@@ -76,9 +78,11 @@ class ReportSomethingState extends State<ReportSomethingPage> {
   }
 
   Future getImageByCamera() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.camera);
-    if (image.lengthSync() > 2080000) {
-      compressionImage(image.path).then((value) {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    File _image = File(pickedFile.path);
+    if (_image.lengthSync() > 2080000) {
+      compressionImage(_image.path).then((value) {
         ReportStManager().uploadReportStImage(value).then((info) {
           setState(() {
             imageUrl = info.toString();
@@ -86,7 +90,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
         });
       });
     } else {
-      ReportStManager().uploadReportStImage(image.path).then((info) {
+      ReportStManager().uploadReportStImage(_image.path).then((info) {
         setState(() {
           imageUrl = info.toString();
         });
