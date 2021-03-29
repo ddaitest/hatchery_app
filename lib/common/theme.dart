@@ -1,5 +1,21 @@
 import 'package:flutter/material.dart';
 
+class AgreementPageTextStyle {
+  /// 协议title
+  TextStyle mainTitle = TextStyle(
+      fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
+
+  /// 协议提示文字
+  TextStyle agreementText =
+      TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400);
+
+  /// 确认按钮
+  TextStyle confirmBtn = TextStyle(fontSize: 18.0);
+
+  /// 关闭app按钮
+  TextStyle closeAppBtn = TextStyle(color: Colors.grey, fontSize: 14);
+}
+
 ThemeData getTheme() {
   return ThemeData(
       brightness: Brightness.light,

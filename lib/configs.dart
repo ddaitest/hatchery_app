@@ -24,7 +24,7 @@ const String NEARBY_TAB_NUMBER = 'a03';
 
 const bool TEST = true;
 
-const int SPLASH_TIME = TEST ? 4 : 3;
+const int SPLASH_TIME = TEST ? 5 : 3;
 
 const String AMAP_KEY = "30a97518348a9b6b8cc652b2dbabe3a2";
 
@@ -35,6 +35,8 @@ const String CONTENT_TYPE = 'application/json';
 
 const String Agreement_DATA_KEY = 'agreementDataKey4';
 
+const String Agreement_text =
+    '欢迎使用本软件！\n在您使用本软件前，请您认真阅读并同意用户协议和隐私政策，以了解我们的服务内容和我们在收集和使用您相关个人信息时的处理规则。我们将严格按照用户协议和隐私政策为您提供服务，保护您的个人信息。';
 const String AGREEMENT = 'https://www.baidu.com/';
 
 const int UPGRADE_LOADING_TIME = 2;

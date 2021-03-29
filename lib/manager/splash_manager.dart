@@ -78,11 +78,12 @@ class SplashManager extends ChangeNotifier {
   _getLocalData() {
     sharedGetData(Agreement_DATA_KEY).then((sp) {
       print("DEBUG=> #### $_agreementData");
-      if (_agreementData == null) {
+      if (sp != null) {
+        _agreementData = sp;
+        if (sp == 0) _timer.cancel();
+      } else {
         _agreementData = 0;
         _timer.cancel();
-      } else {
-        _agreementData = sp;
       }
       notifyListeners();
     });
@@ -92,7 +93,7 @@ class SplashManager extends ChangeNotifier {
   Future _startCountdown(BuildContext context) async {
     final timeUp = (Timer timer) {
       print("LC countdownTime ==> $countdownTime");
-      if (countdownTime < 1) {
+      if (countdownTime < 2) {
         timer.cancel();
         Navigator.pushReplacementNamed(context, '/');
       } else {

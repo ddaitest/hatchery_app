@@ -67,6 +67,8 @@ dependencies:
   flutter_native_image: ^0.0.4
   json_annotation: ^4.0.1
   flutter_spinkit: ^5.0.0
+  flutter_screenutil: ^4.0.4+1
+  flutter_inappwebview: ^5.3.0
 
 
 dev_dependencies:

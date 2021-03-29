@@ -1,6 +1,8 @@
 import 'package:fluro/fluro.dart';
 
 import 'business/home/home.dart';
+import 'business/home/phone_numbers.dart';
+import 'business/home/report_something.dart';
 import 'business/splash/splash.dart';
 import 'common/page_builder.dart';
 
@@ -10,6 +12,8 @@ class Routers {
   static final Map<String, PageBuilder> pageRouters = {
     '/splash': PageBuilder((bundle) => SplashPage()),
     '/': PageBuilder((bundle) => HomePage()),
+    '/service1': PageBuilder((bundle) => ReportSomethingPage()),
+    '/service2': PageBuilder((bundle) => PhoneNumbersPage()),
 //    '/home': PageBuilder((bundle) => Second(bundle: bundle)),
   };
 
@@ -19,5 +23,3 @@ class Routers {
     });
   }
 }
-
-
