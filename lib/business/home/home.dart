@@ -1,136 +1,157 @@
-import 'package:flutter/material.dart';
-import 'package:hatchery/business/home/home_tab.dart';
-import 'package:hatchery/business/nearby/nearby_tab.dart';
-import 'package:hatchery/business/service/service_tab.dart';
-import 'package:hatchery/flavors/default.dart';
-import 'package:hatchery/configs.dart';
-import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:hatchery/test/TestSilver.dart';
-import 'package:hatchery/test/test_provider.dart';
-//import 'package:hatchery/test/test_page.dart';
+import 'dart:collection';
 
-class HomePage extends StatefulWidget {
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:hatchery/common/widget/article_item.dart';
+import 'package:hatchery/common/widget/backgourds.dart';
+import 'package:hatchery/common/widget/post_item.dart';
+import 'package:hatchery/flavors/Flavors.dart';
+import 'package:hatchery/manager/beans.dart';
+import 'package:hatchery/manager/home_manager.dart';
+import 'package:hatchery/common/exts.dart';
+import 'dart:math' as math;
+
+import 'package:provider/provider.dart';
+
+class HomePage extends StatelessWidget {
   @override
-  HomePageState createState() => HomePageState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => HomeManager(context),
+      child: HomeView(),
+    );
+  }
 }
 
-class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  int _tabIndex = 0;
-  var tabImages;
-  var appBarTitles = ['首页', '服务', '周边'];
-  var _pageController;
-
-  final List<Widget> tabBodies = [
-    HomeTab(),
-//    TestProvider(),
-//    TestSilverTab(),
-    ServiceTab(),
-    NearbyTab(),
-  ];
-
-  @override
-  void initState() {
-    _pageController = PageController(initialPage: 0);
-    super.initState();
-  }
+class HomeView extends StatelessWidget {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-          body: PageView(
-            controller: _pageController,
-            children: tabBodies,
-            onPageChanged: (index) {
-              setState(() {
-                _tabIndex = index;
-              });
-            },
-          ),
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: Text(
-              COMMUNITY_NAME,
-              style: TextStyle(color: Colors.black),
-            ),
-            centerTitle: true,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home), title: Text(appBarTitles[0])),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.room_service), title: Text(appBarTitles[1])),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.near_me), title: Text(appBarTitles[2])),
-            ],
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _tabIndex,
-            iconSize: 24.0,
-            //点击事件
-            onTap: (index) {
-              setState(() {
-                _tabIndex = index;
-              });
-              _pageController.animateToPage(index,
-                  duration: Duration(milliseconds: 500),
-                  curve: ElasticOutCurve(4));
-            },
-          )),
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      onRefresh: _onRefresh,
+      child: CustomScrollView(
+        slivers: <Widget>[
+          _banner(context).addSilver(),
+          _posts(),
+          _articles(),
+        ],
+      ),
     );
   }
 
-  ///主界面back弹窗
-  Future<bool> _onWillPop() {
-    return showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(
-              "确定退出吗?",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.start,
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            content: SingleChildScrollView(
-              child: Text("退出后将不能收到最新的社区信息"),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '是',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () => exitApp(),
-              ),
-              FlatButton(
-                child: Text(
-                  '否',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () => Navigator.of(context).pop(false),
-              ),
-            ],
-          ),
-        ) ??
-        false;
+  /// View: Banner
+  Widget _banner(BuildContext context) {
+    HomeManager manager = Provider.of<HomeManager>(context, listen: false);
+    List<BannerInfo> banners = manager.banner;
+    return Container(
+      height: 140,
+      child: new Swiper(
+        itemBuilder: (BuildContext context, int index) {
+          ImageProvider imageProvider;
+          String imageURL = banners[index].imgUrl;
+          if (imageURL.startsWith("http")) {
+            imageProvider = CachedNetworkImageProvider(imageURL);
+          } else {
+            imageProvider = AssetImage(imageURL);
+          }
+          return ClipRRect(
+            borderRadius: new BorderRadius.circular(8.0),
+            child: Image(image: imageProvider, fit: BoxFit.fill),
+          );
+        },
+        itemHeight: 140,
+        itemCount: banners.length,
+        viewportFraction: 0.8,
+        scale: 0.9,
+        pagination: new SwiperPagination(),
+//        control: new SwiperControl(),
+        onTap: (index) {
+          manager.clickBanner(index);
+        },
+      ),
+    );
   }
 
-  Future<void> exitApp() async {
-    if (Platform.isAndroid) {
-      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-    } else if (Platform.isIOS) {
-      exit(0);
-    } else {
-      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      exit(0);
-    }
+  Widget _posts() {
+    return Selector<HomeManager, UnmodifiableListView<Notice>>(
+      selector: (BuildContext context, HomeManager manager) {
+        return manager.posts;
+      },
+      builder: (BuildContext context, UnmodifiableListView<Notice> value,
+          Widget child) {
+        var postViews = <Widget>[
+          _postTitle(),
+        ];
+        for (Notice d in value) {
+          postViews.add(NoticeItem(d, () {}));
+        }
+        return Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: postViews,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey[200],
+                blurRadius: 10.0,
+                spreadRadius: 5.0,
+              )
+            ],
+            color: Colors.white,
+          ),
+        ).addSilver();
+      },
+    );
   }
+
+  Widget _postTitle() {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 2,
+            height: 16,
+            color: Flavors.colors.diver,
+            margin: EdgeInsets.only(right: 8),
+          ),
+          Text(Flavors.strings.post),
+          Expanded(
+            child: Container(),
+            flex: 1,
+          ),
+          Icon(Icons.arrow_forward_ios),
+        ],
+      ),
+    );
+  }
+
+  Widget _articles() {
+    return Selector<HomeManager, UnmodifiableListView<Article>>(
+      selector: (BuildContext context, HomeManager manager) {
+        return manager.articles;
+      },
+      builder: (BuildContext context, UnmodifiableListView<Article> value,
+          Widget child) {
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return ArticleItem(value[index], () {});
+            },
+            childCount: value.length,
+          ),
+        );
+      },
+    );
+  }
+
+  Future _onRefresh() {}
+
+  Future _onLoadMore() {}
 }

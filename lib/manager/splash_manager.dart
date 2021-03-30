@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/configs.dart';
 import 'package:dio/dio.dart';
@@ -50,7 +51,7 @@ class SplashManager extends ChangeNotifier {
   /// UI动作 点击广告
   void clickAD(BuildContext context) {
     _timer.cancel();
-    MaterialPageRoute(
+    CupertinoPageRoute(
         builder: (context) => WebViewPage(_adLists[0].webUrl, '/'));
   }
 
@@ -70,7 +71,7 @@ class SplashManager extends ChangeNotifier {
   void agreementUrl(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => WebViewPage(AGREEMENT, null)),
+      CupertinoPageRoute(builder: (context) => WebViewPage(AGREEMENT, null)),
     );
   }
 

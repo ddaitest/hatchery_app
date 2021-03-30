@@ -33,7 +33,7 @@ const String BASIC_AUTH =
 
 const String CONTENT_TYPE = 'application/json';
 
-const String Agreement_DATA_KEY = 'agreementDataKey4';
+const String Agreement_DATA_KEY = 'agreementDataKey';
 
 const String Agreement_text =
     '欢迎使用本软件！\n在您使用本软件前，请您认真阅读并同意用户协议和隐私政策，以了解我们的服务内容和我们在收集和使用您相关个人信息时的处理规则。我们将严格按照用户协议和隐私政策为您提供服务，保护您的个人信息。';
