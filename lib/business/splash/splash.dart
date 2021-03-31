@@ -9,71 +9,99 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SplashManager _splashManager = SplashManager(context);
     return ChangeNotifierProvider(
-      create: (context) => SplashManager(context),
-      child: _splashPage(context),
+      create: (context) => _splashManager,
+      child: _splashPage(context, _splashManager),
     );
   }
 
-  _splashPage(BuildContext context) {
-    return Consumer<SplashManager>(builder: (context, manager, child) {
-      if (manager.agreementData == null) {
-        return _fullScreenBackgroundView();
-      } else if (manager.agreementData == 1) {
-        return Container(
-          constraints: BoxConstraints.expand(),
-          child: Stack(
-            children: <Widget>[
-              _fullScreenBackgroundView(),
-              GestureDetector(
-                onTap: () => manager.clickAD(context),
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: CachedNetworkImage(
-                    imageUrl:
-                        'https://uploadfile.bizhizu.cn/up/34/e6/cb/34e6cb8e4ca59ec610cf7d3fb0535e8a.jpg.source.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+  _splashPage(BuildContext context, manager) {
+    return WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Selector(
+          builder: (BuildContext context, int value, Widget child) {
+            if (value == null) {
+              return _fullScreenBackgroundView();
+            } else if (value == 1) {
+              // UmengCommonSdk.onPageStart("splashView");
+              return _adView(context, manager);
+            } else {
+              return _agreementMainView(context, manager);
+            }
+          },
+          selector: (BuildContext context, SplashManager splashManager) {
+            return splashManager.agreementData;
+          },
+        ));
+  }
+
+  Widget _adView(context, manager) {
+    print('DEBUG=> _adView 重绘了。。。。。。。。。。');
+    return Container(
+      constraints: BoxConstraints.expand(),
+      child: Stack(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => manager.clickAD(context),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://uploadfile.bizhizu.cn/up/34/e6/cb/34e6cb8e4ca59ec610cf7d3fb0535e8a.jpg.source.jpg',
+                fit: BoxFit.cover,
               ),
-              Positioned(
-                width: 75.0,
-                top: 50.0,
-                right: 20.0,
-                //控件透明度 0.0完全透明，1.0完全不透明
-                child: Opacity(
-                  opacity: 0.5,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.black)),
-                    // color: Colors.black,
-                    // splashColor: Colors.black,
-                    child: Consumer<SplashManager>(builder: (_, manager, cd) {
-                      return Text("跳过 ${manager.countdownTime}");
-                    }),
-                    onPressed: () => manager.skip(context),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        );
-      } else {
-        return Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    "images/welcome.png",
-                  ))),
-          child: _agreementDialogView(context, manager),
-        );
-      }
+          Positioned(
+            width: 75.0,
+            top: 50.0,
+            right: 20.0,
+            //控件透明度 0.0完全透明，1.0完全不透明
+            child: Opacity(
+              opacity: 0.5,
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black)),
+                  // color: Colors.black,
+                  // splashColor: Colors.black,
+                  child: _skipBtnView(),
+                  onPressed: () {
+                    manager.skip(context);
+                  }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _skipBtnView() {
+    return Selector(builder: (BuildContext context, int value, Widget child) {
+      print('DEBUG=> countdownTime 重绘了。。。。。。。。。。');
+      return Text("跳过 ${value.toString()}");
+    }, selector: (BuildContext context, SplashManager splashManager) {
+      //这个地方返回具体的值，对应builder中的value
+      return splashManager.countdownTime;
     });
+  }
+
+  Widget _agreementMainView(context, manager) {
+    print('DEBUG=> _agreementMainView 重绘了。。。。。。。。。。');
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage(
+                "images/welcome.png",
+              ))),
+      child: _agreementDialogView(context, manager),
+    );
   }
 
   Widget _agreementDialogView(BuildContext context, manager) {
@@ -149,6 +177,7 @@ class SplashPage extends StatelessWidget {
   }
 
   Widget _fullScreenBackgroundView() {
+    print('DEBUG=> _fullScreenBackgroundView 重绘了。。。。。。。。。。');
     return Container(
       child: Image.asset(
         'images/welcome.png',

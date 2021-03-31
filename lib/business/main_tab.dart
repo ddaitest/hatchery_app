@@ -4,11 +4,10 @@ import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
 import 'package:hatchery/flavors/default.dart';
 import 'package:hatchery/configs.dart';
-import 'dart:io';
+import 'package:hatchery/common/utils.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
-import 'package:hatchery/common/AndroidBackToDesktop.dart';
 
 class MainTab extends StatefulWidget {
   @override
@@ -16,6 +15,7 @@ class MainTab extends StatefulWidget {
 }
 
 class MainTabState extends State<MainTab> {
+  bool nextKickBackExitApp = false;
   int _tabIndex = 0;
   List<String> bottomBarTitles = ['首页', '服务', '周边'];
 
@@ -86,7 +86,17 @@ class MainTabState extends State<MainTab> {
   }
 
   Future<Null> _onWillPop() {
-    AndroidBackTop.backDeskTop();
+    if (nextKickBackExitApp) {
+      exitApp();
+    } else {
+      showToast('再按一次退出APP');
+      nextKickBackExitApp = true;
+      Future.delayed(
+        const Duration(seconds: 2),
+        () => nextKickBackExitApp = false,
+      );
+      return Future<bool>.value(false);
+    }
   }
 
   @override

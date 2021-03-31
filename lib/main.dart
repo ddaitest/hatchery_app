@@ -5,21 +5,23 @@ import 'package:hatchery/flavors/Flavors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/routers.dart';
 import 'business/main_tab.dart';
-import 'package:fluro/fluro.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
 
 import 'routers.dart';
 
 void main() async {
-  runApp(
-    ChangeNotifierProvider<AppManager>(
-      create: (_) => AppManager(),
-      child: Consumer<AppManager>(
-        builder: (context, manager, child) => MyApp(),
-      ), //添加全局Manager
-    ),
-  );
+  FlutterBugly.postCatchedException(() {
+    runApp(
+      ChangeNotifierProvider<AppManager>(
+        create: (_) => AppManager(),
+        child: Consumer<AppManager>(
+          builder: (context, manager, child) => MyApp(),
+        ), //添加全局Manager
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {

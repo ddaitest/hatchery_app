@@ -11,9 +11,9 @@ import 'package:share/share.dart';
 import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/configs.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AppManager extends ChangeNotifier {
   int _m = 0;
@@ -33,7 +33,7 @@ class AppManager extends ChangeNotifier {
   int timeNow = DateTime.now().millisecondsSinceEpoch;
 
   AppManager() {
-    _getAgreementData();
+    FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
   }
 
   showToast(String title) {
@@ -45,17 +45,6 @@ class AppManager extends ChangeNotifier {
         backgroundColor: Color(0x99000000),
         textColor: Colors.white,
         fontSize: 15.0);
-  }
-
-  /// 获取协议是否同意标识
-  _getAgreementData() {
-    sharedGetData(Agreement_DATA_KEY).then((value) {
-      if (value != null) {
-        _agreementDataKey = true;
-      } else {
-        _agreementDataKey = false;
-      }
-    });
   }
 
   copyData(String text) {
@@ -89,5 +78,11 @@ class AppManager extends ChangeNotifier {
   void add(PhoneNumberInfo item) {
     _phoneNumbersList.add(item);
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    FlutterBugly.dispose();
+    super.dispose();
   }
 }

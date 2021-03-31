@@ -8,7 +8,6 @@ import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/configs.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
@@ -32,7 +31,9 @@ class SplashManager extends ChangeNotifier {
 
   int get ResultCode => resultCode;
 
-  int countdownTime = SPLASH_TIME;
+  int _countdownTime = SPLASH_TIME;
+
+  int get countdownTime => _countdownTime;
   var parsed;
   var newParsed;
   var result;
@@ -50,14 +51,14 @@ class SplashManager extends ChangeNotifier {
 
   /// UI动作 点击广告
   void clickAD(BuildContext context) {
-    _timer.cancel();
+    _timer?.cancel();
     CupertinoPageRoute(
         builder: (context) => WebViewPage(_adLists[0].webUrl, '/'));
   }
 
   /// UI动作 跳过倒计时
   void skip(BuildContext context) {
-    _timer.cancel();
+    _timer?.cancel();
     Navigator.pushReplacementNamed(context, '/');
   }
 
@@ -81,10 +82,10 @@ class SplashManager extends ChangeNotifier {
       print("DEBUG=> #### $_agreementData");
       if (sp != null) {
         _agreementData = sp;
-        if (sp == 0) _timer.cancel();
+        if (sp == 0) _timer?.cancel();
       } else {
         _agreementData = 0;
-        _timer.cancel();
+        _timer?.cancel();
       }
       notifyListeners();
     });
@@ -93,12 +94,12 @@ class SplashManager extends ChangeNotifier {
   /// 开屏倒计时
   Future _startCountdown(BuildContext context) async {
     final timeUp = (Timer timer) {
-      print("LC countdownTime ==> $countdownTime");
-      if (countdownTime < 2) {
-        timer.cancel();
+      print("LC countdownTime ==> $_countdownTime");
+      if (_countdownTime < 2) {
+        _timer?.cancel();
         Navigator.pushReplacementNamed(context, '/');
       } else {
-        countdownTime--;
+        _countdownTime--;
         notifyListeners();
       }
     };
@@ -161,6 +162,7 @@ class SplashManager extends ChangeNotifier {
 
   @override
   void dispose() {
+    _timer?.cancel();
     super.dispose();
   }
 }

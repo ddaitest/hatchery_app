@@ -1,8 +1,33 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'theme.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+void showToast(String title) {
+  Fluttertoast.showToast(
+      msg: title,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Color(0x99000000),
+      textColor: Colors.white,
+      fontSize: 15.0);
+}
+
+Future<void> exitApp() async {
+  if (Platform.isAndroid) {
+    await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  } else if (Platform.isIOS) {
+    exit(0);
+  } else {
+    await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    exit(0);
+  }
+}
 
 void launchcaller(String url) async {
   if (await canLaunch(url)) {
