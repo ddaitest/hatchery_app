@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/configs.dart';
 import 'package:hatchery/common/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:launch_review/launch_review.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -57,7 +58,7 @@ class SplashPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            width: 75.0,
+            width: 75.0.w,
             top: 50.0,
             right: 20.0,
             //控件透明度 0.0完全透明，1.0完全不透明

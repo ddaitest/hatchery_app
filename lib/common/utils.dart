@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'theme.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void showToast(String title) {
@@ -27,6 +28,20 @@ Future<void> exitApp() async {
     await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     exit(0);
   }
+}
+
+Future<bool> isNetworkConnect() async {
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult != ConnectivityResult.none) {
+    return true;
+  } else {
+    return false;
+  }
+  // if (connectivityResult == ConnectivityResult.mobile) {
+  //   // I am connected to a mobile network.
+  // } else if (connectivityResult == ConnectivityResult.wifi) {
+  //   // I am connected to a wifi network.
+  // }
 }
 
 void launchcaller(String url) async {

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/configs.dart';
 
 class ApiForServicePage {
@@ -228,9 +229,9 @@ class ApiForReportSt {
 
 class API {
   static Dio _dio = Dio(BaseOptions(
-      baseUrl: "http://123.206.176.51:5000/",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
+      baseUrl: API_HOST,
+      connectTimeout: API_CONNECT_TIMEOUT,
+      receiveTimeout: API_RECEIVE_TIMEOUT,
       responseType: ResponseType.plain));
 
   static InterceptorsWrapper _interceptorsWrapper =
@@ -254,22 +255,22 @@ class API {
   });
 
   static init() {
+    isNetworkConnect().then((value) {
+      if (!value) {
+        showToast('网络未连接，请检查网络设置');
+      }
+    });
     if (!_dio.interceptors.contains(_interceptorsWrapper)) {
       _dio.interceptors.add(_interceptorsWrapper);
     }
   }
 
-  static Home home = Home(_dio);
-}
-
-class Home {
-  Dio _dio;
-
-  Home(this._dio);
-
-  ///报事报修图片上传
-  getBanners(String category) {
-    return _dio
-        .get("api/banner/banner_list", queryParameters: {"category": category});
+  ///软文列表
+  ///page_num: 页码从0开始
+  /// page_size: 每页数量
+  /// service_id: 服务或者Tab_id
+  static getArticleList(Map<String, String> parameters) {
+    init();
+    return _dio.get("/post/public/list", queryParameters: parameters);
   }
 }

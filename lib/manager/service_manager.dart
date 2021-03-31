@@ -26,7 +26,7 @@ class ServiceManager extends ChangeNotifier {
 
   Map<String, String> getListParameters = {
     "service_id": SERVICE_ID,
-    "category_id": SERVICE_TAB_NUMBER,
+    "category_id": SERVICE_TAB_ID,
     "size": FEED_SIZE,
     "cursor": '',
   };

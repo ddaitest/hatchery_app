@@ -14,6 +14,7 @@ import 'package:hatchery/common/api.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/configs.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 class AppManager extends ChangeNotifier {
   int _m = 0;
@@ -32,8 +33,43 @@ class AppManager extends ChangeNotifier {
 
   int timeNow = DateTime.now().millisecondsSinceEpoch;
 
+  final JPush jpush = JPush();
+
   AppManager() {
     FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    try {
+      jpush.addEventHandler(
+          onReceiveNotification: (Map<String, dynamic> message) async {
+        print("flutter onReceiveNotification: $message");
+      }, onOpenNotification: (Map<String, dynamic> message) async {
+        print("flutter onOpenNotification: $message");
+      }, onReceiveMessage: (Map<String, dynamic> message) async {
+        print("flutter onReceiveMessage: $message");
+      }, onReceiveNotificationAuthorization:
+              (Map<String, dynamic> message) async {
+        print("flutter onReceiveNotificationAuthorization: $message");
+      });
+    } on PlatformException {
+      return;
+    }
+
+    jpush.setup(
+      appKey: "a1f964ef7fa9723b1a328fec", //你自己应用的 AppKey
+      channel: "theChannel",
+      production: false,
+      debug: false,
+    );
+    jpush.applyPushAuthority(
+        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
+
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    jpush.getRegistrationID().then((rid) {
+      print("flutter get registration id : $rid");
+    });
   }
 
   showToast(String title) {
