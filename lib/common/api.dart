@@ -269,7 +269,7 @@ class API {
   ///page_num: 页码从0开始
   /// page_size: 每页数量
   /// service_id: 服务或者Tab_id
-  static getArticleList(Map<String, String> parameters) {
+  static getArticleList(Map<String, dynamic> parameters) {
     init();
     return _dio.get("/post/public/list", queryParameters: parameters);
   }

@@ -135,7 +135,7 @@ class HomeView extends StatelessWidget {
   Widget _articles() {
     return Selector<HomeManager, UnmodifiableListView<ArticleDataInfo>>(
       selector: (BuildContext context, HomeManager manager) {
-        return manager.articles;
+        return manager.articlesList;
       },
       builder: (BuildContext context,
           UnmodifiableListView<ArticleDataInfo> value, Widget child) {
