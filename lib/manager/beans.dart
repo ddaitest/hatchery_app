@@ -99,47 +99,77 @@ class AdListInfo {
 }
 
 ///软文
-@JsonSerializable()
-class Article {
+class ArticleDataInfo {
   String id;
+  String avatar;
   String title;
-  String image;
-  String thumbnail;
-  String url;
-  String contents;
-  int status;
-  @JsonKey(name: 'client_id')
+  Null contentsShort;
+  String contentsType;
+  String source;
+  String status;
   String clientId;
-  @JsonKey(name: 'update_time')
-  int updateTime;
-  @JsonKey(name: 'create_time')
-  int createTime;
-  @JsonKey(name: 'is_web')
-  bool isWeb;
-  @JsonKey(name: 'category_id')
-  String categoryId;
-  @JsonKey(name: 'service_id')
+  String authorId;
+  String authorName;
+  Null authorAvatar;
+  String redirectUrl;
   String serviceId;
+  String createTime;
+  String updateTime;
 
-  Article(
+  ArticleDataInfo(
       {this.id,
+      this.avatar,
       this.title,
-      this.image,
-      this.thumbnail,
-      this.url,
-      this.contents,
+      this.contentsShort,
+      this.contentsType,
+      this.source,
       this.status,
       this.clientId,
-      this.updateTime,
+      this.authorId,
+      this.authorName,
+      this.authorAvatar,
+      this.redirectUrl,
+      this.serviceId,
       this.createTime,
-      this.isWeb,
-      this.categoryId,
-      this.serviceId});
+      this.updateTime});
 
-  factory Article.fromJson(Map<String, dynamic> json) =>
-      _$ArticleFromJson(json);
+  ArticleDataInfo.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    avatar = json['avatar'];
+    title = json['title'];
+    contentsShort = json['contents_short'];
+    contentsType = json['contents_type'];
+    source = json['source'];
+    status = json['status'];
+    clientId = json['client_id'];
+    authorId = json['author_id'];
+    authorName = json['author_name'];
+    authorAvatar = json['author_avatar'];
+    redirectUrl = json['redirect_url'];
+    serviceId = json['service_id'];
+    createTime = json['create_time'];
+    updateTime = json['update_time'];
+  }
 
-  Map<String, dynamic> toJson() => _$ArticleToJson(this);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['avatar'] = this.avatar;
+    data['title'] = this.title;
+    data['contents_short'] = this.contentsShort;
+    data['contents_type'] = this.contentsType;
+    data['source'] = this.source;
+    data['status'] = this.status;
+    data['client_id'] = this.clientId;
+    data['author_id'] = this.authorId;
+    data['author_name'] = this.authorName;
+    data['author_avatar'] = this.authorAvatar;
+    data['redirect_url'] = this.redirectUrl;
+    data['service_id'] = this.serviceId;
+    data['create_time'] = this.createTime;
+    data['update_time'] = this.updateTime;
+    return data;
+  }
 }
 
 ///服务信息

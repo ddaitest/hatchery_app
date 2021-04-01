@@ -8,9 +8,9 @@ import 'dart:collection';
 import 'package:hatchery/configs.dart';
 
 class ServiceManager extends ChangeNotifier {
-  List<Article> _subjectLists = [];
+  List<ArticleDataInfo> _subjectLists = [];
 
-  UnmodifiableListView<Article> get subjectLists =>
+  UnmodifiableListView<ArticleDataInfo> get subjectLists =>
       UnmodifiableListView(_subjectLists);
 
   List<SerivceTopInfo> _topList = [];
@@ -53,7 +53,7 @@ class ServiceManager extends ChangeNotifier {
     });
     queryServiceData().then((info) {
       for (var x in info) {
-        add(Article.fromJson(x));
+        add(ArticleDataInfo.fromJson(x));
       }
       notifyListeners();
     });
@@ -65,7 +65,7 @@ class ServiceManager extends ChangeNotifier {
       await Future.delayed(Duration(seconds: 0), () {
         moreQueryServiceData().then((info) {
           for (var x in info) {
-            add(Article.fromJson(x));
+            add(ArticleDataInfo.fromJson(x));
           }
           isLoading = false;
           notifyListeners();
@@ -125,7 +125,7 @@ class ServiceManager extends ChangeNotifier {
     }
   }
 
-  void add(Article item) {
+  void add(ArticleDataInfo item) {
     _subjectLists.add(item);
   }
 

@@ -13,7 +13,7 @@ class ReportStManager extends ChangeNotifier {
   ///报事报修发送
   Future postReportStData(inputText, contact, imgUrl) async {
     Response response = await ApiForReportSt.postReportData({
-      "name": "$APP_ID",
+      "name": "$CLIENT_ID",
       "message": inputText,
       "contact": contact,
       "img_url": imgUrl

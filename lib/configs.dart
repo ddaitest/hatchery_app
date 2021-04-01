@@ -1,4 +1,4 @@
-const int APP_ID = 001;
+const String CLIENT_ID = '36ff662f-3041-5c10-8bde-65e6fb86523b';
 
 const String API_HOST = 'http://106.12.147.150:8080/';
 

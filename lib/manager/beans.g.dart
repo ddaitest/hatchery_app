@@ -82,40 +82,6 @@ Map<String, dynamic> _$AdListInfoToJson(AdListInfo instance) =>
       'web_url': instance.webUrl,
     };
 
-Article _$ArticleFromJson(Map<String, dynamic> json) {
-  return Article(
-    id: json['id'] as String,
-    title: json['title'] as String,
-    image: json['image'] as String,
-    thumbnail: json['thumbnail'] as String,
-    url: json['url'] as String,
-    contents: json['contents'] as String,
-    status: json['status'] as int,
-    clientId: json['client_id'] as String,
-    updateTime: json['update_time'] as int,
-    createTime: json['create_time'] as int,
-    isWeb: json['is_web'] as bool,
-    categoryId: json['category_id'] as String,
-    serviceId: json['service_id'] as String,
-  );
-}
-
-Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'image': instance.image,
-      'thumbnail': instance.thumbnail,
-      'url': instance.url,
-      'contents': instance.contents,
-      'status': instance.status,
-      'client_id': instance.clientId,
-      'update_time': instance.updateTime,
-      'create_time': instance.createTime,
-      'is_web': instance.isWeb,
-      'category_id': instance.categoryId,
-      'service_id': instance.serviceId,
-    };
-
 Service _$ServiceFromJson(Map<String, dynamic> json) {
   return Service(
     json['id'] as String,

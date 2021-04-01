@@ -4,7 +4,7 @@ import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/beans.dart';
 
 class ArticleItem extends StatelessWidget {
-  final Article article;
+  final ArticleDataInfo article;
   final Function onTap;
 
   ArticleItem(this.article, this.onTap);
@@ -72,14 +72,13 @@ class ArticleItem extends StatelessWidget {
       );
 
   _getSummary() => Container(
-        child:
-            Text(article.contents, maxLines: 2, style: Flavors.styles.content),
+        child: Text(article.title, maxLines: 2, style: Flavors.styles.content),
         color: Colors.white,
       );
 
   _getThumbnail() {
     return CachedNetworkImage(
-      imageUrl: article.thumbnail,
+      imageUrl: article.redirectUrl,
       fit: BoxFit.fill,
       height: Flavors.sizes.articleThumbnail,
       width: Flavors.sizes.articleThumbnail,

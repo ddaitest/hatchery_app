@@ -13,13 +13,13 @@ class HomeManager extends ChangeNotifier {
   PageStatus _status = PageStatus.LOADING;
 
   //banner 数据
-  List<BannerInfo> _banner = List<BannerInfo>();
+  List<BannerInfo> _banner = [];
 
   //公告内容
-  List<Notice> _notices = List<Notice>();
+  List<Notice> _notices = [];
 
   //软文
-  List<Article> _articles = List<Article>();
+  List<ArticleDataInfo> _articles = [];
 
   PageStatus get status => _status;
 
@@ -27,7 +27,8 @@ class HomeManager extends ChangeNotifier {
 
   UnmodifiableListView<Notice> get posts => UnmodifiableListView(_notices);
 
-  UnmodifiableListView<Article> get articles => UnmodifiableListView(_articles);
+  UnmodifiableListView<ArticleDataInfo> get articles =>
+      UnmodifiableListView(_articles);
 
   HomeManager(BuildContext context) {
     _loadBanner();
@@ -73,12 +74,12 @@ class HomeManager extends ChangeNotifier {
 //    List<Article> data = model.getListData(pageType);
 //    final enablePullUp = model.getHasMore(pageType);
     final enablePullUp = false;
-    List<Article> data = List<Article>();
-    data.add(Article(title: "AAA", thumbnail: thumbnail, contents: summary));
-    data.add(Article(title: "bbb", thumbnail: thumbnail, contents: summary));
-    data.add(Article(title: "ccc", thumbnail: thumbnail, contents: summary));
-    data.add(Article(title: "ddd", thumbnail: thumbnail, contents: summary));
-    data.add(Article(title: "eee", thumbnail: thumbnail, contents: summary));
+    List<ArticleDataInfo> data = [];
+    // data.add(ArticleDataInfo(title: "AAA", thumbnail: thumbnail, contents: summary));
+    // data.add(ArticleDataInfo(title: "bbb", thumbnail: thumbnail, contents: summary));
+    // data.add(ArticleDataInfo(title: "ccc", thumbnail: thumbnail, contents: summary));
+    // data.add(ArticleDataInfo(title: "ddd", thumbnail: thumbnail, contents: summary));
+    // data.add(ArticleDataInfo(title: "eee", thumbnail: thumbnail, contents: summary));
     _articles.addAll(data);
     notifyListeners();
   }
