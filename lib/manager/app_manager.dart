@@ -36,8 +36,9 @@ class AppManager extends ChangeNotifier {
   final JPush jpush = JPush();
 
   AppManager() {
-    FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
-    initPlatformState();
+    ///todo 先关闭
+    // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
+    // initPlatformState();
   }
 
   Future<void> initPlatformState() async {

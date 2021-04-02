@@ -15,29 +15,17 @@ import 'dart:math' as math;
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HomeManager(context),
-      child: HomeView(),
-    );
-  }
-}
-
-class HomeView extends StatelessWidget {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      key: _refreshIndicatorKey,
-      onRefresh: _onRefresh,
-      child: CustomScrollView(
-        slivers: <Widget>[
-          _banner(context).addSilver(),
-          _posts(),
-          _articles(),
+    return ChangeNotifierProvider(
+      create: (context) => HomeManager(context),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          _articlesView(),
         ],
       ),
     );
@@ -132,20 +120,23 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _articles() {
+  Widget _articlesView() {
     return Selector<HomeManager, UnmodifiableListView<ArticleDataInfo>>(
       selector: (BuildContext context, HomeManager manager) {
-        return manager.articles;
+        return manager.articlesList;
       },
       builder: (BuildContext context,
           UnmodifiableListView<ArticleDataInfo> value, Widget child) {
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: value.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (value.length == 0) {
+              return Container();
+            } else {
               return ArticleItem(value[index], () {});
-            },
-            childCount: value.length,
-          ),
+            }
+          },
         );
       },
     );
