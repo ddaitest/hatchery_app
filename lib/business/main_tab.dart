@@ -43,10 +43,12 @@ class MainTabState extends State<MainTab> {
             brightness: Brightness.light,
             elevation: 0,
           ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            children: _tabBodies,
-            controller: _pageController,
+          body: SafeArea(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: _tabBodies,
+              controller: _pageController,
+            ),
           ),
           backgroundColor: Colors.white,
           bottomNavigationBar: Container(

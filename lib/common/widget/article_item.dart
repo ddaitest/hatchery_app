@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hatchery/flavors/Flavors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/manager/beans.dart';
 
 class ArticleItem extends StatelessWidget {
@@ -10,85 +11,106 @@ class ArticleItem extends StatelessWidget {
   ArticleItem(this.article, this.onTap);
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
+  Widget build(BuildContext context) => _getItemContainerView(context);
+
+  Widget _getItemContainerView(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (article.redirectUrl != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebViewPage(article.redirectUrl, null)),
+          );
+        }
+      },
       child: Container(
-        height: Flavors.sizes.articleItemHeight,
-        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
         child: Row(
           children: <Widget>[
-            _getLeft(),
-            _getThumbnail(),
+            _imageView(article.avatar),
+            Container(
+                child: _titleView(),
+                width: (MediaQuery.of(context).size.width - 116).w),
           ],
         ),
       ),
-      onTap: () => onTap,
     );
   }
 
-  _getLeft() => Expanded(
-      flex: 1,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _getTitle(),
-          _getSummary(),
-          Expanded(
-            child: Container(),
-            flex: 1,
-          ),
-          _getBottom(),
-        ],
-      ));
-
-//  _getTop() => Row(
-//        mainAxisAlignment: MainAxisAlignment.start,
-//        crossAxisAlignment: CrossAxisAlignment.start,
-//        children: <Widget>[
-//          Expanded(
-//              flex: 1,
-//              child: Column(
-//                mainAxisAlignment: MainAxisAlignment.start,
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: <Widget>[
-//                  _getTitle(),
-//                  _getSummary(),
-//                  _getBottom(),
-//                ],
-//              )),
-//          _getThumbnail(),
-//        ],
-//      );
-
-  _getBottom() => Container(
-        child: Text("${article.updateTime}", style: Flavors.styles.secondary),
-        color: Colors.white,
-      );
-
-  _getTitle() => Container(
-        child: Text(article.title, style: Flavors.styles.title1),
-        color: Colors.white,
-      );
-
-  _getSummary() => Container(
-        child: Text(article.title, maxLines: 2, style: Flavors.styles.content),
-        color: Colors.white,
-      );
-
-  _getThumbnail() {
-    return CachedNetworkImage(
-      imageUrl: article.redirectUrl,
-      fit: BoxFit.fill,
-      height: Flavors.sizes.articleThumbnail,
-      width: Flavors.sizes.articleThumbnail,
-    );
-  }
-
-  _getLine() {
+  Widget _titleView() {
     return Container(
-      height: 1,
-      color: Colors.black26,
+      child: ListTile(
+        title: Text(
+          article.title,
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.visible,
+          style: TextStyle(fontSize: 18, color: Colors.black),
+        ),
+        subtitle: Text(
+          article.contentsShort,
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.visible,
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+      ),
     );
   }
+
+  Widget _imageView(String imgUrl) {
+    return imgUrl == ''
+        ? Container(
+            margin:
+                EdgeInsets.only(left: 8.0, top: 3.0, right: 8.0, bottom: 3.0),
+            width: 100.0.w)
+        : Container(
+            child: CachedNetworkImage(
+              height: 90.0.h,
+              width: 90.0.w,
+              imageUrl: imgUrl,
+              fit: BoxFit.fill,
+            ),
+            margin:
+                EdgeInsets.only(left: 8.0, top: 3.0, right: 8.0, bottom: 3.0),
+            width: 100.0.w,
+          );
+  }
+}
+
+Widget _getMoreWidget() {
+  return Center(
+    child: Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '加载中...  ',
+            style: TextStyle(fontSize: 16.0),
+          ),
+          CircularProgressIndicator(
+            strokeWidth: 1.0,
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _noMoreWidget() {
+  return Center(
+    child: Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '已经是最后一条了',
+            style: TextStyle(fontSize: 16.0),
+          ),
+        ],
+      ),
+    ),
+  );
 }

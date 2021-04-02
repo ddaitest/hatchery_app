@@ -103,14 +103,14 @@ class ArticleDataInfo {
   String id;
   String avatar;
   String title;
-  Null contentsShort;
+  String contentsShort;
   String contentsType;
   String source;
   String status;
   String clientId;
   String authorId;
   String authorName;
-  Null authorAvatar;
+  String authorAvatar;
   String redirectUrl;
   String serviceId;
   String createTime;

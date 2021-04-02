@@ -6,6 +6,7 @@ import 'package:hatchery/common/PageStatus.dart';
 import 'package:hatchery/common/api.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
+import 'package:hatchery/common/apiCommon.dart';
 import 'package:hatchery/configs.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/common/exts.dart';
@@ -26,6 +27,7 @@ class HomeManager extends ChangeNotifier {
   //软文
   List<ArticleDataInfo> _articlesList = [];
   int _articlesDataLength = 0;
+
   int get articlesDataTotal => _articlesDataLength;
 
   PageStatus get status => _status;
@@ -81,26 +83,34 @@ class HomeManager extends ChangeNotifier {
   }
 
   Future _loadArticlesRequest(int pageNum) async {
-    _articlesParameters['page_num'] = pageNum;
-    Response response = await API.getArticleList(_articlesParameters);
-    if (response.statusCode == 200) {
-      _articlesResult = response.data ?? null;
-      _articlesParsed = json.decode(_articlesResult);
-      if (_articlesParsed['message'] == 'success' &&
-          _articlesParsed['code'] == RESPONSE_STATUS_CODE) {
-        var resultData = _articlesParsed['data'] ?? null;
-        if (resultData != null) {
-          print("DEBUG=> _articlesParsed $resultData");
-          for (var x in resultData) {
-            addArticles(ArticleDataInfo.fromJson(x));
-          }
-          notifyListeners();
-        }
-      } else {
-        showToast('服务异常，请稍后再试');
+    // _articlesParameters['page_num'] = pageNum;
+    // apiResponseCheck(API.getArticleList(_articlesParameters)).then(
+    //       (value) {
+    //     if (value != '') {
+    //       print("DEBUG=> _articlesParsed $value");
+    //       for (var x in value) {
+    //         addArticles(ArticleDataInfo.fromJson(x));
+    //       }
+    //       notifyListeners();
+    //     }
+    //   },
+    // );
+    ApiResult result = await API.getArticleList(page, pageSize, "tab1");
+    if (result.isSuccess()) {
+      for (var x in result.getData()) {
+        addArticles(ArticleDataInfo.fromJson(x));
       }
-    } else {
-      showToast('服务异常，请稍后重试');
+      notifyListeners();
+    }
+  }
+
+  var page = 0;
+  int pageSize = 10;
+
+  loadArticles() async {
+    ApiResult result = await API.getArticleList(page, pageSize, "tab1");
+    if (result.isSuccess()) {
+      print("ApiResult.data = ${result.getData()}");
     }
   }
 
@@ -119,7 +129,7 @@ class HomeManager extends ChangeNotifier {
   }
 
   void addArticles(ArticleDataInfo item) {
-    articlesList.add(item);
+    _articlesList.add(item);
   }
 
   void clickBanner(int index) {}
