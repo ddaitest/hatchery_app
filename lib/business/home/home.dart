@@ -70,7 +70,8 @@ class HomeView extends StatelessWidget {
         pagination: new SwiperPagination(),
 //        control: new SwiperControl(),
         onTap: (index) {
-          manager.clickBanner(index);
+          // manager.clickBanner(index);
+          manager.loadArticles();
         },
       ),
     );

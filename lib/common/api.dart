@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/configs.dart';
@@ -151,22 +153,13 @@ class ApiForBanner {
 
   static InterceptorsWrapper _interceptorsWrapper =
       InterceptorsWrapper(onRequest: (options, handler) {
-    // Do something before request is sent
     return handler.next(options); //continue
-    // If you want to resolve the request with some custom data，
-    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
-    // If you want to reject the request with a error message,
-    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
   }, onResponse: (response, handler) {
-    // Do something with response data
+    print(
+        'HTTP: statusCode = ${response.statusCode} ;data = ${response.data} ');
     return handler.next(response); // continue
-    // If you want to reject the request with a error message,
-    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
   }, onError: (DioError e, handler) {
-    // Do something with response error
     return handler.next(e); //continue
-    // If you want to resolve the request with some custom data，
-    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
   });
 
   static init() {
@@ -229,29 +222,24 @@ class ApiForReportSt {
 
 class API {
   static Dio _dio = Dio(BaseOptions(
-      baseUrl: API_HOST,
-      connectTimeout: API_CONNECT_TIMEOUT,
-      receiveTimeout: API_RECEIVE_TIMEOUT,
-      responseType: ResponseType.plain));
+    baseUrl: API_HOST,
+    connectTimeout: API_CONNECT_TIMEOUT,
+    receiveTimeout: API_RECEIVE_TIMEOUT,
+    headers: {"Authorization": BASIC_AUTH},
+    // responseType: ResponseType.plain,
+  ));
 
   static InterceptorsWrapper _interceptorsWrapper =
       InterceptorsWrapper(onRequest: (options, handler) {
-    // Do something before request is sent
+    print('HTTP.onRequest: options = $options ');
     return handler.next(options); //continue
-    // If you want to resolve the request with some custom data，
-    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
-    // If you want to reject the request with a error message,
-    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
   }, onResponse: (response, handler) {
-    // Do something with response data
+    print(
+        'HTTP.onResponse: statusCode = ${response.statusCode} ;data = ${response.data} ');
     return handler.next(response); // continue
-    // If you want to reject the request with a error message,
-    // you can reject a `DioError` object eg: return `dio.reject(dioError)`
   }, onError: (DioError e, handler) {
-    // Do something with response error
+    print('HTTP.onError: = ${e} ');
     return handler.next(e); //continue
-    // If you want to resolve the request with some custom data，
-    // you can resolve a `Response` object eg: return `dio.resolve(response)`.
   });
 
   static init() {
@@ -269,8 +257,43 @@ class API {
   ///page_num: 页码从0开始
   /// page_size: 每页数量
   /// service_id: 服务或者Tab_id
-  static getArticleList(Map<String, String> parameters) {
+  // static getArticleList(Map<String, String> parameters) {
+  static getArticleList(int page, int size, String pageId) async {
+    Map<String, Object> query = {
+      "page_num": page,
+      "page_size": size,
+      "service_id": pageId,
+      "client_id": '36ff662f-3041-5c10-8bde-65e6fb86523b',
+    };
     init();
-    return _dio.get("/post/public/list", queryParameters: parameters);
+    try {
+      Response response = await _dio.get("/post/public/list", queryParameters: query);
+      return ApiResult.of(response.data);
+    } catch (e) {
+      print("e = $e");
+    }
+  }
+}
+
+class ApiResult {
+  int code = 0;
+  String message = "";
+  Map<String,dynamic> parsed;
+
+  ApiResult(this.parsed) {
+    code = parsed['code'];
+    message = parsed['message'];
+  }
+
+  factory ApiResult.of(Map<String,dynamic> response) {
+    return ApiResult(response);
+  }
+
+  bool isSuccess() {
+    return code == 100000;
+  }
+
+  dynamic getData() {
+    return parsed['data'];
   }
 }
