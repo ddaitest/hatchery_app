@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => HomeManager(context),
       child: ListView(
-        shrinkWrap: true,
+        // shrinkWrap: true,
         children: [
           _articlesView(),
         ],
