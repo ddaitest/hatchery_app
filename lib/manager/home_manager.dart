@@ -27,6 +27,7 @@ class HomeManager extends ChangeNotifier {
   //软文
   List<ArticleDataInfo> _articlesList = [];
   int _articlesDataLength = 0;
+
   int get articlesDataTotal => _articlesDataLength;
 
   PageStatus get status => _status;
@@ -82,25 +83,33 @@ class HomeManager extends ChangeNotifier {
   }
 
   Future _loadArticlesRequest(int pageNum) async {
-    _articlesParameters['page_num'] = pageNum;
-    apiResponseCheck(API.getArticleList(_articlesParameters)).then(
-          (value) {
-        if (value != '') {
-          print("DEBUG=> _articlesParsed $value");
-          for (var x in value) {
-            addArticles(ArticleDataInfo.fromJson(x));
-          }
-          notifyListeners();
-        }
-      },
-    );
+    // _articlesParameters['page_num'] = pageNum;
+    // apiResponseCheck(API.getArticleList(_articlesParameters)).then(
+    //       (value) {
+    //     if (value != '') {
+    //       print("DEBUG=> _articlesParsed $value");
+    //       for (var x in value) {
+    //         addArticles(ArticleDataInfo.fromJson(x));
+    //       }
+    //       notifyListeners();
+    //     }
+    //   },
+    // );
+    ApiResult result = await API.getArticleList(page, pageSize, "tab1");
+    if (result.isSuccess()) {
+      for (var x in result.getData()) {
+        addArticles(ArticleDataInfo.fromJson(x));
+      }
+      notifyListeners();
+    }
   }
+
   var page = 0;
   int pageSize = 10;
 
   loadArticles() async {
-    ApiResult result = await API.getArticleList(page,pageSize,"tab1");
-    if(result.isSuccess()){
+    ApiResult result = await API.getArticleList(page, pageSize, "tab1");
+    if (result.isSuccess()) {
       print("ApiResult.data = ${result.getData()}");
     }
   }
