@@ -2,6 +2,8 @@ const String CLIENT_ID = '36ff662f-3041-5c10-8bde-65e6fb86523b';
 
 const String API_HOST = 'http://106.12.147.150:8080/';
 
+const int RESPONSE_STATUS_CODE = 100000;
+
 const int API_CONNECT_TIMEOUT = 60000;
 
 const int API_RECEIVE_TIMEOUT = 60000;
