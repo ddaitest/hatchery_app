@@ -15,64 +15,69 @@ class ArticleItem extends StatelessWidget {
 
   Widget _getItemContainerView(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (article.redirectUrl != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WebViewPage(article.redirectUrl, null)),
-          );
-        }
-      },
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            _imageView(article.avatar),
-            Container(
-                child: _titleView(),
-                width: (MediaQuery.of(context).size.width - 116).w),
-          ],
-        ),
-      ),
-    );
+        onTap: () {
+          if (article.redirectUrl != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WebViewPage(article.redirectUrl, null)),
+            );
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
+          height: 71.0.h,
+          child: _titleView(),
+          width: 275.0.w,
+        ));
   }
 
   Widget _titleView() {
-    return Container(
-      child: ListTile(
-        title: Text(
-          article.title,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.visible,
-          style: TextStyle(fontSize: 18, color: Colors.black),
-        ),
-        subtitle: Text(
-          article.contentsShort,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.visible,
-          style: TextStyle(fontSize: 14, color: Colors.grey),
-        ),
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
+      leading: _imageView(article.avatar),
+      title: Text(
+        article.title,
+        textAlign: TextAlign.left,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 16, color: Color.fromRGBO(51, 51, 51, 1)),
+      ),
+      subtitle: Text(
+        article.contentsShort,
+        textAlign: TextAlign.left,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 14, color: Color.fromRGBO(155, 155, 155, 1)),
       ),
     );
   }
 
   Widget _imageView(String imgUrl) {
-    return imgUrl == ''
-        ? Container(
-            margin:
-                EdgeInsets.only(left: 8.0, top: 3.0, right: 8.0, bottom: 3.0),
-            width: 100.0.w)
-        : Container(
-            child: CachedNetworkImage(
-              height: 90.0.h,
-              width: 90.0.w,
-              imageUrl: imgUrl,
-              fit: BoxFit.fill,
-            ),
-            margin:
-                EdgeInsets.only(left: 8.0, top: 3.0, right: 8.0, bottom: 3.0),
-            width: 100.0.w,
-          );
+    return Container(
+        height: 70.0.h,
+        width: 70.0.w,
+        child: CachedNetworkImage(
+          imageUrl: imgUrl,
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular((8.0)),
+                boxShadow: [
+                  BoxShadow(
+                      offset: Offset(0.0, 2.0), //阴影xy轴偏移量
+                      blurRadius: 4.0, //阴影模糊程度
+                      spreadRadius: 0.0 //阴影扩散程度
+                      )
+                ] // 圆角度
+                ),
+          ),
+          errorWidget: (context, url, error) =>
+              Icon(Icons.image_not_supported_outlined),
+        ));
   }
 }
 

@@ -224,12 +224,11 @@ class API {
     connectTimeout: API_CONNECT_TIMEOUT,
     receiveTimeout: API_RECEIVE_TIMEOUT,
     headers: {"Authorization": BASIC_AUTH},
-    // responseType: ResponseType.plain,
   ));
 
   static InterceptorsWrapper _interceptorsWrapper =
       InterceptorsWrapper(onRequest: (options, handler) {
-    print('HTTP.onRequest: options = $options ');
+    print('HTTP.onRequest: options = ${options.data} ');
     return handler.next(options); //continue
   }, onResponse: (response, handler) {
     print(
@@ -251,47 +250,27 @@ class API {
     }
   }
 
+  ///获取配置
+  static getConfig(int page, int size, String serviceId) {
+    Map<String, dynamic> params = {
+      "client_id": CLIENT_ID,
+    };
+    init();
+    return _dio.get("/api/config", queryParameters: params);
+  }
+
   ///软文列表
   ///page_num: 页码从0开始
   /// page_size: 每页数量
   /// service_id: 服务或者Tab_id
-  // static getArticleList(Map<String, String> parameters) {
-  static getArticleList(int page, int size, String pageId) async {
-    Map<String, Object> query = {
+  static getArticleList(int page, int size, String serviceId) {
+    Map<String, dynamic> params = {
       "page_num": page,
       "page_size": size,
-      "service_id": pageId,
-      "client_id": '36ff662f-3041-5c10-8bde-65e6fb86523b',
+      "service_id": serviceId,
+      "client_id": CLIENT_ID,
     };
     init();
-    try {
-      Response response = await _dio.get("/post/public/list", queryParameters: query);
-      return ApiResult.of(response.data);
-    } catch (e) {
-      print("e = $e");
-    }
-  }
-}
-
-class ApiResult {
-  int code = 0;
-  String message = "";
-  Map<String,dynamic> parsed;
-
-  ApiResult(this.parsed) {
-    code = parsed['code'];
-    message = parsed['message'];
-  }
-
-  factory ApiResult.of(Map<String,dynamic> response) {
-    return ApiResult(response);
-  }
-
-  bool isSuccess() {
-    return code == 100000;
-  }
-
-  dynamic getData() {
-    return parsed['data'];
+    return _dio.get("/post/public/list", queryParameters: params);
   }
 }

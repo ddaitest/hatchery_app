@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -15,29 +15,45 @@ import 'dart:math' as math;
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => HomeManager(context),
+      child: HomeView(),
+    );
+  }
+}
+
+class HomeView extends StatelessWidget {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HomeManager(context),
+    HomeManager _homeManager = Provider.of<HomeManager>(context, listen: false);
+    return Container(
+      height: MediaQuery.of(context).size.height,
       child: ListView(
         // shrinkWrap: true,
         children: [
-          _articlesView(),
+          _bannerView(context),
+          _moreServiceView(),
+          _noticeView(),
+          _articlesView(_homeManager),
         ],
       ),
     );
   }
 
   /// View: Banner
-  Widget _banner(BuildContext context) {
+  Widget _bannerView(BuildContext context) {
     HomeManager manager = Provider.of<HomeManager>(context, listen: false);
     List<BannerInfo> banners = manager.banner;
     return Container(
-      height: 140,
-      child: new Swiper(
+      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
+      height: 140.0.h,
+      child: Swiper(
+        autoplay: true,
         itemBuilder: (BuildContext context, int index) {
           ImageProvider imageProvider;
           String imageURL = banners[index].imgUrl;
@@ -47,98 +63,125 @@ class HomePage extends StatelessWidget {
             imageProvider = AssetImage(imageURL);
           }
           return ClipRRect(
-            borderRadius: new BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(8.0),
             child: Image(image: imageProvider, fit: BoxFit.fill),
           );
         },
-        itemHeight: 140,
+        itemHeight: 140.0.h,
         itemCount: banners.length,
-        viewportFraction: 0.8,
+        viewportFraction: 1,
         scale: 0.9,
-        pagination: new SwiperPagination(),
-//        control: new SwiperControl(),
+        pagination: SwiperPagination(),
+//        control: SwiperControl(),
         onTap: (index) {
           // manager.clickBanner(index);
-          manager.loadArticles();
         },
       ),
     );
   }
 
-  Widget _posts() {
-    return Selector<HomeManager, UnmodifiableListView<Notice>>(
-      selector: (BuildContext context, HomeManager manager) {
-        return manager.posts;
-      },
-      builder: (BuildContext context, UnmodifiableListView<Notice> value,
-          Widget child) {
-        var postViews = <Widget>[
-          _postTitle(),
-        ];
-        for (Notice d in value) {
-          postViews.add(NoticeItem(d, () {}));
-        }
-        return Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: postViews,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[200],
-                blurRadius: 10.0,
-                spreadRadius: 5.0,
-              )
-            ],
-            color: Colors.white,
-          ),
-        ).addSilver();
-      },
-    );
-  }
-
-  Widget _postTitle() {
+  Widget _moreServiceView() {
     return Container(
+      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
       child: Row(
-        children: <Widget>[
-          Container(
-            width: 2,
-            height: 16,
-            color: Flavors.colors.diver,
-            margin: EdgeInsets.only(right: 8),
-          ),
-          Text(Flavors.strings.post),
-          Expanded(
-            child: Container(),
-            flex: 1,
-          ),
-          Icon(Icons.arrow_forward_ios),
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _moreServiceItem('images/image1.png', '问题反馈'),
+          _moreServiceItem('images/image2.png', '报事报修'),
+          _moreServiceItem('images/image3.png', '联系物业'),
+          _moreServiceItem('images/image4.png', '全部服务'),
         ],
       ),
     );
   }
 
-  Widget _articlesView() {
+  Widget _moreServiceItem(String imagePath, String text) {
+    return Container(
+      // height: 50.0.h,
+      width: 50.0.w,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Image.asset(imagePath),
+          Container(height: 10.0.h),
+          Text(text,
+              style:
+                  TextStyle(fontSize: 13, color: Color.fromRGBO(51, 51, 51, 1)))
+        ],
+      ),
+    );
+  }
+
+  Widget _noticeView() {
+    return Container(
+        padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+        height: 130.0.h,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '物业公告',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Color.fromRGBO(51, 51, 51, 1)),
+                  ),
+                  Text(
+                    '更多 >',
+                    style: TextStyle(
+                        fontSize: 14, color: Color.fromRGBO(155, 155, 155, 1)),
+                  ),
+                ],
+              ),
+            ),
+            // Container(height: 15.0),
+            Container(
+                child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 3,
+              itemBuilder: (BuildContext context, int index) =>
+                  _noticeTitle('关于新冠疫苗接种报名的通知'),
+            ))
+          ],
+        ));
+  }
+
+  Widget _noticeTitle(String text) {
+    return Container(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Text(text,
+            style:
+                TextStyle(fontSize: 16, color: Color.fromRGBO(51, 51, 51, 1))));
+  }
+
+  Widget _articlesView(_homeManager) {
     return Selector<HomeManager, UnmodifiableListView<ArticleDataInfo>>(
-      selector: (BuildContext context, HomeManager manager) {
-        return manager.articlesList;
-      },
       builder: (BuildContext context,
           UnmodifiableListView<ArticleDataInfo> value, Widget child) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: value.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (value.length == 0) {
-              return Container();
-            } else {
-              return ArticleItem(value[index], () {});
-            }
-          },
+        return Container(
+          // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: value.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (value.length == 0) {
+                return Container();
+              } else {
+                return ArticleItem(value[index], () {});
+              }
+            },
+          ),
         );
+      },
+      selector: (BuildContext context, _homeManager) {
+        return _homeManager.articlesList;
       },
     );
   }
