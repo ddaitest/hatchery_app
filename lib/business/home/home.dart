@@ -171,10 +171,10 @@ class HomeView extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: value.length,
             itemBuilder: (BuildContext context, int index) {
-              if (value.length == 0) {
-                return Container();
+              if (value.length != 0) {
+                return ArticleItem(value[index], 0, () {});
               } else {
-                return ArticleItem(value[index], () {});
+                return ArticleItem(value[index], 1, () {});
               }
             },
           ),
