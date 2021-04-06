@@ -49,7 +49,7 @@ class ArticleItem extends StatelessWidget {
                     fontSize: 16, color: Color.fromRGBO(51, 51, 51, 1)),
               )
             : SkeletonAnimation(
-                shimmerColor: Colors.grey,
+                shimmerColor: Colors.grey[400],
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
                   // width: 200.0.w,
@@ -71,7 +71,7 @@ class ArticleItem extends StatelessWidget {
                     fontSize: 14, color: Color.fromRGBO(155, 155, 155, 1)),
               )
             : SkeletonAnimation(
-                shimmerColor: Colors.grey,
+                shimmerColor: Colors.grey[400],
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
                   // width: 100.0.w,
@@ -113,7 +113,7 @@ class ArticleItem extends StatelessWidget {
                   Icon(Icons.image_not_supported_outlined),
             ))
         : SkeletonAnimation(
-            shimmerColor: Colors.grey,
+            shimmerColor: Colors.grey[400],
             borderRadius: BorderRadius.circular(20),
             child: Container(
               width: 70.0.w,
