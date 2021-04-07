@@ -97,16 +97,15 @@ class HomeView extends StatelessWidget {
 
   Widget _moreServiceItem(String imagePath, String text) {
     return Container(
-      // height: 50.0.h,
-      width: 50.0.w,
+      height: 50.0.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(imagePath),
           Container(height: 10.0.h),
           Text(text,
-              style:
-                  TextStyle(fontSize: 13, color: Color.fromRGBO(51, 51, 51, 1)))
+              style: TextStyle(
+                  fontSize: 13.sp, color: Color.fromRGBO(51, 51, 51, 1)))
         ],
       ),
     );
@@ -128,13 +127,14 @@ class HomeView extends StatelessWidget {
                     '物业公告',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         color: Color.fromRGBO(51, 51, 51, 1)),
                   ),
                   Text(
                     '更多 >',
                     style: TextStyle(
-                        fontSize: 14, color: Color.fromRGBO(155, 155, 155, 1)),
+                        fontSize: 14.sp,
+                        color: Color.fromRGBO(155, 155, 155, 1)),
                   ),
                 ],
               ),
@@ -156,8 +156,8 @@ class HomeView extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.only(bottom: 10.0),
         child: Text(text,
-            style:
-                TextStyle(fontSize: 16, color: Color.fromRGBO(51, 51, 51, 1))));
+            style: TextStyle(
+                fontSize: 16.sp, color: Color.fromRGBO(51, 51, 51, 1))));
   }
 
   Widget _articlesView(_homeManager) {

@@ -4,6 +4,7 @@ import 'package:hatchery/business/splash/splash.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/routers.dart';
+import 'configs.dart';
 import 'business/main_tab.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
         allowFontScaling: true,
         builder: () => MaterialApp(
-                title: Flavors.strings.title,
+                title: COMMUNITY_NAME,
                 initialRoute: '/splash',
                 routes: {
                   '/': (_) => MainTab(),
