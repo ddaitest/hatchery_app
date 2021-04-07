@@ -13,6 +13,44 @@ Future compressionImage(filePath) async {
   return compressedFile.path;
 }
 
+class SP {
+  static late  SharedPreferences sp;
+
+  init() async {
+    sp = await SharedPreferences.getInstance();
+  }
+
+  static set(String key, dynamic data) {
+    switch (data.runtimeType) {
+      case String:
+        sp.setString(key, data);
+        break;
+      case bool:
+        sp.setBool(key, data);
+        break;
+      case int:
+        sp.setInt(key, data);
+        break;
+      case double:
+        sp.setDouble(key, data);
+        break;
+      case List:
+        sp.setStringList(key, data);
+        break;
+    }
+  }
+
+  static getString(String key) => sp.getString(key);
+
+  static getBool(String key) => sp.getBool(key);
+
+  static getDouble(String key) => sp.getDouble(key);
+
+  static getInt(String key) => sp.getInt(key);
+
+  static getStringList(String key) => sp.getStringList(key);
+}
+
 sharedAddAndUpdate(String key, Object dataType, Object data) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   switch (dataType) {
@@ -37,7 +75,7 @@ sharedAddAndUpdate(String key, Object dataType, Object data) async {
   }
 }
 
-Future<Object> sharedGetData(String key) async {
+Future<Object?> sharedGetData(String key) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   return sharedPreferences.get(key);
 }

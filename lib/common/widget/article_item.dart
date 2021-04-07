@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class ArticleItem extends StatelessWidget {
-  final ArticleDataInfo article;
+  final Article article;
   final int loadingStatus;
   final Function onTap;
 
@@ -38,7 +39,7 @@ class ArticleItem extends StatelessWidget {
       width: 275.0.w,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
-        leading: _imageView(article.avatar),
+        leading: _imageView(article.image),
         title: loadingStatus == 1
             ? Text(
                 article.title,
@@ -49,7 +50,7 @@ class ArticleItem extends StatelessWidget {
                     fontSize: 16, color: Color.fromRGBO(51, 51, 51, 1)),
               )
             : SkeletonAnimation(
-                shimmerColor: Colors.grey[400],
+                shimmerColor: Colors.grey[400]!,
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
                   // width: 200.0.w,
@@ -63,7 +64,7 @@ class ArticleItem extends StatelessWidget {
               ),
         subtitle: loadingStatus == 1
             ? Text(
-                article.contentsShort,
+                article.summary,
                 textAlign: TextAlign.left,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -71,7 +72,7 @@ class ArticleItem extends StatelessWidget {
                     fontSize: 14, color: Color.fromRGBO(155, 155, 155, 1)),
               )
             : SkeletonAnimation(
-                shimmerColor: Colors.grey[400],
+                shimmerColor: Colors.grey[400]!,
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
                   // width: 100.0.w,
@@ -113,7 +114,7 @@ class ArticleItem extends StatelessWidget {
                   Icon(Icons.image_not_supported_outlined),
             ))
         : SkeletonAnimation(
-            shimmerColor: Colors.grey[400],
+            shimmerColor: Colors.grey[9999]!,
             borderRadius: BorderRadius.circular(20),
             child: Container(
               width: 70.0.w,

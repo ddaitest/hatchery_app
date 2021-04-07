@@ -23,7 +23,7 @@ class SplashPage extends StatelessWidget {
           return false;
         },
         child: Selector(
-          builder: (BuildContext context, int value, Widget child) {
+          builder: (BuildContext context, int? value, Widget? child) {
             if (value == null) {
               return _fullScreenBackgroundView();
             } else if (value == 1) {
@@ -81,7 +81,7 @@ class SplashPage extends StatelessWidget {
   }
 
   Widget _skipBtnView() {
-    return Selector(builder: (BuildContext context, int value, Widget child) {
+    return Selector(builder: (BuildContext context, int value, Widget? child) {
       print('DEBUG=> countdownTime 重绘了。。。。。。。。。。');
       return Text("跳过 ${value.toString()}");
     }, selector: (BuildContext context, SplashManager splashManager) {

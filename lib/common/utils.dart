@@ -69,14 +69,14 @@ getRoundIcon(IconData icon) {
   );
 }
 
-Widget getAvatar(String url, {int size}) {
+Widget getAvatar(String url, {int? size}) {
   return Container(
     width: 36,
     height: 36,
     child: CachedNetworkImage(
       imageUrl: url,
-      height: size ?? 22,
-      width: size ?? 22,
+      height: (size ?? 22).toDouble(),
+      width: (size ?? 22).toDouble(),
       color: Colors.white,
     ),
     decoration: BoxDecoration(
@@ -87,7 +87,7 @@ Widget getAvatar(String url, {int size}) {
   );
 }
 
-Widget getMainIcon(int publishType, {int size}) {
+Widget getMainIcon(int publishType, {int? size}) {
   if (publishType != 1) {
     return Container(
       width: 36,
@@ -125,7 +125,8 @@ Widget getMainIcon(int publishType, {int size}) {
 int compareVersion(String a, String b) {
   var as = a.split(".").map((string) => int.tryParse(string));
   var bs = b.split(".").map((string) => int.tryParse(string));
-  int x, y;
+  int? x;
+  int? y;
   for (var i = 0; i < as.length; i++) {
     x = as.elementAt(i);
     y = bs.elementAt(i);
@@ -133,7 +134,7 @@ int compareVersion(String a, String b) {
       break;
     }
   }
-  return x - y;
+  return (x ?? 0) - (y ?? 0);
 }
 
 ///获取升级和弹窗广告数据
@@ -166,7 +167,8 @@ enum DialogDemoAction {
   agree,
 }
 
-Future<DialogDemoAction> showLoadingDialog(BuildContext context, String word) {
+Future<DialogDemoAction?>? showLoadingDialog(
+    BuildContext context, String word) {
   return showDialog<DialogDemoAction>(
       context: context,
       barrierDismissible: false,

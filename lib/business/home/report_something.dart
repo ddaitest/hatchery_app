@@ -14,10 +14,10 @@ class ReportSomethingPage extends StatefulWidget {
 }
 
 class ReportSomethingState extends State<ReportSomethingPage> {
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  String inputValue;
-  String inputPhoneNumberValue;
-  String imageUrl;
+  final GlobalKey<FormState> _fromkey = GlobalKey<FormState>();
+  String inputValue = "";
+  String inputPhoneNumberValue = "";
+  String imageUrl = "";
 
   @override
   void initState() {
@@ -58,29 +58,35 @@ class ReportSomethingState extends State<ReportSomethingPage> {
   Future getImageByGallery() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    File _image = File(pickedFile.path);
-    print('LC->image.lengthSync()###${_image.lengthSync()}');
-    if (_image.lengthSync() > 2080000) {
-      compressionImage(pickedFile.path).then((value) {
-        ReportStManager().uploadReportStImage(value).then((info) {
+    if (pickedFile != null) {
+      File _image = File(pickedFile.path);
+      print('LC->image.lengthSync()###${_image.lengthSync()}');
+      if (_image.lengthSync() > 2080000) {
+        compressionImage(pickedFile.path).then((value) {
+          ReportStManager().uploadReportStImage(value).then((info) {
+            setState(() {
+              imageUrl = info.toString();
+            });
+          });
+        });
+      } else {
+        ReportStManager().uploadReportStImage(pickedFile.path).then((info) {
           setState(() {
             imageUrl = info.toString();
           });
         });
-      });
-    } else {
-      ReportStManager().uploadReportStImage(pickedFile.path).then((info) {
-        setState(() {
-          imageUrl = info.toString();
-        });
-      });
+      }
     }
   }
 
   Future getImageByCamera() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.camera);
+    if (pickedFile == null) {
+      return null;
+    }
     File _image = File(pickedFile.path);
+
     if (_image.lengthSync() > 2080000) {
       compressionImage(_image.path).then((value) {
         ReportStManager().uploadReportStImage(value).then((info) {
@@ -98,11 +104,15 @@ class ReportSomethingState extends State<ReportSomethingPage> {
     }
   }
 
-  void showActionSheet({BuildContext context, Widget child}) {
+  void showActionSheet({BuildContext? context, Widget? child}) {
+    if (context == null || child == null) {
+      return;
+    }
+
     showCupertinoModalPopup<String>(
       context: context,
       builder: (BuildContext context) => child,
-    ).then((String value) {
+    ).then((String? value) {
       if (value != null) {
         if (value == "Camera") {
           getImageByCamera();
@@ -145,8 +155,8 @@ class ReportSomethingState extends State<ReportSomethingPage> {
 
   _bodyView(manager) {
     return Consumer<ReportStManager>(
-        builder: (body, manager, bodychild) => Form(
-            key: _formkey,
+        builder: (body, manager, bodyChild) => Form(
+            key: _fromkey,
             child: SingleChildScrollView(
               child: Column(children: <Widget>[
                 Container(
@@ -161,11 +171,11 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                       hintText: '请输入遇到的问题。',
                     ),
                     // ignore: missing_return
-                    validator: (Value) {
-                      if (Value.isEmpty) {
+                    validator: (value) {
+                      if (value!.isEmpty) {
                         return '请输入内容';
                       } else {
-                        inputValue = Value;
+                        inputValue = value;
                       }
                     },
                   ),
@@ -232,7 +242,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                           // ignore: missing_return
                           validator: (phoneValue) {
                             RegExp reg = RegExp(r'^\d{11}$');
-                            if (!reg.hasMatch(phoneValue)) {
+                            if (!reg.hasMatch(phoneValue!)) {
                               return '请输入正确的手机号码';
                             }
                             if (phoneValue.isEmpty) {
@@ -242,7 +252,8 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                             }
                           },
                           inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly, //只输入数字
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            //只输入数字
                           ],
                           onSaved: (value) {
                             value = inputPhoneNumberValue;
@@ -269,7 +280,7 @@ class ReportSomethingState extends State<ReportSomethingPage> {
                       style: TextStyle(fontSize: 16),
                     ),
                     onPressed: () {
-                      if (_formkey.currentState.validate()) {
+                      if (_fromkey.currentState != null && _fromkey.currentState!.validate()) {
                         manager
                             .postReportStData(inputValue ?? null,
                                 inputPhoneNumberValue ?? null, imageUrl ?? null)

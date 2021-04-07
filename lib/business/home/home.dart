@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/backgourds.dart';
 import 'package:hatchery/common/widget/post_item.dart';
@@ -56,7 +57,7 @@ class HomeView extends StatelessWidget {
         autoplay: true,
         itemBuilder: (BuildContext context, int index) {
           ImageProvider imageProvider;
-          String imageURL = banners[index].imgUrl;
+          String imageURL = banners[index].image;
           if (imageURL.startsWith("http")) {
             imageProvider = CachedNetworkImageProvider(imageURL);
           } else {
@@ -161,9 +162,9 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _articlesView(_homeManager) {
-    return Selector<HomeManager, UnmodifiableListView<ArticleDataInfo>>(
+    return Selector<HomeManager, UnmodifiableListView<Article>>(
       builder: (BuildContext context,
-          UnmodifiableListView<ArticleDataInfo> value, Widget child) {
+          UnmodifiableListView<Article> value, Widget? child) {
         return Container(
           // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
           child: ListView.builder(
@@ -186,7 +187,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Future _onRefresh() {}
+  Future? _onRefresh() {}
 
-  Future _onLoadMore() {}
+  Future? _onLoadMore() {}
 }

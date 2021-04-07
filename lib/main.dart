@@ -3,14 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:hatchery/business/splash/splash.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hatchery/routers.dart';
 import 'configs.dart';
 import 'business/main_tab.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
-
-import 'routers.dart';
 
 void main() async {
   FlutterBugly.postCatchedException(() {

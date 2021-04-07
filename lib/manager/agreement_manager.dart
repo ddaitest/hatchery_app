@@ -18,6 +18,7 @@ import 'dart:collection';
 import 'package:hatchery/common/tools.dart';
 
 class AgreementManager extends ChangeNotifier {
+  final String KEY_AGREEMENT = 'agreedAgreement';
   /// 是否显示 协议确认UI
   bool _agreedAgreement = true;
 
@@ -29,17 +30,22 @@ class AgreementManager extends ChangeNotifier {
 
   /// 获取协议是否同意标识
   _getLocalData(context) {
-    sharedGetData('agreedAgreement').then((sp) {
-      _agreedAgreement = sp ?? false;
-      if (_agreedAgreement) {
-        Navigator.pushReplacement(context, AnimationRoute(SplashPage(), 3));
-      }
-    });
+    // sharedGetData('agreedAgreement').then((sp) {
+    //   _agreedAgreement = sp ?? false;
+    //   if (_agreedAgreement) {
+    //     Navigator.pushReplacement(context, AnimationRoute(SplashPage(), 3));
+    //   }
+    // });
+    _agreedAgreement = SP.getBool(KEY_AGREEMENT)??false;
+    if (_agreedAgreement) {
+      Navigator.pushReplacement(context, AnimationRoute(SplashPage(), 3));
+    }
   }
 
   /// 点击同意协议按钮
   void clickAgreeAgreementButton(BuildContext context) {
-    sharedAddAndUpdate('agreedAgreement', bool, true); // 设置协议是否同意标识
+    // sharedAddAndUpdate('agreedAgreement', bool, true); // 设置协议是否同意标识
+    SP.set(KEY_AGREEMENT, true);
     Navigator.pushReplacementNamed(context, '/');
   }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/api.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +9,9 @@ import 'dart:collection';
 import 'package:hatchery/configs.dart';
 
 class ServiceManager extends ChangeNotifier {
-  List<ArticleDataInfo> _subjectLists = [];
+  List<Article> _subjectLists = [];
 
-  UnmodifiableListView<ArticleDataInfo> get subjectLists =>
+  UnmodifiableListView<Article> get subjectLists =>
       UnmodifiableListView(_subjectLists);
 
   List<SerivceTopInfo> _topList = [];
@@ -53,7 +54,7 @@ class ServiceManager extends ChangeNotifier {
     });
     queryServiceData().then((info) {
       for (var x in info) {
-        add(ArticleDataInfo.fromJson(x));
+        add(Article.fromJson(x));
       }
       notifyListeners();
     });
@@ -65,7 +66,7 @@ class ServiceManager extends ChangeNotifier {
       await Future.delayed(Duration(seconds: 0), () {
         moreQueryServiceData().then((info) {
           for (var x in info) {
-            add(ArticleDataInfo.fromJson(x));
+            add(Article.fromJson(x));
           }
           isLoading = false;
           notifyListeners();
@@ -125,7 +126,7 @@ class ServiceManager extends ChangeNotifier {
     }
   }
 
-  void add(ArticleDataInfo item) {
+  void add(Article item) {
     _subjectLists.add(item);
   }
 

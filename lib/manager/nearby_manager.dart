@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/api.dart';
 import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,11 @@ import 'dart:collection';
 import 'package:hatchery/configs.dart';
 
 class NearbyManager extends ChangeNotifier {
-  List<ArticleDataInfo> _subjectLists = [];
+  List<Article> _subjectLists = [];
 
   List<BannerInfo> _bannerLists = [];
 
-  UnmodifiableListView<ArticleDataInfo> get subjectLists =>
+  UnmodifiableListView<Article> get subjectLists =>
       UnmodifiableListView(_subjectLists);
 
   UnmodifiableListView<BannerInfo> get bannerLists =>
@@ -35,8 +36,8 @@ class NearbyManager extends ChangeNotifier {
     "category": NEARBY_CATEGORY_ID,
   };
 
-  String result;
-  Map parsed;
+  late String result;
+  late Map parsed;
   bool isLoading = false;
 
   NearbyManager() {
@@ -48,7 +49,7 @@ class NearbyManager extends ChangeNotifier {
     });
     queryNearbyData().then((info) {
       for (var x in info) {
-        add(ArticleDataInfo.fromJson(x));
+        add(Article.fromJson(x));
       }
       notifyListeners();
     });
@@ -60,7 +61,7 @@ class NearbyManager extends ChangeNotifier {
       await Future.delayed(Duration(seconds: 1), () {
         moreQueryServiceData().then((info) {
           for (var x in info) {
-            add(ArticleDataInfo.fromJson(x));
+            add(Article.fromJson(x));
           }
           isLoading = false;
           notifyListeners();
@@ -114,7 +115,7 @@ class NearbyManager extends ChangeNotifier {
     }
   }
 
-  void add(ArticleDataInfo item) {
+  void add(Article item) {
     _subjectLists.add(item);
   }
 

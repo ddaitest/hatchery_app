@@ -66,12 +66,12 @@ class UpgradeManager {
 
   ///获取本地路径
   Future _localPath() async {
-    try {
-      var appDocDir = (await getExternalStorageDirectory()).path;
-      return appDocDir;
-    } catch (err) {
-      print(err);
-    }
+    // try {
+    //   var appDocDir = (await getExternalStorageDirectory()).path;
+    //   return appDocDir;
+    // } catch (err) {
+    //   print(err);
+    // }
   }
 
   ///ios跳转至Appstore
@@ -133,9 +133,9 @@ class UpgradeManager {
     }
   }
 
-  Future<void> upgradeCard(context, apkPath) async {
+  upgradeCard(context, apkPath) async {
     Timer(const Duration(seconds: UPGRADE_LOADING_TIME), () {
-      return showDialog<void>(
+      showDialog<void>(
           context: context,
           barrierDismissible: false, // user must tap button!
           builder: (BuildContext context) {
@@ -174,8 +174,7 @@ class UpgradeManager {
                       },
                     ),
                   ],
-                ) ??
-                false;
+                );
           });
     });
   }

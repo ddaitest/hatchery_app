@@ -5,17 +5,17 @@ import '../theme.dart';
 class InfoView extends StatelessWidget {
   final IconData icon;
   final Color color;
-  final String info;
-  final TextStyle style;
-  final List<Widget> childs;
+  final String? info;
+  final TextStyle? style;
+  final List<Widget>? children;
 
   const InfoView({
-    Key key,
-    @required this.icon,
-    @required this.color,
-    @required this.info,
-    this.style,
-    this.childs,
+    Key? key,
+    required this.icon,
+    required this.color,
+    required this.info,
+    required this.style,
+    required this.children,
   }) : super(key: key);
 
   @override
@@ -27,10 +27,10 @@ class InfoView extends StatelessWidget {
         info == null
             ? SizedBox.shrink()
             : Expanded(
-                child: Text(info,
+                child: Text(info!,
                     style: style ?? textStyleInfo, textAlign: TextAlign.left),
               ),
-      ]..addAll(childs ?? []),
+      ]..addAll(children ?? []),
     );
   }
 }

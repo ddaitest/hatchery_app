@@ -86,7 +86,7 @@ InputDecoration getDecoration(String label) {
     focusedBorder:
         UnderlineInputBorder(borderSide: BorderSide(color: colorGrey)),
     enabledBorder:
-        UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[200])),
+        UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[200]!)),
     counterText: '',
   );
 }
@@ -98,7 +98,7 @@ BoxDecoration getContainerBg(double radius) {
       color: Colors.white,
       boxShadow: [
         BoxShadow(
-          color: Colors.grey[200],
+          color: Colors.grey[200]!,
           blurRadius: 10.0,
           spreadRadius: 5.0,
         )
@@ -106,14 +106,14 @@ BoxDecoration getContainerBg(double radius) {
 }
 
 ///列表中 每个ITEM Container 背景的样式
-BoxDecoration getContainerBg2({double radius}) {
+BoxDecoration getContainerBg2({double? radius}) {
   return BoxDecoration(
       borderRadius: BorderRadius.circular(radius ?? 10.0),
-      border: Border.all(color: Colors.grey[400], width: 0.5),
+      border: Border.all(color: Colors.grey[400]!, width: 0.5),
       color: Colors.white,
       boxShadow: [
         BoxShadow(
-          color: Colors.grey[200],
+          color: Colors.grey[200]!,
           blurRadius: 10.0,
         )
       ]);
@@ -122,7 +122,7 @@ BoxDecoration getContainerBg2({double radius}) {
 const PADDING = SizedBox(height: 8);
 const PADDING_H = SizedBox(width: 8);
 
-MaterialButton getButtonBig(String text, {VoidCallback onPressed}) {
+MaterialButton getButtonBig(String text, {VoidCallback? onPressed}) {
   return MaterialButton(
     height: 55,
     elevation: 4,

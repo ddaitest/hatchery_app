@@ -5,7 +5,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class WebViewPage extends StatefulWidget {
   final String url;
-  final String pathName;
+  final String? pathName;
+
   WebViewPage(this.url, this.pathName);
 
   @override
@@ -13,7 +14,7 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  InAppWebViewController webViewController;
+  late InAppWebViewController webViewController;
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
       crossPlatform: InAppWebViewOptions(
         useShouldOverrideUrlLoading: true,
@@ -32,10 +33,11 @@ class _WebViewPageState extends State<WebViewPage> {
   String _title = "加载中...";
 
   gotoHomePage() async {
-    if (widget.pathName == null) {
+    String? pn = widget.pathName;
+    if (pn == null) {
       Navigator.pop(context);
     } else {
-      Navigator.of(context).pushReplacementNamed(widget.pathName);
+      Navigator.of(context).pushReplacementNamed(pn);
     }
   }
 
@@ -61,9 +63,9 @@ class _WebViewPageState extends State<WebViewPage> {
         backgroundColor: Colors.transparent,
       ),
       body: WillPopScope(
-        // ignore: missing_return
-        onWillPop: () {
+        onWillPop: () async {
           gotoHomePage();
+          return false; //如果返回的Future最终值为false时，则当前路由不出栈(不会返回)；最终值为true时，当前路由出栈退出。
         },
         child: InAppWebView(
           initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
@@ -92,7 +94,7 @@ class _WebViewPageState extends State<WebViewPage> {
               "data",
               "javascript",
               "about"
-            ].contains(uri.scheme)) {
+            ].contains(uri!.scheme)) {
               if (await canLaunch(url)) {
                 // Launch the App
                 await launch(
@@ -109,7 +111,9 @@ class _WebViewPageState extends State<WebViewPage> {
               this.url = url.toString();
               urlController.text = this.url;
               controller.getTitle().then((value) {
-                this._title = value;
+                if (value != null) {
+                  this._title = value;
+                }
               });
             });
           },

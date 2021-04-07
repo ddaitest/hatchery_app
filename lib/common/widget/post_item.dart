@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/DateUtil.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:hatchery/manager/beans.dart';
 
 class NoticeItem extends StatelessWidget {
   final Notice notice;
@@ -22,7 +22,7 @@ class NoticeItem extends StatelessWidget {
               children: <Widget>[
                 Text(notice.title, maxLines: 2, style: Flavors.styles.content),
                 Expanded(child: Container(), flex: 1),
-                Text(DateUtil.getDateStrByMs(notice.updateTime,format: DateFormat.MONTH_DAY_HOUR_MINUTE),
+                Text(DateUtil.getDateStrByTimeStr(notice.updateTime,format: DateFormat.MONTH_DAY_HOUR_MINUTE),
                     style: Flavors.styles.content),
               ],
             ),

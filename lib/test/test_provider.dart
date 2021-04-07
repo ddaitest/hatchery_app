@@ -25,7 +25,7 @@ class TestView extends StatelessWidget {
           RaisedButton(child: Text("ADD X"), onPressed: () => manager.testX()),
           //Selector 只监听，selector 条件过滤的改变。
           Selector<TestManager, int>(
-            builder: (BuildContext context, int value, Widget child) =>
+            builder: (BuildContext context, int value, Widget? child) =>
                 _showY(value),
             selector: (BuildContext context, TestManager manager) {
               return manager.y;

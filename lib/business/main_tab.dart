@@ -20,7 +20,8 @@ class MainTabState extends State<MainTab> {
   List<String> bottomBarTitles = ['首页', '服务', '周边'];
 
   List<Widget> _tabBodies = [HomePage(), ServiceTab(), NearbyTab()];
-  PageController _pageController;
+  late PageController _pageController;
+
   @override
   void initState() {
     _pageController =
@@ -87,9 +88,10 @@ class MainTabState extends State<MainTab> {
     );
   }
 
-  Future<Null> _onWillPop() {
+  Future<bool> _onWillPop() async {
     if (nextKickBackExitApp) {
-      exitApp();
+      // exitApp();
+      return true;
     } else {
       showToast('再按一次退出APP');
       nextKickBackExitApp = true;
@@ -97,7 +99,7 @@ class MainTabState extends State<MainTab> {
         const Duration(seconds: 2),
         () => nextKickBackExitApp = false,
       );
-      return Future<bool>.value(false);
+      return false;
     }
   }
 

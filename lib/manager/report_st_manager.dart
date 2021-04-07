@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hatchery/configs.dart';
 
 class ReportStManager extends ChangeNotifier {
-  String result;
+  String? result;
   var parsed;
 
   ///报事报修发送
