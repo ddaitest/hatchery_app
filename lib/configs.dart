@@ -37,7 +37,7 @@ const String AMAP_KEY = "30a97518348a9b6b8cc652b2dbabe3a2";
 const String BASIC_AUTH =
     'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6IjM2ZmY2NjJmLTMwNDEtNWMxMC04YmRlLTY1ZTZmYjg2NTIzYiIsImV4cCI6MTYxNzg5MDkzM30.6-zJZ5Eoq83mx1KAdWs6Fr6gm4wkdXV49tlqKAKJOrU';
 
-const String Agreement_DATA_KEY = 'agreementDataKey';
+const String Agreement_DATA_KEY = 'agreeAgreementKey111';
 
 const String Agreement_text =
     '欢迎使用本软件！\n在您使用本软件前，请您认真阅读并同意用户协议和隐私政策，以了解我们的服务内容和我们在收集和使用您相关个人信息时的处理规则。我们将严格按照用户协议和隐私政策为您提供服务，保护您的个人信息。';

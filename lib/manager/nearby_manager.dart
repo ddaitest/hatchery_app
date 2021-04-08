@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/api.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
 import 'package:hatchery/configs.dart';

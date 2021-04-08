@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hatchery/api/entity.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'dart:collection';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
@@ -40,7 +39,6 @@ class AppManager extends ChangeNotifier {
     ///todo 先关闭
     // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
     // initPlatformState();
-    SP().init();
   }
 
   Future<void> initPlatformState() async {

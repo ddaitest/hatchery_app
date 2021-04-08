@@ -28,7 +28,7 @@ class _WebViewPageState extends State<WebViewPage> {
       ));
   String url = "";
   double progress = 0;
-  PullToRefreshController pullToRefreshController;
+  PullToRefreshController pullToRefreshController = PullToRefreshController();
   final urlController = TextEditingController();
   String _title = "加载中...";
 

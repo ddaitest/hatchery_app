@@ -18,8 +18,8 @@ class ReportStManager extends ChangeNotifier {
       "contact": contact,
       "img_url": imgUrl
     });
-    result = response.data;
-    parsed = jsonDecode(result);
+    result = response.data = '';
+    parsed = jsonDecode(result!);
     print('code ${parsed['code']}');
     if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
       return true;
@@ -34,8 +34,8 @@ class ReportStManager extends ChangeNotifier {
       "file": await MultipartFile.fromFile(imagePath, filename: 'file.jpg')
     });
     Response response = await ApiForReportSt.uploadReportImage(formdata);
-    result = response.data;
-    parsed = jsonDecode(result);
+    result = response.data ?? '';
+    parsed = jsonDecode(result!);
     print('result $parsed');
     if (result != null && parsed['code'] == 200 && parsed['info'] == 'OK') {
       return parsed['result'];

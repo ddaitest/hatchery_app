@@ -14,9 +14,9 @@ Future compressionImage(filePath) async {
 }
 
 class SP {
-  static late  SharedPreferences sp;
+  static late SharedPreferences sp;
 
-  init() async {
+  Future init() async {
     sp = await SharedPreferences.getInstance();
   }
 
@@ -51,7 +51,7 @@ class SP {
   static getStringList(String key) => sp.getStringList(key);
 }
 
-sharedAddAndUpdate(String key, Object dataType, Object data) async {
+sharedAddAndUpdate(String key, Object dataType, var data) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   switch (dataType) {
     case bool:

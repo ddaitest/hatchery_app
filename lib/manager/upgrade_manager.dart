@@ -4,9 +4,9 @@ import 'package:hatchery/common/api.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:package_info/package_info.dart';
@@ -14,9 +14,9 @@ import 'package:hatchery/configs.dart';
 import 'package:flutter/cupertino.dart';
 
 class UpgradeManager {
-  List<UpdateInfo> _updateLists = [];
-  double finalCount;
-  String result;
+  List _updateLists = [];
+  double finalCount = 0.0;
+  String result = '';
   var parsed;
 
   double get FinalCount => finalCount;
@@ -25,36 +25,36 @@ class UpgradeManager {
   isShowUpgradeCard(context) {
     if (Platform.isAndroid) {
       sharedGetData('showUpgradeCard').then((result) {
-        bool showedCard = result ?? false;
+        Object showedCard = result ?? false;
         print('##############  $showedCard');
-        if (showedCard == false) {
-          _queryUpdateData().then((info) {
-            _checkVersion().then((status) {
-              if (status) {
-                _downloadFile(_updateLists[0].url, context);
-              }
-            });
-          });
+        if (result == false) {
+          // _queryUpdateData().then((info) {
+          //   _checkVersion().then((status) {
+          //     if (status) {
+          //       _downloadFile(_updateLists[0].url, context);
+          //     }
+          //   });
+          // });
         }
       });
     }
   }
 
-  Future _queryUpdateData() async {
-    Response response = await Api.queryUpgradeList();
-    result = response.data;
-    parsed = jsonDecode(result);
-    var resultData = parsed['result'] ?? null;
-    if (parsed['result']['verson'] != null &&
-        parsed['code'] == 200 &&
-        parsed['info'] == 'OK') {
-      add(UpdateInfo.fromJson(resultData));
-    }
-  }
-
-  void add(UpdateInfo item) {
-    _updateLists.add(item);
-  }
+  // Future _queryUpdateData() async {
+  //   Response response = await Api.queryUpgradeList();
+  //   result = response.data;
+  //   parsed = jsonDecode(result);
+  //   var resultData = parsed['result'] ?? null;
+  //   if (parsed['result']['verson'] != null &&
+  //       parsed['code'] == 200 &&
+  //       parsed['info'] == 'OK') {
+  //     add(UpdateInfo.fromJson(resultData));
+  //   }
+  // }
+  //
+  // void add(UpdateInfo item) {
+  //   _updateLists.add(item);
+  // }
 
   ///下载策略
 //  Future _downloadApp() async {
@@ -122,16 +122,16 @@ class UpgradeManager {
     });
   }
 
-  Future _checkVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    int localVersionCode = int.parse(packageInfo.buildNumber) ?? 1;
-    int apiVc = int.parse(_updateLists[0].version);
-    if (localVersionCode < apiVc) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // Future _checkVersion() async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  //   int localVersionCode = int.parse(packageInfo.buildNumber) ?? 1;
+  //   int apiVc = int.parse(_updateLists[0].version);
+  //   if (localVersionCode < apiVc) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   upgradeCard(context, apkPath) async {
     Timer(const Duration(seconds: UPGRADE_LOADING_TIME), () {
@@ -140,41 +140,39 @@ class UpgradeManager {
           barrierDismissible: false, // user must tap button!
           builder: (BuildContext context) {
             return AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: Text(
-                    "发现新版本!",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
+              backgroundColor: Colors.white,
+              title: Text(
+                "发现新版本!",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              content: SingleChildScrollView(
+                child: Text(_updateLists[0]?.introduction ?? "修复bug"),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(
+                    '取消',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  content: SingleChildScrollView(
-                    child: Text(_updateLists[0]?.introduction ?? "修复bug"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text(
+                    '更新',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text(
-                        '取消',
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    FlatButton(
-                      child: Text(
-                        '更新',
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () {
-                        OpenFile.open('$apkPath' + '/hatchery.apk');
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
+                  onPressed: () {
+                    OpenFile.open('$apkPath' + '/hatchery.apk');
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
           });
     });
   }

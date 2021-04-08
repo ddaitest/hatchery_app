@@ -8,7 +8,6 @@ import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/backgourds.dart';
 import 'package:hatchery/common/widget/post_item.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:hatchery/common/exts.dart';
 import 'dart:math' as math;
@@ -98,7 +97,7 @@ class HomeView extends StatelessWidget {
 
   Widget _moreServiceItem(String imagePath, String text) {
     return Container(
-      height: 50.0.h,
+      // height: 50.0.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -163,8 +162,8 @@ class HomeView extends StatelessWidget {
 
   Widget _articlesView(_homeManager) {
     return Selector<HomeManager, UnmodifiableListView<Article>>(
-      builder: (BuildContext context,
-          UnmodifiableListView<Article> value, Widget? child) {
+      builder: (BuildContext context, UnmodifiableListView<Article> value,
+          Widget? child) {
         return Container(
           // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
           child: ListView.builder(

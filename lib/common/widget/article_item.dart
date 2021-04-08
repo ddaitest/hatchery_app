@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
-import 'package:hatchery/manager/beans.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class ArticleItem extends StatelessWidget {
@@ -114,7 +113,7 @@ class ArticleItem extends StatelessWidget {
                   Icon(Icons.image_not_supported_outlined),
             ))
         : SkeletonAnimation(
-            shimmerColor: Colors.grey[9999]!,
+            shimmerColor: Colors.grey[400]!,
             borderRadius: BorderRadius.circular(20),
             child: Container(
               width: 70.0.w,

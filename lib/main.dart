@@ -6,20 +6,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'configs.dart';
 import 'business/main_tab.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:hatchery/common/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
 
-void main() async {
-  FlutterBugly.postCatchedException(() {
-    runApp(
-      ChangeNotifierProvider<AppManager>(
-        create: (_) => AppManager(),
-        child: Consumer<AppManager>(
-          builder: (context, manager, child) => MyApp(),
-        ), //添加全局Manager
-      ),
-    );
-  });
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SP().init().then(
+        (value) => FlutterBugly.postCatchedException(() {
+          runApp(
+            ChangeNotifierProvider<AppManager>(
+              create: (_) => AppManager(),
+              child: Consumer<AppManager>(
+                builder: (context, manager, child) => MyApp(),
+              ), //添加全局Manager
+            ),
+          );
+        }),
+      );
 }
 
 class MyApp extends StatelessWidget {

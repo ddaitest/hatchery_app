@@ -125,12 +125,13 @@ class BannerInfo {
   BannerInfo(
       this.id, this.image, this.redirectUrl, this.updateTime, this.createTime);
 
-  factory BannerInfo.fromJson(Map<String, dynamic> json) => _$BannerInfoFromJson(json);
+  factory BannerInfo.fromJson(Map<String, dynamic> json) =>
+      _$BannerInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$BannerInfoToJson(this);
 }
 
-/// Banner
+/// Advertising
 @JsonSerializable()
 class Advertising {
   String id = "";

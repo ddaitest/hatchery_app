@@ -42,9 +42,7 @@ class ServiceTabState extends State<ServiceTab>
     return Consumer<ServiceManager>(builder: (context, manager, child) {
       manager.scrollController.addListener(() {
         if (manager.scrollController.position.pixels ==
-            manager.scrollController.position.maxScrollExtent) {
-          manager.getMore();
-        }
+            manager.scrollController.position.maxScrollExtent) {}
       });
       manager.topShow.clear();
       return RefreshIndicator(

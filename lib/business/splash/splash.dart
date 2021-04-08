@@ -18,25 +18,21 @@ class SplashPage extends StatelessWidget {
   }
 
   _splashPage(BuildContext context, manager) {
-    return WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
-        child: Selector(
-          builder: (BuildContext context, int? value, Widget? child) {
-            if (value == null) {
-              return _fullScreenBackgroundView();
-            } else if (value == 1) {
-              // UmengCommonSdk.onPageStart("splashView");
-              return _adView(context, manager);
-            } else {
-              return _agreementMainView(context, manager);
-            }
-          },
-          selector: (BuildContext context, SplashManager splashManager) {
-            return splashManager.agreementData;
-          },
-        ));
+    return Selector(
+      builder: (BuildContext context, bool? value, _) {
+        if (value == null) {
+          return _fullScreenBackgroundView();
+        } else if (value) {
+          // UmengCommonSdk.onPageStart("splashView");
+          return _adView(context, manager);
+        } else {
+          return _agreementMainView(context, manager);
+        }
+      },
+      selector: (BuildContext context, SplashManager splashManager) {
+        return splashManager.isAgreeAgreementValue;
+      },
+    );
   }
 
   Widget _adView(context, manager) {
