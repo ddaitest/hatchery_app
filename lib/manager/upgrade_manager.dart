@@ -22,23 +22,23 @@ class UpgradeManager {
   double get FinalCount => finalCount;
 
   ///先判断app生命周期内是否弹过
-  isShowUpgradeCard(context) {
-    if (Platform.isAndroid) {
-      sharedGetData('showUpgradeCard').then((result) {
-        Object showedCard = result ?? false;
-        print('##############  $showedCard');
-        if (result == false) {
-          // _queryUpdateData().then((info) {
-          //   _checkVersion().then((status) {
-          //     if (status) {
-          //       _downloadFile(_updateLists[0].url, context);
-          //     }
-          //   });
-          // });
-        }
-      });
-    }
-  }
+  // isShowUpgradeCard(context) {
+  //   if (Platform.isAndroid) {
+  // sharedGetData('showUpgradeCard').then((result) {
+  //   Object showedCard = result ?? false;
+  //   print('##############  $showedCard');
+  //   if (result == false) {
+  // _queryUpdateData().then((info) {
+  //   _checkVersion().then((status) {
+  //     if (status) {
+  //       _downloadFile(_updateLists[0].url, context);
+  //     }
+  //   });
+  // });
+  //       }
+  //     });
+  //   }
+  // }
 
   // Future _queryUpdateData() async {
   //   Response response = await Api.queryUpgradeList();
@@ -98,29 +98,29 @@ class UpgradeManager {
   }
 
   ///下载前需先拿到path
-  _downloadFile(urlPath, context) async {
-    await _requestPermission().then((result) {
-      sharedAddAndUpdate('showUpgradeCard', bool, true);
-      if (result) {
-        _localPath().then((info) async {
-          Dio dio = Dio();
-          try {
-            print('LC -> ' + '$info' + '/hatchery.apk');
-            await dio.download(urlPath, '$info' + '/hatchery.apk',
-                onReceiveProgress: (int count, int total) {
-              finalCount = (((count / total) * 100).toInt()).toDouble();
-
-              ///进度
-              print("$FinalCount%");
-            });
-            upgradeCard(context, info);
-          } on DioError catch (e) {
-            print('downloadFile error---------$e');
-          }
-        });
-      }
-    });
-  }
+  // _downloadFile(urlPath, context) async {
+  //   await _requestPermission().then((result) {
+  //     sharedAddAndUpdate('showUpgradeCard', bool, true);
+  //     if (result) {
+  //       _localPath().then((info) async {
+  //         Dio dio = Dio();
+  //         try {
+  //           print('LC -> ' + '$info' + '/hatchery.apk');
+  //           await dio.download(urlPath, '$info' + '/hatchery.apk',
+  //               onReceiveProgress: (int count, int total) {
+  //             finalCount = (((count / total) * 100).toInt()).toDouble();
+  //
+  //             ///进度
+  //             print("$FinalCount%");
+  //           });
+  //           upgradeCard(context, info);
+  //         } on DioError catch (e) {
+  //           print('downloadFile error---------$e');
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
   // Future _checkVersion() async {
   //   PackageInfo packageInfo = await PackageInfo.fromPlatform();

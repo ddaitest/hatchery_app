@@ -99,9 +99,13 @@ class HomeView extends StatelessWidget {
     return Container(
       // height: 50.0.h,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Image.asset(imagePath),
+          Image.asset(
+            imagePath,
+            height: 30.0.h,
+            width: 30.0.w,
+          ),
           Container(height: 10.0.h),
           Text(text,
               style: TextStyle(
@@ -157,7 +161,7 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 10.0),
         child: Text(text,
             style: TextStyle(
-                fontSize: 16.sp, color: Color.fromRGBO(51, 51, 51, 1))));
+                fontSize: 14.sp, color: Color.fromRGBO(51, 51, 51, 1))));
   }
 
   Widget _articlesView(_homeManager) {

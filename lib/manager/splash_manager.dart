@@ -34,20 +34,27 @@ class SplashManager extends ChangeNotifier {
   int _countdownTime = SPLASH_TIME;
 
   int get countdownTime => _countdownTime;
-  var parsed;
-  var newParsed;
-  var result;
-  var newResultData;
-  int? resultCode;
-  String? statesMessage;
-  String? _responseData;
+  String? _responseResult;
+  Map<dynamic, dynamic>? _finalParse;
+  String? _splashAdImageUrl;
+  String? _splashAdUrl;
 
   SplashManager(BuildContext context) {
-    _getLocalAgreeAgreementValue().then((value) {
-      if (value!) _startCountdown(context);
-    });
+    _getAdData();
+    _startCountdown(context);
     // sharedDeleteData('showUpgradeCard');
     // queryAdData();
+  }
+
+  _getAdData() {
+    _responseResult = SP.getString(AD_RESPONSE_KEY);
+    if (_responseResult != null) {
+      _finalParse = jsonDecode(_responseResult!);
+      print("DEBUG=> @@@@@${_finalParse!['open_ad']['ad_media']}");
+    } else {
+      _splashAdImageUrl = '';
+      _splashAdUrl = '';
+    }
   }
 
   /// UI动作 点击广告
@@ -63,27 +70,6 @@ class SplashManager extends ChangeNotifier {
     Navigator.pushReplacementNamed(context, '/');
   }
 
-  /// 点击"同意协议"按钮
-  void agree(BuildContext context) {
-    SP.set(Agreement_DATA_KEY, true); // 设置协议是否同意标识
-    Navigator.pushReplacementNamed(context, '/');
-  }
-
-  /// UI动作 同意协议
-  void agreementUrl(BuildContext context) {
-    Navigator.push(
-      context,
-      CupertinoPageRoute(builder: (context) => WebViewPage(AGREEMENT, null)),
-    );
-  }
-
-  /// 获取协议是否同意标识
-  Future<bool?> _getLocalAgreeAgreementValue() async {
-    _isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
-    print("DEBUG=> #### $_isAgreeAgreementValue");
-    return _isAgreeAgreementValue;
-  }
-
   /// 开屏倒计时
   Future _startCountdown(BuildContext context) async {
     final timeUp = (Timer timer) {
@@ -97,60 +83,6 @@ class SplashManager extends ChangeNotifier {
       }
     };
     _timer = Timer.periodic(Duration(seconds: 1), timeUp);
-  }
-
-  /// 获取开屏广告数据
-  // queryAdData() async {
-  //   Response response = await Api.querySplashList();
-  //   result = response.data;
-  //   sharedGetData('splashAd_json').then((info) {
-  //     _responseData = info ?? null;
-  //     if (_responseData != null) {
-  //       parsed = json.decode(_responseData);
-  //       var resultData = parsed['result'][0];
-  //       add(AdListInfo.fromJson(resultData));
-  //       newParsed = json.decode(result);
-  //       resultCode = newParsed['code'] ?? 0;
-  //       statesMessage = parsed['info'] ?? null;
-  //       var newResultData = newParsed['result'][0] ?? null;
-  //       if (resultCode == 200 &&
-  //           statesMessage == 'OK' &&
-  //           newResultData != null) {
-  //         print('LC resultData1-> $newResultData');
-  //         sharedAddAndUpdate('splashAd_json', String, result);
-  //       }
-  //     } else {
-  //       parsed = json.decode(result);
-  //       resultCode = parsed['code'] ?? 0;
-  //       statesMessage = parsed['info'] ?? null;
-  //       var newResultData = parsed['result'][0] ?? null;
-  //       if (resultCode == 200 &&
-  //           statesMessage == 'OK' &&
-  //           newResultData != null) {
-  //         print('LC resultData2-> $newResultData');
-  //         sharedAddAndUpdate('splashAd_json', String, result);
-  //         add(AdListInfo.fromJson(newResultData));
-  //       } else {
-  //         add(AdListInfo.fromJson(json.decode(_responseData)['result'][0]));
-  //       }
-  //     }
-  //   });
-  // }
-  //
-  // void add(AdListInfo item) {
-  //   _adLists.add(item);
-  //   notifyListeners();
-  // }
-
-  Future<void> exitApp() async {
-    if (Platform.isAndroid) {
-      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-    } else if (Platform.isIOS) {
-      exit(0);
-    } else {
-      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      exit(0);
-    }
   }
 
   @override

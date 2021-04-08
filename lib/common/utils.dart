@@ -30,6 +30,14 @@ Future<void> exitApp() async {
   }
 }
 
+callPhoneNum(String number) async {
+  if (await canLaunch("tel:${number}")) {
+    await launch("tel:${number}");
+  } else {
+    throw 'Could not launch $number';
+  }
+}
+
 Future<bool> isNetworkConnect() async {
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult != ConnectivityResult.none) {

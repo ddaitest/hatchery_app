@@ -60,26 +60,6 @@ class HomeManager extends ChangeNotifier {
 
   _loadBanner() {
     List<BannerInfo> info = <BannerInfo>[];
-    // info.add(BannerInfo(
-    //     id: "id",
-    //     imgUrl: "images/demo/banner_demo2.png",
-    //     webUrl: "http://baidu.com"));
-    // info.add(BannerInfo(
-    //     id: "id",
-    //     imgUrl: "images/demo/banner_demo3.jpg",
-    //     webUrl: "http://baidu.com"));
-    // info.add(BannerInfo(
-    //     id: "id",
-    //     imgUrl: "images/demo/banner_demo4.png",
-    //     webUrl: "http://baidu.com"));
-    // info.add(BannerInfo(
-    //     id: "id",
-    //     imgUrl: "images/demo/banner_demo5.jpg",
-    //     webUrl: "http://baidu.com"));
-    // info.add(BannerInfo(
-    //     id: "id",
-    //     imgUrl: "images/demo/banner_demo6.jpeg",
-    //     webUrl: "http://baidu.com"));
     _banner.addAll(info);
   }
 

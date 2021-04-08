@@ -88,7 +88,7 @@ class NearbyTabState extends State<NearbyTab>
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            WebViewPage(sub.bannerLists[index].webUrl, null)),
+                            WebViewPage(sub.bannerLists[index].webUrl, '')),
                   );
                 }
               },
@@ -199,8 +199,7 @@ _getItemContainerView(BuildContext gicv, var subject) {
       if (subject.url != null) {
         Navigator.push(
           gicv,
-          MaterialPageRoute(
-              builder: (context) => WebViewPage(subject.url, null)),
+          MaterialPageRoute(builder: (context) => WebViewPage(subject.url, '')),
         );
       }
     },

@@ -6,13 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
 import 'package:flutter/services.dart';
-import 'package:dio/dio.dart';
-import 'package:hatchery/common/api.dart';
+import 'package:hatchery/api/API.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
+import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/configs.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 
@@ -21,8 +20,10 @@ class AppManager extends ChangeNotifier {
 
   int get m => _m;
 
-  bool _agreementDataKey = false;
-  bool get agreementDataKey => _agreementDataKey;
+  /// 是否显示 协议确认UI
+  bool? _isAgreeAgreementValue;
+
+  bool? get isAgreeAgreementValue => _isAgreeAgreementValue;
 
   List<Contact> _phoneNumbersList = [];
 
@@ -36,9 +37,18 @@ class AppManager extends ChangeNotifier {
   final JPush jpush = JPush();
 
   AppManager() {
+    _getLocalAgreeAgreementValue();
+    queryConfigData();
+
     ///todo 先关闭
     // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
     // initPlatformState();
+  }
+
+  /// 获取协议是否同意标识
+  _getLocalAgreeAgreementValue() async {
+    _isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
+    print("DEBUG=> #### $_isAgreeAgreementValue");
   }
 
   Future<void> initPlatformState() async {
@@ -88,29 +98,17 @@ class AppManager extends ChangeNotifier {
     Clipboard.setData(ClipboardData(text: text));
   }
 
-  callPhoneNum(String number) async {
-    if (await canLaunch("tel:${number}")) {
-      await launch("tel:${number}");
-    } else {
-      throw 'Could not launch $number';
-    }
-  }
-
   shareFrame(String contents) {
     Share.share(contents);
   }
 
-//   queryPhoneNumData() async {
-//     Response response = await Api.queryPhoneNumList();
-//     if (response.data != null) {
-//       final parsed = json.decode(response.data)['numberlist'] ?? null;
-// //      var resultCode = parsed['code'] ?? 0;
-//       for (var x in parsed) {
-//         add(PhoneNumberInfo.fromJson(x));
-//       }
-// //      print("LC->#### ${_phoneNumbersList}");
-//     }
-//   }
+  queryConfigData() async {
+    await API.getConfig().then((value) {
+      if (value.isSuccess()) {
+        SP.set(AD_RESPONSE_KEY, value.getData().toString());
+      }
+    });
+  }
 
   // void add(PhoneNumberInfo item) {
   //   _phoneNumbersList.add(item);

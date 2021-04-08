@@ -21,7 +21,6 @@ class ServiceTabState extends State<ServiceTab>
   @override
   void initState() {
     super.initState();
-    UpgradeManager().isShowUpgradeCard(context);
   }
 
   @override
