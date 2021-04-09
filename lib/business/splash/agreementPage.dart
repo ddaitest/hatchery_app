@@ -56,7 +56,7 @@ class AgreementPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: () => manager.agreementUrl(context),
+                    onTap: () => manager.gotoAgreementUrl(context),
                     child: Text("《用户协议》",
                         style: TextStyle(
                             decoration: TextDecoration.underline,

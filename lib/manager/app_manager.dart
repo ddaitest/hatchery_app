@@ -37,8 +37,13 @@ class AppManager extends ChangeNotifier {
   final JPush jpush = JPush();
 
   AppManager() {
-    _getLocalAgreeAgreementValue();
-    queryConfigData();
+    _getLocalAgreeAgreementValue().then((value) => {
+          if (value!)
+            {
+              _queryConfigData(),
+              _querySplashAdData(),
+            }
+        });
 
     ///todo 先关闭
     // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
@@ -46,9 +51,10 @@ class AppManager extends ChangeNotifier {
   }
 
   /// 获取协议是否同意标识
-  _getLocalAgreeAgreementValue() async {
+  Future<bool?> _getLocalAgreeAgreementValue() async {
     _isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
     print("DEBUG=> #### $_isAgreeAgreementValue");
+    return _isAgreeAgreementValue;
   }
 
   Future<void> initPlatformState() async {
@@ -102,10 +108,19 @@ class AppManager extends ChangeNotifier {
     Share.share(contents);
   }
 
-  queryConfigData() async {
+  _queryConfigData() async {
     await API.getConfig().then((value) {
       if (value.isSuccess()) {
-        SP.set(AD_RESPONSE_KEY, value.getData().toString());
+        SP.set(CONFIG_KEY, json.encode(value.getData()));
+      }
+    });
+  }
+
+  _querySplashAdData() async {
+    await API.getSplashADList(0, 1, SPLASH_ID).then((value) {
+      if (value.isSuccess()) {
+        print("DEBUG=> ######${value.getData()}");
+        SP.set(SPLASH_AD_RESPONSE_KEY, json.encode(value.getData()));
       }
     });
   }

@@ -14,6 +14,8 @@ const String COMMUNITY_NAME = '玫瑰园';
 
 const String SERVICE_ID = '5e089b4abc2d3e1ea9fe637d';
 
+const String SPLASH_ID = '5e089b4abc2d3e1ea9fe637d';
+
 const String HOME_CATEGORY_ID = '5dfe047470492f05963a1eca';
 
 const String SERVICE_CATEGORY_ID = '5dfe048c70492f05963a1ecd';
@@ -39,7 +41,9 @@ const String BASIC_AUTH =
 
 const String Agreement_DATA_KEY = 'agreeAgreementKey';
 
-const String AD_RESPONSE_KEY = 'adResponseKey';
+const String CONFIG_KEY = 'configKey';
+
+const String SPLASH_AD_RESPONSE_KEY = 'adResponseKey';
 
 const String Agreement_text =
     '欢迎使用本软件！\n在您使用本软件前，请您认真阅读并同意用户协议和隐私政策，以了解我们的服务内容和我们在收集和使用您相关个人信息时的处理规则。我们将严格按照用户协议和隐私政策为您提供服务，保护您的个人信息。';

@@ -62,7 +62,7 @@ dependencies:
   json_annotation: ^4.0.1
   flutter_spinkit: ^5.0.0
   flutter_screenutil: ^4.0.4+1
-  flutter_inappwebview: ^5.3.0
+  flutter_inappwebview: ^5.3.2
   jpush_flutter: ^2.0.1
   launch_review: ^3.0.1
   skeleton_text: ^3.0.0
