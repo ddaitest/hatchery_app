@@ -15,39 +15,32 @@ import 'dart:math' as math;
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HomeManager(context),
-      child: HomeView(),
-    );
-  }
-}
-
-class HomeView extends StatelessWidget {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
-
   @override
   Widget build(BuildContext context) {
-    HomeManager _homeManager = Provider.of<HomeManager>(context, listen: false);
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      child: ListView(
-        // shrinkWrap: true,
-        children: [
-          _bannerView(context),
-          _moreServiceView(),
-          _noticeView(),
-          _articlesView(_homeManager),
-        ],
+    HomeManager _homeManager = HomeManager();
+    return Scaffold(
+      body: ChangeNotifierProvider(
+        create: (context) => _homeManager,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: ListView(
+            // shrinkWrap: true,
+            children: [
+              _bannerView(context, _homeManager),
+              _moreServiceView(),
+              _noticeView(),
+              _articlesView(_homeManager),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   /// View: Banner
-  Widget _bannerView(BuildContext context) {
-    HomeManager manager = Provider.of<HomeManager>(context, listen: false);
+  Widget _bannerView(BuildContext context, manager) {
     List<BannerInfo> banners = manager.banner;
     return Container(
       padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
@@ -164,33 +157,64 @@ class HomeView extends StatelessWidget {
                 fontSize: 14.sp, color: Color.fromRGBO(51, 51, 51, 1))));
   }
 
-  Widget _articlesView(_homeManager) {
-    return Selector<HomeManager, UnmodifiableListView<Article>>(
-      builder: (BuildContext context, UnmodifiableListView<Article> value,
-          Widget? child) {
-        return Container(
-          // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: value.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (value.length != 0) {
-                return ArticleItem(value[index], 0, () {});
-              } else {
-                return ArticleItem(value[index], 1, () {});
-              }
-            },
+  Widget _articlesView(homeManager) {
+    return Container(
+        // height: 130.0.h,
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '便民信息',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.sp,
+                    color: Color.fromRGBO(51, 51, 51, 1)),
+              ),
+              homeManager.articlesList.isNotEmpty
+                  ? Text(
+                      '更多 >',
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Color.fromRGBO(155, 155, 155, 1)),
+                    )
+                  : Container(),
+            ],
           ),
-        );
-      },
-      selector: (BuildContext context, _homeManager) {
-        return _homeManager.articlesList;
-      },
-    );
+        ),
+        Container(
+          height: 10.0.h,
+        ),
+        Selector(
+          builder:
+              (BuildContext context, UnmodifiableListView<Article> value, _) {
+            return Container(
+              // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: value.isEmpty ? 5 : value.length,
+                itemBuilder: (BuildContext context, int index) {
+                  print("DEBUG=> value $value");
+                  if (value.isEmpty) {
+                    return ArticleItemLoading();
+                  } else {
+                    return ArticleItem(value[index], () {});
+                  }
+                },
+              ),
+            );
+          },
+          selector: (BuildContext context, HomeManager homeManager) {
+            return homeManager.articlesList;
+          },
+        ),
+      ],
+    ));
   }
-
-  Future? _onRefresh() {}
-
-  Future? _onLoadMore() {}
 }

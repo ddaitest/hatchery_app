@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/PageStatus.dart';
-import 'package:hatchery/common/api.dart';
+import 'package:hatchery/api/API.dart';
 import 'package:flutter/material.dart';
-import 'package:hatchery/common/apiCommon.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/configs.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/common/exts.dart';
@@ -14,9 +14,6 @@ import 'package:hatchery/common/exts.dart';
 class HomeManager extends ChangeNotifier {
   //当前页面状态
   PageStatus _status = PageStatus.LOADING;
-
-  String _articlesResult = '';
-  Map _articlesParsed = {};
 
   //banner 数据
   List<BannerInfo> _banner = [];
@@ -39,23 +36,13 @@ class HomeManager extends ChangeNotifier {
   UnmodifiableListView<Article> get articlesList =>
       UnmodifiableListView(_articlesList);
 
-  Map<String, dynamic> _articlesParameters = {
-    'page_num': 0,
-    'page_size': 10,
-    'service_id': '',
-    'client_id': ''
-  };
+  List<dynamic>? _finalParse;
 
-  HomeManager(BuildContext context) {
+  HomeManager() {
     _loadBanner();
     _loadPost();
-    _loadArticles();
-    // _loadArticlesRequest(0, 10, '1111');
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    // _loadArticles();
+    queryArticleData();
   }
 
   _loadBanner() {
@@ -63,25 +50,25 @@ class HomeManager extends ChangeNotifier {
     _banner.addAll(info);
   }
 
-  Future _loadArticlesRequest(int page, int size, String serviceId) async {
-    apiResponseCheck(API.getArticleList(page, size, serviceId)).then(
-      (value) {
-        print("DEBUG=> _articlesParsed $value");
-        if (value != null) {
-          for (var x in value) {
-            addArticles(Article.fromJson(x));
+  queryArticleData() async {
+    await API.getArticleList(0, 10, HOME_ID).then((value) {
+      if (value.isSuccess()) {
+        _finalParse = value.getData();
+        if (_finalParse != null) {
+          print("DEBUG=> queryHomeData${_finalParse}");
+          if (_finalParse!.isNotEmpty) {
+            _finalParse!.forEach((element) {
+              addArticles(Article.fromJson(element));
+            });
+            notifyListeners();
+          } else {
+            _articlesList = [];
           }
-          notifyListeners();
+        } else {
+          _articlesList = [];
         }
-      },
-    );
-    // ApiResult result = await API.getArticleList(page, pageSize, "tab1");
-    // if (result.isSuccess()) {
-    //   for (var x in result.getData()) {
-    //     addArticles(ArticleDataInfo.fromJson(x));
-    //   }
-    //   notifyListeners();
-    // }
+      }
+    });
   }
 
   _loadArticles() async {
@@ -192,4 +179,9 @@ class HomeManager extends ChangeNotifier {
   }
 
   void clickBanner(int index) {}
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

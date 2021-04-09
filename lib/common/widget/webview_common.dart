@@ -15,7 +15,7 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  InAppWebViewController? webViewController;
+  late InAppWebViewController webViewController;
   late ContextMenu contextMenu;
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
       crossPlatform: InAppWebViewOptions(
@@ -46,15 +46,15 @@ class _WebViewPageState extends State<WebViewPage> {
               title: "Special",
               action: () async {
                 print("Menu item Special clicked!");
-                print(await webViewController?.getSelectedText());
-                await webViewController?.clearFocus();
+                print(await webViewController.getSelectedText());
+                await webViewController.clearFocus();
               })
         ],
         options: ContextMenuOptions(hideDefaultSystemContextMenuItems: false),
         onCreateContextMenu: (hitTestResult) async {
           print("onCreateContextMenu");
           print(hitTestResult.extra);
-          print(await webViewController?.getSelectedText());
+          print(await webViewController.getSelectedText());
         },
         onHideContextMenu: () {
           print("onHideContextMenu");
@@ -75,10 +75,10 @@ class _WebViewPageState extends State<WebViewPage> {
       ),
       onRefresh: () async {
         if (Platform.isAndroid) {
-          webViewController?.reload();
+          webViewController.reload();
         } else if (Platform.isIOS) {
-          webViewController?.loadUrl(
-              urlRequest: URLRequest(url: await webViewController?.getUrl()));
+          webViewController.loadUrl(
+              urlRequest: URLRequest(url: await webViewController.getUrl()));
         }
       },
     );
@@ -193,5 +193,10 @@ class _WebViewPageState extends State<WebViewPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

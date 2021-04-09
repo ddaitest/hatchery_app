@@ -15,23 +15,15 @@ import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/configs.dart';
 
 class SplashManager extends ChangeNotifier {
-  Timer? _timer;
-
   List<Advertising> _splashAdLists = [];
 
   UnmodifiableListView<Advertising> get splashAdLists =>
       UnmodifiableListView(_splashAdLists);
-
-  int _countdownTime = SPLASH_TIME;
-
-  int get countdownTime => _countdownTime;
   String? _responseResult;
   List<dynamic>? _finalParse;
 
   SplashManager(BuildContext context) {
     _getSplashAdData(context);
-    // sharedDeleteData('showUpgradeCard');
-    // queryAdData();
   }
 
   List<String>? _getSplashAdData(context) {
@@ -44,8 +36,6 @@ class SplashManager extends ChangeNotifier {
       });
       if (_splashAdLists.isEmpty) {
         routeHomePage(context);
-      } else {
-        startCountdown(context);
       }
     } else {
       _splashAdLists = [];
@@ -59,7 +49,6 @@ class SplashManager extends ChangeNotifier {
 
   /// UI动作 点击广告
   void clickAD(BuildContext context) {
-    _stopCountdown();
     if (_splashAdLists.isNotEmpty)
       Navigator.pushReplacement(
         context,
@@ -71,39 +60,17 @@ class SplashManager extends ChangeNotifier {
 
   /// UI动作 跳过倒计时
   void skip(BuildContext context) {
-    _stopCountdown();
     routeHomePage(context);
   }
 
-  void routeHomePage(context) async {
-    Future.delayed(Duration.zero, () {
+  void routeHomePage(context) {
+    Future.delayed(Duration.zero, () async {
       Navigator.pushReplacementNamed(context, '/');
     });
   }
 
-  /// 开屏倒计时
-  Future startCountdown(BuildContext context) async {
-    final timeUp = (Timer timer) {
-      print("LC countdownTime ==> $_countdownTime");
-      if (_countdownTime < 2) {
-        _stopCountdown();
-        routeHomePage(context);
-      } else {
-        _countdownTime--;
-        notifyListeners();
-      }
-    };
-    _timer = Timer.periodic(Duration(seconds: 1), timeUp);
-  }
-
-  /// 停止倒计时
-  _stopCountdown() async {
-    _timer?.cancel();
-  }
-
   @override
   void dispose() {
-    _stopCountdown();
     super.dispose();
   }
 }

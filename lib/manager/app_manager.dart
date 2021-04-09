@@ -41,7 +41,7 @@ class AppManager extends ChangeNotifier {
           if (value!)
             {
               _queryConfigData(),
-              _querySplashAdData(),
+              querySplashAdData(),
             }
         });
 
@@ -116,7 +116,7 @@ class AppManager extends ChangeNotifier {
     });
   }
 
-  _querySplashAdData() async {
+  querySplashAdData() async {
     await API.getSplashADList(0, 1, SPLASH_ID).then((value) {
       if (value.isSuccess()) {
         print("DEBUG=> ######${value.getData()}");
