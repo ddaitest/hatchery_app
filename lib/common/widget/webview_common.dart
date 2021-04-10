@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:hatchery/configs.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class WebViewPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _WebViewPageState extends State<WebViewPage> {
   double progress = 0;
   PullToRefreshController pullToRefreshController = PullToRefreshController();
   final urlController = TextEditingController();
-  String _title = "加载中...";
+  String _title = "$COMMUNITY_NAME";
 
   @override
   void initState() {

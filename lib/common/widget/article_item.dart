@@ -7,8 +7,7 @@ import 'package:skeleton_text/skeleton_text.dart';
 
 class ArticleItem extends StatelessWidget {
   final Article article;
-  final Function onTap;
-  ArticleItem(this.article, this.onTap);
+  ArticleItem(this.article);
 
   @override
   Widget build(BuildContext context) => _getItemContainerView(context);
@@ -62,19 +61,12 @@ class ArticleItem extends StatelessWidget {
           imageUrl: imgUrl,
           imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular((8.0)),
-                boxShadow: [
-                  BoxShadow(
-                      offset: Offset(0.0, 2.0), //阴影xy轴偏移量
-                      blurRadius: 4.0, //阴影模糊程度
-                      spreadRadius: 0.0 //阴影扩散程度
-                      )
-                ] // 圆角度
-                ),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular((8.0)), // 圆角度
+            ),
           ),
           errorWidget: (context, url, error) =>
               Icon(Icons.image_not_supported_outlined),

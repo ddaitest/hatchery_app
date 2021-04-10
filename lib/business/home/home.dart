@@ -19,61 +19,64 @@ class HomePage extends StatelessWidget {
       GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
-    HomeManager _homeManager = HomeManager();
-    return Scaffold(
-      body: ChangeNotifierProvider(
-        create: (context) => _homeManager,
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: ListView(
-            // shrinkWrap: true,
-            children: [
-              _bannerView(context, _homeManager),
-              _moreServiceView(),
-              _noticeView(),
-              _articlesView(_homeManager),
-            ],
-          ),
+    return ChangeNotifierProvider(
+      create: (_) => HomeManager(),
+      child: Container(
+        child: ListView(
+          // shrinkWrap: true,
+          children: [
+            _bannerView(context),
+            _moreServiceView(),
+            _noticeView(),
+            _articlesView(context),
+          ],
         ),
       ),
     );
   }
 
   /// View: Banner
-  Widget _bannerView(BuildContext context, manager) {
-    List<BannerInfo> banners = manager.banner;
-    return Container(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
-      height: 140.0.h,
-      child: Swiper(
-        autoplay: true,
-        itemBuilder: (BuildContext context, int index) {
-          ImageProvider imageProvider;
-          String imageURL = banners[index].image;
-          if (imageURL.startsWith("http")) {
-            imageProvider = CachedNetworkImageProvider(imageURL);
-          } else {
-            imageProvider = AssetImage(imageURL);
-          }
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image(image: imageProvider, fit: BoxFit.fill),
-          );
-        },
-        itemHeight: 140.0.h,
-        itemCount: banners.length,
-        viewportFraction: 1,
-        scale: 0.9,
-        pagination: SwiperPagination(),
+  Widget _bannerView(BuildContext context) {
+    return Selector<HomeManager, UnmodifiableListView<BannerInfo>>(
+      builder: (BuildContext context, UnmodifiableListView<BannerInfo> value,
+          Widget? child) {
+        print("DEBUG=> _bannerView 重绘了。。。。。");
+        return Container(
+          padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
+          width: 300.0.w,
+          height: 120.0.h,
+          child: Swiper(
+            autoplay: true,
+            itemBuilder: (BuildContext context, int index) {
+              ImageProvider imageProvider;
+              String imageURL = value[index].image;
+              imageProvider = CachedNetworkImageProvider(imageURL);
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image(image: imageProvider, fit: BoxFit.fitWidth),
+              );
+            },
+            itemHeight: 120.0.h,
+            itemCount: value.length,
+            viewportFraction: 1,
+            scale: 0.9,
+            pagination: SwiperPagination(),
 //        control: SwiperControl(),
-        onTap: (index) {
-          // manager.clickBanner(index);
-        },
-      ),
+            onTap: (index) {
+              // manager.clickBanner(index);
+            },
+          ),
+        );
+      },
+      selector: (BuildContext context, HomeManager homeManager) {
+        return homeManager.bannerList;
+      },
+      shouldRebuild: (pre, next) => pre != next,
     );
   }
 
   Widget _moreServiceView() {
+    print("DEBUG=> _moreServiceView 重绘了。。。。。");
     return Container(
       padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
       child: Row(
@@ -109,44 +112,53 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _noticeView() {
-    return Container(
-        padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-        height: 130.0.h,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '物业公告',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Color.fromRGBO(51, 51, 51, 1)),
+    return Selector(
+      builder: (BuildContext context, UnmodifiableListView<Notice> value,
+          Widget? child) {
+        print("DEBUG=> _noticeView 重绘了。。。。。");
+        return Container(
+            padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+            height: 130.0.h,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '物业公告',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp,
+                            color: Color.fromRGBO(51, 51, 51, 1)),
+                      ),
+                      Text(
+                        '更多 >',
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Color.fromRGBO(155, 155, 155, 1)),
+                      ),
+                    ],
                   ),
-                  Text(
-                    '更多 >',
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Color.fromRGBO(155, 155, 155, 1)),
-                  ),
-                ],
-              ),
-            ),
-            // Container(height: 15.0),
-            Container(
-                child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) =>
-                  _noticeTitle('关于新冠疫苗接种报名的通知'),
-            ))
-          ],
-        ));
+                ),
+                // Container(height: 15.0),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: value.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      _noticeTitle('${value[index].title}'),
+                ),
+              ],
+            ));
+      },
+      selector: (BuildContext context, HomeManager homeManager) {
+        return homeManager.noticesList;
+      },
+      shouldRebuild: (pre, next) => pre != next,
+    );
   }
 
   Widget _noticeTitle(String text) {
@@ -157,10 +169,9 @@ class HomePage extends StatelessWidget {
                 fontSize: 14.sp, color: Color.fromRGBO(51, 51, 51, 1))));
   }
 
-  Widget _articlesView(homeManager) {
-    return Container(
-        // height: 130.0.h,
-        child: Column(
+  Widget _articlesView(BuildContext context) {
+    HomeManager homeManager = HomeManager();
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -187,12 +198,11 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          height: 10.0.h,
-        ),
-        Selector(
-          builder:
-              (BuildContext context, UnmodifiableListView<Article> value, _) {
+        Container(height: 10.0.h),
+        Selector<HomeManager, UnmodifiableListView<Article>>(
+          builder: (BuildContext context, UnmodifiableListView<Article> value,
+              Widget? child) {
+            print("DEBUG=> _articlesView 重绘了。。。。。");
             return Container(
               // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
               child: ListView.builder(
@@ -200,11 +210,10 @@ class HomePage extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: value.isEmpty ? 5 : value.length,
                 itemBuilder: (BuildContext context, int index) {
-                  print("DEBUG=> value $value");
                   if (value.isEmpty) {
                     return ArticleItemLoading();
                   } else {
-                    return ArticleItem(value[index], () {});
+                    return ArticleItem(value[index]);
                   }
                 },
               ),
@@ -213,8 +222,9 @@ class HomePage extends StatelessWidget {
           selector: (BuildContext context, HomeManager homeManager) {
             return homeManager.articlesList;
           },
+          shouldRebuild: (pre, next) => pre != next,
         ),
       ],
-    ));
+    );
   }
 }
