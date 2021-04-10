@@ -19,18 +19,15 @@ class HomePage extends StatelessWidget {
       GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => HomeManager(),
-      child: Container(
-        child: ListView(
-          // shrinkWrap: true,
-          children: [
-            _bannerView(context),
-            _moreServiceView(),
-            _noticeView(),
-            _articlesView(context),
-          ],
-        ),
+    return Container(
+      child: ListView(
+        // shrinkWrap: true,
+        children: [
+          _bannerView(context),
+          _moreServiceView(),
+          _noticeView(),
+          _articlesView(context),
+        ],
       ),
     );
   }
