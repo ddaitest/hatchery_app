@@ -21,9 +21,7 @@ class AppManager extends ChangeNotifier {
   int get m => _m;
 
   /// 是否显示 协议确认UI
-  bool? _isAgreeAgreementValue;
-
-  bool? get isAgreeAgreementValue => _isAgreeAgreementValue;
+  late bool isAgreeAgreementValue;
 
   List<Contact> _phoneNumbersList = [];
 
@@ -37,13 +35,11 @@ class AppManager extends ChangeNotifier {
   final JPush jpush = JPush();
 
   AppManager() {
-    _getLocalAgreeAgreementValue().then((value) => {
-          if (value!)
-            {
-              _queryConfigData(),
-              querySplashAdData(),
-            }
-        });
+    isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
+    if (!isAgreeAgreementValue) {
+      _queryConfigData();
+      querySplashAdData();
+    }
 
     ///todo 先关闭
     // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
@@ -51,11 +47,11 @@ class AppManager extends ChangeNotifier {
   }
 
   /// 获取协议是否同意标识
-  Future<bool?> _getLocalAgreeAgreementValue() async {
-    _isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
-    print("DEBUG=> #### $_isAgreeAgreementValue");
-    return _isAgreeAgreementValue;
-  }
+  // bool _getLocalAgreeAgreementValue() {
+  //   _isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
+  //   print("DEBUG=> #### $_isAgreeAgreementValue");
+  //   return _isAgreeAgreementValue;
+  // }
 
   Future<void> initPlatformState() async {
     try {

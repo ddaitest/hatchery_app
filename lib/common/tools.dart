@@ -6,17 +6,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future compressionImage(filePath) async {
   ImageProperties properties =
       await FlutterNativeImage.getImageProperties(filePath);
-  File compressedFile = await FlutterNativeImage.compressImage(filePath,
+  final width = properties.width;
+  final height = properties.height;
+  if (width == null || height == null) {
+    return null;
+  } else {
+    File compressedFile = await FlutterNativeImage.compressImage(filePath,
 //      quality: 100,  默认70
-      targetWidth: properties.width,
-      targetHeight: properties.height);
-  return compressedFile.path;
+        targetWidth: width,
+        targetHeight: height);
+    return compressedFile.path;
+  }
 }
 
 class SP {
   static late SharedPreferences sp;
 
-  Future init() async {
+  static Future init() async {
     sp = await SharedPreferences.getInstance();
   }
 

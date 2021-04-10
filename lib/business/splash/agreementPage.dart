@@ -32,7 +32,7 @@ class AgreementPage extends StatelessWidget {
     );
   }
 
-  Widget _agreementDialogView(BuildContext context, manager) {
+  Widget _agreementDialogView(BuildContext context,AgreementManager manager) {
     return AlertDialog(
       contentPadding: const EdgeInsets.fromLTRB(26.0, 20.0, 26.0, 24.0),
       title: Text(

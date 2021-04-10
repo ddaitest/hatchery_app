@@ -13,9 +13,13 @@ import 'package:hatchery/common/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
 
+import 'manager/home_manager.dart';
+import 'manager/nearby_manager.dart';
+import 'manager/service_manager.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SP().init().then(
+  SP.init().then(
         (value) => FlutterBugly.postCatchedException(() {
           if (Platform.isAndroid) {
             SystemUiOverlayStyle style = SystemUiOverlayStyle(
@@ -28,11 +32,14 @@ void main() {
             SystemChrome.setSystemUIOverlayStyle(style);
           }
           runApp(
-            ChangeNotifierProvider<AppManager>(
-              create: (_) => AppManager(),
-              child: Consumer<AppManager>(
-                builder: (context, manager, child) => MyApp(manager),
-              ), //添加全局Manager
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (_) => AppManager()),
+                ChangeNotifierProvider(create: (_) => HomeManager()),
+                ChangeNotifierProvider(create: (_) => NearbyManager()),
+                ChangeNotifierProvider(create: (_) => ServiceManager()),
+              ],
+              child: MyApp(),
             ),
           );
         }),
@@ -40,18 +47,18 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final AppManager appManager;
-  MyApp(this.appManager);
+  MyApp();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    AppManager manager = Provider.of<AppManager>(context, listen: false);
     return ScreenUtilInit(
-        allowFontScaling: true,
         builder: () => MaterialApp(
                 title: COMMUNITY_NAME,
-                initialRoute: appManager.isAgreeAgreementValue!
-                    ? '/splash'
-                    : '/agreementPage',
+                initialRoute: manager.isAgreeAgreementValue
+                    ? '/agreementPage'
+                    : '/splash',
                 routes: {
                   '/': (_) => MainTab(),
                   '/agreementPage': (_) => AgreementPage(),
