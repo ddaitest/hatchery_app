@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hatchery/business/splash/splash.dart';
 import 'package:hatchery/business/splash/agreementPage.dart';
+import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'configs.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -55,14 +57,14 @@ class MyApp extends StatelessWidget {
     AppManager manager = Provider.of<AppManager>(context, listen: false);
     return ScreenUtilInit(
         builder: () => MaterialApp(
-                title: COMMUNITY_NAME,
-                initialRoute: manager.isAgreeAgreementValue
-                    ? '/agreementPage'
-                    : '/splash',
-                routes: {
-                  '/': (_) => MainTab(),
-                  '/agreementPage': (_) => AgreementPage(),
-                  '/splash': (_) => SplashPage(),
-                }));
+            title: COMMUNITY_NAME,
+            navigatorKey: AppContext.navState,
+            initialRoute:
+                manager.isAgreeAgreementValue ? '/agreementPage' : '/splash',
+            routes: {
+              '/': (_) => MainTab(),
+              '/agreementPage': (_) => AgreementPage(),
+              '/splash': (_) => SplashPage(),
+            }));
   }
 }

@@ -67,6 +67,7 @@ dependencies:
   launch_review: ^3.0.1
   skeleton_text: ^3.0.0
   timer_count_down: ^2.0.0
+  pull_to_refresh: ^1.6.4
 
 
 dev_dependencies:
