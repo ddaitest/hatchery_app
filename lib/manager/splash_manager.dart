@@ -19,17 +19,15 @@ class SplashManager extends ChangeNotifier {
 
   UnmodifiableListView<Advertising> get splashAdLists =>
       UnmodifiableListView(_splashAdLists);
-  String? _responseResult;
-  List<dynamic>? _finalParse;
 
   SplashManager(BuildContext context) {
     _getSplashAdData(context);
   }
 
   List<String>? _getSplashAdData(context) {
-    _responseResult = SP.getString(SPLASH_AD_RESPONSE_KEY);
+    String? _responseResult = SP.getString(SPLASH_AD_RESPONSE_KEY);
     if (_responseResult != null) {
-      _finalParse = jsonDecode(_responseResult!);
+      List<dynamic>? _finalParse = jsonDecode(_responseResult);
       print("DEBUG=> _finalParse ${_finalParse}");
       _finalParse!.forEach((element) {
         addSplashAdData(Advertising.fromJson(element));

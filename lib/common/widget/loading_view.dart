@@ -35,7 +35,6 @@ class LoadingView extends StatelessWidget {
         shimmerColor: Colors.grey[400]!,
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          width: viewWidth!.w,
           height: viewHeight!.h,
           decoration: BoxDecoration(
             color: Colors.grey[300],

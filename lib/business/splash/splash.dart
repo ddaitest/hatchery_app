@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:collection';
 import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/configs.dart';
-import 'package:hatchery/common/theme.dart';
+import 'package:hatchery/api/entity.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:launch_review/launch_review.dart';
@@ -11,21 +12,29 @@ import 'package:launch_review/launch_review.dart';
 class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SplashManager _splashManager = SplashManager(context);
     return Scaffold(
-      body: ChangeNotifierProvider(
-        create: (context) => _splashManager,
-        child: _splashPage(context, _splashManager),
+        body: ChangeNotifierProvider(
+      create: (context) => SplashManager(context),
+      child: Selector<SplashManager, UnmodifiableListView<Advertising>>(
+        builder: (BuildContext context, UnmodifiableListView<Advertising> value,
+                Widget? child) =>
+            _splashPage(context),
+        selector: (BuildContext context, SplashManager splashManager) {
+          return splashManager.splashAdLists;
+        },
+        shouldRebuild: (pre, next) => pre != next,
       ),
-    );
+    ));
   }
 
-  _splashPage(BuildContext context, manager) {
-    if (manager.splashAdLists!.isEmpty) {
+  _splashPage(BuildContext context) {
+    SplashManager _splashManager =
+        Provider.of<SplashManager>(context, listen: false);
+    if (_splashManager.splashAdLists.isEmpty) {
       return _fullScreenBackgroundView();
     } else {
       // UmengCommonSdk.onPageStart("splashView");
-      return _adView(context, manager);
+      return _adView(context, _splashManager);
     }
   }
 

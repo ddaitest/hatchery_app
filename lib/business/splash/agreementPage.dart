@@ -11,9 +11,11 @@ class AgreementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AgreementManager _agreementManager = AgreementManager();
-    return ChangeNotifierProvider(
-      create: (context) => _agreementManager,
-      child: _agreementMainView(context, _agreementManager),
+    return Scaffold(
+      body: ChangeNotifierProvider(
+        create: (context) => _agreementManager,
+        child: _agreementMainView(context, _agreementManager),
+      ),
     );
   }
 
@@ -32,7 +34,7 @@ class AgreementPage extends StatelessWidget {
     );
   }
 
-  Widget _agreementDialogView(BuildContext context,AgreementManager manager) {
+  Widget _agreementDialogView(BuildContext context, AgreementManager manager) {
     return AlertDialog(
       contentPadding: const EdgeInsets.fromLTRB(26.0, 20.0, 26.0, 24.0),
       title: Text(

@@ -87,7 +87,6 @@ class ArticleItemLoading extends StatelessWidget {
 
   Widget _titleView() {
     return Container(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
       height: 71.0.h,
       width: 275.0.w,
       child: ListTile(
