@@ -8,6 +8,12 @@ class AppID {
 class Strings {
   final title = "默认小区名";
   final post = "物业公告";
+  final refresh_complete = "刷新成功";
+  final refresh_fail = "刷新失败";
+  final load_fail = "加载失败";
+  final loading = "加载中...";
+  final load_complete = "加载成功";
+  final load_no_data = "没有更多数据";
 }
 
 class TextStyles {

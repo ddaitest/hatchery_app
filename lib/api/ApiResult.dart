@@ -23,4 +23,15 @@ class ApiResult {
   dynamic getData() {
     return parsed['data'];
   }
+
+  List<O> getDataList<O, I>(O function(Map<String, dynamic> value)) {
+    var data = getData();
+    if (data == null) {
+      return <O>[];
+    } else {
+      return (data as List<dynamic>)
+          .map((m) => function(m))
+          .toList();
+    }
+  }
 }
