@@ -49,22 +49,22 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp();
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     AppManager manager = Provider.of<AppManager>(context, listen: false);
+    print("DEBUG LC => ${manager.isAgreeAgreementValue}");
     return ScreenUtilInit(
         builder: () => MaterialApp(
-            title: COMMUNITY_NAME,
-            navigatorKey: AppContext.navState,
-            initialRoute:
-                manager.isAgreeAgreementValue ? '/agreementPage' : '/splash',
-            routes: {
-              '/': (_) => MainTab(),
-              '/agreementPage': (_) => AgreementPage(),
-              '/splash': (_) => SplashPage(),
-            }));
+                title: COMMUNITY_NAME,
+                navigatorKey: AppContext.navState,
+                initialRoute: manager.isAgreeAgreementValue
+                    ? '/splash'
+                    : '/agreementPage',
+                routes: {
+                  '/': (_) => MainTab(),
+                  '/agreementPage': (_) => AgreementPage(),
+                  '/splash': (_) => SplashPage(),
+                }));
   }
 }

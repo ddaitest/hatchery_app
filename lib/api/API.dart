@@ -40,14 +40,13 @@ class API {
   static bool skipCheck = false;
 
   static init() {
-    if(!skipCheck){
+    if (!skipCheck) {
       isNetworkConnect().then((value) {
         if (!value) {
           showToast('网络未连接，请检查网络设置');
         }
       });
     }
-
   }
 
   ///软文列表
@@ -150,6 +149,7 @@ class API {
       "page_size": size,
       "service_id": pageId,
       "client_id": CLIENT_ID,
+      "today_is_show": true,
     };
     init();
     try {

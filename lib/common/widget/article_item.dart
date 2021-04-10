@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:skeleton_text/skeleton_text.dart';
+import 'package:hatchery/common/widget/loading_view.dart';
 
 class ArticleItem extends StatelessWidget {
   final Article article;
@@ -68,6 +69,8 @@ class ArticleItem extends StatelessWidget {
               borderRadius: BorderRadius.circular((8.0)), // 圆角度
             ),
           ),
+          placeholder: (context, url) =>
+              LoadingView(1, viewHeight: 70.0, viewWidth: 70.0),
           errorWidget: (context, url, error) =>
               Icon(Icons.image_not_supported_outlined),
         ));
@@ -84,53 +87,18 @@ class ArticleItemLoading extends StatelessWidget {
 
   Widget _titleView() {
     return Container(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
       height: 71.0.h,
       width: 275.0.w,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
         leading: _imageView(),
-        title: SkeletonAnimation(
-          shimmerColor: Colors.grey[400]!,
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            // width: 200.0.w,
-            height: 15.0.h,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            margin: const EdgeInsets.only(bottom: 10),
-          ),
-        ),
-        subtitle: SkeletonAnimation(
-          shimmerColor: Colors.grey[400]!,
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            // width: 100.0.w,
-            height: 15.0.h,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
+        title: LoadingView(1, viewHeight: 15.0),
+        subtitle: LoadingView(1, viewHeight: 15.0),
       ),
     );
   }
 
   Widget _imageView() {
-    return SkeletonAnimation(
-      shimmerColor: Colors.grey[400]!,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        width: 70.0.w,
-        height: 70.0.h,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
+    return LoadingView(0, viewHeight: 70.0, viewWidth: 70.0);
   }
 }

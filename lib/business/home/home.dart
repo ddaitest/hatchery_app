@@ -7,6 +7,7 @@ import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/backgourds.dart';
+import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/common/widget/post_item.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
@@ -52,7 +53,14 @@ class HomePage extends StatelessWidget {
               imageProvider = CachedNetworkImageProvider(imageURL);
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: Image(image: imageProvider, fit: BoxFit.fitWidth),
+                child: CachedNetworkImage(
+                  imageUrl: value[index].image,
+                  fit: BoxFit.fitWidth,
+                  placeholder: (context, url) =>
+                      LoadingView(1, viewHeight: 120.0.h, viewWidth: 300.0.w),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.image_not_supported_outlined),
+                ),
               );
             },
             itemHeight: 120.0.h,
@@ -96,41 +104,48 @@ class HomePage extends StatelessWidget {
           Widget? child) {
         print("DEBUG=> _noticeView 重绘了。。。。。");
         return Container(
-            padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-            height: 130.0.h,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '物业公告',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                            color: Color.fromRGBO(51, 51, 51, 1)),
+            padding:
+                const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
+            child: Card(
+              child: Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '物业公告',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                                color: Color.fromRGBO(51, 51, 51, 1)),
+                          ),
+                          value.length > 4
+                              ? Text(
+                                  '更多 >',
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Color.fromRGBO(155, 155, 155, 1)),
+                                )
+                              : Container(),
+                        ],
                       ),
-                      Text(
-                        '更多 >',
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Color.fromRGBO(155, 155, 155, 1)),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Container(height: 15.0),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: value.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          _noticeTitle('${value[index].title}'),
+                    ),
+                  ],
                 ),
-                // Container(height: 15.0),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: value.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      _noticeTitle('${value[index].title}'),
-                ),
-              ],
+              ),
             ));
       },
       selector: (BuildContext context, HomeManager homeManager) {
@@ -149,41 +164,39 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _articlesView(BuildContext context) {
-    HomeManager homeManager = HomeManager();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '便民信息',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
-                    color: Color.fromRGBO(51, 51, 51, 1)),
+    return Selector<HomeManager, UnmodifiableListView<Article>>(
+      builder: (BuildContext context, UnmodifiableListView<Article> value,
+          Widget? child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '便民信息',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.sp,
+                        color: Color.fromRGBO(51, 51, 51, 1)),
+                  ),
+                  value.isNotEmpty
+                      ? Text(
+                          '更多 >',
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Color.fromRGBO(155, 155, 155, 1)),
+                        )
+                      : Container(),
+                ],
               ),
-              homeManager.articlesList.isNotEmpty
-                  ? Text(
-                      '更多 >',
-                      style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Color.fromRGBO(155, 155, 155, 1)),
-                    )
-                  : Container(),
-            ],
-          ),
-        ),
-        Container(height: 10.0.h),
-        Selector<HomeManager, UnmodifiableListView<Article>>(
-          builder: (BuildContext context, UnmodifiableListView<Article> value,
-              Widget? child) {
-            print("DEBUG=> _articlesView 重绘了。。。。。");
-            return Container(
-              // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+            ),
+            Container(height: 10.0.h),
+            Container(
+              // padding: const EdgeInsets.only(left: 15.0, right: 15.0),
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -196,14 +209,14 @@ class HomePage extends StatelessWidget {
                   }
                 },
               ),
-            );
-          },
-          selector: (BuildContext context, HomeManager homeManager) {
-            return homeManager.articlesList;
-          },
-          shouldRebuild: (pre, next) => pre != next,
-        ),
-      ],
+            ),
+          ],
+        );
+      },
+      selector: (BuildContext context, HomeManager homeManager) {
+        return homeManager.articlesList;
+      },
+      shouldRebuild: (pre, next) => pre != next,
     );
   }
 }

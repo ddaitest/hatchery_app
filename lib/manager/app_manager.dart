@@ -36,7 +36,7 @@ class AppManager extends ChangeNotifier {
 
   AppManager() {
     isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
-    if (!isAgreeAgreementValue) {
+    if (isAgreeAgreementValue) {
       _queryConfigData();
       querySplashAdData();
     }
@@ -45,13 +45,6 @@ class AppManager extends ChangeNotifier {
     // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
     // initPlatformState();
   }
-
-  /// 获取协议是否同意标识
-  // bool _getLocalAgreeAgreementValue() {
-  //   _isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
-  //   print("DEBUG=> #### $_isAgreeAgreementValue");
-  //   return _isAgreeAgreementValue;
-  // }
 
   Future<void> initPlatformState() async {
     try {
@@ -119,11 +112,6 @@ class AppManager extends ChangeNotifier {
       }
     });
   }
-
-  // void add(PhoneNumberInfo item) {
-  //   _phoneNumbersList.add(item);
-  //   notifyListeners();
-  // }
 
   @override
   void dispose() {
