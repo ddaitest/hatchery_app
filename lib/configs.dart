@@ -16,7 +16,7 @@ const String SERVICE_ID = '5e089b4abc2d3e1ea9fe637d';
 
 const String SPLASH_ID = '5e089b4abc2d3e1ea9fe637d';
 
-const String HOME_ID = '5dfe047470492f05963a1eca';
+const String HOME_ID = 'tab1';
 
 const String SERVICE_CATEGORY_ID = '5dfe048c70492f05963a1ecd';
 

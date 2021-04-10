@@ -16,51 +16,80 @@ class HomeManager extends ChangeNotifier {
   PageStatus _status = PageStatus.LOADING;
 
   //banner 数据
-  List<BannerInfo> _banner = [];
+  List<BannerInfo> _bannerList = [];
 
   //公告内容
-  List<Notice> _notices = [];
+  List<Notice> _noticesList = [];
 
   //软文
   List<Article> _articlesList = [];
-  int _articlesDataLength = 0;
-
-  int get articlesDataTotal => _articlesDataLength;
 
   PageStatus get status => _status;
 
-  UnmodifiableListView<BannerInfo> get banner => UnmodifiableListView(_banner);
+  UnmodifiableListView<BannerInfo> get bannerList =>
+      UnmodifiableListView(_bannerList);
 
-  UnmodifiableListView<Notice> get posts => UnmodifiableListView(_notices);
+  UnmodifiableListView<Notice> get noticesList =>
+      UnmodifiableListView(_noticesList);
 
   UnmodifiableListView<Article> get articlesList =>
       UnmodifiableListView(_articlesList);
 
-  List<dynamic>? _finalParse;
-
   HomeManager() {
-    _loadBanner();
-    _loadPost();
-    // _loadArticles();
+    _queryNoticesData();
+    _queryBannerData();
     queryArticleData();
   }
 
-  _loadBanner() {
-    List<BannerInfo> info = <BannerInfo>[];
-    _banner.addAll(info);
+  _queryBannerData() async {
+    await API.getBannerList(0, 10, HOME_ID).then((value) {
+      if (value.isSuccess()) {
+        List<dynamic>? _finalParse = value.getData();
+        if (_finalParse != null) {
+          if (_finalParse.isNotEmpty) {
+            _finalParse.forEach((element) {
+              addBanner(BannerInfo.fromJson(element));
+            });
+          } else {
+            _bannerList = [];
+          }
+        } else {
+          _bannerList = [];
+        }
+      }
+    });
+    notifyListeners();
+  }
+
+  _queryNoticesData() async {
+    await API.getNoticeList(0, 10, HOME_ID).then((value) {
+      if (value.isSuccess()) {
+        List<dynamic>? _finalParse = value.getData();
+        if (_finalParse != null) {
+          if (_finalParse.isNotEmpty) {
+            _finalParse.forEach((element) {
+              addNotices(Notice.fromJson(element));
+            });
+          } else {
+            _noticesList = [];
+          }
+        } else {
+          _noticesList = [];
+        }
+      }
+    });
+    notifyListeners();
   }
 
   queryArticleData() async {
     await API.getArticleList(0, 10, HOME_ID).then((value) {
       if (value.isSuccess()) {
-        _finalParse = value.getData();
+        List<dynamic>? _finalParse = value.getData();
         if (_finalParse != null) {
-          print("DEBUG=> queryHomeData${_finalParse}");
-          if (_finalParse!.isNotEmpty) {
-            _finalParse!.forEach((element) {
+          if (_finalParse.isNotEmpty) {
+            _finalParse.forEach((element) {
               addArticles(Article.fromJson(element));
             });
-            notifyListeners();
           } else {
             _articlesList = [];
           }
@@ -69,113 +98,19 @@ class HomeManager extends ChangeNotifier {
         }
       }
     });
-  }
-
-  _loadArticles() async {
-    final thumbnail =
-        "https://upload-images.jianshu.io/upload_images/10392521-682342d2186572c0.jpg-mobile?imageMogr2/auto-orient/strip|imageView2/2/w/750/format/webp";
-    final summary1 =
-        "前段时间一直在进行hybrid app的调优工作，主要工作集中在webview的优化。工程实践虽然离不开方法论的指导，但到了具体实施仍然千差万别。webview优化存在典型的加载时间与优化难度负相关的关系。这次调优，我们也分别从纯前端层面以及Xcode/Java层面进行双向优化的工作。相较而言，纯前端优化有更多传统、经典的方法论作为指导，效果更容易获取。而Xcode/Java层，就需要更多的借鉴和自我创新。今天这篇文章，记录下前端，既纯h5层面可以优化的部分思路。";
-//    List<Article> data = model.getListData(pageType);
-//    final enablePullUp = model.getHasMore(pageType);
-    final enablePullUp = false;
-    List<Article> data = [];
-    data.add(Article(
-        "id",
-        thumbnail,
-        "title",
-        summary1,
-        "contentType",
-        "source",
-        "status",
-        "clientId",
-        "redirectUrl",
-        "updateTime",
-        "createTime"));
-    data.add(Article(
-        "id",
-        thumbnail,
-        "title",
-        summary1,
-        "contentType",
-        "source",
-        "status",
-        "clientId",
-        "redirectUrl",
-        "updateTime",
-        "createTime"));
-    data.add(Article(
-        "id",
-        thumbnail,
-        "title",
-        summary1,
-        "contentType",
-        "source",
-        "status",
-        "clientId",
-        "redirectUrl",
-        "updateTime",
-        "createTime"));
-    data.add(Article(
-        "id",
-        thumbnail,
-        "title",
-        summary1,
-        "contentType",
-        "source",
-        "status",
-        "clientId",
-        "redirectUrl",
-        "updateTime",
-        "createTime"));
-    data.add(Article(
-        "id",
-        thumbnail,
-        "title",
-        summary1,
-        "contentType",
-        "source",
-        "status",
-        "clientId",
-        "redirectUrl",
-        "updateTime",
-        "createTime"));
-    _articlesList.addAll(data);
-    notifyListeners();
-  }
-
-  var page = 0;
-  int pageSize = 10;
-
-  // loadArticles() async {
-  //   ApiResult result = await API.getArticleList(page, pageSize, "tab1");
-  //   if (result.isSuccess()) {
-  //     print("ApiResult.data = ${result.getData()}");
-  //   }
-  // }
-
-  void _loadPost() async {
-    final thumbnail =
-        "https://upload-images.jianshu.io/upload_images/10392521-682342d2186572c0.jpg-mobile?imageMogr2/auto-orient/strip|imageView2/2/w/750/format/webp";
-    final summary =
-        "前段时间一直在进行hybrid app的调优工作，主要工作集中在webview的优化。工程实践虽然离不开方法论的指导，但到了具体实施仍然千差万别。webview优化存在典型的加载时间与优化难度负相关的关系。这次调优，我们也分别从纯前端层面以及Xcode/Java层面进行双向优化的工作。相较而言，纯前端优化有更多传统、经典的方法论作为指导，效果更容易获取。而Xcode/Java层，就需要更多的借鉴和自我创新。今天这篇文章，记录下前端，既纯h5层面可以优化的部分思路。";
-    List<Notice> data = [];
-    data.add(Notice("id", thumbnail, "title", summary, "contentType", "source",
-        "status", "clientId", "redirectUrl", "updateTime", "createTime"));
-    data.add(Notice("id", thumbnail, "title", summary, "contentType", "source",
-        "status", "clientId", "redirectUrl", "updateTime", "createTime"));
-    data.add(Notice("id", thumbnail, "title", summary, "contentType", "source",
-        "status", "clientId", "redirectUrl", "updateTime", "createTime"));
-    data.add(Notice("id", thumbnail, "title", summary, "contentType", "source",
-        "status", "clientId", "redirectUrl", "updateTime", "createTime"));
-    data.add(Notice("id", thumbnail, "title", summary, "contentType", "source",
-        "status", "clientId", "redirectUrl", "updateTime", "createTime"));
-    _notices.addAll(data);
     notifyListeners();
   }
 
   void addArticles(Article item) {
     _articlesList.add(item);
+  }
+
+  void addNotices(Notice item) {
+    _noticesList.add(item);
+  }
+
+  void addBanner(BannerInfo item) {
+    _bannerList.add(item);
   }
 
   void clickBanner(int index) {}
