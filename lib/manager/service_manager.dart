@@ -36,6 +36,17 @@ class ServiceManager extends ChangeNotifier {
     "size": FEED_SIZE,
   };
 
+  List<ServiceInfo> services = [
+    ServiceInfo("报事报修", "repairs"),
+    ServiceInfo("问题反馈", "feedback"),
+    ServiceInfo("联系物业", "contact"),
+    ServiceInfo("便民服务", "service_1"),
+    ServiceInfo("家电维修", "service_2"),
+    ServiceInfo("房屋租售", "service_3"),
+    ServiceInfo("教育培训", "service_4"),
+    ServiceInfo("开锁换锁", "service_5"),
+  ];
+
   // String result;
   // Map parsed;
   // String topResult;

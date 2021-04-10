@@ -204,3 +204,12 @@ class Feedback {
 
   Map<String, dynamic> toJson() => _$FeedbackToJson(this);
 }
+
+
+class ServiceInfo{
+  String image = "";
+  String name = "";
+  String serviceId = "";
+
+  ServiceInfo(this.name, this.serviceId);
+}

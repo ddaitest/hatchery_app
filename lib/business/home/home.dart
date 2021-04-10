@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hatchery/api/entity.dart';
+import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/backgourds.dart';
 import 'package:hatchery/common/widget/post_item.dart';
@@ -17,6 +18,7 @@ import 'package:provider/provider.dart';
 class HomePage extends StatelessWidget {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,30 +81,10 @@ class HomePage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _moreServiceItem('images/image1.png', '问题反馈'),
-          _moreServiceItem('images/image2.png', '报事报修'),
-          _moreServiceItem('images/image3.png', '联系物业'),
-          _moreServiceItem('images/image4.png', '全部服务'),
-        ],
-      ),
-    );
-  }
-
-  Widget _moreServiceItem(String imagePath, String text) {
-    return Container(
-      // height: 50.0.h,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Image.asset(
-            imagePath,
-            height: 30.0.h,
-            width: 30.0.w,
-          ),
-          Container(height: 10.0.h),
-          Text(text,
-              style: TextStyle(
-                  fontSize: 13.sp, color: Color.fromRGBO(51, 51, 51, 1)))
+          ServiceItem('images/image1.png', '问题反馈'),
+          ServiceItem('images/image2.png', '报事报修'),
+          ServiceItem('images/image3.png', '联系物业'),
+          ServiceItem('images/image4.png', '全部服务'),
         ],
       ),
     );
