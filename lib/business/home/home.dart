@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:hatchery/common/exts.dart';
 import 'package:hatchery/manager/service_manager.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
@@ -39,6 +41,7 @@ class HomePage extends StatelessWidget {
 
   /// 顶部banner & service View
   Widget _topContainerMain(context) {
+    _popAdView(context);
     return Container(
       width: MediaQuery.of(context).size.width.w,
       height: 175.0.h,
@@ -106,6 +109,7 @@ class HomePage extends StatelessWidget {
                   scale: 0.9,
                   pagination: SwiperPagination(),
                   onTap: (index) {
+                    _popAdView(context);
                     _homeManager.clickBanner(index);
                   },
                 ),
@@ -281,5 +285,28 @@ class HomePage extends StatelessWidget {
       },
       shouldRebuild: (pre, next) => pre != next,
     );
+  }
+
+  _popAdView(BuildContext context) {
+    return Alert(
+      title: '',
+      context: context,
+      style: AlertStyle(
+        isButtonVisible: false,
+        alertElevation: 0.0,
+        backgroundColor: Colors.transparent,
+        overlayColor: Colors.transparent,
+        buttonAreaPadding: const EdgeInsets.all(0.0),
+        constraints: BoxConstraints(
+            minWidth: double.infinity.w, //宽度尽可能大
+            minHeight: 300.0.h //最小高度为50像素
+            ),
+      ),
+      content: CachedNetworkImage(
+        imageUrl:
+            'http://cdn.duitang.com/uploads/item/201407/16/20140716212515_TvYEA.jpeg',
+        fit: BoxFit.cover,
+      ),
+    ).show();
   }
 }
