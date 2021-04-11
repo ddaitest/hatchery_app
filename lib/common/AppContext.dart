@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AppContext {
+class App {
   static final navState = new GlobalKey<NavigatorState>();
 
-  static T getManager<T>({bool listen: false}) {
+  static T manager<T>({bool listen: false}) {
     return Provider.of<T>(navState.currentContext!, listen: listen);
   }
 }

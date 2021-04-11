@@ -87,7 +87,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
   gotoHomePage() async {
     String? pn = widget.pathName;
-    if (pn == null) {
+    if (pn == null || pn.isEmpty) {
       Navigator.pop(context);
     } else {
       Navigator.of(context).pushReplacementNamed(pn);

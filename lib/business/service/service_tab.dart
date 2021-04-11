@@ -52,33 +52,16 @@ class ServiceTabState extends State<ServiceTab>
   }
 
   void _onRefresh() async {
-    Provider.of<ServiceManager>(context, listen: false).refresh().then((value) {
-      switch (value) {
-        case PageRefreshStatus.completed:
-          _refreshController.refreshCompleted();
-          break;
-        case PageRefreshStatus.failed:
-          _refreshController.refreshFailed();
-          break;
-      }
-    });
+    Provider.of<ServiceManager>(context, listen: false)
+        .refresh()
+        .then((value) => value.handle(_refreshController));
   }
 
   void _onLoading() async {
     // AppContext.getManager<ServiceManager>().loadMore();
-    Provider.of<ServiceManager>(context, listen: false).loadMore().then((value) {
-      switch (value) {
-        case PageLoadStatus.canLoading:
-          _refreshController.loadComplete();
-          break;
-        case PageLoadStatus.noMore:
-          _refreshController.loadNoData();
-          break;
-        case PageLoadStatus.failed:
-          _refreshController.loadFailed();
-          break;
-      }
-    });
+    Provider.of<ServiceManager>(context, listen: false)
+        .loadMore()
+        .then((value) => value.handle(_refreshController));
   }
 
   Widget _topPart(BuildContext context) {
@@ -122,6 +105,8 @@ class ServiceTabState extends State<ServiceTab>
     return Selector<ServiceManager, List<Article>>(
       builder: (context, value, child) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: value.map((e) => ArticleItem(e)).toList(),
         );
       },

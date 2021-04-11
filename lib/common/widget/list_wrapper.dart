@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../PageStatus.dart';
+
 Widget getSimpleHeader() {
   TextStyle style = const TextStyle(color: Colors.grey);
   return WaterDropHeader(
@@ -60,4 +62,33 @@ Widget getSimpleFooter() {
       );
     },
   );
+}
+
+extension LoadStatusHandler on PageLoadStatus {
+  handle(RefreshController controller) {
+    switch (this) {
+      case PageLoadStatus.canLoading:
+        controller.loadComplete();
+        break;
+      case PageLoadStatus.noMore:
+        controller.loadNoData();
+        break;
+      case PageLoadStatus.failed:
+        controller.loadFailed();
+        break;
+    }
+  }
+}
+
+extension RefreshStatusHandler on PageRefreshStatus {
+  handle(RefreshController controller) {
+    switch (this) {
+      case PageRefreshStatus.completed:
+        controller.refreshCompleted();
+        break;
+      case PageRefreshStatus.failed:
+        controller.refreshFailed();
+        break;
+    }
+  }
 }
