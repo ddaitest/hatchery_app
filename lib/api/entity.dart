@@ -179,7 +179,7 @@ class Contact {
 
 /// 问题反馈 + 报事报修
 @JsonSerializable()
-class Feedback {
+class FeedbackInfo {
   String id = "";
 
   String title = "";
@@ -196,20 +196,19 @@ class Feedback {
   String img5 = "";
   String img6 = "";
 
-  Feedback(this.id, this.title, this.contents, this.phone, this.img1, this.img2,
+  FeedbackInfo(this.id, this.title, this.contents, this.phone, this.img1, this.img2,
       this.img3, this.img4, this.img5, this.img6);
 
-  factory Feedback.fromJson(Map<String, dynamic> json) =>
-      _$FeedbackFromJson(json);
+  factory FeedbackInfo.fromJson(Map<String, dynamic> json) =>
+      _$FeedbackInfoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FeedbackToJson(this);
+  Map<String, dynamic> toJson() => _$FeedbackInfoToJson(this);
 }
 
-
-class ServiceInfo{
+class ServiceInfo {
   String image = "";
   String name = "";
   String serviceId = "";
 
-  ServiceInfo(this.name, this.serviceId);
+  ServiceInfo(this.image, this.name, this.serviceId);
 }

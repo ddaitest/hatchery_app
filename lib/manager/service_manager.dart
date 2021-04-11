@@ -11,6 +11,8 @@ import 'dart:collection';
 import 'package:hatchery/configs.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../routers.dart';
+
 class ServiceManager extends ChangeNotifier {
   List<Article> _articles = [];
 
@@ -20,17 +22,33 @@ class ServiceManager extends ChangeNotifier {
   static const int _pageSize = 10; //软文每次加载SIZE
 
   List<ServiceInfo> services = [
-    ServiceInfo("报事报修", "repairs"),
-    ServiceInfo("问题反馈", "feedback"),
-    ServiceInfo("联系物业", "contact"),
-    ServiceInfo("便民服务", "service_1"),
-    ServiceInfo("家电维修", "service_2"),
-    ServiceInfo("房屋租售", "service_3"),
-    ServiceInfo("教育培训", "service_4"),
-    ServiceInfo("开锁换锁", "service_5"),
+    //TODO fix
+    ServiceInfo('images/image1.png',"问题反馈", "feedback"),
+    ServiceInfo('images/image2.png',"报事报修", "repairs"),
+    ServiceInfo('images/image3.png',"联系物业", "contact"),
+    ServiceInfo('images/image4.png',"便民服务", "service_1"),
+    ServiceInfo('images/image1.png',"家电维修", "service_2"),
+    ServiceInfo('images/image2.png',"房屋租售", "service_3"),
+    ServiceInfo('images/image3.png',"教育培训", "service_4"),
+    ServiceInfo('images/image4.png',"开锁换锁", "service_5"),
   ];
 
-  ServiceManager() {}
+  clickService(ServiceInfo serviceInfo) {
+    switch (serviceInfo.serviceId) {
+      case "repairs":
+        Routers.navigateTo('/repairs_list');
+        break;
+      case "feedback":
+        Routers.navigateTo('/feedback_list');
+        break;
+      case "contact":
+        Routers.navigateTo('/contact');
+        break;
+      default:
+        Routers.navListPage(serviceInfo.serviceId);
+        break;
+    }
+  }
 
   /// 页面 load more
   Future<PageLoadStatus> loadMore() async {

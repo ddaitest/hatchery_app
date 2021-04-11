@@ -29,11 +29,11 @@ class ServiceTabState extends State<ServiceTab>
   @override
   void initState() {
     super.initState();
-    Provider.of<ServiceManager>(context, listen: false).refresh();
+    // Provider.of<ServiceManager>(context, listen: false).refresh();
   }
 
   RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +52,13 @@ class ServiceTabState extends State<ServiceTab>
   }
 
   void _onRefresh() async {
-    Provider.of<ServiceManager>(context, listen: false)
+    App.manager<ServiceManager>()
         .refresh()
         .then((value) => value.handle(_refreshController));
   }
 
   void _onLoading() async {
-    // AppContext.getManager<ServiceManager>().loadMore();
-    Provider.of<ServiceManager>(context, listen: false)
+    App.manager<ServiceManager>()
         .loadMore()
         .then((value) => value.handle(_refreshController));
   }
@@ -119,6 +118,7 @@ class ServiceTabState extends State<ServiceTab>
   }
 
   Widget _computeTopServiceView(List<ServiceInfo> data) {
+    ServiceManager manager = App.manager<ServiceManager>();
     var views = <Widget>[];
     //generator first line.
     if (data.length > 3) {
@@ -126,7 +126,8 @@ class ServiceTabState extends State<ServiceTab>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: data
             .sublist(0, 4)
-            .map((e) => ServiceItem('images/image1.png', e.name))
+            .map((e) =>
+                ServiceItem(e.image, e.name, () => manager.clickService(e)))
             .toList(),
       ));
     }
@@ -136,7 +137,8 @@ class ServiceTabState extends State<ServiceTab>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: data
             .sublist(4)
-            .map((e) => ServiceItem('images/image1.png', e.name))
+            .map((e) =>
+                ServiceItem(e.image, e.name, () => manager.clickService(e)))
             .toList(),
       ));
     }
