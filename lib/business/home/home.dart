@@ -41,7 +41,6 @@ class HomePage extends StatelessWidget {
 
   /// 顶部banner & service View
   Widget _topContainerMain(context) {
-    _popAdView(context);
     return Container(
       width: MediaQuery.of(context).size.width.w,
       height: 175.0.h,
