@@ -48,14 +48,13 @@ class NearbyTabState extends State<NearbyTab>
   }
 
   void _onRefresh() async {
-    Provider.of<NearbyManager>(context, listen: false)
+    App.manager<NearbyManager>()
         .refresh()
         .then((value) => value.handle(_refreshController));
   }
 
   void _onLoading() async {
-    // AppContext.getManager<ServiceManager>().loadMore();
-    Provider.of<NearbyManager>(context, listen: false)
+    App.manager<NearbyManager>()
         .loadMore()
         .then((value) => value.handle(_refreshController));
   }
