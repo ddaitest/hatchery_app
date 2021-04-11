@@ -19,7 +19,7 @@ class MainTabState extends State<MainTab> {
   int _tabIndex = 0;
   List<String> bottomBarTitles = ['首页', '服务', '周边'];
 
-  List<Widget> _tabBodies = [ ServiceTab(), HomePage(),NearbyTab()];
+  List<Widget> _tabBodies = [HomePage(), ServiceTab(), NearbyTab()];
   late PageController _pageController;
 
   @override
