@@ -24,34 +24,23 @@ class ArticleItem extends StatelessWidget {
             );
           }
         },
-        child: _titleView());
+        child: _titleView(context));
   }
 
-  Widget _titleView() {
+  Widget _titleView(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
-      height: 71.0.h,
-      width: 275.0.w,
-      child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
-        leading: _imageView(article.image),
-        title: Text(
-          article.title,
-          textAlign: TextAlign.left,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 16, color: Color.fromRGBO(51, 51, 51, 1)),
-        ),
-        subtitle: Text(
-          article.summary,
-          textAlign: TextAlign.left,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style:
-              TextStyle(fontSize: 14, color: Color.fromRGBO(155, 155, 155, 1)),
-        ),
-      ),
-    );
+        height: 78.0.h,
+        padding: const EdgeInsets.only(right: 20.0, left: 20.0, top: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _imageView(article.image),
+            Container(width: 20.0.h),
+            _textView(
+                '短点的像素、density的取值都是一样的，所以需要适配的是长。', '大、屏占比高、长宽比达到了19.5:9甚至更高；'),
+            // _textView(article.title, article.summary),
+          ],
+        ));
   }
 
   Widget _imageView(String imgUrl) {
@@ -66,14 +55,42 @@ class ArticleItem extends StatelessWidget {
                 image: imageProvider,
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.circular((8.0)), // 圆角度
+              borderRadius: BorderRadius.circular((6.0)), // 圆角度
             ),
           ),
           placeholder: (context, url) =>
-              LoadingView(1, viewHeight: 70.0, viewWidth: 70.0),
+              LoadingView(viewHeight: 70.0, viewWidth: 70.0),
           errorWidget: (context, url, error) =>
               Icon(Icons.image_not_supported_outlined),
         ));
+  }
+
+  Widget _textView(String title, String subtitle) {
+    return Expanded(
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 16.sp, color: Color(0xFF333333)),
+            ),
+            Container(height: 10.0.w),
+            Text(
+              subtitle,
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13.sp, color: Color(0xFF999999)),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -87,18 +104,34 @@ class ArticleItemLoading extends StatelessWidget {
 
   Widget _titleView() {
     return Container(
-      height: 71.0.h,
-      width: 275.0.w,
-      child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
-        leading: _imageView(),
-        title: LoadingView(1, viewHeight: 15.0),
-        subtitle: LoadingView(1, viewHeight: 15.0),
+        height: 78.0.h,
+        padding: const EdgeInsets.only(right: 20.0, left: 20.0, top: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _imageView(),
+            Container(width: 20.0.h),
+            _textView(),
+          ],
+        ));
+  }
+
+  Widget _textView() {
+    return Expanded(
+        child: Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          LoadingView(viewHeight: 20.0, viewWidth: 200.0),
+          Container(height: 10.0.w),
+          LoadingView(viewHeight: 15.0, viewWidth: 100.0),
+        ],
       ),
-    );
+    ));
   }
 
   Widget _imageView() {
-    return LoadingView(0, viewHeight: 70.0, viewWidth: 70.0);
+    return LoadingView(viewHeight: 70.0, viewWidth: 70.0);
   }
 }

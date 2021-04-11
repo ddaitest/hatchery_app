@@ -22,58 +22,93 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
+    return Scaffold(
+      backgroundColor: Color(0xFFF7F7F7),
+      body: ListView(
         // shrinkWrap: true,
         children: [
-          _bannerView(context),
-          _moreServiceView(),
-          _noticeView(),
-          _articlesView(context),
+          _topContainerMain(context),
+          _noticeContainerMain(),
+          _articlesContainerMain(context),
         ],
       ),
     );
   }
 
+  /// 顶部banner & service View
+  Widget _topContainerMain(context) {
+    return Container(
+      width: MediaQuery.of(context).size.width.w,
+      height: 175.0.h,
+      decoration: BoxDecoration(
+        color: Color(0xFFFFFFFF),
+      ),
+      child: Container(
+        child: Column(
+          children: [
+            _bannerView(context),
+            _moreServiceView(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _noticeContainerMain() {
+    return Container(
+      padding: const EdgeInsets.only(
+          left: 14.0, right: 14.0, top: 12.0, bottom: 12.0),
+      child: _noticeView(),
+    );
+  }
+
+  Widget _articlesContainerMain(context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0),
+      child: _articlesView(context),
+    );
+  }
+
   /// View: Banner
   Widget _bannerView(BuildContext context) {
+    HomeManager _homeManager = HomeManager();
     return Selector<HomeManager, UnmodifiableListView<BannerInfo>>(
       builder: (BuildContext context, UnmodifiableListView<BannerInfo> value,
           Widget? child) {
         print("DEBUG=> _bannerView 重绘了。。。。。");
-        return Container(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
-          width: 300.0.w,
-          height: 120.0.h,
-          child: Swiper(
-            autoplay: true,
-            itemBuilder: (BuildContext context, int index) {
-              ImageProvider imageProvider;
-              String imageURL = value[index].image;
-              imageProvider = CachedNetworkImageProvider(imageURL);
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: CachedNetworkImage(
-                  imageUrl: value[index].image,
-                  fit: BoxFit.fitWidth,
-                  placeholder: (context, url) =>
-                      LoadingView(1, viewHeight: 120.0.h, viewWidth: 300.0.w),
-                  errorWidget: (context, url, error) =>
-                      Icon(Icons.image_not_supported_outlined),
+        return value.isNotEmpty
+            ? Container(
+                padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+                height: 92.0.h,
+                child: Swiper(
+                  autoplay: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'https://img.zcool.cn/community/01d56b5542d8bc0000019ae98da289.jpg@1280w_1l_2o_100sh.png',
+                        // imageUrl: value[index].image,
+                        fit: BoxFit.fitWidth,
+                        placeholder: (context, url) => LoadingView(
+                            viewHeight: 92.0.h,
+                            viewWidth: MediaQuery.of(context).size.width),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.image_not_supported_outlined),
+                      ),
+                    );
+                  },
+                  itemHeight: 92.0.h,
+                  itemCount: value.length,
+                  viewportFraction: 1,
+                  scale: 0.9,
+                  pagination: SwiperPagination(),
+                  onTap: (index) {
+                    _homeManager.clickBanner(index);
+                  },
                 ),
-              );
-            },
-            itemHeight: 120.0.h,
-            itemCount: value.length,
-            viewportFraction: 1,
-            scale: 0.9,
-            pagination: SwiperPagination(),
-//        control: SwiperControl(),
-            onTap: (index) {
-              // manager.clickBanner(index);
-            },
-          ),
-        );
+              )
+            : Container();
       },
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.bannerList;
@@ -85,7 +120,7 @@ class HomePage extends StatelessWidget {
   Widget _moreServiceView() {
     print("DEBUG=> _moreServiceView 重绘了。。。。。");
     return Container(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
+      padding: const EdgeInsets.only(left: 14.0, right: 14.0, top: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -104,49 +139,68 @@ class HomePage extends StatelessWidget {
           Widget? child) {
         print("DEBUG=> _noticeView 重绘了。。。。。");
         return Container(
-            padding:
-                const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
-            child: Card(
-              child: Container(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(6.0)),
+            color: Color(0xFFFFFFFF),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '物业公告',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.sp,
-                                color: Color.fromRGBO(51, 51, 51, 1)),
-                          ),
-                          value.length > 4
-                              ? Text(
-                                  '更多 >',
-                                  style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Color.fromRGBO(155, 155, 155, 1)),
-                                )
-                              : Container(),
-                        ],
-                      ),
+                    Text(
+                      '物业公告',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                          color: Color(0xFF333333)),
                     ),
-                    Container(height: 15.0),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: value.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          _noticeTitle('${value[index].title}'),
+                    Text(
+                      '更多 >',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                          color: Color(0xFF666666)),
                     ),
                   ],
                 ),
               ),
-            ));
+              Divider(
+                indent: 14.0,
+                endIndent: 14.0,
+                thickness: 1.0.h,
+                height: 1.0.h,
+                color: Color(0xFFF4F4F4),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                    left: 20.0, right: 20.0, top: 16.0, bottom: 10.0),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: value.isEmpty ? 3 : value.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (value.isEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            LoadingView(viewHeight: 17.0, viewWidth: 200.0),
+                            Container(height: 10.h)
+                          ],
+                        );
+                      } else {
+                        return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
+                        // return _noticeTitle('${value[index].title}');
+                      }
+                    }),
+              ),
+            ],
+          ),
+        );
       },
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.noticesList;
@@ -158,60 +212,68 @@ class HomePage extends StatelessWidget {
   Widget _noticeTitle(String text) {
     return Container(
         padding: const EdgeInsets.only(bottom: 10.0),
-        child: Text(text,
-            style: TextStyle(
-                fontSize: 14.sp, color: Color.fromRGBO(51, 51, 51, 1))));
+        child: Text('$text',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 14.sp, color: Color(0xFF333333))));
   }
 
   Widget _articlesView(BuildContext context) {
     return Selector<HomeManager, UnmodifiableListView<Article>>(
       builder: (BuildContext context, UnmodifiableListView<Article> value,
           Widget? child) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '便民信息',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Color.fromRGBO(51, 51, 51, 1)),
+        return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(6.0)),
+              color: Color(0xFFFFFFFF),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '便民信息',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                            color: Color(0xFF333333)),
+                      ),
+                      Text(
+                        '更多 >',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
+                            color: Color(0xFF666666)),
+                      ),
+                    ],
                   ),
-                  value.isNotEmpty
-                      ? Text(
-                          '更多 >',
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Color.fromRGBO(155, 155, 155, 1)),
-                        )
-                      : Container(),
-                ],
-              ),
-            ),
-            Container(height: 10.0.h),
-            Container(
-              // padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: value.isEmpty ? 5 : value.length,
-                itemBuilder: (BuildContext context, int index) {
-                  if (value.isEmpty) {
-                    return ArticleItemLoading();
-                  } else {
-                    return ArticleItem(value[index]);
-                  }
-                },
-              ),
-            ),
-          ],
-        );
+                ),
+                Divider(
+                  indent: 14.0,
+                  endIndent: 14.0,
+                  thickness: 1.0.h,
+                  height: 1.0.h,
+                  color: Color(0xFFF4F4F4),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: value.isEmpty ? 5 : value.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (value.isEmpty) {
+                      return ArticleItemLoading();
+                    } else {
+                      return ArticleItem(value[index]);
+                    }
+                  },
+                ),
+              ],
+            ));
       },
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.articlesList;

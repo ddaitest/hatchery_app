@@ -37,7 +37,10 @@ class MainTabState extends State<MainTab> {
           appBar: AppBar(
             title: Text(
               COMMUNITY_NAME,
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500),
             ),
             centerTitle: true,
             backgroundColor: Colors.white,

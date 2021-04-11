@@ -10,7 +10,6 @@ class ServiceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 50.0.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -19,10 +18,12 @@ class ServiceItem extends StatelessWidget {
             height: 30.0.h,
             width: 30.0.w,
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 8.0.h),
           Text(text,
               style: TextStyle(
-                  fontSize: 13.sp, color: Color.fromRGBO(51, 51, 51, 1)))
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF666666)))
         ],
       ),
     );

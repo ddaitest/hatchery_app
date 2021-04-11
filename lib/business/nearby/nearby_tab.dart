@@ -76,7 +76,7 @@ class NearbyTabState extends State<NearbyTab>
                   imageUrl: value[index].image,
                   fit: BoxFit.fitWidth,
                   placeholder: (context, url) =>
-                      LoadingView(1, viewHeight: 120.0.h, viewWidth: 300.0.w),
+                      LoadingView(viewHeight: 120.0.h, viewWidth: 300.0.w),
                   errorWidget: (context, url, error) =>
                       Icon(Icons.image_not_supported_outlined),
                 ),
