@@ -19,6 +19,7 @@ class Routers {
       case '/feedback_list':
         return MaterialPageRoute(builder: (_) => FeedbackListPage());
       case '/web_view':
+        //跳转 web view, 解析对应参数。
         Map map = settings.arguments as Map<String, String>;
         return MaterialPageRoute(
             builder: (_) => WebViewPage(map["url"], map["path"]));
@@ -31,10 +32,12 @@ class Routers {
     }
   }
 
+  ///一般跳转，无参数
   static Future<dynamic> navigateTo(String routeName, {Object? arg}) {
     return App.navState.currentState!.pushNamed(routeName, arguments: arg);
   }
 
+  ///跳转  WebView, 带参数的页面建议单独定义
   static Future<dynamic> navWebView(String url, {String? path}) {
     return navigateTo('/web_view', arg: {"url": url, "path": path ?? ""});
   }
