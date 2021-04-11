@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/AppContext.dart';
-
+import 'package:hatchery/common/route_animation.dart';
 import 'business/contact/contact_page.dart';
 import 'business/feedback/feedback_list.dart';
 import 'business/feedback/feedback_new.dart';
@@ -14,36 +15,36 @@ class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => MainTab());
+        return CupertinoPageRoute(builder: (_) => MainTab());
       case '/agreementPage':
-        return MaterialPageRoute(builder: (_) => AgreementPage());
+        return CupertinoPageRoute(builder: (_) => AgreementPage());
       case '/splash':
-        return MaterialPageRoute(builder: (_) => SplashPage());
+        return CupertinoPageRoute(builder: (_) => SplashPage());
       case '/feedback_list':
-        return MaterialPageRoute(builder: (_) => FeedbackListPage());
+        return CupertinoPageRoute(builder: (_) => FeedbackListPage());
       case '/feedback_new':
-        return MaterialPageRoute(builder: (_) => FeedbackNew());
+        return CupertinoPageRoute(builder: (_) => FeedbackNew());
       case '/contact':
-        return MaterialPageRoute(builder: (_) => ContactPage());
+        return CupertinoPageRoute(builder: (_) => ContactPage());
       case '/repairs_list':
-        return MaterialPageRoute(builder: (_) => FeedbackListPage());
+        return CupertinoPageRoute(builder: (_) => FeedbackListPage());
       case '/repairs_new':
-        return MaterialPageRoute(builder: (_) => FeedbackNew());
+        return CupertinoPageRoute(builder: (_) => FeedbackNew());
       // case '/contact':
       //   return MaterialPageRoute(builder: (_) => ContactPage());
       // case '/contact':
       //   return MaterialPageRoute(builder: (_) => ContactPage());
 
       case '/list_page':
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
             builder: (_) => ListPage(settings.arguments as String));
       case '/web_view':
         //跳转 web view, 解析对应参数。
         Map map = settings.arguments as Map<String, String>;
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
             builder: (_) => WebViewPage(map["url"], map["path"]));
       default:
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
             builder: (_) => Scaffold(
                   body: Center(
                       child: Text('No route defined for ${settings.name}')),

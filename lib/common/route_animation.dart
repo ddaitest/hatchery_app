@@ -4,7 +4,7 @@ class AnimationRoute extends PageRouteBuilder {
   final Widget widget;
   final int switchNum;
 
-  AnimationRoute(this.widget, this.switchNum)
+  AnimationRoute(this.widget, {this.switchNum = 3})
       : super(
             transitionDuration: const Duration(milliseconds: 300), //设置动画时长500毫秒
             pageBuilder: (BuildContext context, Animation<double> animation1,
