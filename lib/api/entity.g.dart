@@ -119,8 +119,8 @@ Map<String, dynamic> _$ContactToJson(Contact instance) => <String, dynamic>{
       'contents_short': instance.content,
     };
 
-Feedback _$FeedbackFromJson(Map<String, dynamic> json) {
-  return Feedback(
+FeedbackInfo _$FeedbackInfoFromJson(Map<String, dynamic> json) {
+  return FeedbackInfo(
     json['id'] as String,
     json['title'] as String,
     json['contents'] as String,
@@ -134,7 +134,7 @@ Feedback _$FeedbackFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$FeedbackToJson(Feedback instance) => <String, dynamic>{
+Map<String, dynamic> _$FeedbackInfoToJson(FeedbackInfo instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'contents': instance.contents,

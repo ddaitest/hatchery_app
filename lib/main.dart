@@ -5,6 +5,7 @@ import 'package:hatchery/business/splash/agreementPage.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:hatchery/routers.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'configs.dart';
@@ -16,6 +17,7 @@ import 'package:hatchery/common/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
 
+import 'manager/contact_manager.dart';
 import 'manager/home_manager.dart';
 import 'manager/nearby_manager.dart';
 import 'manager/service_manager.dart';
@@ -41,6 +43,8 @@ void main() {
                 ChangeNotifierProvider(create: (_) => HomeManager()),
                 ChangeNotifierProvider(create: (_) => NearbyManager()),
                 ChangeNotifierProvider(create: (_) => ServiceManager()),
+                ChangeNotifierProvider(create: (_) => ContactManager()),
+                ChangeNotifierProvider(create: (_) => FeedbackManager()),
               ],
               child: MyApp(),
             ),

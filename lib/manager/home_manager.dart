@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/api/entity.dart';
+import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:hatchery/configs.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/common/exts.dart';
+import 'package:hatchery/manager/service_manager.dart';
 
 class HomeManager extends ChangeNotifier {
   //当前页面状态
@@ -49,6 +51,26 @@ class HomeManager extends ChangeNotifier {
     Future.delayed(Duration(seconds: 3), () async {
       _queryPopAdData();
     });
+  }
+
+  List<ServiceInfo> services = [
+    //TODO fix
+    ServiceInfo('images/image1.png', "问题反馈", "feedback"),
+    ServiceInfo('images/image2.png', "报事报修", "repairs"),
+    ServiceInfo('images/image3.png', "联系物业", "contact"),
+    ServiceInfo('images/image4.png', "全部服务", "all_service"),
+  ];
+
+  clickService(ServiceInfo serviceInfo) {
+    switch (serviceInfo.serviceId) {
+      case "all_service":
+        //TODO TAB 服务业
+        break;
+      default:
+        // 使用统一逻辑处理。
+        App.manager<ServiceManager>().clickService(serviceInfo);
+        break;
+    }
   }
 
   _queryBannerData() async {

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hatchery/api/entity.dart';
+import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/backgourds.dart';
@@ -12,6 +13,7 @@ import 'package:hatchery/common/widget/post_item.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:hatchery/common/exts.dart';
+import 'package:hatchery/manager/service_manager.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
@@ -119,16 +121,15 @@ class HomePage extends StatelessWidget {
 
   Widget _moreServiceView() {
     print("DEBUG=> _moreServiceView 重绘了。。。。。");
+    HomeManager manager = App.manager<HomeManager>();
     return Container(
       padding: const EdgeInsets.only(left: 14.0, right: 14.0, top: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ServiceItem('images/image1.png', '问题反馈'),
-          ServiceItem('images/image2.png', '报事报修'),
-          ServiceItem('images/image3.png', '联系物业'),
-          ServiceItem('images/image4.png', '全部服务'),
-        ],
+        children: manager.services
+            .map((e) =>
+                ServiceItem(e.image, e.name, () => manager.clickService(e)))
+            .toList(),
       ),
     );
   }
