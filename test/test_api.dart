@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hatchery/api/API.dart';
 
@@ -61,8 +63,23 @@ void main() {
 
   test('提交意见反馈', () async {
     API.skipCheck = true;
-    var response = await API.postFeedback("content", "18611223344", "uid_test",
+    var response = await API.postFeedback(
+        "title123",
+        "content222",
+        "18611223344",
+        "uid_test",
         ["https://avatars.githubusercontent.com/u/3735867?v=4"]);
     expect(response.isSuccess(), true);
   });
+
+  test('上传', () async {
+    FormData formData = new FormData.fromMap({
+    'file': await MultipartFile.fromString("aaaaaa",filename:'a.jpg')
+    });
+    Response response = await Dio().post(
+        "http://106.12.147.150:8080/files/upload", data: formData);
+    print("response= ${response.data}");
+  });
+
+  ///
 }

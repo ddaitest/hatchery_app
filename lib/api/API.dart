@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/utils.dart';
-
+import 'package:http_parser/http_parser.dart';
 import '../configs.dart';
 import 'ApiResult.dart';
 
@@ -32,8 +32,8 @@ extension ExtendedDio on Dio {
 class API {
   static Dio _dio = Dio(BaseOptions(
     baseUrl: API_HOST,
-    connectTimeout: API_CONNECT_TIMEOUT,
-    receiveTimeout: API_RECEIVE_TIMEOUT,
+    // connectTimeout: API_CONNECT_TIMEOUT,
+    // receiveTimeout: API_RECEIVE_TIMEOUT,
     headers: {"Authorization": BASIC_AUTH},
   )).initWrapper();
 
@@ -166,11 +166,40 @@ class API {
   static Future<ApiResult> uploadImage(
       String filePath, ProgressCallback callback) async {
     init();
-    FormData formData = FormData.fromMap(
-        {"file": await MultipartFile.fromFile(filePath, filename: 'file.jpg')});
+    var name =
+        filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
+    var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
+    // // test 1
+    FormData formData = FormData.fromMap({
+      "file": MultipartFile.fromFileSync(filePath, filename: name),
+    });
+    //
+    // // test 2
+    // FormData f2 = new FormData.fromMap({
+    //   'file': await MultipartFile.fromFile(filePath, filename: name),
+    // });
+
+    // test 3
+    // var f3 = File(filePath).readAsBytesSync();
+    // print("ff = ${f3.length}");
+    //
+    // var f4 = f3.sublist(0, 100);
+    //
+    // FormData formData = new FormData.fromMap(
+    //     {'file': MultipartFile.fromBytes(f4, filename: name)});
+    print(
+        "DDAI name=$name; suffix=$suffix; filePath=$filePath; formData=$formData");
+    print(
+        "DDAI formData.files.first.value.length=${formData.files.first.value.length}");
     try {
-      Response response = await _dio.post("files/upload",
-          data: formData, onSendProgress: callback);
+      Response response = await _dio.post("files/upload", data: formData,
+          onSendProgress: (a, b) {
+        print("send >>> $a/$b");
+      }, onReceiveProgress: (a, b) {
+        print("receive <<< $a/$b");
+      });
+      // Response response = await Dio()
+      //     .post("http://106.12.147.150:8080/files/upload", data: formData);
       return ApiResult.of(response.data);
     } catch (e) {
       print("e = $e");
@@ -258,11 +287,11 @@ class API {
   }
 
   ///提交意见反馈
-  static Future<ApiResult> postFeedback(
-      String content, String phone, String uid, List<String> photos) async {
+  static Future<ApiResult> postFeedback(String title, String content,
+      String phone, String uid, List<String> photos) async {
     init();
     Map<String, Object> query = {
-      "title": "title ${DateTime.now()}",
+      "title": title,
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,

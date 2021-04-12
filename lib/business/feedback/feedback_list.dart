@@ -9,6 +9,11 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class FeedbackListPage extends StatefulWidget {
+
+  bool isFeedback;
+
+  FeedbackListPage(this.isFeedback);
+
   @override
   _FeedbackListPageState createState() => _FeedbackListPageState();
 }

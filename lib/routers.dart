@@ -21,15 +21,15 @@ class Routers {
       case '/splash':
         return CupertinoPageRoute(builder: (_) => SplashPage());
       case '/feedback_list':
-        return CupertinoPageRoute(builder: (_) => FeedbackListPage());
+        return CupertinoPageRoute(builder: (_) => FeedbackListPage(true));
       case '/feedback_new':
-        return CupertinoPageRoute(builder: (_) => FeedbackNew());
+        return CupertinoPageRoute(builder: (_) => FeedbackNewPage());
       case '/contact':
         return CupertinoPageRoute(builder: (_) => ContactPage());
       case '/repairs_list':
-        return CupertinoPageRoute(builder: (_) => FeedbackListPage());
+        return CupertinoPageRoute(builder: (_) => FeedbackListPage(false));
       case '/repairs_new':
-        return CupertinoPageRoute(builder: (_) => FeedbackNew());
+        return CupertinoPageRoute(builder: (_) => FeedbackNewPage());
       // case '/contact':
       //   return MaterialPageRoute(builder: (_) => ContactPage());
       // case '/contact':
