@@ -16,6 +16,9 @@ import '../routers.dart';
 class FeedbackManager extends ChangeNotifier {
   List<FeedbackInfo> _data = [];
 
+  String uploadUrl =
+      "https://lh6.googleusercontent.com/-Dae1asfHrWc/AAAAAAAAAAI/AAAAAAAAFcg/oAo7f_B9_v8/photo.jpg?sz=328";
+
   UnmodifiableListView<FeedbackInfo> get data => UnmodifiableListView(_data);
 
   var _page = 0; //当前软文 页数
@@ -68,6 +71,35 @@ class FeedbackManager extends ChangeNotifier {
   }
 
   create() {
-    Routers.navigateTo('feedback_new');
+    Routers.navigateTo('/feedback_new');
+  }
+
+  Future<bool> submit(String title, String content, String phone) async {
+    var images = <String>[];
+    if (uploadUrl.isNotEmpty) {
+      images.add(uploadUrl);
+    }
+    ApiResult result =
+        await API.postFeedback(title, content, phone, "uid_test", images);
+    return result.isSuccess();
+  }
+
+  Future<bool> uploadImage(String filePath) async {
+    ApiResult result = await API.uploadImage(filePath, (count, total) {
+      print("$count / $total");
+    });
+    if (result.isSuccess()) {
+      final url = result.getData();
+      if (url is String) {
+        uploadUrl = url;
+        notifyListeners();
+      }
+    }
+    return result.isSuccess();
+  }
+
+  removeImage() {
+    uploadUrl = "";
+    notifyListeners();
   }
 }
