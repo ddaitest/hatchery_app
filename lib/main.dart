@@ -12,7 +12,7 @@ import 'business/list/list_manager.dart';
 import 'configs.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'business/main_tab.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:provider/provider.dart';
@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
                   manager.isAgreeAgreementValue ? '/splash' : '/agreementPage',
               onGenerateRoute: Routers.generateRoute,
               theme: ThemeData(
+                textTheme: GoogleFonts.notoSansTextTheme(),
                 // Define the default brightness and colors.
                 brightness: Brightness.light,
                 primaryColor: Colors.lightBlue[800],
