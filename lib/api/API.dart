@@ -88,7 +88,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     init();
     try {
@@ -108,7 +108,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     init();
     try {
@@ -128,7 +128,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     init();
     try {
@@ -148,7 +148,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
       "today_is_show": true,
     };
     init();
@@ -183,7 +183,7 @@ class API {
     Map<String, Object> query = {
       "page_num": page,
       "page_size": size,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     init();
     try {
@@ -202,7 +202,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "custom_id": uid,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     init();
     try {
@@ -224,7 +224,7 @@ class API {
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     query.addAll(photos.asMap().map((k, v) => MapEntry("img${k + 1}", v)));
     try {
@@ -244,7 +244,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "custom_id": uid,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     init();
     try {
@@ -266,7 +266,7 @@ class API {
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,
-      "client_id": Flavors.appId,
+      "client_id": Flavors.appId.client_id,
     };
     query.addAll(photos.asMap().map((k, v) => MapEntry("img${k + 1}", v)));
     try {
