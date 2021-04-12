@@ -63,19 +63,29 @@ class MyApp extends StatelessWidget {
     print("DEBUG LC => ${manager.isAgreeAgreementValue}");
     return ScreenUtilInit(
         builder: () => MaterialApp(
-                title: COMMUNITY_NAME,
-                navigatorKey: App.navState,
-                initialRoute: manager.isAgreeAgreementValue
-                    ? '/splash'
-                    : '/agreementPage',
-                onGenerateRoute: Routers.generateRoute,
-                // routes: {
-                //   '/': (_) => MainTab(),
-                //   '/agreementPage': (_) => AgreementPage(),
-                //   '/splash': (_) => SplashPage(),
-                // },
-        ));
+              title: COMMUNITY_NAME,
+              navigatorKey: App.navState,
+              initialRoute:
+                  manager.isAgreeAgreementValue ? '/splash' : '/agreementPage',
+              onGenerateRoute: Routers.generateRoute,
+              theme: ThemeData(
+                // Define the default brightness and colors.
+                brightness: Brightness.light,
+                primaryColor: Colors.lightBlue[800],
+                accentColor: Colors.cyan[600],
+                // primaryIconTheme: IconThemeData().color = Colors.blue
+                iconTheme: IconThemeData(
+                  color: Colors.black87, //change your color here
+                ),
+                primaryIconTheme: IconThemeData(
+                  color: Colors.black87, //change your color here
+                ),
+              ),
+              // routes: {
+              //   '/': (_) => MainTab(),
+              //   '/agreementPage': (_) => AgreementPage(),
+              //   '/splash': (_) => SplashPage(),
+              // },
+            ));
   }
-
-
 }
