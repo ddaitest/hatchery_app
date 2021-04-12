@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:hatchery/routers.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'business/list/list_manager.dart';
 import 'configs.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -45,6 +46,7 @@ void main() {
                 ChangeNotifierProvider(create: (_) => ServiceManager()),
                 ChangeNotifierProvider(create: (_) => ContactManager()),
                 ChangeNotifierProvider(create: (_) => FeedbackManager()),
+                ChangeNotifierProvider(create: (_) => ListPageManager()),
               ],
               child: MyApp(),
             ),
