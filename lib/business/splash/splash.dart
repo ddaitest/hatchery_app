@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:collection';
 import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hatchery/configs.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,7 +91,7 @@ class SplashPage extends StatelessWidget {
 
   Widget _skipBtnView(context, manager) {
     return Countdown(
-      seconds: SPLASH_TIME,
+      seconds: Flavors.timeConfig.SPLASH_TIME,
       build: (BuildContext context, double time) => Text("跳过  ${time.toInt()}"),
       interval: Duration(seconds: 1),
       onFinished: () {

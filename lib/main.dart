@@ -7,7 +7,6 @@ import 'package:hatchery/flavors/Flavors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:hatchery/routers.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'configs.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -16,7 +15,7 @@ import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
-
+import 'package:hatchery/flavors/Flavors.dart';
 import 'manager/contact_manager.dart';
 import 'manager/home_manager.dart';
 import 'manager/nearby_manager.dart';
@@ -61,19 +60,16 @@ class MyApp extends StatelessWidget {
     print("DEBUG LC => ${manager.isAgreeAgreementValue}");
     return ScreenUtilInit(
         builder: () => MaterialApp(
-                title: COMMUNITY_NAME,
-                navigatorKey: App.navState,
-                initialRoute: manager.isAgreeAgreementValue
-                    ? '/splash'
-                    : '/agreementPage',
-                onGenerateRoute: Routers.generateRoute,
-                // routes: {
-                //   '/': (_) => MainTab(),
-                //   '/agreementPage': (_) => AgreementPage(),
-                //   '/splash': (_) => SplashPage(),
-                // },
-        ));
+              title: Flavors.stringsInfo.community_name,
+              navigatorKey: App.navState,
+              initialRoute:
+                  manager.isAgreeAgreementValue ? '/splash' : '/agreementPage',
+              onGenerateRoute: Routers.generateRoute,
+              // routes: {
+              //   '/': (_) => MainTab(),
+              //   '/agreementPage': (_) => AgreementPage(),
+              //   '/splash': (_) => SplashPage(),
+              // },
+            ));
   }
-
-
 }

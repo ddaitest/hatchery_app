@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/utils.dart';
-
-import '../configs.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'ApiResult.dart';
 
 extension ExtendedDio on Dio {
@@ -31,10 +30,10 @@ extension ExtendedDio on Dio {
 
 class API {
   static Dio _dio = Dio(BaseOptions(
-    baseUrl: API_HOST,
-    connectTimeout: API_CONNECT_TIMEOUT,
-    receiveTimeout: API_RECEIVE_TIMEOUT,
-    headers: {"Authorization": BASIC_AUTH},
+    baseUrl: Flavors.apiInfo.API_HOST,
+    connectTimeout: Flavors.apiInfo.API_CONNECT_TIMEOUT,
+    receiveTimeout: Flavors.apiInfo.API_RECEIVE_TIMEOUT,
+    headers: {"Authorization": Flavors.apiInfo.BASIC_AUTH},
   )).initWrapper();
 
   static bool skipCheck = false;
@@ -56,7 +55,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId.client_id,
     };
     init();
     try {
@@ -73,7 +72,8 @@ class API {
   static Future<ApiResult> getConfig() async {
     init();
     try {
-      Response response = await _dio.get("api/config/$CLIENT_ID");
+      Response response =
+          await _dio.get("api/config/${Flavors.appId.client_id}");
       return ApiResult.of(response.data);
     } catch (e) {
       print("e = $e");
@@ -88,7 +88,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     init();
     try {
@@ -108,7 +108,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     init();
     try {
@@ -128,7 +128,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     init();
     try {
@@ -148,7 +148,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
       "today_is_show": true,
     };
     init();
@@ -183,7 +183,7 @@ class API {
     Map<String, Object> query = {
       "page_num": page,
       "page_size": size,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     init();
     try {
@@ -202,7 +202,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "custom_id": uid,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     init();
     try {
@@ -224,7 +224,7 @@ class API {
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     query.addAll(photos.asMap().map((k, v) => MapEntry("img${k + 1}", v)));
     try {
@@ -244,7 +244,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "custom_id": uid,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     init();
     try {
@@ -266,7 +266,7 @@ class API {
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,
-      "client_id": CLIENT_ID,
+      "client_id": Flavors.appId,
     };
     query.addAll(photos.asMap().map((k, v) => MapEntry("img${k + 1}", v)));
     try {

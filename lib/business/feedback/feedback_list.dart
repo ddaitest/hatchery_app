@@ -106,7 +106,7 @@ class FeedbackItem extends StatelessWidget {
       child: ListTile(
         trailing: Icon(Icons.keyboard_arrow_right),
         title: Text(
-          info.contents??"...",
+          info.contents ?? "...",
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 17,

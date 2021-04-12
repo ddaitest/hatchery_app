@@ -1,16 +1,11 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:hatchery/common/api.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:hatchery/common/tools.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:hatchery/api/entity.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:package_info/package_info.dart';
-import 'package:hatchery/configs.dart';
 import 'package:flutter/cupertino.dart';
 
 class UpgradeManager {
@@ -134,7 +129,7 @@ class UpgradeManager {
   // }
 
   upgradeCard(context, apkPath) async {
-    Timer(const Duration(seconds: UPGRADE_LOADING_TIME), () {
+    Timer(const Duration(seconds: 3), () {
       showDialog<void>(
           context: context,
           barrierDismissible: false, // user must tap button!

@@ -5,9 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
-import 'package:hatchery/configs.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:convert' as convert;
-import 'package:hatchery/common/api.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
@@ -25,7 +24,8 @@ class SplashManager extends ChangeNotifier {
   }
 
   List<String>? _getSplashAdData(context) {
-    String? _responseResult = SP.getString(SPLASH_AD_RESPONSE_KEY);
+    String? _responseResult =
+        SP.getString(Flavors.localSharedPreferences.SPLASH_AD_RESPONSE_KEY);
     if (_responseResult != null) {
       List<dynamic>? _finalParse = jsonDecode(_responseResult);
       print("DEBUG=> _finalParse ${_finalParse}");

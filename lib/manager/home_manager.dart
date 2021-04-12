@@ -1,17 +1,13 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:flutter/material.dart';
-import 'package:hatchery/api/entity.dart';
-import 'package:hatchery/configs.dart';
-import 'package:hatchery/common/tools.dart';
-import 'package:hatchery/common/utils.dart';
-import 'package:hatchery/common/exts.dart';
+import 'package:hatchery/flavors/Flavors.dart';
+import 'package:hatchery/routers.dart';
 import 'package:hatchery/manager/service_manager.dart';
 
 class HomeManager extends ChangeNotifier {
@@ -48,9 +44,7 @@ class HomeManager extends ChangeNotifier {
     _queryNoticesData();
     _queryBannerData();
     queryArticleData();
-    Future.delayed(Duration(seconds: 3), () async {
-      _queryPopAdData();
-    });
+    _queryPopAdData();
   }
 
   List<ServiceInfo> services = [
@@ -74,7 +68,7 @@ class HomeManager extends ChangeNotifier {
   }
 
   _queryBannerData() async {
-    await API.getBannerList(0, 10, HOME_ID).then((value) {
+    await API.getBannerList(0, 10, Flavors.appId.home_page_id).then((value) {
       if (value.isSuccess()) {
         List<dynamic>? _finalParse = value.getData();
         if (_finalParse != null) {
@@ -94,7 +88,7 @@ class HomeManager extends ChangeNotifier {
   }
 
   _queryNoticesData() async {
-    await API.getNoticeList(0, 10, HOME_ID).then((value) {
+    await API.getNoticeList(0, 10, Flavors.appId.home_page_id).then((value) {
       if (value.isSuccess()) {
         List<dynamic>? _finalParse = value.getData();
         if (_finalParse != null) {
@@ -114,7 +108,7 @@ class HomeManager extends ChangeNotifier {
   }
 
   queryArticleData() async {
-    await API.getArticleList(0, 10, HOME_ID).then((value) {
+    await API.getArticleList(0, 10, Flavors.appId.home_page_id).then((value) {
       if (value.isSuccess()) {
         List<dynamic>? _finalParse = value.getData();
         if (_finalParse != null) {
@@ -134,7 +128,7 @@ class HomeManager extends ChangeNotifier {
   }
 
   _queryPopAdData() async {
-    await API.getPopupADList(0, 10, HOME_ID).then((value) {
+    await API.getPopupADList(0, 10, Flavors.appId.home_page_id).then((value) {
       if (value.isSuccess()) {
         List<dynamic>? _finalParse = value.getData();
         if (_finalParse != null) {
@@ -170,6 +164,8 @@ class HomeManager extends ChangeNotifier {
   }
 
   void clickBanner(int index) {}
+
+  void clickPopAd(Advertising value) => Routers.navWebView(value.redirectUrl);
 
   @override
   void dispose() {
