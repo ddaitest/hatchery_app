@@ -93,13 +93,16 @@ class HomePage extends StatelessWidget {
                 height: 92.0.h,
                 child: Swiper(
                   autoplay: value.length != 1 ? true : false,
+                  physics: value.length != 1
+                      ? const AlwaysScrollableScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     return ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(6.0)),
                       child: CachedNetworkImage(
-                        imageUrl:
-                            'https://img.zcool.cn/community/01d56b5542d8bc0000019ae98da289.jpg@1280w_1l_2o_100sh.png',
-                        // imageUrl: value[index].image,
+                        // imageUrl:
+                        //     'https://img.zcool.cn/community/01d56b5542d8bc0000019ae98da289.jpg@1280w_1l_2o_100sh.png',
+                        imageUrl: value[index].image,
                         fit: BoxFit.fitWidth,
                         placeholder: (context, url) => LoadingView(
                             viewHeight: 92.0.h,
@@ -205,8 +208,8 @@ class HomePage extends StatelessWidget {
                           ],
                         );
                       } else {
-                        return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
-                        // return _noticeTitle('${value[index].title}');
+                        // return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
+                        return _noticeTitle('${value[index].title}');
                       }
                     }),
               ),
@@ -299,6 +302,7 @@ class HomePage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
+          homeManager.setPopShowCount();
           return Center(
             child: Container(
               padding: const EdgeInsets.only(left: 40.0, right: 40.0),

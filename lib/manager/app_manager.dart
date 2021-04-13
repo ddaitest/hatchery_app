@@ -25,7 +25,7 @@ class AppManager extends ChangeNotifier {
 
   int get total => _phoneNumbersList.length;
 
-  int timeNow = DateTime.now().millisecondsSinceEpoch;
+  DateTime now = DateTime.now();
 
   final JPush jpush = JPush();
 

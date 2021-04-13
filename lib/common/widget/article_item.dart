@@ -36,9 +36,9 @@ class ArticleItem extends StatelessWidget {
           children: [
             _imageView(article.image),
             Container(width: 20.0.h),
-            _textView(
-                '短点的像素、density的取值都是一样的，所以需要适配的是长。', '大、屏占比高、长宽比达到了19.5:9甚至更高；'),
-            // _textView(article.title, article.summary),
+            // _textView(
+            //     '短点的像素、density的取值都是一样的，所以需要适配的是长。', '大、屏占比高、长宽比达到了19.5:9甚至更高；'),
+            _textView(article.title, article.summary),
           ],
         ));
   }
@@ -46,7 +46,7 @@ class ArticleItem extends StatelessWidget {
   Widget _imageView(String imgUrl) {
     return Container(
         height: 70.0.h,
-        width: 70.0.w,
+        width: 90.0.w,
         child: CachedNetworkImage(
           imageUrl: imgUrl,
           imageBuilder: (context, imageProvider) => Container(
@@ -59,7 +59,7 @@ class ArticleItem extends StatelessWidget {
             ),
           ),
           placeholder: (context, url) =>
-              LoadingView(viewHeight: 70.0, viewWidth: 70.0),
+              LoadingView(viewHeight: 70.0, viewWidth: 90.0),
           errorWidget: (context, url, error) =>
               Icon(Icons.image_not_supported_outlined),
         ));
@@ -132,6 +132,6 @@ class ArticleItemLoading extends StatelessWidget {
   }
 
   Widget _imageView() {
-    return LoadingView(viewHeight: 70.0, viewWidth: 70.0);
+    return LoadingView(viewHeight: 70.0, viewWidth: 90.0);
   }
 }

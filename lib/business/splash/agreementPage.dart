@@ -41,7 +41,7 @@ class AgreementPage extends StatelessWidget {
       contentPadding: const EdgeInsets.fromLTRB(26.0, 20.0, 26.0, 24.0),
       title: Text(
         "服务条款和用户协议提示",
-        style: _agreementPageTextStyle.mainTitle,
+        style: _agreementPageTextStyle.agreementTitle,
         textAlign: TextAlign.center,
       ),
       shape: RoundedRectangleBorder(

@@ -149,7 +149,6 @@ class API {
       "page_size": size,
       "service_id": pageId,
       "client_id": Flavors.appId.client_id,
-      "today_is_show": true,
     };
     init();
     try {

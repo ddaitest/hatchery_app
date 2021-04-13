@@ -41,13 +41,14 @@ class LocalSharedPreferences {
   final String Agreement_DATA_KEY = 'agreeAgreementKey';
   final String CONFIG_KEY = 'configKey';
   final String SPLASH_AD_RESPONSE_KEY = 'adResponseKey';
-  final String POP_AD_RESPONSE_KEY = 'popResponseKey';
+  final String POP_AD_SHOW_TIMES_KEY = 'popShowTimesKey';
 }
 
 class TimeConfig {
   final int SPLASH_TIME = TEST ? 1 : 4;
   final int POP_AD_WAIT_TIME = TEST ? 1 : 3;
   final int UPGRADE_LOADING_TIME = TEST ? 1 : 5;
+  final int DEFAULT_SHOW_POP_TIMES = TEST ? 3 : 1;
 }
 
 class TextStyles {
@@ -83,12 +84,6 @@ class TextStyles {
 }
 
 class AgreementPageTextStyle {
-  final TextStyle mainTitle = const TextStyle(
-      fontSize: 27.0, color: Colors.black87, fontWeight: FontWeight.w500);
-
-  final TextStyle subtitleTitle =
-      const TextStyle(fontSize: 27.0, color: Colors.black87);
-
   /// 协议title
   TextStyle agreementTitle = TextStyle(
       fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
