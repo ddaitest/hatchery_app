@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class FeedbackListPage extends StatefulWidget {
-
   bool isFeedback;
 
   FeedbackListPage(this.isFeedback);
@@ -103,7 +102,7 @@ class FeedbackItem extends StatelessWidget {
       child: ListTile(
         trailing: Icon(Icons.keyboard_arrow_right),
         title: Text(
-          info.contents ?? "...",
+          info.contents,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 17,

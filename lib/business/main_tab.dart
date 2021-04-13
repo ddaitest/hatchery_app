@@ -71,7 +71,7 @@ class MainTabState extends State<MainTab> {
           ),
           backgroundColor: Colors.white,
           bottomNavigationBar: Container(
-              width: MediaQuery.of(context).size.width,
+              width: Flavors.sizesInfo.screenWidth,
               child: BottomNavigationBar(
                 selectedLabelStyle: TextStyle(
                     fontSize: 10.0.sp,

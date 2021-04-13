@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
       if (_homeManager.popAdList.isNotEmpty) _popAdView(context, _homeManager);
     });
     return Container(
-      width: MediaQuery.of(context).size.width.w,
+      width: Flavors.sizesInfo.screenWidth,
       height: 175.0.h,
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
@@ -67,15 +67,15 @@ class HomePage extends StatelessWidget {
 
   Widget _noticeContainerMain() {
     return Container(
-      padding: const EdgeInsets.only(
-          left: 14.0, right: 14.0, top: 12.0, bottom: 12.0),
+      padding:
+          const EdgeInsets.only(left: 7.0, right: 7.0, top: 12.0, bottom: 12.0),
       child: _noticeView(),
     );
   }
 
   Widget _articlesContainerMain(context) {
     return Container(
-      padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0),
+      padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 12.0),
       child: _articlesView(context),
     );
   }
@@ -89,7 +89,7 @@ class HomePage extends StatelessWidget {
         print("DEBUG=> _bannerView 重绘了。。。。。");
         return value.isNotEmpty
             ? Container(
-                padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+                padding: const EdgeInsets.only(left: 7.0, right: 7.0),
                 height: 92.0.h,
                 child: Swiper(
                   autoplay: value.length != 1 ? true : false,
@@ -106,9 +106,11 @@ class HomePage extends StatelessWidget {
                         fit: BoxFit.fitWidth,
                         placeholder: (context, url) => LoadingView(
                             viewHeight: 92.0.h,
-                            viewWidth: MediaQuery.of(context).size.width),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.image_not_supported_outlined),
+                            viewWidth: Flavors.sizesInfo.screenWidth),
+                        errorWidget: (context, url, error) => Icon(
+                          Icons.image_not_supported_outlined,
+                          size: 40.0,
+                        ),
                       ),
                     );
                   },
@@ -163,23 +165,17 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '物业公告',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16.sp,
-                          color: Color(0xFF333333)),
+                      style: Flavors.textStyles.sortTitle,
                     ),
                     Text(
                       '更多 >',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.sp,
-                          color: Color(0xFF666666)),
+                      style: Flavors.textStyles.moreText,
                     ),
                   ],
                 ),
@@ -230,7 +226,7 @@ class HomePage extends StatelessWidget {
         child: Text('$text',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 14.sp, color: Color(0xFF333333))));
+            style: Flavors.textStyles.noticeText));
   }
 
   Widget _articlesView(BuildContext context) {
@@ -247,23 +243,17 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         '便民信息',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
-                            color: Color(0xFF333333)),
+                        style: Flavors.textStyles.sortTitle,
                       ),
                       Text(
                         '更多 >',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp,
-                            color: Color(0xFF666666)),
+                        style: Flavors.textStyles.moreText,
                       ),
                     ],
                   ),

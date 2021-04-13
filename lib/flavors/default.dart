@@ -67,42 +67,66 @@ class TextStyles {
   final TextStyle secondary =
       const TextStyle(fontSize: 16.0, color: Colors.black38);
 
-  final TextStyle splashFont = const TextStyle(
-      fontSize: 27.0,
-      height: 1.5,
-      fontWeight: FontWeight.w500,
-      color: Colors.white);
-  final TextStyle splashFontNow = const TextStyle(
-      fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.black);
+  /// 协议title
+  final TextStyle agreementTitle = TextStyle(
+      fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
 
+  /// 协议提示文字
+  final TextStyle agreementText =
+      TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400);
+
+  /// 确认按钮
+  final TextStyle agreementConfirmBtn = TextStyle(fontSize: 18.0);
+
+  /// 关闭app按钮
+  final TextStyle agreementCloseAppBtn =
+      TextStyle(color: Colors.grey, fontSize: 14);
+
+  /// 开屏倒计时
+  final TextStyle splashFont = const TextStyle(
+      fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.white);
+
+  /// 分类主标题，如：物业公告
+  final TextStyle sortTitle = const TextStyle(
+      fontWeight: FontWeight.w400, fontSize: 16.0, color: Color(0xFF333333));
+
+  /// 分类更多按钮
+  final TextStyle moreText = const TextStyle(
+      fontWeight: FontWeight.w500, fontSize: 14.0, color: Color(0xFF666666));
+
+  /// service text
+  final TextStyle serviceTitle = const TextStyle(
+      fontSize: 12.0, fontWeight: FontWeight.w400, color: Color(0xFF666666));
+
+  /// 软文主标题
   final TextStyle articleTitle =
-      const TextStyle(fontSize: 20.0, color: Colors.black87);
+      const TextStyle(fontSize: 16.0, color: Color(0xFF333333));
+
+  /// 软文副标题
   final TextStyle articleSummary =
-      const TextStyle(fontSize: 18.0, color: Colors.black54);
+      const TextStyle(fontSize: 13.0, color: Color(0xFF999999));
+
+  /// 软文日期
   final TextStyle articleDate =
       const TextStyle(fontSize: 18.0, color: Colors.black38);
+
+  /// 软文日期
+  final TextStyle noticeText =
+      const TextStyle(fontSize: 14.0, color: Color(0xFF333333));
 }
 
 class AgreementPageTextStyle {
   /// 协议title
   TextStyle agreementTitle = TextStyle(
       fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
-
-  /// 协议提示文字
-  TextStyle agreementText =
-      TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400);
-
-  /// 确认按钮
-  TextStyle confirmBtn = TextStyle(fontSize: 18.0);
-
-  /// 关闭app按钮
-  TextStyle closeAppBtn = TextStyle(color: Colors.grey, fontSize: 14);
 }
 
 class SizesInfo {
   final articleItemHeight = 120.0;
   final articleThumbnail = 100.0;
   final postItemHeight = 60.0;
+  final screenWidth = 1.sw; // 屏幕宽度
+  final screenHeight = 1.sh; // 屏幕高度
 }
 
 class ColorInfo {

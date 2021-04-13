@@ -92,7 +92,8 @@ class SplashPage extends StatelessWidget {
   Widget _skipBtnView(context, manager) {
     return Countdown(
       seconds: Flavors.timeConfig.SPLASH_TIME,
-      build: (BuildContext context, double time) => Text("跳过  ${time.toInt()}"),
+      build: (BuildContext context, double time) =>
+          Text("跳过  ${time.toInt()}", style: Flavors.textStyles.splashFont),
       interval: Duration(seconds: 1),
       onFinished: () {
         manager.routeHomePage(context);

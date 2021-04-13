@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/agreement_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,9 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:launch_review/launch_review.dart';
 
 class AgreementPage extends StatelessWidget {
-  static StringsInfo _stringsInfo = StringsInfo();
-  static AgreementPageTextStyle _agreementPageTextStyle =
-      AgreementPageTextStyle();
   @override
   Widget build(BuildContext context) {
     AgreementManager _agreementManager = AgreementManager();
@@ -41,7 +39,7 @@ class AgreementPage extends StatelessWidget {
       contentPadding: const EdgeInsets.fromLTRB(26.0, 20.0, 26.0, 24.0),
       title: Text(
         "服务条款和用户协议提示",
-        style: _agreementPageTextStyle.agreementTitle,
+        style: Flavors.textStyles.agreementTitle,
         textAlign: TextAlign.center,
       ),
       shape: RoundedRectangleBorder(
@@ -50,8 +48,8 @@ class AgreementPage extends StatelessWidget {
         child: ListBody(
           children: <Widget>[
             Text(
-              _stringsInfo.agreement_card_text,
-              style: _agreementPageTextStyle.agreementText,
+              Flavors.stringsInfo.agreement_card_text,
+              style: Flavors.textStyles.agreementText,
               textAlign: TextAlign.start,
             ),
             Container(height: 10.0.h),
@@ -80,12 +78,12 @@ class AgreementPage extends StatelessWidget {
             Column(
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: Flavors.sizesInfo.screenWidth,
                   height: 45.0.h,
                   child: ElevatedButton(
                     child: Text(
                       "确 定",
-                      style: _agreementPageTextStyle.confirmBtn,
+                      style: Flavors.textStyles.agreementConfirmBtn,
                     ),
                     onPressed: () => manager.clickAgreeAgreementButton(context),
                   ),
@@ -97,7 +95,7 @@ class AgreementPage extends StatelessWidget {
                   },
                   child: Text(
                     "不同意并退出App",
-                    style: _agreementPageTextStyle.closeAppBtn,
+                    style: Flavors.textStyles.agreementCloseAppBtn,
                   ),
                 )
               ],

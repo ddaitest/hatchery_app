@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 
 class ServiceItem extends StatelessWidget {
   String image;
@@ -22,11 +23,7 @@ class ServiceItem extends StatelessWidget {
               width: 30.0.w,
             ),
             SizedBox(height: 8.0.h),
-            Text(text,
-                style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF666666)))
+            Text(text, style: Flavors.textStyles.serviceTitle)
           ],
         ),
       ),
