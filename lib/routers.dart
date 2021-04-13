@@ -21,23 +21,24 @@ class Routers {
       case '/splash':
         return CupertinoPageRoute(builder: (_) => SplashPage());
       case '/feedback_list':
-        return CupertinoPageRoute(builder: (_) => FeedbackListPage());
+        return CupertinoPageRoute(builder: (_) => FeedbackListPage(true));
       case '/feedback_new':
-        return CupertinoPageRoute(builder: (_) => FeedbackNew());
+        return CupertinoPageRoute(builder: (_) => FeedbackNewPage());
       case '/contact':
         return CupertinoPageRoute(builder: (_) => ContactPage());
       case '/repairs_list':
-        return CupertinoPageRoute(builder: (_) => FeedbackListPage());
+        return CupertinoPageRoute(builder: (_) => FeedbackListPage(false));
       case '/repairs_new':
-        return CupertinoPageRoute(builder: (_) => FeedbackNew());
+        return CupertinoPageRoute(builder: (_) => FeedbackNewPage());
       // case '/contact':
       //   return MaterialPageRoute(builder: (_) => ContactPage());
       // case '/contact':
       //   return MaterialPageRoute(builder: (_) => ContactPage());
 
       case '/list_page':
+        Map map = settings.arguments as Map<String, String>;
         return CupertinoPageRoute(
-            builder: (_) => ListPage(settings.arguments as String));
+            builder: (_) => ListPage(map["title"], map["serviceId"]));
       case '/web_view':
         //跳转 web view, 解析对应参数。
         Map map = settings.arguments as Map<String, String>;
@@ -63,7 +64,8 @@ class Routers {
   }
 
   ///跳转  WebView, 带参数的页面建议单独定义
-  static Future<dynamic> navListPage(String serviceId) {
-    return navigateTo('/list_page', arg: serviceId);
+  static Future<dynamic> navListPage(String title, String serviceId) {
+    return navigateTo('/list_page',
+        arg: {"title": title, "serviceId": serviceId});
   }
 }

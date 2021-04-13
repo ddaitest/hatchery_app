@@ -45,7 +45,7 @@ class ServiceManager extends ChangeNotifier {
         Routers.navigateTo('/contact');
         break;
       default:
-        Routers.navListPage(serviceInfo.serviceId);
+        Routers.navListPage(serviceInfo.name,serviceInfo.serviceId);
         break;
     }
   }

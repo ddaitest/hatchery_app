@@ -2,12 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
+import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class FeedbackListPage extends StatefulWidget {
+
+  bool isFeedback;
+
+  FeedbackListPage(this.isFeedback);
+
   @override
   _FeedbackListPageState createState() => _FeedbackListPageState();
 }
@@ -28,16 +34,7 @@ class _FeedbackListPageState extends State<FeedbackListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "问题反馈列表",
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          brightness: Brightness.light,
-          elevation: 0,
-        ),
+        appBar: AppBarFactory.getCommon("问题反馈"),
         body: Container(
           color: Colors.white,
           child: SmartRefresher(

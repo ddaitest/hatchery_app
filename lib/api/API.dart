@@ -88,7 +88,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": CLIENT_ID,
     };
     init();
     try {
@@ -108,7 +108,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": CLIENT_ID,
     };
     init();
     try {
@@ -128,7 +128,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": CLIENT_ID,
     };
     init();
     try {
@@ -148,7 +148,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": CLIENT_ID,
       "today_is_show": true,
     };
     init();
@@ -166,11 +166,40 @@ class API {
   static Future<ApiResult> uploadImage(
       String filePath, ProgressCallback callback) async {
     init();
-    FormData formData = FormData.fromMap(
-        {"file": await MultipartFile.fromFile(filePath, filename: 'file.jpg')});
+    var name =
+        filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
+    var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
+    // // test 1
+    FormData formData = FormData.fromMap({
+      "file": MultipartFile.fromFileSync(filePath, filename: name),
+    });
+    //
+    // // test 2
+    // FormData f2 = new FormData.fromMap({
+    //   'file': await MultipartFile.fromFile(filePath, filename: name),
+    // });
+
+    // test 3
+    // var f3 = File(filePath).readAsBytesSync();
+    // print("ff = ${f3.length}");
+    //
+    // var f4 = f3.sublist(0, 100);
+    //
+    // FormData formData = new FormData.fromMap(
+    //     {'file': MultipartFile.fromBytes(f4, filename: name)});
+    print(
+        "DDAI name=$name; suffix=$suffix; filePath=$filePath; formData=$formData");
+    print(
+        "DDAI formData.files.first.value.length=${formData.files.first.value.length}");
     try {
-      Response response = await _dio.post("files/upload",
-          data: formData, onSendProgress: callback);
+      Response response = await _dio.post("files/upload", data: formData,
+          onSendProgress: (a, b) {
+        print("send >>> $a/$b");
+      }, onReceiveProgress: (a, b) {
+        print("receive <<< $a/$b");
+      });
+      // Response response = await Dio()
+      //     .post("http://106.12.147.150:8080/files/upload", data: formData);
       return ApiResult.of(response.data);
     } catch (e) {
       print("e = $e");
@@ -224,7 +253,7 @@ class API {
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,
-      "client_id": Flavors.appId.client_id,
+      "client_id": CLIENT_ID,
     };
     query.addAll(photos.asMap().map((k, v) => MapEntry("img${k + 1}", v)));
     try {
@@ -244,7 +273,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "custom_id": uid,
-      "client_id": Flavors.appId.client_id,
+      "client_id": CLIENT_ID,
     };
     init();
     try {
@@ -258,11 +287,11 @@ class API {
   }
 
   ///提交意见反馈
-  static Future<ApiResult> postFeedback(
-      String content, String phone, String uid, List<String> photos) async {
+  static Future<ApiResult> postFeedback(String title, String content,
+      String phone, String uid, List<String> photos) async {
     init();
     Map<String, Object> query = {
-      "title": "title ${DateTime.now()}",
+      "title": title,
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,

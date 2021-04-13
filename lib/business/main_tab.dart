@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home.dart';
 import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
+import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/flavors/default.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:flutter/services.dart';
@@ -31,11 +32,23 @@ class MainTabState extends State<MainTab> {
     super.initState();
   }
 
+  void handleClick(String value) {
+    switch (value) {
+      case '关于物业':
+        //TODO
+        break;
+      case '商务合作':
+        //TODO
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+<<<<<<< HEAD
           appBar: AppBar(
             title: Text(
               StringsInfo().community_name,
@@ -43,12 +56,22 @@ class MainTabState extends State<MainTab> {
                   fontSize: 18.0,
                   color: Colors.black,
                   fontWeight: FontWeight.w500),
+=======
+          appBar: AppBarFactory.getMain(COMMUNITY_NAME, actions: [
+            PopupMenuButton<String>(
+              onSelected: handleClick,
+              icon: Icon(Icons.more_vert, color: Colors.blue),
+              itemBuilder: (BuildContext context) {
+                return {'关于物业', '商务合作'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+>>>>>>> e602b1e13a7a440ff56b43ab1945480e10761eab
             ),
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            brightness: Brightness.light,
-            elevation: 0,
-          ),
+          ]),
           body: SafeArea(
             child: PageView(
               physics: const NeverScrollableScrollPhysics(),
