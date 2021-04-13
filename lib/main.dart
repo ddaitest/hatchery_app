@@ -79,24 +79,6 @@ class MyApp extends StatelessWidget {
                   color: Colors.black87, //change your color here
                 ),
               ),
-              // routes: {
-              //   '/': (_) => MainTab(),
-              //   '/agreementPage': (_) => AgreementPage(),
-              //   '/splash': (_) => SplashPage(),
-              // },
-            ));
-              title: Flavors.stringsInfo.community_name,
-              navigatorKey: App.navState,
-              initialRoute:
-                  manager.isAgreeAgreementValue ? '/splash' : '/agreementPage',
-              onGenerateRoute: Routers.generateRoute,
-              // routes: {
-              //   '/': (_) => MainTab(),
-              //   '/agreementPage': (_) => AgreementPage(),
-              //   '/splash': (_) => SplashPage(),
-              // },
             ));
   }
-
-
 }
