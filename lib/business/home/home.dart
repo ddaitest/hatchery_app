@@ -170,7 +170,7 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '物业公告',
+                      '${Flavors.stringsInfo.post_title}',
                       style: Flavors.textStyles.sortTitle,
                     ),
                     Text(
@@ -248,7 +248,7 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '便民信息',
+                        '${Flavors.stringsInfo.articles_title}',
                         style: Flavors.textStyles.sortTitle,
                       ),
                       Text(
