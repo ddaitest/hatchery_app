@@ -45,6 +45,7 @@ class LocalSharedPreferences {
 }
 
 class TimeConfig {
+  final int SPLASH_TIMEOUT = TEST ? 6 : 6;
   final int SPLASH_TIME = TEST ? 1 : 4;
   final int POP_AD_WAIT_TIME = TEST ? 1 : 3;
   final int UPGRADE_LOADING_TIME = TEST ? 1 : 5;

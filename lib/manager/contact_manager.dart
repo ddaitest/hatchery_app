@@ -8,7 +8,6 @@ import 'package:hatchery/common/PageStatus.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
-import 'package:hatchery/configs.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ContactManager extends ChangeNotifier {

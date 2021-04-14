@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
 import 'package:hatchery/common/tools.dart';
-import 'package:hatchery/configs.dart';
+import 'package:hatchery/routers.dart';
 
 class SplashManager extends ChangeNotifier {
   List<Advertising> _splashAdLists = [];
@@ -19,11 +19,19 @@ class SplashManager extends ChangeNotifier {
   UnmodifiableListView<Advertising> get splashAdLists =>
       UnmodifiableListView(_splashAdLists);
 
-  SplashManager(BuildContext context) {
-    _getSplashAdData(context);
+  Timer? _timer;
+
+  Timer get timer => _timer!;
+
+  SplashManager() {
+    _getSplashAdData();
+    _timer = Timer.periodic(
+        Duration(seconds: Flavors.timeConfig.SPLASH_TIMEOUT), (timer) {
+      routeHomePage();
+    });
   }
 
-  List<String>? _getSplashAdData(context) {
+  List<String>? _getSplashAdData() {
     String? _responseResult =
         SP.getString(Flavors.localSharedPreferences.SPLASH_AD_RESPONSE_KEY);
     if (_responseResult != null) {
@@ -33,11 +41,11 @@ class SplashManager extends ChangeNotifier {
         addSplashAdData(Advertising.fromJson(element));
       });
       if (_splashAdLists.isEmpty) {
-        routeHomePage(context);
+        routeHomePage();
       }
     } else {
       _splashAdLists = [];
-      routeHomePage(context);
+      routeHomePage();
     }
   }
 
@@ -46,29 +54,25 @@ class SplashManager extends ChangeNotifier {
   }
 
   /// UI动作 点击广告
-  void clickAD(BuildContext context) {
+  void clickAD() {
     if (_splashAdLists.isNotEmpty)
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                WebViewPage(_splashAdLists[0].redirectUrl, '/')),
-      );
+      Routers.navWebViewReplace(_splashAdLists[0].redirectUrl);
   }
 
   /// UI动作 跳过倒计时
   void skip(BuildContext context) {
-    routeHomePage(context);
+    routeHomePage();
   }
 
-  void routeHomePage(context) {
+  void routeHomePage() {
     Future.delayed(Duration.zero, () async {
-      Navigator.pushReplacementNamed(context, '/');
+      Routers.navigateReplace('/');
     });
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     super.dispose();
   }
 }

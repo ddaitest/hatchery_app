@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/AppContext.dart';
-import 'package:hatchery/common/route_animation.dart';
 import 'business/contact/contact_page.dart';
 import 'business/feedback/feedback_list.dart';
 import 'business/feedback/feedback_new.dart';
@@ -59,12 +58,17 @@ class Routers {
   }
 
   static Future<dynamic> navigateReplace(String routeName, {Object? arg}) {
-    return App.navState.currentState!.pushReplacementNamed(routeName, arguments: arg);
+    return App.navState.currentState!
+        .pushReplacementNamed(routeName, arguments: arg);
   }
 
   ///跳转  WebView, 带参数的页面建议单独定义
   static Future<dynamic> navWebView(String url, {String? path}) {
     return navigateTo('/web_view', arg: {"url": url, "path": path ?? ""});
+  }
+
+  static Future<dynamic> navWebViewReplace(String url, {String? path}) {
+    return navigateReplace('/web_view', arg: {"url": url, "path": path ?? ""});
   }
 
   ///跳转  WebView, 带参数的页面建议单独定义

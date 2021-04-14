@@ -8,8 +8,6 @@ import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
-import 'package:hatchery/configs.dart';
-
 import '../routers.dart';
 
 class NearbyManager extends ChangeNotifier {

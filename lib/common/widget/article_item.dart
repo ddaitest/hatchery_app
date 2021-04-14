@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/api/entity.dart';
-import 'package:hatchery/common/widget/webview_common.dart';
+import 'package:hatchery/routers.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/common/widget/loading_view.dart';
 
@@ -15,15 +15,7 @@ class ArticleItem extends StatelessWidget {
 
   Widget _getItemContainerView(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          if (article.redirectUrl != null) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => WebViewPage(article.redirectUrl, null)),
-            );
-          }
-        },
+        onTap: () => Routers.navWebView(article.redirectUrl),
         child: _titleView(context));
   }
 

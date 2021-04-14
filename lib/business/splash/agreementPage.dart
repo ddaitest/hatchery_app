@@ -28,7 +28,7 @@ class AgreementPage extends StatelessWidget {
           image: DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage(
-                "images/welcome.png",
+                "images/splash.jpg",
               ))),
       child: _agreementDialogView(context, manager),
     );

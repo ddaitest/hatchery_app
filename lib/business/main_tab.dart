@@ -5,9 +5,11 @@ import 'package:hatchery/business/service/service_tab.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:flutter/services.dart';
+import 'package:hatchery/common/tools.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:uuid/uuid.dart';
+import 'package:package_info/package_info.dart';
 import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
 
@@ -23,6 +25,7 @@ class MainTabState extends State<MainTab> {
 
   List<Widget> _tabBodies = [HomePage(), ServiceTab(), NearbyTab()];
   late PageController _pageController;
+  var uuid = Uuid();
 
   @override
   void initState() {
@@ -34,10 +37,14 @@ class MainTabState extends State<MainTab> {
   void handleClick(String value) {
     switch (value) {
       case '关于物业':
-        //TODO
+        PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+          String version = packageInfo.version;
+          String buildNumber = packageInfo.buildNumber;
+          showToast(version + '\n' + buildNumber);
+        });
         break;
       case '商务合作':
-        //TODO
+        // todo
         break;
     }
   }
@@ -51,7 +58,7 @@ class MainTabState extends State<MainTab> {
               actions: [
                 PopupMenuButton<String>(
                   onSelected: handleClick,
-                  icon: Icon(Icons.more_vert, color: Colors.blue),
+                  icon: Icon(Icons.more_vert),
                   itemBuilder: (BuildContext context) {
                     return {'关于物业', '商务合作'}.map((String choice) {
                       return PopupMenuItem<String>(

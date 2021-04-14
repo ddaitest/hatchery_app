@@ -1,13 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
-import 'package:hatchery/common/widget/loading_view.dart';
+import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'package:hatchery/manager/nearby_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -63,35 +60,7 @@ class NearbyTabState extends State<NearbyTab>
     return Selector<NearbyManager, List<BannerInfo>>(
       builder: (BuildContext context, List<BannerInfo> value, Widget? child) {
         print("DEBUG=> _bannerView 重绘了。。。。。");
-        return Container(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
-          width: 300.0.w,
-          height: 120.0.h,
-          child: Swiper(
-            autoplay: true,
-            itemBuilder: (BuildContext context, int index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: CachedNetworkImage(
-                  imageUrl: value[index].image,
-                  fit: BoxFit.fitWidth,
-                  placeholder: (context, url) =>
-                      LoadingView(viewHeight: 120.0.h, viewWidth: 300.0.w),
-                  errorWidget: (context, url, error) =>
-                      Icon(Icons.image_not_supported_outlined),
-                ),
-              );
-            },
-            itemHeight: 120.0.h,
-            itemCount: value.length,
-            viewportFraction: 1,
-            scale: 0.9,
-            pagination: SwiperPagination(),
-            onTap: (index) {
-              App.manager<NearbyManager>().clickBanner(value[index]);
-            },
-          ),
-        );
+        return BannerCommonView(value);
       },
       selector: (BuildContext context, NearbyManager homeManager) {
         return homeManager.banners;

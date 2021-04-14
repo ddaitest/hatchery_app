@@ -21,7 +21,7 @@ class AgreementManager extends ChangeNotifier {
     await SP.set(
         Flavors.localSharedPreferences.Agreement_DATA_KEY, true); // 设置协议是否同意标识
     await AppManager().querySplashAdData();
-    Navigator.pushReplacementNamed(context, '/');
+    Routers.navigateReplace('/');
   }
 
   /// 查看用户协议webview

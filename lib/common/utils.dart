@@ -8,11 +8,13 @@ import 'theme.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-void showToast(String title) {
+void showToast(String title,
+    {Toast toastTime = Toast.LENGTH_SHORT,
+    ToastGravity showGravity = ToastGravity.CENTER}) {
   Fluttertoast.showToast(
       msg: title,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
+      toastLength: toastTime,
+      gravity: showGravity,
       timeInSecForIosWeb: 1,
       backgroundColor: Color(0x99000000),
       textColor: Colors.white,

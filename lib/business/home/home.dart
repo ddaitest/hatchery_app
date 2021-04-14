@@ -1,23 +1,17 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
-import 'package:hatchery/common/widget/backgourds.dart';
 import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/common/widget/post_item.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
-import 'package:hatchery/configs.dart';
-import 'package:hatchery/common/exts.dart';
-import 'package:hatchery/manager/service_manager.dart';
-import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
@@ -82,51 +76,11 @@ class HomePage extends StatelessWidget {
 
   /// View: Banner
   Widget _bannerView(BuildContext context) {
-    HomeManager _homeManager = HomeManager();
     return Selector<HomeManager, UnmodifiableListView<BannerInfo>>(
       builder: (BuildContext context, UnmodifiableListView<BannerInfo> value,
           Widget? child) {
         print("DEBUG=> _bannerView 重绘了。。。。。");
-        return value.isNotEmpty
-            ? Container(
-                padding: const EdgeInsets.only(left: 7.0, right: 7.0),
-                height: 92.0.h,
-                child: Swiper(
-                  autoplay: value.length != 1 ? true : false,
-                  physics: value.length != 1
-                      ? const AlwaysScrollableScrollPhysics()
-                      : const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                      child: CachedNetworkImage(
-                        // imageUrl:
-                        //     'https://img.zcool.cn/community/01d56b5542d8bc0000019ae98da289.jpg@1280w_1l_2o_100sh.png',
-                        imageUrl: value[index].image,
-                        fit: BoxFit.fitWidth,
-                        placeholder: (context, url) => LoadingView(
-                            viewHeight: 92.0.h,
-                            viewWidth: Flavors.sizesInfo.screenWidth),
-                        errorWidget: (context, url, error) => Icon(
-                          Icons.image_not_supported_outlined,
-                          size: 40.0,
-                        ),
-                      ),
-                    );
-                  },
-                  itemHeight: 92.0.h,
-                  itemCount: value.length,
-                  viewportFraction: 1,
-                  scale: 0.9,
-                  pagination: value.length != 1
-                      ? SwiperPagination()
-                      : SwiperPagination(builder: SwiperPagination.rect),
-                  onTap: (index) {
-                    _homeManager.clickBanner(index);
-                  },
-                ),
-              )
-            : Container();
+        return BannerCommonView(value);
       },
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.bannerList;
@@ -288,38 +242,44 @@ class HomePage extends StatelessWidget {
   }
 
   _popAdView(BuildContext context, homeManager) {
-    return showDialog(
+    return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           homeManager.setPopShowCount();
-          return Center(
-            child: Container(
-              padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      homeManager.clickPopAd(homeManager.popAdList[0]);
-                    },
-                    child: CachedNetworkImage(
-                      imageUrl: homeManager.popAdList[0].image,
-                      fit: BoxFit.fitWidth,
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.image_not_supported_outlined),
-                    ),
+          return CachedNetworkImage(
+            imageUrl: homeManager.popAdList[0].image,
+            imageBuilder: (context, imageProvider) {
+              return Center(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 40.0, right: 40.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          homeManager.clickPopAd(homeManager.popAdList[0]);
+                        },
+                        child: Image(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Container(height: 20.0.h),
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Icon(Icons.cancel_outlined,
+                            size: 40.0, color: Colors.grey[400]),
+                      ),
+                    ],
                   ),
-                  Container(height: 20.0.h),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.cancel_outlined,
-                        size: 40.0, color: Colors.grey[400]),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
+            fit: BoxFit.fitWidth,
+            errorWidget: (context, url, error) =>
+                Icon(Icons.image_not_supported_outlined, size: 40.0),
           );
         });
   }

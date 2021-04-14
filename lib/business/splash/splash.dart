@@ -13,44 +13,42 @@ import 'package:launch_review/launch_review.dart';
 class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ChangeNotifierProvider(
-      create: (context) => SplashManager(context),
-      child: Selector<SplashManager, UnmodifiableListView<Advertising>>(
-        builder: (BuildContext context, UnmodifiableListView<Advertising> value,
-                Widget? child) =>
-            _splashPage(context),
-        selector: (BuildContext context, SplashManager splashManager) {
-          return splashManager.splashAdLists;
-        },
-        shouldRebuild: (pre, next) => pre != next,
+    SplashManager splashManager = SplashManager();
+    return Material(
+      child: ChangeNotifierProvider(
+        create: (context) => SplashManager(),
+        child: Selector<SplashManager, UnmodifiableListView<Advertising>>(
+          builder: (BuildContext context,
+              UnmodifiableListView<Advertising> value, Widget? child) {
+            if (value.isEmpty) {
+              return _fullScreenBackgroundView();
+            } else {
+              // UmengCommonSdk.onPageStart("splashView");
+              return _adView(splashManager);
+            }
+          },
+          selector: (BuildContext context, SplashManager splashManager) {
+            return splashManager.splashAdLists;
+          },
+          shouldRebuild: (pre, next) => pre != next,
+        ),
       ),
-    ));
+    );
   }
 
-  _splashPage(BuildContext context) {
-    SplashManager _splashManager =
-        Provider.of<SplashManager>(context, listen: false);
-    if (_splashManager.splashAdLists.isEmpty) {
-      return _fullScreenBackgroundView();
-    } else {
-      // UmengCommonSdk.onPageStart("splashView");
-      return _adView(context, _splashManager);
-    }
-  }
-
-  Widget _adView(context, manager) {
+  Widget _adView(manager) {
     print('DEBUG=> _adView 重绘了。。。。。。。。。。');
     return CachedNetworkImage(
       imageUrl: manager.splashAdLists[0].image,
       imageBuilder: (context, imageProvider) {
+        print('DEBUG=> imageProvider $imageProvider');
         return Stack(
           children: [
             GestureDetector(
-              onTap: () => manager.clickAD(context),
+              onTap: () => manager.clickAD(),
               child: Container(
-                width: double.infinity.w,
-                height: double.infinity.h,
+                width: Flavors.sizesInfo.screenWidth,
+                height: Flavors.sizesInfo.screenHeight,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: imageProvider,
@@ -60,7 +58,6 @@ class SplashPage extends StatelessWidget {
               ),
             ),
             Positioned(
-              width: 75.0.w,
               top: 50.0,
               right: 20.0,
               //控件透明度 0.0完全透明，1.0完全不透明
@@ -72,7 +69,7 @@ class SplashPage extends StatelessWidget {
                             MaterialStateProperty.all(Colors.black)),
                     // color: Colors.black,
                     // splashColor: Colors.black,
-                    child: _skipBtnView(context, manager),
+                    child: _skipBtnView(manager),
                     onPressed: () {
                       manager.skip(context);
                     }),
@@ -89,14 +86,17 @@ class SplashPage extends StatelessWidget {
     );
   }
 
-  Widget _skipBtnView(context, manager) {
+  Widget _skipBtnView(manager) {
     return Countdown(
       seconds: Flavors.timeConfig.SPLASH_TIME,
-      build: (BuildContext context, double time) =>
-          Text("跳过  ${time.toInt()}", style: Flavors.textStyles.splashFont),
+      build: (BuildContext context, double time) {
+        manager.timer?.cancel();
+        return Text("跳过  ${time.toInt()}",
+            style: Flavors.textStyles.splashFont);
+      },
       interval: Duration(seconds: 1),
       onFinished: () {
-        manager.routeHomePage(context);
+        manager.routeHomePage();
       },
     );
   }
@@ -105,9 +105,9 @@ class SplashPage extends StatelessWidget {
     print('DEBUG=> _fullScreenBackgroundView 重绘了。。。。。。。。。。');
     return Container(
       child: Image.asset(
-        'images/welcome.png',
-        width: double.infinity,
-        height: double.infinity,
+        'images/splash.jpg',
+        width: Flavors.sizesInfo.screenWidth,
+        height: Flavors.sizesInfo.screenHeight,
         fit: BoxFit.cover,
       ),
     );

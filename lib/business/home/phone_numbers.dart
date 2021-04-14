@@ -12,7 +12,6 @@ class PhoneNumbersState extends State<PhoneNumbersPage> {
   @override
   void initState() {
     super.initState();
-    AppManager().showToast("长按复制号码");
   }
 
   @override

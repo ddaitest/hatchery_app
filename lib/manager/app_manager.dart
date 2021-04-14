@@ -16,7 +16,7 @@ import 'package:jpush_flutter/jpush_flutter.dart';
 
 class AppManager extends ChangeNotifier {
   /// 是否显示 协议确认UI
-  late bool isAgreeAgreementValue;
+  bool? isAgreeAgreementValue;
 
   List<Contact> _phoneNumbersList = [];
 
@@ -30,16 +30,22 @@ class AppManager extends ChangeNotifier {
   final JPush jpush = JPush();
 
   AppManager() {
-    isAgreeAgreementValue =
-        SP.getBool(Flavors.localSharedPreferences.Agreement_DATA_KEY) ?? false;
-    if (isAgreeAgreementValue) {
-      _queryConfigData();
-      querySplashAdData();
-    }
+    _getAgreeAgreementValueForSP().then((value) {
+      isAgreeAgreementValue = value;
+      if (isAgreeAgreementValue!) {
+        _queryConfigData();
+        querySplashAdData();
+      }
+    });
 
     ///todo 先关闭
     // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
     // initPlatformState();
+  }
+
+  Future<bool> _getAgreeAgreementValueForSP() async {
+    return SP.getBool(Flavors.localSharedPreferences.Agreement_DATA_KEY) ??
+        false;
   }
 
   Future<void> initPlatformState() async {
@@ -72,17 +78,6 @@ class AppManager extends ChangeNotifier {
     jpush.getRegistrationID().then((rid) {
       print("flutter get registration id : $rid");
     });
-  }
-
-  showToast(String title) {
-    Fluttertoast.showToast(
-        msg: title,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x99000000),
-        textColor: Colors.white,
-        fontSize: 15.0);
   }
 
   copyData(String text) {
