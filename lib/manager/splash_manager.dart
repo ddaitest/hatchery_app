@@ -67,6 +67,7 @@ class SplashManager extends ChangeNotifier {
   void routeHomePage() {
     Future.delayed(Duration.zero, () async {
       Routers.navigateReplace('/');
+      _timer?.cancel();
     });
   }
 
