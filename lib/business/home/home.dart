@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,10 @@ import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/common/widget/post_item.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
+import 'package:hatchery/configs.dart';
 import 'package:hatchery/common/exts.dart';
 import 'package:hatchery/manager/service_manager.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
@@ -41,8 +43,13 @@ class HomePage extends StatelessWidget {
 
   /// 顶部banner & service View
   Widget _topContainerMain(context) {
+    HomeManager _homeManager = HomeManager();
+    Future.delayed(Duration(seconds: Flavors.timeConfig.POP_AD_WAIT_TIME),
+        () async {
+      if (_homeManager.popAdList.isNotEmpty) _popAdView(context, _homeManager);
+    });
     return Container(
-      width: MediaQuery.of(context).size.width.w,
+      width: Flavors.sizesInfo.screenWidth,
       height: 175.0.h,
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
@@ -60,15 +67,15 @@ class HomePage extends StatelessWidget {
 
   Widget _noticeContainerMain() {
     return Container(
-      padding: const EdgeInsets.only(
-          left: 14.0, right: 14.0, top: 12.0, bottom: 12.0),
+      padding:
+          const EdgeInsets.only(left: 7.0, right: 7.0, top: 12.0, bottom: 12.0),
       child: _noticeView(),
     );
   }
 
   Widget _articlesContainerMain(context) {
     return Container(
-      padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0),
+      padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 12.0),
       child: _articlesView(context),
     );
   }
@@ -82,23 +89,28 @@ class HomePage extends StatelessWidget {
         print("DEBUG=> _bannerView 重绘了。。。。。");
         return value.isNotEmpty
             ? Container(
-                padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+                padding: const EdgeInsets.only(left: 7.0, right: 7.0),
                 height: 92.0.h,
                 child: Swiper(
-                  autoplay: true,
+                  autoplay: value.length != 1 ? true : false,
+                  physics: value.length != 1
+                      ? const AlwaysScrollableScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     return ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(6.0)),
                       child: CachedNetworkImage(
-                        imageUrl:
-                            'https://img.zcool.cn/community/01d56b5542d8bc0000019ae98da289.jpg@1280w_1l_2o_100sh.png',
-                        // imageUrl: value[index].image,
+                        // imageUrl:
+                        //     'https://img.zcool.cn/community/01d56b5542d8bc0000019ae98da289.jpg@1280w_1l_2o_100sh.png',
+                        imageUrl: value[index].image,
                         fit: BoxFit.fitWidth,
                         placeholder: (context, url) => LoadingView(
                             viewHeight: 92.0.h,
-                            viewWidth: MediaQuery.of(context).size.width),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.image_not_supported_outlined),
+                            viewWidth: Flavors.sizesInfo.screenWidth),
+                        errorWidget: (context, url, error) => Icon(
+                          Icons.image_not_supported_outlined,
+                          size: 40.0,
+                        ),
                       ),
                     );
                   },
@@ -106,9 +118,10 @@ class HomePage extends StatelessWidget {
                   itemCount: value.length,
                   viewportFraction: 1,
                   scale: 0.9,
-                  pagination: SwiperPagination(),
+                  pagination: value.length != 1
+                      ? SwiperPagination()
+                      : SwiperPagination(builder: SwiperPagination.rect),
                   onTap: (index) {
-                    _popAdView(context);
                     _homeManager.clickBanner(index);
                   },
                 ),
@@ -152,23 +165,17 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '物业公告',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16.sp,
-                          color: Color(0xFF333333)),
+                      '${Flavors.stringsInfo.post_title}',
+                      style: Flavors.textStyles.sortTitle,
                     ),
                     Text(
                       '更多 >',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.sp,
-                          color: Color(0xFF666666)),
+                      style: Flavors.textStyles.moreText,
                     ),
                   ],
                 ),
@@ -197,8 +204,8 @@ class HomePage extends StatelessWidget {
                           ],
                         );
                       } else {
-                        return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
-                        // return _noticeTitle('${value[index].title}');
+                        // return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
+                        return _noticeTitle('${value[index].title}');
                       }
                     }),
               ),
@@ -219,7 +226,7 @@ class HomePage extends StatelessWidget {
         child: Text('$text',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 14.sp, color: Color(0xFF333333))));
+            style: Flavors.textStyles.noticeText));
   }
 
   Widget _articlesView(BuildContext context) {
@@ -236,23 +243,17 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '便民信息',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
-                            color: Color(0xFF333333)),
+                        '${Flavors.stringsInfo.articles_title}',
+                        style: Flavors.textStyles.sortTitle,
                       ),
                       Text(
                         '更多 >',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp,
-                            color: Color(0xFF666666)),
+                        style: Flavors.textStyles.moreText,
                       ),
                     ],
                   ),
@@ -286,26 +287,40 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  _popAdView(BuildContext context) {
-    return Alert(
-      title: '',
-      context: context,
-      style: AlertStyle(
-        isButtonVisible: false,
-        alertElevation: 0.0,
-        backgroundColor: Colors.transparent,
-        overlayColor: Colors.transparent,
-        buttonAreaPadding: const EdgeInsets.all(0.0),
-        constraints: BoxConstraints(
-            minWidth: double.infinity.w, //宽度尽可能大
-            minHeight: 300.0.h //最小高度为50像素
+  _popAdView(BuildContext context, homeManager) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          homeManager.setPopShowCount();
+          return Center(
+            child: Container(
+              padding: const EdgeInsets.only(left: 40.0, right: 40.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      homeManager.clickPopAd(homeManager.popAdList[0]);
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: homeManager.popAdList[0].image,
+                      fit: BoxFit.fitWidth,
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.image_not_supported_outlined),
+                    ),
+                  ),
+                  Container(height: 20.0.h),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.cancel_outlined,
+                        size: 40.0, color: Colors.grey[400]),
+                  ),
+                ],
+              ),
             ),
-      ),
-      content: CachedNetworkImage(
-        imageUrl:
-            'http://cdn.duitang.com/uploads/item/201407/16/20140716212515_TvYEA.jpeg',
-        fit: BoxFit.cover,
-      ),
-    ).show();
+          );
+        });
   }
 }

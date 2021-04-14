@@ -6,20 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:share/share.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
-import 'package:hatchery/common/utils.dart';
-import 'package:hatchery/configs.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 
 class AppManager extends ChangeNotifier {
-  int _m = 0;
-
-  int get m => _m;
-
   /// 是否显示 协议确认UI
   late bool isAgreeAgreementValue;
 
@@ -30,12 +25,13 @@ class AppManager extends ChangeNotifier {
 
   int get total => _phoneNumbersList.length;
 
-  int timeNow = DateTime.now().millisecondsSinceEpoch;
+  DateTime now = DateTime.now();
 
   final JPush jpush = JPush();
 
   AppManager() {
-    isAgreeAgreementValue = SP.getBool(Agreement_DATA_KEY) ?? false;
+    isAgreeAgreementValue =
+        SP.getBool(Flavors.localSharedPreferences.Agreement_DATA_KEY) ?? false;
     if (isAgreeAgreementValue) {
       _queryConfigData();
       querySplashAdData();
@@ -100,15 +96,17 @@ class AppManager extends ChangeNotifier {
   _queryConfigData() async {
     await API.getConfig().then((value) {
       if (value.isSuccess()) {
-        SP.set(CONFIG_KEY, json.encode(value.getData()));
+        SP.set(Flavors.localSharedPreferences.CONFIG_KEY,
+            json.encode(value.getData()));
       }
     });
   }
 
   querySplashAdData() async {
-    await API.getSplashADList(0, 1, SPLASH_ID).then((value) {
+    await API.getSplashADList(0, 1, Flavors.appId.splash_page_id).then((value) {
       if (value.isSuccess()) {
-        SP.set(SPLASH_AD_RESPONSE_KEY, json.encode(value.getData()));
+        SP.set(Flavors.localSharedPreferences.SPLASH_AD_RESPONSE_KEY,
+            json.encode(value.getData()));
       }
     });
   }

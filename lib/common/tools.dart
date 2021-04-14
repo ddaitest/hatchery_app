@@ -46,6 +46,8 @@ class SP {
     }
   }
 
+  static delete(String key) => sp.remove(key);
+
   static getString(String key) => sp.getString(key);
 
   static getBool(String key) => sp.getBool(key);

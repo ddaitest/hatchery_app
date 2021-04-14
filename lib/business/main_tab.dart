@@ -3,10 +3,11 @@ import 'package:hatchery/business/home/home.dart';
 import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
-import 'package:hatchery/flavors/default.dart';
-import 'package:hatchery/configs.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hatchery/flavors/Flavors.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
 
@@ -46,20 +47,21 @@ class MainTabState extends State<MainTab> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-          appBar: AppBarFactory.getMain(COMMUNITY_NAME, actions: [
-            PopupMenuButton<String>(
-              onSelected: handleClick,
-              icon: Icon(Icons.more_vert, color: Colors.blue),
-              itemBuilder: (BuildContext context) {
-                return {'关于物业', '商务合作'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            ),
-          ]),
+          appBar: AppBarFactory.getMain(Flavors.stringsInfo.community_name,
+              actions: [
+                PopupMenuButton<String>(
+                  onSelected: handleClick,
+                  icon: Icon(Icons.more_vert, color: Colors.blue),
+                  itemBuilder: (BuildContext context) {
+                    return {'关于物业', '商务合作'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                ),
+              ]),
           body: SafeArea(
             child: PageView(
               physics: const NeverScrollableScrollPhysics(),
@@ -69,20 +71,26 @@ class MainTabState extends State<MainTab> {
           ),
           backgroundColor: Colors.white,
           bottomNavigationBar: Container(
-              width: MediaQuery.of(context).size.width,
+              width: Flavors.sizesInfo.screenWidth,
               child: BottomNavigationBar(
-                selectedFontSize: 14.0,
-                unselectedFontSize: 14.0,
+                selectedLabelStyle: TextStyle(
+                    fontSize: 10.0.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Flavors.colorInfo.homeTabSelected),
+                unselectedLabelStyle: TextStyle(
+                    fontSize: 10.0.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Flavors.colorInfo.homeTabUnSelected),
                 items: <BottomNavigationBarItem>[
                   _bottomBarTitlesTabBar(Icons.home_outlined, Icons.home, 0),
-                  _bottomBarTitlesTabBar(
-                      Icons.room_service_outlined, Icons.room_service, 1),
+                  _bottomBarTitlesTabBar(Icons.home_repair_service_outlined,
+                      Icons.home_repair_service, 1),
                   _bottomBarTitlesTabBar(
                       Icons.near_me_outlined, Icons.near_me, 2),
                 ],
                 type: BottomNavigationBarType.fixed,
                 currentIndex: _tabIndex,
-                iconSize: 24.0,
+                iconSize: 30.0,
                 //点击事件
                 onTap: (index) {
                   setState(() {

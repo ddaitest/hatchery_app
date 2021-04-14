@@ -14,19 +14,22 @@ class NoticeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        height: Flavors.sizes.postItemHeight,
+        height: Flavors.sizesInfo.postItemHeight,
         padding: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
         child: Column(
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text(notice.title, maxLines: 2, style: Flavors.styles.content),
+                Text(notice.title,
+                    maxLines: 2, style: Flavors.textStyles.content),
                 Expanded(child: Container(), flex: 1),
-                Text(DateUtil.getDateStrByTimeStr(notice.updateTime,format: DateFormat.MONTH_DAY_HOUR_MINUTE),
-                    style: Flavors.styles.content),
+                Text(
+                    DateUtil.getDateStrByTimeStr(notice.updateTime,
+                        format: DateFormat.MONTH_DAY_HOUR_MINUTE),
+                    style: Flavors.textStyles.content),
               ],
             ),
-            Divider(color: Flavors.colors.diver)
+            Divider(color: Flavors.colorInfo.diver)
           ],
         ),
       ),

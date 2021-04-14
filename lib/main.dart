@@ -7,8 +7,6 @@ import 'package:hatchery/flavors/Flavors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:hatchery/routers.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'business/list/list_manager.dart';
 import 'configs.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -17,7 +15,7 @@ import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/app_manager.dart';
-
+import 'package:hatchery/flavors/Flavors.dart';
 import 'manager/contact_manager.dart';
 import 'manager/home_manager.dart';
 import 'manager/nearby_manager.dart';
@@ -46,7 +44,6 @@ void main() {
                 ChangeNotifierProvider(create: (_) => ServiceManager()),
                 ChangeNotifierProvider(create: (_) => ContactManager()),
                 ChangeNotifierProvider(create: (_) => FeedbackManager()),
-                ChangeNotifierProvider(create: (_) => ListPageManager()),
               ],
               child: MyApp(),
             ),
@@ -63,7 +60,7 @@ class MyApp extends StatelessWidget {
     print("DEBUG LC => ${manager.isAgreeAgreementValue}");
     return ScreenUtilInit(
         builder: () => MaterialApp(
-              title: COMMUNITY_NAME,
+              title: Flavors.stringsInfo.community_name,
               navigatorKey: App.navState,
               initialRoute:
                   manager.isAgreeAgreementValue ? '/splash' : '/agreementPage',
@@ -82,11 +79,6 @@ class MyApp extends StatelessWidget {
                   color: Colors.black87, //change your color here
                 ),
               ),
-              // routes: {
-              //   '/': (_) => MainTab(),
-              //   '/agreementPage': (_) => AgreementPage(),
-              //   '/splash': (_) => SplashPage(),
-              // },
             ));
   }
 }

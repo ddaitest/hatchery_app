@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hatchery/flavors/Flavors.dart';
+import 'package:hatchery/flavors/default.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../PageStatus.dart';
@@ -20,7 +20,7 @@ Widget getSimpleHeader() {
           width: 15.0,
         ),
         Text(
-          Flavors.strings.refresh_complete,
+          StringsInfo().load_complete,
           style: style,
         )
       ],
@@ -35,7 +35,7 @@ Widget getSimpleHeader() {
         Container(
           width: 15.0,
         ),
-        Text(Flavors.strings.refresh_fail, style: TextStyle(color: Colors.grey))
+        Text(StringsInfo().refresh_fail, style: TextStyle(color: Colors.grey))
       ],
     ),
   );
