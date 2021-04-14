@@ -24,7 +24,7 @@ import 'manager/service_manager.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SP.init().then(
-        (value) => FlutterBugly.postCatchedException(() {
+        (_) => FlutterBugly.postCatchedException(() {
           if (Platform.isAndroid) {
             SystemUiOverlayStyle style = SystemUiOverlayStyle(
                 statusBarColor: Colors.transparent,

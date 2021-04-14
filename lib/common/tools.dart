@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:hatchery/flavors/default.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_info/device_info.dart';
 
 Future compressionImage(filePath) async {
   ImageProperties properties =
@@ -57,4 +59,47 @@ class SP {
   static getInt(String key) => sp.getInt(key);
 
   static getStringList(String key) => sp.getStringList(key);
+}
+
+class DeviceInfo {
+  static late DeviceInfoPlugin deviceInfo;
+  static late PackageInfo packageInfo;
+  static Future init() async {
+    deviceInfo = DeviceInfoPlugin();
+    packageInfo = await PackageInfo.fromPlatform();
+  }
+
+  static setDeviceInfoToSP() {
+    Map<String, dynamic>? _commonParamMap;
+    if (Platform.isAndroid) {
+      deviceInfo.androidInfo.then((deviceValue) {
+        _commonParamMap = {
+          "device_model": deviceValue.model,
+          "phone_board": deviceValue.brand,
+          "version": packageInfo.version,
+          "vc": packageInfo.buildNumber,
+          "package_name": packageInfo.packageName,
+          "app_name": packageInfo.appName,
+          "system_version": deviceValue.version,
+          "android_id": deviceValue.androidId,
+          "isPhysicalDevice": deviceValue.isPhysicalDevice
+        };
+        print("DEBUG=> ${_commonParamMap}");
+      });
+    } else {
+      deviceInfo.iosInfo.then((deviceValue) {
+        _commonParamMap = {
+          "device_model": deviceValue.utsname.machine,
+          "phone_board": deviceValue.model,
+          "version": packageInfo.version,
+          "vc": packageInfo.buildNumber,
+          "package_name": packageInfo.packageName,
+          "system_version": deviceValue.systemVersion,
+          "IDFV": deviceValue.identifierForVendor,
+          "isPhysicalDevice": deviceValue.isPhysicalDevice
+        };
+        print("DEBUG=> _commonParamMap ${_commonParamMap?.toString()}");
+      });
+    }
+  }
 }

@@ -122,6 +122,20 @@ class AgreementPageTextStyle {
       fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
 }
 
+class CommonParameter {
+  Map<String, dynamic> _commonParamMap = {
+    "device_model": "",
+    "phone_board": "",
+    "version": "",
+    "vc": "",
+    "package_name": "",
+    "app_name": "",
+    "os": "",
+    "android_id": "",
+    "isPhysicalDevice": ""
+  };
+}
+
 class SizesInfo {
   final articleItemHeight = 120.0;
   final articleThumbnail = 100.0;

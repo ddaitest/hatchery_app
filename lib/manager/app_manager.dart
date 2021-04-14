@@ -37,9 +37,12 @@ class AppManager extends ChangeNotifier {
         querySplashAdData();
       }
     });
+    DeviceInfo.init().then((_) {
+      DeviceInfo.setDeviceInfoToSP();
+    });
 
     ///todo 先关闭
-    // FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
+    FlutterBugly.init(androidAppId: "41d23c0115", iOSAppId: "7274afdfed");
     // initPlatformState();
   }
 

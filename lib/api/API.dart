@@ -38,6 +38,8 @@ class API {
 
   static bool skipCheck = false;
 
+  static String clientId = Flavors.appId.client_id;
+
   static init() {
     if (!skipCheck) {
       isNetworkConnect().then((value) {
@@ -55,7 +57,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -72,8 +74,7 @@ class API {
   static Future<ApiResult> getConfig() async {
     init();
     try {
-      Response response =
-          await _dio.get("api/config/${Flavors.appId.client_id}");
+      Response response = await _dio.get("api/config/${clientId}");
       return ApiResult.of(response.data);
     } catch (e) {
       print("e = $e");
@@ -88,7 +89,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -108,7 +109,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -128,7 +129,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -148,7 +149,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "service_id": pageId,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -211,7 +212,7 @@ class API {
     Map<String, Object> query = {
       "page_num": page,
       "page_size": size,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -230,7 +231,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "custom_id": uid,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -252,7 +253,7 @@ class API {
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     query.addAll(photos.asMap().map((k, v) => MapEntry("img${k + 1}", v)));
     try {
@@ -272,7 +273,7 @@ class API {
       "page_num": page,
       "page_size": size,
       "custom_id": uid,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     init();
     try {
@@ -294,7 +295,7 @@ class API {
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,
-      "client_id": Flavors.appId.client_id,
+      "client_id": clientId,
     };
     query.addAll(photos.asMap().map((k, v) => MapEntry("img${k + 1}", v)));
     try {

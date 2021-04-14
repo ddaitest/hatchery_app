@@ -59,9 +59,9 @@ class HomeManager extends ChangeNotifier {
     _getPopAdShowTimes();
     _queryPopAdData();
 
-    var ttttt = FlutterBugly.getUpgradeInfo();
-    ttttt.then(
-        (value) => print("DEBUG => FlutterBugly.getUpgradeInfo() ${value!}"));
+    var tttt = FlutterBugly.checkUpgrade(isManual: false);
+    tttt.then(
+        (value) => print("DEBUG => FlutterBugly.getUpgradeInfo() ${value}"));
   }
 
   List<ServiceInfo> services = [
