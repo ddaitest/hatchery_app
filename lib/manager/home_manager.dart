@@ -11,6 +11,7 @@ import 'package:hatchery/routers.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/manager/service_manager.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 
 class HomeManager extends ChangeNotifier {
   //当前页面状态
@@ -57,6 +58,10 @@ class HomeManager extends ChangeNotifier {
     queryArticleData();
     _getPopAdShowTimes();
     _queryPopAdData();
+
+    var ttttt = FlutterBugly.getUpgradeInfo();
+    ttttt.then(
+        (value) => print("DEBUG => FlutterBugly.getUpgradeInfo() ${value!}"));
   }
 
   List<ServiceInfo> services = [

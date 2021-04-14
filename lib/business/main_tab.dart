@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:uuid/uuid.dart';
 import 'package:package_info/package_info.dart';
 import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
@@ -25,7 +24,6 @@ class MainTabState extends State<MainTab> {
 
   List<Widget> _tabBodies = [HomePage(), ServiceTab(), NearbyTab()];
   late PageController _pageController;
-  var uuid = Uuid();
 
   @override
   void initState() {

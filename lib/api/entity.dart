@@ -196,8 +196,8 @@ class FeedbackInfo {
   String img5 = "";
   String img6 = "";
 
-  FeedbackInfo(this.id, this.title, this.contents, this.phone, this.img1, this.img2,
-      this.img3, this.img4, this.img5, this.img6);
+  FeedbackInfo(this.id, this.title, this.contents, this.phone, this.img1,
+      this.img2, this.img3, this.img4, this.img5, this.img6);
 
   factory FeedbackInfo.fromJson(Map<String, dynamic> json) =>
       _$FeedbackInfoFromJson(json);
@@ -211,4 +211,39 @@ class ServiceInfo {
   String serviceId = "";
 
   ServiceInfo(this.image, this.name, this.serviceId);
+}
+
+class UpgradeInfo {
+  String? id = "";
+  String? title = "";
+  String? newFeature = "";
+  int? publishTime = 0;
+  int? publishType = 0;
+  int? upgradeType = 1; //2为强制更新
+  int? popTimes = 0;
+  int? popInterval = 0;
+  int? versionCode;
+  String? versionName = "";
+  String? apkMd5;
+  String? apkUrl;
+  int? fileSize;
+  String? imageUrl;
+  int? updateType;
+
+  UpgradeInfo.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        title = json['title'],
+        newFeature = json['newFeature'],
+        publishTime = json['publishTime'],
+        publishType = json['publishType'],
+        upgradeType = json['upgradeType'],
+        popTimes = json['popTimes'],
+        popInterval = json['popInterval'],
+        versionCode = json['versionCode'],
+        versionName = json['versionName'],
+        apkMd5 = json['apkMd5'],
+        apkUrl = json['apkUrl'],
+        fileSize = json['fileSize'],
+        imageUrl = json['imageUrl'],
+        updateType = json['updateType'];
 }
