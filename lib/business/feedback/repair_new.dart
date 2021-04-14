@@ -11,7 +11,7 @@ import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class FeedbackNewPage extends StatelessWidget {
+class RepairNewPage extends StatelessWidget {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final phoneController = TextEditingController();
@@ -20,7 +20,7 @@ class FeedbackNewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarFactory.getCommon("新问题反馈"),
+        appBar: AppBarFactory.getCommon("新报事报修"),
         body: Container(
           width: double.infinity,
           color: Colors.white,
@@ -103,7 +103,7 @@ class FeedbackNewPage extends StatelessWidget {
                   SizedBox(width: 20),
                   Text("(可选一张图片上传)")
                 ]),
-                Selector<FeedbackManager, String>(
+                Selector<RepairManager, String>(
                   builder: (context, String value, child) {
                     if (value.isEmpty) {
                       return Container();
@@ -128,16 +128,15 @@ class FeedbackNewPage extends StatelessWidget {
                                     color: Colors.white,
                                     size: 50,
                                   ),
-                                  onPressed: () =>
-                                      App.manager<FeedbackManager>()
-                                          .removeImage()),
+                                  onPressed: () => App.manager<RepairManager>()
+                                      .removeImage()),
                             ],
                           )
                         ],
                       );
                     }
                   },
-                  selector: (BuildContext context, FeedbackManager manager) {
+                  selector: (BuildContext context, RepairManager manager) {
                     return manager.uploadUrl;
                   },
                   shouldRebuild: (pre, next) =>
@@ -156,7 +155,7 @@ class FeedbackNewPage extends StatelessWidget {
 
   ///上传图片
   _uploadImage(String filePath) {
-    App.manager<FeedbackManager>().uploadImage(filePath).then((value) =>
+    App.manager<RepairManager>().uploadImage(filePath).then((value) =>
         ScaffoldMessenger.of(App.navState.currentContext!)
             .showSnackBar(SnackBar(content: Text(value ? '上传成功' : "上传失败"))));
   }
@@ -167,7 +166,7 @@ class FeedbackNewPage extends StatelessWidget {
       var title = titleController.text;
       var phone = phoneController.text;
       var content = contentController.text;
-      App.manager<FeedbackManager>().submit(title, phone, content).then((e) {
+      App.manager<RepairManager>().submit(title, phone, content).then((e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('发布成功')));
         Navigator.pop(context);

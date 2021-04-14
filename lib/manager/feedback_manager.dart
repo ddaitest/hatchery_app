@@ -12,11 +12,46 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../routers.dart';
 
-class FeedbackManager extends ChangeNotifier {
+/// API - 获取
+typedef Future<ApiResult> GetData(int page, int size, String uid);
+
+/// API - 创建
+typedef Future<ApiResult> PostData(String title, String content, String phone,
+    String uid, List<String> photos);
+
+/// 解析
+typedef T Parser<T>(Map<String, dynamic> value);
+
+/// 报事报修 Manager
+class RepairManager extends BaseManager {
+  static GetData get = (a, b, c) => API.getReports(a, b, c);
+  static PostData post = (a, b, c, d, e) => API.postFeedback(a, b, c, d, e);
+  static Parser<FeedbackInfo> pp = (m) => FeedbackInfo.fromJson(m);
+
+  RepairManager() : super(get, post, pp, "/repairs_new");
+}
+
+/// 问题反馈 Manager
+class FeedbackManager extends BaseManager {
+  static GetData get = (a, b, c) => API.getFeedback(a, b, c);
+  static PostData post = (a, b, c, d, e) => API.postFeedback(a, b, c, d, e);
+  static Parser<FeedbackInfo> pp = (m) => FeedbackInfo.fromJson(m);
+
+  FeedbackManager() : super(get, post, pp, "/feedback_new");
+}
+
+/// 问题反馈 +报事报修 基础Manager
+class BaseManager extends ChangeNotifier {
+  Parser<FeedbackInfo> parser;
+  GetData getApi;
+  PostData postApi;
+  String createPath;
+
+  BaseManager(this.getApi, this.postApi, this.parser, this.createPath);
+
   List<FeedbackInfo> _data = [];
 
-  String uploadUrl =
-      "https://lh6.googleusercontent.com/-Dae1asfHrWc/AAAAAAAAAAI/AAAAAAAAFcg/oAo7f_B9_v8/photo.jpg?sz=328";
+  String uploadUrl = "";
 
   UnmodifiableListView<FeedbackInfo> get data => UnmodifiableListView(_data);
 
@@ -25,10 +60,10 @@ class FeedbackManager extends ChangeNotifier {
 
   /// 页面 load more
   Future<PageLoadStatus> loadMore() async {
-    ApiResult result = await API.getFeedback(_page + 1, _pageSize, "uid_test");
+    ApiResult result = await getApi(_page + 1, _pageSize, "uid_test");
     var callback = PageLoadStatus.canLoading;
     if (result.isSuccess()) {
-      var news = result.getDataList((m) => FeedbackInfo.fromJson(m));
+      var news = result.getDataList(parser);
       if (news.isEmpty) {
         callback = PageLoadStatus.noMore;
       } else {
@@ -46,10 +81,10 @@ class FeedbackManager extends ChangeNotifier {
   /// 页面首次加载 or 刷新
   Future<PageRefreshStatus> refresh() async {
     _page = 0;
-    ApiResult result = await API.getFeedback(_page, _pageSize, "uid_test");
+    ApiResult result = await getApi(_page, _pageSize, "uid_test");
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
-      var news = result.getDataList((m) => FeedbackInfo.fromJson(m));
+      var news = result.getDataList(parser);
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
@@ -70,7 +105,7 @@ class FeedbackManager extends ChangeNotifier {
   }
 
   create() {
-    Routers.navigateTo('/feedback_new');
+    Routers.navigateTo(createPath);
   }
 
   Future<bool> submit(String title, String content, String phone) async {
@@ -78,8 +113,7 @@ class FeedbackManager extends ChangeNotifier {
     if (uploadUrl.isNotEmpty) {
       images.add(uploadUrl);
     }
-    ApiResult result =
-        await API.postFeedback(title, content, phone, "uid_test", images);
+    ApiResult result = await postApi(title, content, phone, "uid_test", images);
     return result.isSuccess();
   }
 

@@ -8,13 +8,13 @@ import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class FeedbackListPage extends StatefulWidget {
+class RepairListPage extends StatefulWidget {
 
   @override
-  _FeedbackListPageState createState() => _FeedbackListPageState();
+  _RepairListPageState createState() => _RepairListPageState();
 }
 
-class _FeedbackListPageState extends State<FeedbackListPage>
+class _RepairListPageState extends State<RepairListPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -30,7 +30,7 @@ class _FeedbackListPageState extends State<FeedbackListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarFactory.getCommon("问题反馈"),
+        appBar: AppBarFactory.getCommon("报事报修"),
         body: Container(
           color: Colors.white,
           child: SmartRefresher(
@@ -49,13 +49,13 @@ class _FeedbackListPageState extends State<FeedbackListPage>
   }
 
   void _onRefresh() async {
-    App.manager<FeedbackManager>()
+    App.manager<RepairManager>()
         .refresh()
         .then((value) => value.handle(_refreshController));
   }
 
   void _onLoading() async {
-    App.manager<FeedbackManager>()
+    App.manager<RepairManager>()
         .loadMore()
         .then((value) => value.handle(_refreshController));
   }
@@ -65,13 +65,13 @@ class _FeedbackListPageState extends State<FeedbackListPage>
       padding: EdgeInsets.all(10),
       child: OutlinedButton(
         child: Text("新建"),
-        onPressed: () => App.manager<FeedbackManager>().create(),
+        onPressed: () => App.manager<RepairManager>().create(),
       ),
     );
   }
 
   Widget _listPart() {
-    return Selector<FeedbackManager, List<FeedbackInfo>>(
+    return Selector<RepairManager, List<FeedbackInfo>>(
       builder: (context, value, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class _FeedbackListPageState extends State<FeedbackListPage>
           children: value.map((e) => FeedbackItem(e)).toList(),
         );
       },
-      selector: (BuildContext context, FeedbackManager manager) {
+      selector: (BuildContext context, RepairManager manager) {
         return manager.data;
       },
       shouldRebuild: (pre, next) =>

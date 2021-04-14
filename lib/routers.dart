@@ -4,6 +4,8 @@ import 'package:hatchery/common/AppContext.dart';
 import 'business/contact/contact_page.dart';
 import 'business/feedback/feedback_list.dart';
 import 'business/feedback/feedback_new.dart';
+import 'business/feedback/repair_list.dart';
+import 'business/feedback/repair_new.dart';
 import 'business/list/list_page.dart';
 import 'business/main_tab.dart';
 import 'business/splash/agreementPage.dart';
@@ -20,15 +22,15 @@ class Routers {
       case '/splash':
         return CupertinoPageRoute(builder: (_) => SplashPage());
       case '/feedback_list':
-        return CupertinoPageRoute(builder: (_) => FeedbackListPage(true));
+        return CupertinoPageRoute(builder: (_) => FeedbackListPage());
       case '/feedback_new':
         return CupertinoPageRoute(builder: (_) => FeedbackNewPage());
       case '/contact':
         return CupertinoPageRoute(builder: (_) => ContactPage());
       case '/repairs_list':
-        return CupertinoPageRoute(builder: (_) => FeedbackListPage(false));
+        return CupertinoPageRoute(builder: (_) => RepairListPage());
       case '/repairs_new':
-        return CupertinoPageRoute(builder: (_) => FeedbackNewPage());
+        return CupertinoPageRoute(builder: (_) => RepairNewPage());
       // case '/contact':
       //   return MaterialPageRoute(builder: (_) => ContactPage());
       // case '/contact':
