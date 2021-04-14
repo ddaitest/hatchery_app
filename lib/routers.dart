@@ -58,6 +58,10 @@ class Routers {
     return App.navState.currentState!.pushNamed(routeName, arguments: arg);
   }
 
+  static Future<dynamic> navigateReplace(String routeName, {Object? arg}) {
+    return App.navState.currentState!.pushReplacementNamed(routeName, arguments: arg);
+  }
+
   ///跳转  WebView, 带参数的页面建议单独定义
   static Future<dynamic> navWebView(String url, {String? path}) {
     return navigateTo('/web_view', arg: {"url": url, "path": path ?? ""});
