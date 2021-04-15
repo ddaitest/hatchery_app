@@ -52,7 +52,7 @@ class TimeConfig {
   final int SPLASH_TIME = TEST ? 1 : 4;
   final int POP_AD_WAIT_TIME = TEST ? 1 : 3;
   final int UPGRADE_LOADING_TIME = TEST ? 1 : 5;
-  final int DEFAULT_SHOW_POP_TIMES = TEST ? 3 : 1;
+  final int DEFAULT_SHOW_POP_TIMES = TEST ? 30 : 1;
 }
 
 class TextStyles {

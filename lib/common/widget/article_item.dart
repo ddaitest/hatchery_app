@@ -37,7 +37,7 @@ class ArticleItem extends StatelessWidget {
 
   Widget _imageView(String imgUrl) {
     return Container(
-        height: 56.25.h,
+        height: 60.0.h,
         width: 90.0.w,
         child: CachedNetworkImage(
           imageUrl: imgUrl,
@@ -51,7 +51,7 @@ class ArticleItem extends StatelessWidget {
             ),
           ),
           placeholder: (context, url) =>
-              LoadingView(viewHeight: 70.0, viewWidth: 90.0),
+              LoadingView(viewHeight: 60.0, viewWidth: 90.0),
           errorWidget: (context, url, error) =>
               Icon(Icons.image_not_supported_outlined),
         ));
@@ -115,15 +115,17 @@ class ArticleItemLoading extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LoadingView(viewHeight: 20.0, viewWidth: 200.0),
+          LoadingView(
+              viewHeight: 20.0, viewWidth: Flavors.sizesInfo.screenWidth),
           Container(height: 12.0.w),
-          LoadingView(viewHeight: 15.0, viewWidth: 100.0),
+          LoadingView(
+              viewHeight: 15.0, viewWidth: Flavors.sizesInfo.screenWidth / 2),
         ],
       ),
     ));
   }
 
   Widget _imageView() {
-    return LoadingView(viewHeight: 56.25, viewWidth: 90.0);
+    return LoadingView(viewHeight: 60, viewWidth: 90.0);
   }
 }

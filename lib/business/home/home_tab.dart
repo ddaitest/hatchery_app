@@ -161,13 +161,19 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                 child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: value.isEmpty ? 3 : value.length,
+                    itemCount: value.isEmpty
+                        ? 4
+                        : value.length > 4
+                            ? 4
+                            : value.length,
                     itemBuilder: (BuildContext context, int index) {
                       if (value.isEmpty) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            LoadingView(viewHeight: 17.0, viewWidth: 200.0),
+                            LoadingView(
+                                viewHeight: 14.0,
+                                viewWidth: Flavors.sizesInfo.screenWidth),
                             Container(height: 10.h)
                           ],
                         );

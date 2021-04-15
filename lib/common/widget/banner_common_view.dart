@@ -35,7 +35,7 @@ class BannerCommonView extends StatelessWidget {
                     imageUrl: bannerLists[index].image,
                     fit: BoxFit.fitWidth,
                     placeholder: (context, url) => LoadingView(
-                        viewHeight: 92.0.h,
+                        viewHeight: bannerHeight.h,
                         viewWidth: Flavors.sizesInfo.screenWidth),
                     errorWidget: (context, url, error) => Icon(
                       Icons.image_not_supported_outlined,
@@ -55,6 +55,27 @@ class BannerCommonView extends StatelessWidget {
                   Routers.navWebView(bannerLists[index].redirectUrl),
             ),
           )
-        : Container();
+        : Container(
+            padding: const EdgeInsets.only(left: 7.0, right: 7.0),
+            height: bannerHeight.h,
+            child: Swiper(
+              autoplay: false,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  child: LoadingView(
+                      viewHeight: bannerHeight.h,
+                      viewWidth: Flavors.sizesInfo.screenWidth),
+                );
+              },
+              itemHeight: bannerHeight.h,
+              itemCount: 1,
+              viewportFraction: 1,
+              scale: 0.9,
+              pagination:
+                  const SwiperPagination(builder: SwiperPagination.rect),
+            ),
+          );
   }
 }
