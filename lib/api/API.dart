@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/flavors/Flavors.dart';
@@ -34,9 +33,13 @@ class API {
     connectTimeout: Flavors.apiInfo.API_CONNECT_TIMEOUT,
     receiveTimeout: Flavors.apiInfo.API_RECEIVE_TIMEOUT,
     headers: {"Authorization": Flavors.apiInfo.BASIC_AUTH},
+    queryParameters: commonParamMap,
   )).initWrapper();
 
   static bool skipCheck = false;
+
+  static Map<String, dynamic> commonParamMap =
+      Flavors.commonParam.commonParamMap;
 
   static String clientId = Flavors.appId.client_id;
 

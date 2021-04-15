@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:hatchery/flavors/default.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info/device_info.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 
 Future compressionImage(filePath) async {
   ImageProperties properties =
@@ -79,12 +82,12 @@ class DeviceInfo {
           "version": packageInfo.version,
           "vc": packageInfo.buildNumber,
           "package_name": packageInfo.packageName,
-          "app_name": packageInfo.appName,
-          "system_version": deviceValue.version,
+          "system_version": deviceValue.version.release,
           "android_id": deviceValue.androidId,
           "isPhysicalDevice": deviceValue.isPhysicalDevice
         };
-        print("DEBUG=> ${_commonParamMap}");
+        SP.set(Flavors.localSharedPreferences.COMMON_PARAM_KEY,
+            json.encode(_commonParamMap));
       });
     } else {
       deviceInfo.iosInfo.then((deviceValue) {
@@ -98,7 +101,8 @@ class DeviceInfo {
           "IDFV": deviceValue.identifierForVendor,
           "isPhysicalDevice": deviceValue.isPhysicalDevice
         };
-        print("DEBUG=> _commonParamMap ${_commonParamMap?.toString()}");
+        SP.set(Flavors.localSharedPreferences.COMMON_PARAM_KEY,
+            json.encode(_commonParamMap));
       });
     }
   }

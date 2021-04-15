@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:hatchery/api/entity.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 
 class UpgradeDialog extends StatelessWidget {
   final UpgradeInfo upgrade;

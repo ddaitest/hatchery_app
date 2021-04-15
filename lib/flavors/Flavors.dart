@@ -10,4 +10,5 @@ class Flavors {
   static final textStyles = TextStyles();
   static final sizesInfo = SizesInfo();
   static final colorInfo = ColorInfo();
+  static final commonParam = CommonParam();
 }

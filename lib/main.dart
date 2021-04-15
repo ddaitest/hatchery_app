@@ -34,6 +34,10 @@ void main() {
                 ///Brightness.dark 一般都是显示为黑色
                 statusBarIconBrightness: Brightness.dark);
             SystemChrome.setSystemUIOverlayStyle(style);
+
+            /// 强制竖屏
+            SystemChrome.setPreferredOrientations(
+                [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
           }
           runApp(
             MultiProvider(

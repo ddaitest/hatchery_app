@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hatchery/common/tools.dart';
+import 'dart:convert';
 
 const bool TEST = true;
 
@@ -42,6 +44,7 @@ class LocalSharedPreferences {
   final String CONFIG_KEY = 'configKey';
   final String SPLASH_AD_RESPONSE_KEY = 'adResponseKey';
   final String POP_AD_SHOW_TIMES_KEY = 'popShowTimesKey';
+  final String COMMON_PARAM_KEY = 'commonParamKey';
 }
 
 class TimeConfig {
@@ -122,18 +125,17 @@ class AgreementPageTextStyle {
       fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
 }
 
-class CommonParameter {
-  Map<String, dynamic> _commonParamMap = {
-    "device_model": "",
-    "phone_board": "",
-    "version": "",
-    "vc": "",
-    "package_name": "",
-    "app_name": "",
-    "os": "",
-    "android_id": "",
-    "isPhysicalDevice": ""
-  };
+class CommonParam {
+  final Map<String, dynamic> commonParamMap = getCommonParamMapFromSP() ?? null;
+
+  static getCommonParamMapFromSP() {
+    String? _responseResult =
+        SP.getString(LocalSharedPreferences().COMMON_PARAM_KEY);
+    if (_responseResult != null) {
+      Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
+      return _finalParse;
+    }
+  }
 }
 
 class SizesInfo {

@@ -9,6 +9,7 @@ import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/common/widget/post_item.dart';
+import 'package:hatchery/common/widget/upgrade_view.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:hatchery/common/widget/banner_common_view.dart';
@@ -40,7 +41,9 @@ class HomePage extends StatelessWidget {
     HomeManager _homeManager = HomeManager();
     Future.delayed(Duration(seconds: Flavors.timeConfig.POP_AD_WAIT_TIME),
         () async {
-      if (_homeManager.popAdList.isNotEmpty) _popAdView(context, _homeManager);
+      if (_homeManager.popAdList.isNotEmpty) {
+        _popAdView(context, _homeManager);
+      }
     });
     return Container(
       width: Flavors.sizesInfo.screenWidth,
