@@ -9,31 +9,42 @@ import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/common/widget/post_item.dart';
-import 'package:hatchery/common/widget/upgrade_view.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'dart:math' as math;
-
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+class HomeTab extends StatefulWidget {
+  @override
+  HomeTabState createState() => HomeTabState();
+}
+
+class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFF7F7F7),
-      child: ListView(
-        // shrinkWrap: true,
-        children: [
-          _topContainerMain(context),
-          _noticeContainerMain(),
-          _articlesContainerMain(context),
-        ],
-      ),
-    );
+        color: Color(0xFFF7F7F7),
+        child: SmartRefresher(
+          controller: _refreshController,
+          header: getSimpleHeader(),
+          onRefresh: _onRefresh,
+          child: ListView(
+            // shrinkWrap: true,
+            children: [
+              _topContainerMain(context),
+              _noticeContainerMain(),
+              _articlesContainerMain(context),
+            ],
+          ),
+        ));
   }
 
   /// 顶部banner & service View
@@ -285,5 +296,11 @@ class HomePage extends StatelessWidget {
                 Icon(Icons.image_not_supported_outlined, size: 40.0),
           );
         });
+  }
+
+  void _onRefresh() async {
+    App.manager<HomeManager>()
+        .refresh()
+        .then((value) => value.handle(_refreshController));
   }
 }

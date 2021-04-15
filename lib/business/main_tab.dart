@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hatchery/business/home/home.dart';
+import 'package:hatchery/business/home/home_tab.dart';
 import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
@@ -22,7 +22,7 @@ class MainTabState extends State<MainTab> {
   int _tabIndex = 0;
   List<String> bottomBarTitles = ['首页', '服务', '周边'];
 
-  List<Widget> _tabBodies = [HomePage(), ServiceTab(), NearbyTab()];
+  List<Widget> _tabBodies = [HomeTab(), ServiceTab(), NearbyTab()];
   late PageController _pageController;
 
   @override

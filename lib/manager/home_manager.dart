@@ -11,7 +11,7 @@ import 'package:hatchery/routers.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/manager/service_manager.dart';
 import 'package:date_format/date_format.dart';
-import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:hatchery/api/ApiResult.dart';
 
 class HomeManager extends ChangeNotifier {
   //当前页面状态
@@ -226,7 +226,21 @@ class HomeManager extends ChangeNotifier {
     _popAdList.add(item);
   }
 
-  void clickBanner(int index) {}
+  _clearDataList() {
+    _bannerList.clear();
+    _noticesList.clear();
+    _articlesList.clear();
+  }
+
+  /// 页面首次加载 or 刷新
+  Future<PageRefreshStatus> refresh() async {
+    _clearDataList();
+    _queryNoticesData();
+    _queryBannerData();
+    queryArticleData();
+    notifyListeners();
+    return PageRefreshStatus.completed;
+  }
 
   void clickPopAd(Advertising value) => Routers.navWebView(value.redirectUrl);
 
