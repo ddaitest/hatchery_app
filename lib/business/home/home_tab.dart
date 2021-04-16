@@ -183,12 +183,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                         );
                       } else {
                         // return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () =>
-                              Routers.navWebView(value[index].redirectUrl),
-                          child: _noticeTitle('${value[index].title}'),
-                        );
+                        return _noticeTitle('${value[index].title}');
                       }
                     }),
               ),

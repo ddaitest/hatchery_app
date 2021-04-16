@@ -235,10 +235,14 @@ class HomeManager extends ChangeNotifier {
   /// 页面首次加载 or 刷新
   Future<PageRefreshStatus> refresh() async {
     _clearDataList();
-    _queryNoticesData();
-    _queryBannerData();
-    queryArticleData();
     notifyListeners();
+    Future.delayed(Duration(milliseconds: 500), () async {
+      _queryNoticesData();
+      _queryBannerData();
+      queryArticleData();
+      notifyListeners();
+    });
+
     return PageRefreshStatus.completed;
   }
 
