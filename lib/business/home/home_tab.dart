@@ -230,8 +230,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                         style: Flavors.textStyles.sortTitle,
                       ),
                       GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        // onTap: () => Routers.navigateTo('/', arg: 2),
+                        // behavior: HitTestBehavior.opaque,
+                        onTap: () => MainTabHandler.of(context).gotoTab(2),
                         child: Text(
                           '更多 >',
                           style: Flavors.textStyles.moreText,

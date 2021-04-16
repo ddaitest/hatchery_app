@@ -51,6 +51,8 @@ class HomeManager extends ChangeNotifier {
   UnmodifiableListView<Advertising> get popAdList =>
       UnmodifiableListView(_popAdList);
 
+  int currentTab = 0;
+
   HomeManager() {
     _getLocalPopShowTimes();
     _queryNoticesData();

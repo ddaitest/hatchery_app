@@ -2,36 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home_tab.dart';
 import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
+import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/flavors/Flavors.dart';
+import 'package:hatchery/manager/home_manager.dart';
 import 'package:package_info/package_info.dart';
 import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
+import 'package:provider/provider.dart';
 
-class MainTab extends StatefulWidget {
-  final routerTabIndex;
-  MainTab({this.routerTabIndex = 0});
+class MainTab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MainTabHandler(
+      x: 0,
+      child: MainTab2(),
+    );
+  }
+}
+
+class MainTab2 extends StatefulWidget {
   @override
   MainTabState createState() => MainTabState();
 }
 
-class MainTabState extends State<MainTab> {
+class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   bool nextKickBackExitApp = false;
-  int _tabIndex = 0;
-  List<String> bottomBarTitles = Flavors.stringsInfo.main_tab_title;
-
+  var bottomBarTitles = Flavors.stringsInfo.main_tab_title;
   List<Widget> _tabBodies = [HomeTab(), ServiceTab(), NearbyTab()];
-  late PageController _pageController =
-      PageController(initialPage: this._tabIndex, keepPage: true);
+
+  late TabController _tabController;
 
   @override
   void initState() {
-    _tabIndex = widget.routerTabIndex;
+    _tabController = TabController(vsync: this, length: _tabBodies.length);
+    Future.delayed(Duration(milliseconds: 200), () {
+      MainTabHandler.of(context).setGotoFun((page) {
+        if (_tabController.index != page) {
+          _tabController.animateTo(page);
+        }
+      });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    MainTabHandler.of(context).setGotoFun(null);
+    super.dispose();
   }
 
   void handleClick(String value) {
@@ -46,6 +68,15 @@ class MainTabState extends State<MainTab> {
       case '商务合作':
         // todo
         break;
+      case 'TAB1':
+        _tabController.animateTo(0);
+        break;
+      case 'TAB2':
+        _tabController.animateTo(1);
+        break;
+      case 'TAB3':
+        _tabController.animateTo(2);
+        break;
     }
   }
 
@@ -54,70 +85,64 @@ class MainTabState extends State<MainTab> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-          appBar: AppBarFactory.getMain(Flavors.stringsInfo.community_name,
-              actions: [
-                PopupMenuButton<String>(
-                  onSelected: handleClick,
-                  icon: Icon(Icons.more_vert),
-                  itemBuilder: (BuildContext context) {
-                    return {'关于物业', '商务合作'}.map((String choice) {
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
-                  },
-                ),
-              ]),
-          body: SafeArea(
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: _tabBodies,
-              controller: _pageController,
-            ),
+        appBar:
+            AppBarFactory.getMain(Flavors.stringsInfo.community_name, actions: [
+          PopupMenuButton<String>(
+            onSelected: handleClick,
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) {
+              return {'关于物业', '商务合作', 'TAB1', 'TAB2', 'TAB3'}
+                  .map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
           ),
-          backgroundColor: Colors.white,
-          bottomNavigationBar: Container(
-              width: Flavors.sizesInfo.screenWidth,
-              child: BottomNavigationBar(
-                selectedLabelStyle: TextStyle(
-                    fontSize: 10.0.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Flavors.colorInfo.homeTabSelected),
-                unselectedLabelStyle: TextStyle(
-                    fontSize: 10.0.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Flavors.colorInfo.homeTabUnSelected),
-                items: <BottomNavigationBarItem>[
-                  _bottomBarTitlesTabBar(Icons.home_outlined, Icons.home, 0),
-                  _bottomBarTitlesTabBar(Icons.home_repair_service_outlined,
-                      Icons.home_repair_service, 1),
-                  _bottomBarTitlesTabBar(
-                      Icons.near_me_outlined, Icons.near_me, 2),
-                ],
-                type: BottomNavigationBarType.fixed,
-                currentIndex: _tabIndex,
-                iconSize: 30.0,
-                //点击事件
-                onTap: (index) {
-                  setState(() {
-                    print("DEBUG=>$index");
-                    _tabIndex = index;
-                    _pageController.jumpToPage(index);
-                  });
-                },
-              ))),
+        ]),
+        body: SafeArea(
+            child: Stack(
+          children: [
+            Selector<HomeManager, int>(
+              builder: (BuildContext context, int value, Widget? child) {
+                print('DDAI aaa');
+                if (_tabController.index != value) {
+                  print('DDAI bbb');
+                  _tabController.animateTo(value);
+                }
+                return Container();
+              },
+              selector: (BuildContext context, HomeManager homeManager) {
+                return homeManager.currentTab;
+              },
+            ),
+            TabBarView(
+              controller: _tabController,
+              children: _tabBodies,
+            ),
+          ],
+        )),
+        backgroundColor: Colors.white,
+        bottomNavigationBar: TabBar(
+          controller: _tabController,
+          labelColor: Colors.black87,
+          tabs: bottomBarTitles.entries
+              .map((e) => Tab(text: e.key, icon: Icon(e.value)))
+              .toList(),
+        ),
+      ),
     );
   }
 
-  BottomNavigationBarItem _bottomBarTitlesTabBar(
-      IconData unSelectIconName, IconData selectedIconName, int barTitleIndex) {
-    return BottomNavigationBarItem(
-      icon: Icon(unSelectIconName, size: 30.0),
-      activeIcon: Icon(selectedIconName, size: 30.0),
-      label: bottomBarTitles[barTitleIndex],
-    );
-  }
+  // BottomNavigationBarItem _bottomBarTitlesTabBar(
+  //     IconData unSelectIconName, IconData selectedIconName, int barTitleIndex) {
+  //   return BottomNavigationBarItem(
+  //     icon: Icon(unSelectIconName, size: 30.0),
+  //     activeIcon: Icon(selectedIconName, size: 30.0),
+  //     label: bottomBarTitles[barTitleIndex],
+  //   );
+  // }
 
   Future<bool> _onWillPop() async {
     if (nextKickBackExitApp) {
@@ -133,10 +158,42 @@ class MainTabState extends State<MainTab> {
       return false;
     }
   }
+}
+
+typedef void Goto(int page);
+
+class MainTabHandler extends InheritedWidget {
+  const MainTabHandler({
+    Key? key,
+    required this.x,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final int x;
+
+  static MainTabHandler of(BuildContext context) {
+    final MainTabHandler? result =
+        context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
+    assert(result != null, 'No FrogColor found in context');
+    return result!;
+  }
+
+  static int tt = 0;
+
+  static Goto? goto;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+  bool updateShouldNotify(MainTabHandler old) => x != old.x;
+
+  gotoTab(int tab) {
+    if (tab >= 0 && tab < 3) {
+      if (goto != null) {
+        goto!(tab);
+      }
+    }
+  }
+
+  setGotoFun(Goto? fun) {
+    goto = fun;
   }
 }
