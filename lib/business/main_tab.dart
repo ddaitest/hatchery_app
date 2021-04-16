@@ -128,7 +128,8 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
           controller: _tabController,
           labelColor: Colors.black87,
           tabs: bottomBarTitles.entries
-              .map((e) => Tab(text: e.key, icon: Icon(e.value)))
+              // .map((e) => Tab(text: e.key, icon: Icon(e.value)))
+              .map((e) => HomeTabView(e.value, e.key))
               .toList(),
         ),
       ),
@@ -160,6 +161,34 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   }
 }
 
+class HomeTabView extends StatelessWidget {
+  final IconData? icon;
+  final String? label;
+
+  HomeTabView(this.icon, this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60.0,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(icon, size: 30.0),
+            Text(
+              label ?? "",
+              style: Flavors.textStyles.tabBar,
+            )
+          ],
+        ),
+        widthFactor: 1.0,
+      ),
+    );
+  }
+}
+
 typedef void Goto(int page);
 
 class MainTabHandler extends InheritedWidget {
@@ -185,6 +214,7 @@ class MainTabHandler extends InheritedWidget {
   @override
   bool updateShouldNotify(MainTabHandler old) => x != old.x;
 
+  ///跳转到置顶 Home 的 tab 页。
   gotoTab(int tab) {
     if (tab >= 0 && tab < 3) {
       if (goto != null) {
@@ -193,6 +223,7 @@ class MainTabHandler extends InheritedWidget {
     }
   }
 
+  /// Home 页跳转的回调，应该在initState 时候添加，depose 时候移除
   setGotoFun(Goto? fun) {
     goto = fun;
   }

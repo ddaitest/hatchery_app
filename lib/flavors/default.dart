@@ -76,6 +76,9 @@ class TextStyles {
   final TextStyle secondary =
       const TextStyle(fontSize: 16.0, color: Colors.black38);
 
+  final TextStyle tabBar = TextStyle(
+      fontSize: 10.0.sp, fontWeight: FontWeight.w400, color: Color(0x8A000000));
+
   /// 协议title
   final TextStyle agreementTitle = TextStyle(
       fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
@@ -154,5 +157,5 @@ class SizesInfo {
 class ColorInfo {
   final diver = Colors.black87;
   final homeTabSelected = Color(0xFF006EE7);
-  final homeTabUnSelected = Color(0x8A000000);
+  final homeTabUnSelected = const Color(0x8A000000);
 }

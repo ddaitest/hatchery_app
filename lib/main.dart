@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hatchery/business/list/list_manager.dart';
 import 'package:hatchery/business/splash/splash.dart';
 import 'package:hatchery/business/splash/agreementPage.dart';
 import 'package:hatchery/common/AppContext.dart';
@@ -49,6 +50,7 @@ void main() {
                 ChangeNotifierProvider(create: (_) => ServiceManager()),
                 ChangeNotifierProvider(create: (_) => ContactManager()),
                 ChangeNotifierProvider(create: (_) => FeedbackManager()),
+                ChangeNotifierProvider(create: (_) => ListPageManager()),
               ],
               child: MyApp(),
             ),
