@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
+import 'package:hatchery/routers.dart';
+import 'package:hatchery/business/main_tab.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
@@ -141,10 +143,12 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                       '${Flavors.stringsInfo.post_title}',
                       style: Flavors.textStyles.sortTitle,
                     ),
-                    Text(
-                      '更多 >',
-                      style: Flavors.textStyles.moreText,
-                    ),
+                    value.length > 4
+                        ? Text(
+                            '更多 >',
+                            style: Flavors.textStyles.moreText,
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -179,7 +183,12 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                         );
                       } else {
                         // return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
-                        return _noticeTitle('${value[index].title}');
+                        return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () =>
+                              Routers.navWebView(value[index].redirectUrl),
+                          child: _noticeTitle('${value[index].title}'),
+                        );
                       }
                     }),
               ),
@@ -225,9 +234,13 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                         '${Flavors.stringsInfo.articles_title}',
                         style: Flavors.textStyles.sortTitle,
                       ),
-                      Text(
-                        '更多 >',
-                        style: Flavors.textStyles.moreText,
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        // onTap: () => Routers.navigateTo('/', arg: 2),
+                        child: Text(
+                          '更多 >',
+                          style: Flavors.textStyles.moreText,
+                        ),
                       ),
                     ],
                   ),

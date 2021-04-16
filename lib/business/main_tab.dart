@@ -13,6 +13,8 @@ import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
 
 class MainTab extends StatefulWidget {
+  final routerTabIndex;
+  MainTab({this.routerTabIndex = 0});
   @override
   MainTabState createState() => MainTabState();
 }
@@ -20,15 +22,15 @@ class MainTab extends StatefulWidget {
 class MainTabState extends State<MainTab> {
   bool nextKickBackExitApp = false;
   int _tabIndex = 0;
-  List<String> bottomBarTitles = ['首页', '服务', '周边'];
+  List<String> bottomBarTitles = Flavors.stringsInfo.main_tab_title;
 
   List<Widget> _tabBodies = [HomeTab(), ServiceTab(), NearbyTab()];
-  late PageController _pageController;
+  late PageController _pageController =
+      PageController(initialPage: this._tabIndex, keepPage: true);
 
   @override
   void initState() {
-    _pageController =
-        PageController(initialPage: this._tabIndex, keepPage: true);
+    _tabIndex = widget.routerTabIndex;
     super.initState();
   }
 

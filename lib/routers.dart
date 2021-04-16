@@ -7,6 +7,7 @@ import 'business/feedback/feedback_new.dart';
 import 'business/feedback/repair_list.dart';
 import 'business/feedback/repair_new.dart';
 import 'business/list/list_page.dart';
+import 'business/nearby/nearby_tab.dart';
 import 'business/main_tab.dart';
 import 'business/splash/agreementPage.dart';
 import 'business/splash/splash.dart';
@@ -31,10 +32,8 @@ class Routers {
         return CupertinoPageRoute(builder: (_) => RepairListPage());
       case '/repairs_new':
         return CupertinoPageRoute(builder: (_) => RepairNewPage());
-      // case '/contact':
-      //   return MaterialPageRoute(builder: (_) => ContactPage());
-      // case '/contact':
-      //   return MaterialPageRoute(builder: (_) => ContactPage());
+      case '/nearby':
+        return CupertinoPageRoute(builder: (_) => NearbyTab());
 
       case '/list_page':
         Map map = settings.arguments as Map<String, String>;
