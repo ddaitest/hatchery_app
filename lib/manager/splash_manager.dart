@@ -59,12 +59,12 @@ class SplashManager extends ChangeNotifier {
 
   ///更新 闪屏 广告
   _querySplashAd() async {
-    Log.log("更新 闪屏 广告", color: LColor.Magenta);
+    Log.log("更新 闪屏 广告", color: LColor.YELLOW);
     API.getSplashADList(0, 1, Flavors.appId.splash_page_id).then((value) {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => Advertising.fromJson(m));
         if (news.isNotEmpty) {
-          Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.Magenta);
+          Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.YELLOW);
           SP.set(SPKey.splashAD, jsonEncode(news[0].toJson()));
         }
       }
@@ -73,12 +73,12 @@ class SplashManager extends ChangeNotifier {
 
   ///更新 弹框 广告
   _queryPopAd() async {
-    Log.log("更新 弹框 广告", color: LColor.BLUE);
-    API.getPopupADList(0, 1, Flavors.appId.splash_page_id).then((value) {
+    Log.log("更新 弹框 广告", color: LColor.YELLOW);
+    API.getPopupADList(0, 1, "tab1").then((value) {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => Advertising.fromJson(m));
         if (news.isNotEmpty) {
-          Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.BLUE);
+          Log.log("存 弹框 广告 = ${news[0].toJson()}", color: LColor.YELLOW);
           SP.set(SPKey.popAD, jsonEncode(news[0].toJson()));
         }
       }

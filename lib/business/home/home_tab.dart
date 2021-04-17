@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/business/main_tab.dart';
 import 'package:hatchery/common/AppContext.dart';
+import 'package:hatchery/common/log.dart';
 import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/banner_common_view.dart';
@@ -29,6 +30,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     App.manager<HomeManager>().checkPopAd().then((ad) {
+      Log.log("checkPopAd.then = $ad",color: LColor.YELLOW);
       if (ad != null) {
         _popAdView(context, ad);
       }
@@ -275,6 +277,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   }
 
   _popAdView(BuildContext context, Advertising advertising) {
+    Log.log("_popAdView",color: LColor.YELLOW);
     return showDialog<void>(
         context: context,
         barrierDismissible: false,

@@ -7,6 +7,7 @@ import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:flutter/material.dart';
+import 'package:hatchery/common/log.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/routers.dart';
@@ -31,13 +32,13 @@ class HomeManager extends ChangeNotifier {
   //弹窗广告
   // Advertising? popAd;
 
-  /// 服务器返回弹窗广告次数
-  int? _popAdShowTotalTimesForResponse;
+  // /// 服务器返回弹窗广告次数
+  // int? _popAdShowTotalTimesForResponse;
 
-  /// 本地存储的弹窗已经弹过的广告次数
-  int? _popAdShowTotalTimesForLocal;
+  // /// 本地存储的弹窗已经弹过的广告次数
+  // int? _popAdShowTotalTimesForLocal;
 
-  DateTime now = DateTime.now();
+  // DateTime now = DateTime.now();
 
   // PageStatus get status => _status;
 
@@ -70,12 +71,14 @@ class HomeManager extends ChangeNotifier {
 
   ///监测是否显示POP广告.
   Future<Advertising?> checkPopAd() async {
-    Future.delayed(Duration(seconds: TimeConfig.POP_AD_WAIT_TIME), () {
+    return Future.delayed(Duration(seconds: TimeConfig.POP_AD_WAIT_TIME), () {
       //判断是否应该显示
       var now = DateTime.now();
       int times = _getLocalPopShowTimes(now);
+      Log.log("checkPopAd.times = $times",color: LColor.YELLOW);
       if (times <= POP_AD_LIMIT) {
         Advertising? ad = _getStoredAd();
+        Log.log("checkPopAd.Advertising = $ad",color: LColor.YELLOW);
         if (ad != null) {
           setPopShowCount(now, times + 1);
           return ad;
@@ -86,6 +89,7 @@ class HomeManager extends ChangeNotifier {
 
   Advertising? _getStoredAd() {
     String? stored = SP.getString(SPKey.popAD);
+    Log.log("SP StoredAd = $stored",color: LColor.YELLOW);
     if (stored != null) {
       try {
         return Advertising.fromJson(jsonDecode(stored));
@@ -101,6 +105,7 @@ class HomeManager extends ChangeNotifier {
     try {
       var key = "${now.year}_${now.month}_${now.day}";
       String record = SP.getString(SPKey.popTimes) ?? "";
+      Log.log("SP GET.record = $record",color: LColor.YELLOW);
       if (record.contains(key)) {
         String times = record.substring(key.length + 1);
         return int.parse(times);
@@ -113,6 +118,7 @@ class HomeManager extends ChangeNotifier {
   setPopShowCount(DateTime now, int times) {
     var key = "${now.year}_${now.month}_${now.day}";
     SP.set(SPKey.popTimes, "$key@$times");
+    Log.log("SP SAVE.record = $key@$times",color: LColor.YELLOW);
     // Map<String, int> _popAdShowMap = {
     //   '${formatDate(DateTime(now.year, now.month, now.day), [yyyy, mm, dd])}':
     //   _popAdShowTotalTimesForLocal! + 1
