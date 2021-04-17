@@ -105,9 +105,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.bannerList;
       },
-      shouldRebuild: (pre, next) {
-        return (pre != next);
-      },
+      shouldRebuild: (pre, next) =>
+          ((pre != next) || (pre.length != next.length)),
     );
   }
 
@@ -199,7 +198,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.noticesList;
       },
-      shouldRebuild: (pre, next) => pre != next,
+      shouldRebuild: (pre, next) =>
+      ((pre != next) || (pre.length != next.length)),
     );
   }
 
@@ -269,7 +269,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.articlesList;
       },
-      shouldRebuild: (pre, next) => pre != next,
+      shouldRebuild: (pre, next) =>
+      ((pre != next) || (pre.length != next.length)),
     );
   }
 

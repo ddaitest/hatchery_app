@@ -14,9 +14,7 @@ import 'package:hatchery/common/PageStatus.dart';
 // enum ListPageType { Notice, Article }
 
 class ListPageManager extends ChangeNotifier {
-  List<Article> _data = [];
-
-  UnmodifiableListView<Article> get data => UnmodifiableListView(_data);
+  List<Article> data = [];
 
   var _page = 0; //当前软文 页数
   static const int _pageSize = 20; //软文每次加载SIZE
@@ -40,7 +38,8 @@ class ListPageManager extends ChangeNotifier {
         callback = PageLoadStatus.noMore;
       } else {
         _page++;
-        _data.addAll(news);
+        data = [...data]..addAll(news);
+        // _data.addAll(news);
         callback = PageLoadStatus.canLoading;
       }
     } else {
@@ -60,8 +59,9 @@ class ListPageManager extends ChangeNotifier {
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
-        _data.clear();
-        _data.addAll(news);
+        data = news;
+        // _data.clear();
+        // _data.addAll(news);
         callback = PageRefreshStatus.completed;
       }
     } else {
