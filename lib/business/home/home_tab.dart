@@ -92,16 +92,15 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   /// View: Banner
   Widget _bannerView(BuildContext context) {
-    return Selector<HomeManager, UnmodifiableListView<BannerInfo>>(
-      builder: (BuildContext context, UnmodifiableListView<BannerInfo> value,
-          Widget? child) {
+    return Selector<HomeManager, List<BannerInfo>>(
+      builder: (BuildContext context, List<BannerInfo> value, Widget? child) {
         print("DEBUG=> _bannerView 重绘了。。。。。");
         return BannerCommonView(value);
       },
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.bannerList;
       },
-      shouldRebuild: (pre, next){
+      shouldRebuild: (pre, next) {
         return (pre != next);
       },
     );
@@ -124,8 +123,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   Widget _noticeView() {
     return Selector(
-      builder: (BuildContext context, UnmodifiableListView<Notice> value,
-          Widget? child) {
+      builder: (BuildContext context, List<Notice> value, Widget? child) {
         print("DEBUG=> _noticeView 重绘了。。。。。");
         return Container(
           decoration: BoxDecoration(
@@ -210,9 +208,9 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _articlesView(BuildContext context) {
-    return Selector<HomeManager, UnmodifiableListView<Article>>(
-      builder: (BuildContext context, UnmodifiableListView<Article> value,
-          Widget? child) {
+    print("DEBUG=> _articlesView 重绘了。。。。。");
+    return Selector<HomeManager, List<Article>>(
+      builder: (BuildContext context, List<Article> value, Widget? child) {
         return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(6.0)),

@@ -17,9 +17,9 @@ class SplashPage extends StatelessWidget {
     return Material(
       child: ChangeNotifierProvider(
         create: (context) => SplashManager(),
-        child: Selector<SplashManager, UnmodifiableListView<Advertising>>(
-          builder: (BuildContext context,
-              UnmodifiableListView<Advertising> value, Widget? child) {
+        child: Selector<SplashManager, List<Advertising>>(
+          builder:
+              (BuildContext context, List<Advertising> value, Widget? child) {
             if (value.isEmpty) {
               return _fullScreenBackgroundView();
             } else {

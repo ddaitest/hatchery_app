@@ -18,16 +18,16 @@ class HomeManager extends ChangeNotifier {
   PageStatus _status = PageStatus.LOADING;
 
   //banner 数据
-  List<BannerInfo> _bannerList = [];
+  List<BannerInfo> bannerList = [];
 
   //公告内容
-  List<Notice> _noticesList = [];
+  List<Notice> noticesList = [];
 
   //软文
-  List<Article> _articlesList = [];
+  List<Article> articlesList = [];
 
   //弹窗广告
-  List<Advertising> _popAdList = [];
+  List<Advertising> popAdList = [];
 
   /// 服务器返回弹窗广告次数
   int? _popAdShowTotalTimesForResponse;
@@ -35,23 +35,14 @@ class HomeManager extends ChangeNotifier {
   /// 本地存储的弹窗已经弹过的广告次数
   int? _popAdShowTotalTimesForLocal;
 
+  int currentTab = 0;
+
   DateTime now = DateTime.now();
 
   PageStatus get status => _status;
 
-  UnmodifiableListView<BannerInfo> get bannerList =>
-      UnmodifiableListView(_bannerList);
-
-  UnmodifiableListView<Notice> get noticesList =>
-      UnmodifiableListView(_noticesList);
-
-  UnmodifiableListView<Article> get articlesList =>
-      UnmodifiableListView(_articlesList);
-
-  UnmodifiableListView<Advertising> get popAdList =>
-      UnmodifiableListView(_popAdList);
-
-
+  late PageController pageController =
+      PageController(initialPage: this.currentTab);
 
   HomeManager() {
     _getLocalPopShowTimes();
@@ -113,10 +104,10 @@ class HomeManager extends ChangeNotifier {
               addBanner(BannerInfo.fromJson(element));
             });
           } else {
-            _bannerList = [];
+            bannerList = [];
           }
         } else {
-          _bannerList = [];
+          bannerList = [];
         }
       }
     });
@@ -133,10 +124,10 @@ class HomeManager extends ChangeNotifier {
               addNotices(Notice.fromJson(element));
             });
           } else {
-            _noticesList = [];
+            noticesList = [];
           }
         } else {
-          _noticesList = [];
+          noticesList = [];
         }
       }
     });
@@ -153,10 +144,10 @@ class HomeManager extends ChangeNotifier {
               addArticles(Article.fromJson(element));
             });
           } else {
-            _articlesList = [];
+            articlesList = [];
           }
         } else {
-          _articlesList = [];
+          articlesList = [];
         }
       }
     });
@@ -174,10 +165,10 @@ class HomeManager extends ChangeNotifier {
                 addPopAd(Advertising.fromJson(element));
               });
             } else {
-              _popAdList = [];
+              popAdList = [];
             }
           } else {
-            _popAdList = [];
+            popAdList = [];
           }
         }
       });
@@ -213,25 +204,25 @@ class HomeManager extends ChangeNotifier {
   }
 
   void addArticles(Article item) {
-    _articlesList.add(item);
+    articlesList.add(item);
   }
 
   void addNotices(Notice item) {
-    _noticesList.add(item);
+    noticesList.add(item);
   }
 
   void addBanner(BannerInfo item) {
-    _bannerList.add(item);
+    bannerList.add(item);
   }
 
   void addPopAd(Advertising item) {
-    _popAdList.add(item);
+    popAdList.add(item);
   }
 
   _clearDataList() {
-    _bannerList.clear();
-    _noticesList.clear();
-    _articlesList.clear();
+    bannerList.clear();
+    noticesList.clear();
+    articlesList.clear();
   }
 
   /// 页面首次加载 or 刷新
@@ -254,8 +245,8 @@ class HomeManager extends ChangeNotifier {
   void dispose() {
     super.dispose();
   }
-  int currentTab = 0;
-  void test(int a){
+
+  void test(int a) {
     currentTab = a;
     notifyListeners();
   }

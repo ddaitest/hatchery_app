@@ -33,21 +33,19 @@ class MainTab2 extends StatefulWidget {
 
 class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   bool nextKickBackExitApp = false;
-  var bottomBarTitles = Flavors.stringsInfo.main_tab_title;
+  List bottomBarTitles = Flavors.stringsInfo.main_tab_title;
   List<Widget> _tabBodies = [HomeTab(), ServiceTab(), NearbyTab()];
-
-  late TabController _tabController;
-
+  // late TabController _tabController;
   @override
   void initState() {
-    _tabController = TabController(vsync: this, length: _tabBodies.length);
-    Future.delayed(Duration(milliseconds: 200), () {
-      MainTabHandler.of(context).setGotoFun((page) {
-        if (_tabController.index != page) {
-          _tabController.animateTo(page);
-        }
-      });
-    });
+    // _tabController = TabController(vsync: this, length: _tabBodies.length);
+    // Future.delayed(Duration(milliseconds: 200), () {
+    //   MainTabHandler.of(context).setGotoFun((page) {
+    //     if (_tabController.index != page) {
+    //       _tabController.animateTo(page);
+    //     }
+    //   });
+    // });
     super.initState();
   }
 
@@ -74,6 +72,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    HomeManager homeManager = HomeManager();
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -93,32 +92,63 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
           ),
         ]),
         body: SafeArea(
-          child: TabBarView(
-            controller: _tabController,
-            children: _tabBodies,
+          child: Selector<HomeManager, int>(
+            builder: (BuildContext context, int value, Widget? child) {
+              print('DDAI aaa');
+              // if (_tabController.index != value) {
+              //   print('DDAI bbb');
+              //   _tabController.animateTo(value);
+              // }
+              return PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: _tabBodies,
+                controller: homeManager.pageController,
+              );
+            },
+            selector: (BuildContext context, HomeManager homeManager) {
+              return homeManager.currentTab;
+            },
           ),
         ),
         backgroundColor: Colors.white,
-        bottomNavigationBar: TabBar(
-          controller: _tabController,
-          labelColor: Colors.black87,
-          tabs: bottomBarTitles.entries
-              // .map((e) => Tab(text: e.key, icon: Icon(e.value)))
-              .map((e) => HomeTabView(e.value, e.key))
-              .toList(),
-        ),
+        bottomNavigationBar: Container(
+            width: Flavors.sizesInfo.screenWidth,
+            child: BottomNavigationBar(
+              selectedLabelStyle: TextStyle(
+                  fontSize: 10.0.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Flavors.colorInfo.homeTabSelected),
+              unselectedLabelStyle: TextStyle(
+                  fontSize: 10.0.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Flavors.colorInfo.homeTabUnSelected),
+              items: <BottomNavigationBarItem>[
+                _bottomBarTitlesTabBar(Icons.home_outlined, Icons.home, 0),
+                _bottomBarTitlesTabBar(Icons.home_repair_service_outlined,
+                    Icons.home_repair_service, 1),
+                _bottomBarTitlesTabBar(
+                    Icons.near_me_outlined, Icons.near_me, 2),
+              ],
+              type: BottomNavigationBarType.fixed,
+              iconSize: 30.0,
+              currentIndex: homeManager.currentTab,
+              onTap: (index) {
+                print("DEBUG=> index index$index");
+                homeManager.pageController.jumpToPage(index);
+              },
+            )),
       ),
     );
   }
 
-  // BottomNavigationBarItem _bottomBarTitlesTabBar(
-  //     IconData unSelectIconName, IconData selectedIconName, int barTitleIndex) {
-  //   return BottomNavigationBarItem(
-  //     icon: Icon(unSelectIconName, size: 30.0),
-  //     activeIcon: Icon(selectedIconName, size: 30.0),
-  //     label: bottomBarTitles[barTitleIndex],
-  //   );
-  // }
+  BottomNavigationBarItem _bottomBarTitlesTabBar(
+      IconData unSelectIconName, IconData selectedIconName, int barTitleIndex) {
+    return BottomNavigationBarItem(
+      icon: Icon(unSelectIconName, size: 30.0),
+      activeIcon: Icon(selectedIconName, size: 30.0),
+      label: bottomBarTitles[barTitleIndex],
+    );
+  }
 
   Future<bool> _onWillPop() async {
     if (nextKickBackExitApp) {
@@ -136,33 +166,32 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   }
 }
 
-class HomeTabView extends StatelessWidget {
-  final IconData? icon;
-  final String? label;
-
-  HomeTabView(this.icon, this.label);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 60.0,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(icon, size: 30.0),
-            Text(
-              label ?? "",
-              style: Flavors.textStyles.tabBar,
-            )
-          ],
-        ),
-        widthFactor: 1.0,
-      ),
-    );
-  }
-}
+// class HomeTabView extends StatelessWidget {
+//   final IconData? icon;
+//   final String? label;
+//
+//   HomeTabView(this.icon, this.label);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: 60.0,
+//       child: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Icon(icon, size: 30.0),
+//             Text(
+//               label ?? "",
+//             )
+//           ],
+//         ),
+//         widthFactor: 1.0,
+//       ),
+//     );
+//   }
+// }
 
 typedef void Goto(int page);
 

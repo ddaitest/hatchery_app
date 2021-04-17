@@ -14,10 +14,7 @@ import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/routers.dart';
 
 class SplashManager extends ChangeNotifier {
-  List<Advertising> _splashAdLists = [];
-
-  UnmodifiableListView<Advertising> get splashAdLists =>
-      UnmodifiableListView(_splashAdLists);
+  List<Advertising> splashAdLists = [];
 
   Timer? _timer;
 
@@ -40,23 +37,23 @@ class SplashManager extends ChangeNotifier {
       _finalParse!.forEach((element) {
         addSplashAdData(Advertising.fromJson(element));
       });
-      if (_splashAdLists.isEmpty) {
+      if (splashAdLists.isEmpty) {
         routeHomePage();
       }
     } else {
-      _splashAdLists = [];
+      splashAdLists = [];
       routeHomePage();
     }
   }
 
   void addSplashAdData(Advertising item) {
-    _splashAdLists.add(item);
+    splashAdLists.add(item);
   }
 
   /// UI动作 点击广告
   void clickAD() {
-    if (_splashAdLists.isNotEmpty)
-      Routers.navWebViewReplace(_splashAdLists[0].redirectUrl);
+    if (splashAdLists.isNotEmpty)
+      Routers.navWebViewReplace(splashAdLists[0].redirectUrl);
   }
 
   /// UI动作 跳过倒计时
