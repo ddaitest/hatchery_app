@@ -254,4 +254,9 @@ class HomeManager extends ChangeNotifier {
   void dispose() {
     super.dispose();
   }
+
+  void test(int a){
+    currentTab = a;
+    notifyListeners();
+  }
 }

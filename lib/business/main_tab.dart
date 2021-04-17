@@ -69,10 +69,12 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
         // todo
         break;
       case 'TAB1':
-        _tabController.animateTo(0);
+        // _tabController.animateTo(0);
+        App.manager<HomeManager>().test(1);
         break;
       case 'TAB2':
-        _tabController.animateTo(1);
+        App.manager<HomeManager>().test(2);
+        // _tabController.animateTo(1);
         break;
       case 'TAB3':
         _tabController.animateTo(2);
@@ -102,27 +104,11 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
           ),
         ]),
         body: SafeArea(
-            child: Stack(
-          children: [
-            Selector<HomeManager, int>(
-              builder: (BuildContext context, int value, Widget? child) {
-                print('DDAI aaa');
-                if (_tabController.index != value) {
-                  print('DDAI bbb');
-                  _tabController.animateTo(value);
-                }
-                return Container();
-              },
-              selector: (BuildContext context, HomeManager homeManager) {
-                return homeManager.currentTab;
-              },
-            ),
-            TabBarView(
-              controller: _tabController,
-              children: _tabBodies,
-            ),
-          ],
-        )),
+          child: TabBarView(
+            controller: _tabController,
+            children: _tabBodies,
+          ),
+        ),
         backgroundColor: Colors.white,
         bottomNavigationBar: TabBar(
           controller: _tabController,
