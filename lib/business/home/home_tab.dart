@@ -12,6 +12,7 @@ import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/config.dart';
+import 'package:hatchery/routers.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:provider/provider.dart';
@@ -189,7 +190,12 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                         );
                       } else {
                         // return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
-                        return _noticeTitle('${value[index].title}');
+                        return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () =>
+                              Routers.navWebView(value[index].redirectUrl),
+                          child: _noticeTitle('${value[index].title}'),
+                        );
                       }
                     }),
               ),
@@ -201,7 +207,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         return homeManager.noticesList;
       },
       shouldRebuild: (pre, next) =>
-      ((pre != next) || (pre.length != next.length)),
+          ((pre != next) || (pre.length != next.length)),
     );
   }
 
@@ -272,7 +278,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         return homeManager.articlesList;
       },
       shouldRebuild: (pre, next) =>
-      ((pre != next) || (pre.length != next.length)),
+          ((pre != next) || (pre.length != next.length)),
     );
   }
 
