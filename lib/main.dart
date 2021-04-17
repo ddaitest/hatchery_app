@@ -24,53 +24,51 @@ import 'manager/service_manager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SP.init().then(
-        (_) => FlutterBugly.postCatchedException(() {
-          if (Platform.isAndroid) {
-            SystemUiOverlayStyle style = SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
+  FlutterBugly.postCatchedException(() {
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle style = SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
 
-                ///这是设置状态栏的图标和字体的颜色
-                ///Brightness.light  一般都是显示为白色
-                ///Brightness.dark 一般都是显示为黑色
-                statusBarIconBrightness: Brightness.dark);
-            SystemChrome.setSystemUIOverlayStyle(style);
+          ///这是设置状态栏的图标和字体的颜色
+          ///Brightness.light  一般都是显示为白色
+          ///Brightness.dark 一般都是显示为黑色
+          statusBarIconBrightness: Brightness.dark);
+      SystemChrome.setSystemUIOverlayStyle(style);
 
-            /// 强制竖屏
-            SystemChrome.setPreferredOrientations(
-                [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-          }
-          runApp(
-            MultiProvider(
-              providers: [
-                ChangeNotifierProvider(create: (_) => AppManager()),
-                ChangeNotifierProvider(create: (_) => SplashManager()),
-                ChangeNotifierProvider(create: (_) => HomeManager()),
-                ChangeNotifierProvider(create: (_) => NearbyManager()),
-                ChangeNotifierProvider(create: (_) => ServiceManager()),
-                ChangeNotifierProvider(create: (_) => ContactManager()),
-                ChangeNotifierProvider(create: (_) => FeedbackManager()),
-                ChangeNotifierProvider(create: (_) => ListPageManager()),
-              ],
-              child: MyApp(),
-            ),
-          );
-        }),
-      );
+      /// 强制竖屏
+      SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    }
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => AppManager()),
+          ChangeNotifierProvider(create: (_) => SplashManager()),
+          ChangeNotifierProvider(create: (_) => HomeManager()),
+          ChangeNotifierProvider(create: (_) => NearbyManager()),
+          ChangeNotifierProvider(create: (_) => ServiceManager()),
+          ChangeNotifierProvider(create: (_) => ContactManager()),
+          ChangeNotifierProvider(create: (_) => FeedbackManager()),
+          ChangeNotifierProvider(create: (_) => ListPageManager()),
+        ],
+        child: MyApp(),
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    AppManager manager = Provider.of<AppManager>(context, listen: false);
-    print("DEBUG LC => ${manager.isAgreeAgreementValue}");
+    // AppManager manager = Provider.of<AppManager>(context, listen: false);
+    // print("DEBUG LC => ${manager.isAgreeAgreementValue}");
     return ScreenUtilInit(
       builder: () => MaterialApp(
         title: Flavors.stringsInfo.community_name,
         navigatorKey: App.navState,
-        initialRoute:
-            manager.isAgreeAgreementValue! ? '/splash' : '/agreementPage',
+        initialRoute:'/splash',
+            // manager.isAgreeAgreementValue! ? '/splash' : '/agreementPage',
         onGenerateRoute: Routers.generateRoute,
         theme: ThemeData(
           textTheme: GoogleFonts.notoSansTextTheme(),

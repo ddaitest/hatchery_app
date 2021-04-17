@@ -49,11 +49,9 @@ class BaseManager extends ChangeNotifier {
 
   BaseManager(this.getApi, this.postApi, this.parser, this.createPath);
 
-  List<FeedbackInfo> _data = [];
+  List<FeedbackInfo> data = [];
 
   String uploadUrl = "";
-
-  UnmodifiableListView<FeedbackInfo> get data => UnmodifiableListView(_data);
 
   var _page = 0; //当前软文 页数
   static const int _pageSize = 20; //软文每次加载SIZE
@@ -68,7 +66,8 @@ class BaseManager extends ChangeNotifier {
         callback = PageLoadStatus.noMore;
       } else {
         _page++;
-        _data.addAll(news);
+        data = [...data]..addAll(news);
+        // _data.addAll(news);
         callback = PageLoadStatus.canLoading;
       }
     } else {
@@ -88,8 +87,7 @@ class BaseManager extends ChangeNotifier {
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
-        _data.clear();
-        _data.addAll(news);
+        data=(news);
         callback = PageRefreshStatus.completed;
       }
     } else {

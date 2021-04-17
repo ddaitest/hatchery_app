@@ -1,23 +1,20 @@
-import 'dart:collection';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/api/entity.dart';
-import 'package:hatchery/routers.dart';
 import 'package:hatchery/business/main_tab.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/widget/ServiceItem.dart';
 import 'package:hatchery/common/widget/article_item.dart';
-import 'package:hatchery/common/widget/loading_view.dart';
-import 'package:hatchery/common/widget/post_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
+import 'package:hatchery/common/widget/loading_view.dart';
+import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
-import 'package:hatchery/common/widget/banner_common_view.dart';
-import 'dart:math' as math;
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -27,11 +24,26 @@ class HomeTab extends StatefulWidget {
 class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  var _refreshController = RefreshController(initialRefresh: true);
+
+  @override
+  void initState() {
+    App.manager<HomeManager>().checkPopAd().then((ad) {
+      if (ad != null) {
+        _popAdView(context, ad);
+      }
+    });
+    // Future.delayed(Duration(seconds: TimeConfig.POP_AD_WAIT_TIME), () async {
+    //   if (_homeManager.popAdList.isNotEmpty) {
+    //     _popAdView(context, _homeManager);
+    //   }
+    // });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
         color: Color(0xFFF7F7F7),
         child: SmartRefresher(
@@ -51,13 +63,6 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   /// 顶部banner & service View
   Widget _topContainerMain(context) {
-    HomeManager _homeManager = HomeManager();
-    Future.delayed(Duration(seconds: Flavors.timeConfig.POP_AD_WAIT_TIME),
-        () async {
-      if (_homeManager.popAdList.isNotEmpty) {
-        _popAdView(context, _homeManager);
-      }
-    });
     return Container(
       width: Flavors.sizesInfo.screenWidth,
       height: 175.0.h,
@@ -92,16 +97,15 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   /// View: Banner
   Widget _bannerView(BuildContext context) {
-    return Selector<HomeManager, UnmodifiableListView<BannerInfo>>(
-      builder: (BuildContext context, UnmodifiableListView<BannerInfo> value,
-          Widget? child) {
+    return Selector<HomeManager, List<BannerInfo>>(
+      builder: (BuildContext context, List<BannerInfo> value, Widget? child) {
         print("DEBUG=> _bannerView 重绘了。。。。。");
         return BannerCommonView(value);
       },
       selector: (BuildContext context, HomeManager homeManager) {
         return homeManager.bannerList;
       },
-      shouldRebuild: (pre, next){
+      shouldRebuild: (pre, next) {
         return (pre != next);
       },
     );
@@ -123,9 +127,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _noticeView() {
-    return Selector(
-      builder: (BuildContext context, UnmodifiableListView<Notice> value,
-          Widget? child) {
+    return Selector<HomeManager, List<Notice>>(
+      builder: (BuildContext context, List<Notice> value, Widget? child) {
         print("DEBUG=> _noticeView 重绘了。。。。。");
         return Container(
           decoration: BoxDecoration(
@@ -210,9 +213,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _articlesView(BuildContext context) {
-    return Selector<HomeManager, UnmodifiableListView<Article>>(
-      builder: (BuildContext context, UnmodifiableListView<Article> value,
-          Widget? child) {
+    return Selector<HomeManager, List<Article>>(
+      builder: (BuildContext context, List<Article> value, Widget? child) {
         return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(6.0)),
@@ -271,14 +273,14 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  _popAdView(BuildContext context, homeManager) {
+  _popAdView(BuildContext context, Advertising advertising) {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          homeManager.setPopShowCount();
+          // homeManager.setPopShowCount();
           return CachedNetworkImage(
-            imageUrl: homeManager.popAdList[0].image,
+            imageUrl: advertising.image,
             imageBuilder: (context, imageProvider) {
               return Center(
                 child: Container(
@@ -289,7 +291,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
-                          homeManager.clickPopAd(homeManager.popAdList[0]);
+                          App.manager<HomeManager>().clickPopAd(advertising);
                         },
                         child: Image(
                           image: imageProvider,

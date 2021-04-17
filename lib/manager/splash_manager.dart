@@ -4,7 +4,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hatchery/api/API.dart';
+import 'package:hatchery/common/log.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
+import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:convert' as convert;
 import 'package:flutter/services.dart';
@@ -14,61 +17,117 @@ import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/routers.dart';
 
 class SplashManager extends ChangeNotifier {
-  List<Advertising> _splashAdLists = [];
+  /// 是否显示 协议确认UI
+  bool? showAgreement;
 
-  UnmodifiableListView<Advertising> get splashAdLists =>
-      UnmodifiableListView(_splashAdLists);
+  Advertising? advertising;
+
+  int? countDown;
 
   Timer? _timer;
 
-  Timer get timer => _timer!;
-
-  SplashManager() {
-    _getSplashAdData();
-    _timer = Timer.periodic(
-        Duration(seconds: Flavors.timeConfig.SPLASH_TIMEOUT), (timer) {
-      routeHomePage();
+  /// 初始化
+  init() {
+    Log.log("SplashManager 初始化", color: LColor.YELLOW);
+    SP.init().then((sp) {
+      bool spValue = SP.getBool(SPKey.showAgreement) ?? true;
+      Log.log("showAgreement = $spValue", color: LColor.YELLOW);
+      showAgreement = spValue;
+      if (spValue) {
+        //跳转 显示 Agreement
+        Routers.navigateTo("/agreementPage");
+      } else {
+        //显示广告
+        _getStoredAd();
+        //更新数据
+        _queryConfigData();
+        _querySplashAd();
+        _queryPopAd();
+      }
     });
   }
 
-  List<String>? _getSplashAdData() {
-    String? _responseResult =
-        SP.getString(Flavors.localSharedPreferences.SPLASH_AD_RESPONSE_KEY);
-    if (_responseResult != null) {
-      List<dynamic>? _finalParse = jsonDecode(_responseResult);
-      print("DEBUG=> _finalParse ${_finalParse}");
-      _finalParse!.forEach((element) {
-        addSplashAdData(Advertising.fromJson(element));
-      });
-      if (_splashAdLists.isEmpty) {
-        routeHomePage();
+  ///更新 配置
+  _queryConfigData() async {
+    Log.log("更新 闪屏 广告", color: LColor.Magenta);
+    API.getConfig().then((value) {
+      if (value.isSuccess()) {
+        SP.set(SPKey.CONFIG_KEY, json.encode(value.getData()));
       }
-    } else {
-      _splashAdLists = [];
-      routeHomePage();
-    }
+    });
   }
 
-  void addSplashAdData(Advertising item) {
-    _splashAdLists.add(item);
+  ///更新 闪屏 广告
+  _querySplashAd() async {
+    Log.log("更新 闪屏 广告", color: LColor.Magenta);
+    API.getSplashADList(0, 1, Flavors.appId.splash_page_id).then((value) {
+      if (value.isSuccess()) {
+        var news = value.getDataList((m) => Advertising.fromJson(m));
+        if (news.isNotEmpty) {
+          Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.Magenta);
+          SP.set(SPKey.splashAD, jsonEncode(news[0].toJson()));
+        }
+      }
+    });
+  }
+
+  ///更新 弹框 广告
+  _queryPopAd() async {
+    Log.log("更新 弹框 广告", color: LColor.BLUE);
+    API.getPopupADList(0, 1, Flavors.appId.splash_page_id).then((value) {
+      if (value.isSuccess()) {
+        var news = value.getDataList((m) => Advertising.fromJson(m));
+        if (news.isNotEmpty) {
+          Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.BLUE);
+          SP.set(SPKey.popAD, jsonEncode(news[0].toJson()));
+        }
+      }
+    });
+  }
+
+  _getStoredAd() {
+    String? stored = SP.getString(SPKey.splashAD);
+    if (stored != null) {
+      try {
+        var ad = Advertising.fromJson(jsonDecode(stored));
+        //显示 广告 和 倒计时
+        countDown = TimeConfig.SPLASH_TIMEOUT;
+        advertising = ad;
+        notifyListeners();
+        // 开始倒计时
+        _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+          var t = countDown! - 1;
+          Log.log("Timer $t", color: LColor.YELLOW);
+          if (t == 0) {
+            _timer?.cancel();
+            Routers.navigateReplace('/');
+            return;
+          }
+          countDown = t;
+          notifyListeners();
+        });
+      } catch (e) {}
+    } else {
+      //没有广告
+      Timer.periodic(Duration(seconds: 1), (timer) {
+        _timer?.cancel();
+        Routers.navigateReplace('/');
+      });
+    }
   }
 
   /// UI动作 点击广告
   void clickAD() {
-    if (_splashAdLists.isNotEmpty)
-      Routers.navWebViewReplace(_splashAdLists[0].redirectUrl);
+    if (advertising != null) {
+      _timer?.cancel();
+      Routers.navWebViewReplace(advertising!.redirectUrl);
+    }
   }
 
   /// UI动作 跳过倒计时
-  void skip(BuildContext context) {
-    routeHomePage();
-  }
-
-  void routeHomePage() {
-    Future.delayed(Duration.zero, () async {
-      Routers.navigateReplace('/');
-      _timer?.cancel();
-    });
+  void skip() {
+    _timer?.cancel();
+    Routers.navigateReplace('/');
   }
 
   @override

@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info/device_info.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 
+import '../config.dart';
+
 Future compressionImage(filePath) async {
   ImageProperties properties =
       await FlutterNativeImage.getImageProperties(filePath);
@@ -67,6 +69,7 @@ class SP {
 class DeviceInfo {
   static late DeviceInfoPlugin deviceInfo;
   static late PackageInfo packageInfo;
+
   static Future init() async {
     deviceInfo = DeviceInfoPlugin();
     packageInfo = await PackageInfo.fromPlatform();
@@ -86,8 +89,7 @@ class DeviceInfo {
           "android_id": deviceValue.androidId,
           "isPhysicalDevice": deviceValue.isPhysicalDevice
         };
-        SP.set(Flavors.localSharedPreferences.COMMON_PARAM_KEY,
-            json.encode(_commonParamMap));
+        SP.set(SPKey.COMMON_PARAM_KEY, json.encode(_commonParamMap));
       });
     } else {
       deviceInfo.iosInfo.then((deviceValue) {
@@ -101,8 +103,7 @@ class DeviceInfo {
           "IDFV": deviceValue.identifierForVendor,
           "isPhysicalDevice": deviceValue.isPhysicalDevice
         };
-        SP.set(Flavors.localSharedPreferences.COMMON_PARAM_KEY,
-            json.encode(_commonParamMap));
+        SP.set(SPKey.COMMON_PARAM_KEY, json.encode(_commonParamMap));
       });
     }
   }

@@ -14,29 +14,30 @@ import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 
+import '../config.dart';
+
 class AppManager extends ChangeNotifier {
-  /// 是否显示 协议确认UI
-  bool? isAgreeAgreementValue;
 
-  List<Contact> _phoneNumbersList = [];
+  List<Contact> phoneNumbersList = [];
 
-  UnmodifiableListView<Contact> get phoneNumbersList =>
-      UnmodifiableListView(_phoneNumbersList);
+  // UnmodifiableListView<Contact> get phoneNumbersList =>
+  //     UnmodifiableListView(_phoneNumbersList);
 
-  int get total => _phoneNumbersList.length;
+  // int get total => _phoneNumbersList.length;
 
   DateTime now = DateTime.now();
 
   final JPush jpush = JPush();
 
   AppManager() {
-    _getAgreeAgreementValueForSP().then((value) {
-      isAgreeAgreementValue = value;
-      if (isAgreeAgreementValue!) {
-        _queryConfigData();
-        querySplashAdData();
-      }
-    });
+
+    // _getAgreeAgreementValueForSP().then((value) {
+    //   isAgreeAgreementValue = value;
+    //   if (isAgreeAgreementValue!) {
+    //     _queryConfigData();
+    //     querySplashAdData();
+    //   }
+    // });
     DeviceInfo.init().then((_) {
       DeviceInfo.setDeviceInfoToSP();
     });
@@ -47,11 +48,6 @@ class AppManager extends ChangeNotifier {
         iOSAppId: "7274afdfed",
         autoCheckUpgrade: false);
     // initPlatformState();
-  }
-
-  Future<bool> _getAgreeAgreementValueForSP() async {
-    return SP.getBool(Flavors.localSharedPreferences.Agreement_DATA_KEY) ??
-        false;
   }
 
   Future<void> initPlatformState() async {
@@ -86,31 +82,14 @@ class AppManager extends ChangeNotifier {
     });
   }
 
-  copyData(String text) {
-    Clipboard.setData(ClipboardData(text: text));
-  }
+  // copyData(String text) {
+  //   Clipboard.setData(ClipboardData(text: text));
+  // }
 
   shareFrame(String contents) {
     Share.share(contents);
   }
 
-  _queryConfigData() async {
-    await API.getConfig().then((value) {
-      if (value.isSuccess()) {
-        SP.set(Flavors.localSharedPreferences.CONFIG_KEY,
-            json.encode(value.getData()));
-      }
-    });
-  }
-
-  querySplashAdData() async {
-    await API.getSplashADList(0, 1, Flavors.appId.splash_page_id).then((value) {
-      if (value.isSuccess()) {
-        SP.set(Flavors.localSharedPreferences.SPLASH_AD_RESPONSE_KEY,
-            json.encode(value.getData()));
-      }
-    });
-  }
 
   @override
   void dispose() {

@@ -13,9 +13,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../routers.dart';
 
 class ServiceManager extends ChangeNotifier {
-  List<Article> _articles = [];
-
-  UnmodifiableListView<Article> get articles => UnmodifiableListView(_articles);
+  List<Article> articles = [];
 
   var _page = 0; //当前软文 页数
   static const int _pageSize = 10; //软文每次加载SIZE
@@ -59,7 +57,7 @@ class ServiceManager extends ChangeNotifier {
         callback = PageLoadStatus.noMore;
       } else {
         _page++;
-        _articles.addAll(news);
+        articles=(news);
         callback = PageLoadStatus.canLoading;
       }
     } else {
@@ -79,8 +77,7 @@ class ServiceManager extends ChangeNotifier {
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
-        _articles.clear();
-        _articles.addAll(news);
+        articles = [...articles]..addAll(news);
         callback = PageRefreshStatus.completed;
       }
     } else {

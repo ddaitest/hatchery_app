@@ -11,9 +11,9 @@ import 'dart:collection';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ContactManager extends ChangeNotifier {
-  List<Contact> _contacts = [];
+  List<Contact> contacts = [];
 
-  UnmodifiableListView<Contact> get contacts => UnmodifiableListView(_contacts);
+  // UnmodifiableListView<Contact> get contacts => UnmodifiableListView(_contacts);
 
   var _page = 0; //当前软文 页数
   static const int _pageSize = 20; //软文每次加载SIZE
@@ -28,7 +28,8 @@ class ContactManager extends ChangeNotifier {
         callback = PageLoadStatus.noMore;
       } else {
         _page++;
-        _contacts.addAll(news);
+        contacts=[...contacts]..addAll(news);
+        // _contacts.addAll(news);
         callback = PageLoadStatus.canLoading;
       }
     } else {
@@ -48,8 +49,7 @@ class ContactManager extends ChangeNotifier {
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
-        _contacts.clear();
-        _contacts.addAll(news);
+        contacts = news;
         callback = PageRefreshStatus.completed;
       }
     } else {

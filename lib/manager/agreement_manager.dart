@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hatchery/config.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/routers.dart';
@@ -14,13 +15,11 @@ class AgreementManager extends ChangeNotifier {
 
   bool get agreedAgreement => _agreedAgreement;
 
-  AgreementManager() {}
 
   /// 点击同意协议按钮
   void clickAgreeAgreementButton(BuildContext context) async {
-    await SP.set(
-        Flavors.localSharedPreferences.Agreement_DATA_KEY, true); // 设置协议是否同意标识
-    await AppManager().querySplashAdData();
+    SP.set(SPKey.showAgreement, false); // 设置协议是否同意标识
+    // await AppManager().querySplashAdData();
     Routers.navigateReplace('/');
   }
 
@@ -32,16 +31,16 @@ class AgreementManager extends ChangeNotifier {
   void gotoPrivacyAgreementUrl() =>
       Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url);
 
-  Future<void> exitApp() async {
-    if (Platform.isAndroid) {
-      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-    } else if (Platform.isIOS) {
-      exit(0);
-    } else {
-      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      exit(0);
-    }
-  }
+  // Future<void> exitApp() async {
+  //   if (Platform.isAndroid) {
+  //     await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  //   } else if (Platform.isIOS) {
+  //     exit(0);
+  //   } else {
+  //     await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  //     exit(0);
+  //   }
+  // }
 
   @override
   void dispose() {

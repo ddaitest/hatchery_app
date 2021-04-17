@@ -37,6 +37,7 @@ class ServiceTabState extends State<ServiceTab>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SmartRefresher(
       controller: _refreshController,
       enablePullDown: true,

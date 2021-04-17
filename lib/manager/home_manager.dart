@@ -2,10 +2,12 @@ import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:hatchery/api/entity.dart';
+import 'package:hatchery/business/main_tab.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:flutter/material.dart';
+import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/routers.dart';
 import 'package:hatchery/common/tools.dart';
@@ -14,20 +16,20 @@ import 'package:date_format/date_format.dart';
 import 'package:hatchery/api/ApiResult.dart';
 
 class HomeManager extends ChangeNotifier {
-  //当前页面状态
-  PageStatus _status = PageStatus.LOADING;
+  // //当前页面状态
+  // PageStatus _status = PageStatus.LOADING;
 
   //banner 数据
-  List<BannerInfo> _bannerList = [];
+  List<BannerInfo> bannerList = [];
 
   //公告内容
-  List<Notice> _noticesList = [];
+  List<Notice> noticesList = [];
 
   //软文
-  List<Article> _articlesList = [];
+  List<Article> articlesList = [];
 
   //弹窗广告
-  List<Advertising> _popAdList = [];
+  // Advertising? popAd;
 
   /// 服务器返回弹窗广告次数
   int? _popAdShowTotalTimesForResponse;
@@ -37,30 +39,7 @@ class HomeManager extends ChangeNotifier {
 
   DateTime now = DateTime.now();
 
-  PageStatus get status => _status;
-
-  UnmodifiableListView<BannerInfo> get bannerList =>
-      UnmodifiableListView(_bannerList);
-
-  UnmodifiableListView<Notice> get noticesList =>
-      UnmodifiableListView(_noticesList);
-
-  UnmodifiableListView<Article> get articlesList =>
-      UnmodifiableListView(_articlesList);
-
-  UnmodifiableListView<Advertising> get popAdList =>
-      UnmodifiableListView(_popAdList);
-
-
-
-  HomeManager() {
-    _getLocalPopShowTimes();
-    _queryNoticesData();
-    _queryBannerData();
-    queryArticleData();
-    _getPopAdShowTimes();
-    _queryPopAdData();
-  }
+  // PageStatus get status => _status;
 
   List<ServiceInfo> services = [
     //TODO fix
@@ -70,10 +49,17 @@ class HomeManager extends ChangeNotifier {
     ServiceInfo('images/image4.png', "全部服务", "all_service"),
   ];
 
+  /// 页面首次加载 or 刷新
+  Future<PageRefreshStatus> refresh() async {
+    _queryBannerData();
+    _queryArticleData();
+    return _queryNoticesData();
+  }
+
   clickService(ServiceInfo serviceInfo) {
     switch (serviceInfo.serviceId) {
       case "all_service":
-        //TODO TAB 服务业
+        MainTabHandler.of(App.navState.currentContext!).gotoTab(1);
         break;
       default:
         // 使用统一逻辑处理。
@@ -82,170 +68,107 @@ class HomeManager extends ChangeNotifier {
     }
   }
 
-  /// 获取SP中的当天弹出次数结构为map = {'today': 1}
+  ///监测是否显示POP广告.
+  Future<Advertising?> checkPopAd() async {
+    Future.delayed(Duration(seconds: TimeConfig.POP_AD_WAIT_TIME), () {
+      //判断是否应该显示
+      var now = DateTime.now();
+      int times = _getLocalPopShowTimes(now);
+      if (times <= POP_AD_LIMIT) {
+        Advertising? ad = _getStoredAd();
+        if (ad != null) {
+          setPopShowCount(now, times + 1);
+          return ad;
+        }
+      }
+    });
+  }
+
+  Advertising? _getStoredAd() {
+    String? stored = SP.getString(SPKey.popAD);
+    if (stored != null) {
+      try {
+        return Advertising.fromJson(jsonDecode(stored));
+      } catch (e) {}
+    }
+    return null;
+  }
+
+  /// 获取SP中的当天弹出次数. 结构为String "2020_11_11@X",X为次数
   /// 用当天的日期如20210413作为key是判断SP中是否有对应的key，如果有则获取value的值
   /// 用value中的值去和服务器返回的做比较，相同则不弹，不相同则弹
-  _getLocalPopShowTimes() {
-    String _nowDay =
-        formatDate(DateTime(now.year, now.month, now.day), [yyyy, mm, dd]);
-    String? _responseResult =
-        SP.getString(Flavors.localSharedPreferences.POP_AD_SHOW_TIMES_KEY);
-    if (_responseResult != null) {
-      Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
-      if (_finalParse!.containsKey(_nowDay)) {
-        _popAdShowTotalTimesForLocal = _finalParse[_nowDay];
-      } else {
-        SP.delete(Flavors.localSharedPreferences.POP_AD_SHOW_TIMES_KEY);
-        _popAdShowTotalTimesForLocal = 0;
+  int _getLocalPopShowTimes(DateTime now) {
+    try {
+      var key = "${now.year}_${now.month}_${now.day}";
+      String record = SP.getString(SPKey.popTimes) ?? "";
+      if (record.contains(key)) {
+        String times = record.substring(key.length + 1);
+        return int.parse(times);
       }
-    } else {
-      _popAdShowTotalTimesForLocal = 0;
-    }
+    } catch (e) {}
+    return 0;
   }
 
-  _queryBannerData() async {
-    await API.getBannerList(0, 10, Flavors.appId.home_page_id).then((value) {
+  /// 记录pop ad 弹出次数，结构为String "2020_11_11@X",X为次数
+  setPopShowCount(DateTime now, int times) {
+    var key = "${now.year}_${now.month}_${now.day}";
+    SP.set(SPKey.popTimes, "$key@$times");
+    // Map<String, int> _popAdShowMap = {
+    //   '${formatDate(DateTime(now.year, now.month, now.day), [yyyy, mm, dd])}':
+    //   _popAdShowTotalTimesForLocal! + 1
+    // };
+    // SP.set(SPKey.POP_AD_SHOW_TIMES_KEY, json.encode(_popAdShowMap));
+  }
+
+  //
+  // /// 获取config中的pop广告弹出次数，如果获取不到则用default.dart中默认的值
+  // _getPopAdShowTimes() {
+  //   String? _responseResult = SP.getString(SPKey.CONFIG_KEY);
+  //   if (_responseResult != null) {
+  //     Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
+  //     _popAdShowTotalTimesForResponse = _finalParse?['popup_ad']['show_times'];
+  //     if (_popAdShowTotalTimesForResponse == null) {
+  //       _popAdShowTotalTimesForResponse = TimeConfig.DEFAULT_SHOW_POP_TIMES;
+  //     }
+  //     print(
+  //         "DEBUG=> _popAdShowTotalTimesForResponse ${_popAdShowTotalTimesForResponse}");
+  //     print(
+  //         "DEBUG=> _popAdShowTotalTimesForLocal ${_popAdShowTotalTimesForLocal}");
+  //   }
+  // }
+
+  _queryBannerData() {
+    API.getBannerList(0, 10, Flavors.appId.home_page_id).then((value) {
       if (value.isSuccess()) {
-        List<dynamic>? _finalParse = value.getData();
-        if (_finalParse != null) {
-          if (_finalParse.isNotEmpty) {
-            _finalParse.forEach((element) {
-              addBanner(BannerInfo.fromJson(element));
-            });
-          } else {
-            _bannerList = [];
-          }
-        } else {
-          _bannerList = [];
-        }
+        var news = value.getDataList((m) => BannerInfo.fromJson(m));
+        bannerList = news;
+        notifyListeners();
       }
     });
-    notifyListeners();
   }
 
-  _queryNoticesData() async {
-    await API.getNoticeList(0, 10, Flavors.appId.home_page_id).then((value) {
-      if (value.isSuccess()) {
-        List<dynamic>? _finalParse = value.getData();
-        if (_finalParse != null) {
-          if (_finalParse.isNotEmpty) {
-            _finalParse.forEach((element) {
-              addNotices(Notice.fromJson(element));
-            });
-          } else {
-            _noticesList = [];
-          }
-        } else {
-          _noticesList = [];
-        }
-      }
-    });
-    notifyListeners();
-  }
-
-  queryArticleData() async {
-    await API.getArticleList(0, 10, Flavors.appId.home_page_id).then((value) {
-      if (value.isSuccess()) {
-        List<dynamic>? _finalParse = value.getData();
-        if (_finalParse != null) {
-          if (_finalParse.isNotEmpty) {
-            _finalParse.forEach((element) {
-              addArticles(Article.fromJson(element));
-            });
-          } else {
-            _articlesList = [];
-          }
-        } else {
-          _articlesList = [];
-        }
-      }
-    });
-    notifyListeners();
-  }
-
-  _queryPopAdData() async {
-    if (_popAdShowTotalTimesForLocal != _popAdShowTotalTimesForResponse)
-      await API.getPopupADList(0, 10, Flavors.appId.home_page_id).then((value) {
-        if (value.isSuccess()) {
-          List<dynamic>? _finalParse = value.getData();
-          if (_finalParse != null) {
-            if (_finalParse.isNotEmpty) {
-              _finalParse.forEach((element) {
-                addPopAd(Advertising.fromJson(element));
-              });
-            } else {
-              _popAdList = [];
-            }
-          } else {
-            _popAdList = [];
-          }
-        }
-      });
-    notifyListeners();
-  }
-
-  /// 记录pop ad 弹出次数，日期作为key，次数作为value
-  setPopShowCount() {
-    Map<String, int> _popAdShowMap = {
-      '${formatDate(DateTime(now.year, now.month, now.day), [yyyy, mm, dd])}':
-          _popAdShowTotalTimesForLocal! + 1
-    };
-    SP.set(Flavors.localSharedPreferences.POP_AD_SHOW_TIMES_KEY,
-        json.encode(_popAdShowMap));
-  }
-
-  /// 获取config中的pop广告弹出次数，如果获取不到则用default.dart中默认的值
-  _getPopAdShowTimes() {
-    String? _responseResult =
-        SP.getString(Flavors.localSharedPreferences.CONFIG_KEY);
-    if (_responseResult != null) {
-      Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
-      _popAdShowTotalTimesForResponse = _finalParse?['popup_ad']['show_times'];
-      if (_popAdShowTotalTimesForResponse == null) {
-        _popAdShowTotalTimesForResponse =
-            Flavors.timeConfig.DEFAULT_SHOW_POP_TIMES;
-      }
-      print(
-          "DEBUG=> _popAdShowTotalTimesForResponse ${_popAdShowTotalTimesForResponse}");
-      print(
-          "DEBUG=> _popAdShowTotalTimesForLocal ${_popAdShowTotalTimesForLocal}");
-    }
-  }
-
-  void addArticles(Article item) {
-    _articlesList.add(item);
-  }
-
-  void addNotices(Notice item) {
-    _noticesList.add(item);
-  }
-
-  void addBanner(BannerInfo item) {
-    _bannerList.add(item);
-  }
-
-  void addPopAd(Advertising item) {
-    _popAdList.add(item);
-  }
-
-  _clearDataList() {
-    _bannerList.clear();
-    _noticesList.clear();
-    _articlesList.clear();
-  }
-
-  /// 页面首次加载 or 刷新
-  Future<PageRefreshStatus> refresh() async {
-    _clearDataList();
-    notifyListeners();
-    Future.delayed(Duration(milliseconds: 500), () async {
-      _queryNoticesData();
-      _queryBannerData();
-      queryArticleData();
+  Future<PageRefreshStatus> _queryNoticesData() async {
+    var callback = PageRefreshStatus.completed;
+    ApiResult result =
+        await API.getNoticeList(0, 10, Flavors.appId.home_page_id);
+    if (result.isSuccess()) {
+      var news = result.getDataList((m) => Notice.fromJson(m));
+      noticesList = news;
       notifyListeners();
-    });
+    } else {
+      callback = PageRefreshStatus.failed;
+    }
+    return callback;
+  }
 
-    return PageRefreshStatus.completed;
+  _queryArticleData() {
+    API.getArticleList(0, 10, Flavors.appId.home_page_id).then((value) {
+      if (value.isSuccess()) {
+        var news = value.getDataList((m) => Article.fromJson(m));
+        articlesList = news;
+        notifyListeners();
+      }
+    });
   }
 
   void clickPopAd(Advertising value) => Routers.navWebView(value.redirectUrl);
@@ -253,10 +176,5 @@ class HomeManager extends ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
-  }
-  int currentTab = 0;
-  void test(int a){
-    currentTab = a;
-    notifyListeners();
   }
 }

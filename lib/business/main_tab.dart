@@ -122,7 +122,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
 
   Future<bool> _onWillPop() async {
     if (nextKickBackExitApp) {
-      exitApp();
+      // exitApp();
       return true;
     } else {
       showToast('再按一次退出APP');

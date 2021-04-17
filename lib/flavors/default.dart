@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/common/tools.dart';
 import 'dart:convert';
 
-const bool TEST = true;
+import 'package:hatchery/config.dart';
 
 class AppID {
   final client_id = '36ff662f-3041-5c10-8bde-65e6fb86523b';
@@ -42,22 +42,6 @@ class ApiInfo {
   final String CONTENT_TYPE = 'application/json';
   final String BASIC_AUTH =
       'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6IjM2ZmY2NjJmLTMwNDEtNWMxMC04YmRlLTY1ZTZmYjg2NTIzYiIsImV4cCI6MTYxNzg5MDkzM30.6-zJZ5Eoq83mx1KAdWs6Fr6gm4wkdXV49tlqKAKJOrU';
-}
-
-class LocalSharedPreferences {
-  final String Agreement_DATA_KEY = 'agreeAgreementKey';
-  final String CONFIG_KEY = 'configKey';
-  final String SPLASH_AD_RESPONSE_KEY = 'adResponseKey';
-  final String POP_AD_SHOW_TIMES_KEY = 'popShowTimesKey';
-  final String COMMON_PARAM_KEY = 'commonParamKey';
-}
-
-class TimeConfig {
-  final int SPLASH_TIMEOUT = TEST ? 6 : 6;
-  final int SPLASH_TIME = TEST ? 1 : 4;
-  final int POP_AD_WAIT_TIME = TEST ? 1 : 3;
-  final int UPGRADE_LOADING_TIME = TEST ? 1 : 5;
-  final int DEFAULT_SHOW_POP_TIMES = TEST ? 30 : 1;
 }
 
 class TextStyles {
@@ -138,7 +122,7 @@ class CommonParam {
 
   static getCommonParamMapFromSP() {
     String? _responseResult =
-        SP.getString(LocalSharedPreferences().COMMON_PARAM_KEY);
+        SP.getString(SPKey.COMMON_PARAM_KEY);
     if (_responseResult != null) {
       Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
       return _finalParse;

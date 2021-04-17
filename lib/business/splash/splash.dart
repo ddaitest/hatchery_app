@@ -1,45 +1,48 @@
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:collection';
+import 'package:hatchery/api/entity.dart';
+import 'package:hatchery/common/AppContext.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hatchery/flavors/Flavors.dart';
-import 'package:hatchery/api/entity.dart';
-import 'package:timer_count_down/timer_count_down.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:launch_review/launch_review.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
+  @override
+  _SplashPageState createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    App.manager<SplashManager>().init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    SplashManager splashManager = SplashManager();
     return Material(
-      child: ChangeNotifierProvider(
-        create: (context) => SplashManager(),
-        child: Selector<SplashManager, UnmodifiableListView<Advertising>>(
-          builder: (BuildContext context,
-              UnmodifiableListView<Advertising> value, Widget? child) {
-            if (value.isEmpty) {
-              return _fullScreenBackgroundView();
-            } else {
-              // UmengCommonSdk.onPageStart("splashView");
-              return _adView(splashManager);
-            }
-          },
-          selector: (BuildContext context, SplashManager splashManager) {
-            return splashManager.splashAdLists;
-          },
-          shouldRebuild: (pre, next) => pre != next,
-        ),
+      child: Selector<SplashManager, Advertising?>(
+        builder: (BuildContext context, Advertising? value, Widget? child) {
+          if (value == null) {
+            return _fullScreenBackgroundView();
+          } else {
+            // UmengCommonSdk.onPageStart("splashView");
+            return _adView(value);
+          }
+        },
+        selector: (BuildContext context, SplashManager splashManager) {
+          return splashManager.advertising;
+        },
       ),
     );
   }
 
-  Widget _adView(manager) {
+  Widget _adView(Advertising advertising) {
     print('DEBUG=> _adView 重绘了。。。。。。。。。。');
+    var manager = App.manager<SplashManager>();
     return CachedNetworkImage(
-      imageUrl: manager.splashAdLists[0].image,
+      imageUrl: advertising.image,
       imageBuilder: (context, imageProvider) {
         print('DEBUG=> imageProvider $imageProvider');
         return Stack(
@@ -63,16 +66,21 @@ class SplashPage extends StatelessWidget {
               //控件透明度 0.0完全透明，1.0完全不透明
               child: Opacity(
                 opacity: 0.5,
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.black)),
-                    // color: Colors.black,
-                    // splashColor: Colors.black,
-                    child: _skipBtnView(manager),
-                    onPressed: () {
-                      manager.skip(context);
-                    }),
+                child: Selector<SplashManager, int?>(
+                  builder: (BuildContext context, int? value, Widget? child) {
+                    return ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.black)),
+                        child: Text("跳过  $value",
+                            style: Flavors.textStyles.splashFont),
+                        onPressed: manager.skip);
+                  },
+                  selector:
+                      (BuildContext context, SplashManager splashManager) {
+                    return splashManager.countDown;
+                  },
+                ),
               ),
             ),
           ],
@@ -86,20 +94,20 @@ class SplashPage extends StatelessWidget {
     );
   }
 
-  Widget _skipBtnView(manager) {
-    return Countdown(
-      seconds: Flavors.timeConfig.SPLASH_TIME,
-      build: (BuildContext context, double time) {
-        manager.timer?.cancel();
-        return Text("跳过  ${time.toInt()}",
-            style: Flavors.textStyles.splashFont);
-      },
-      interval: Duration(seconds: 1),
-      onFinished: () {
-        manager.routeHomePage();
-      },
-    );
-  }
+  // Widget _skipBtnView(manager) {
+  //   return Countdown(
+  //     seconds: Flavors.timeConfig.SPLASH_TIME,
+  //     build: (BuildContext context, double time) {
+  //       manager.timer?.cancel();
+  //       return Text("跳过  ${time.toInt()}",
+  //           style: Flavors.textStyles.splashFont);
+  //     },
+  //     interval: Duration(seconds: 1),
+  //     onFinished: () {
+  //       manager.routeHomePage();
+  //     },
+  //   );
+  // }
 
   Widget _fullScreenBackgroundView() {
     print('DEBUG=> _fullScreenBackgroundView 重绘了。。。。。。。。。。');

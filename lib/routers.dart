@@ -11,6 +11,7 @@ import 'business/nearby/nearby_tab.dart';
 import 'business/main_tab.dart';
 import 'business/splash/agreementPage.dart';
 import 'business/splash/splash.dart';
+import 'common/log.dart';
 import 'common/widget/webview_common.dart';
 
 class Routers {
@@ -59,6 +60,7 @@ class Routers {
   }
 
   static Future<dynamic> navigateReplace(String routeName, {Object? arg}) {
+    Log.log("navigateReplace $routeName", color: LColor.RED);
     return App.navState.currentState!
         .pushReplacementNamed(routeName, arguments: arg);
   }

@@ -31,6 +31,7 @@ class NearbyTabState extends State<NearbyTab>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SmartRefresher(
       controller: _refreshController,
       enablePullDown: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/agreement_manager.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,7 @@ class AgreementPage extends StatelessWidget {
                 Container(height: 10.0.h),
                 GestureDetector(
                   onTap: () {
-                    manager.exitApp();
+                    showToast("需要同意才能继续使用");
                   },
                   child: Text(
                     "不同意并退出App",
