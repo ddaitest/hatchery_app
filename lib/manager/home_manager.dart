@@ -51,7 +51,7 @@ class HomeManager extends ChangeNotifier {
   UnmodifiableListView<Advertising> get popAdList =>
       UnmodifiableListView(_popAdList);
 
-  int currentTab = 0;
+
 
   HomeManager() {
     _getLocalPopShowTimes();
@@ -254,7 +254,7 @@ class HomeManager extends ChangeNotifier {
   void dispose() {
     super.dispose();
   }
-
+  int currentTab = 0;
   void test(int a){
     currentTab = a;
     notifyListeners();

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
+import 'package:hatchery/common/log.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/common/widget/banner_common_view.dart';
@@ -59,19 +60,29 @@ class NearbyTabState extends State<NearbyTab>
   Widget _topPart() {
     return Selector<NearbyManager, List<BannerInfo>>(
       builder: (BuildContext context, List<BannerInfo> value, Widget? child) {
-        print("DEBUG=> _bannerView 重绘了。。。。。");
+        Log.log("_topPart 重绘了。。。。", color: LColor.RED);
         return BannerCommonView(value);
       },
       selector: (BuildContext context, NearbyManager homeManager) {
         return homeManager.banners;
       },
-      shouldRebuild: (pre, next) => pre != next,
+      shouldRebuild: (pre, next) {
+        Log.log("pre =${pre.hashCode}; length=${pre.length}",
+            color: LColor.RED);
+        Log.log("next =${next.hashCode}; length=${next.length}",
+            color: LColor.RED);
+        Log.log(
+            "shouldRebuild =${((pre != next) || (pre.length != next.length))}",
+            color: LColor.RED);
+        return ((pre != next) || (pre.length != next.length));
+      },
     );
   }
 
   Widget _listPart() {
     return Selector<NearbyManager, List<Article>>(
       builder: (context, value, child) {
+        Log.log("_listPart 重绘了。。。。", color: LColor.YELLOW);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -81,8 +92,16 @@ class NearbyTabState extends State<NearbyTab>
       selector: (BuildContext context, NearbyManager manager) {
         return manager.articles;
       },
-      shouldRebuild: (pre, next) =>
-          ((pre != next) || (pre.length != next.length)),
+      shouldRebuild: (pre, next) {
+        Log.log("pre =${pre.hashCode}; length=${pre.length}",
+            color: LColor.YELLOW);
+        Log.log("next =${next.hashCode}; length=${next.length}",
+            color: LColor.YELLOW);
+        Log.log(
+            "shouldRebuild =${((pre != next) || (pre.length != next.length))}",
+            color: LColor.YELLOW);
+        return ((pre != next) || (pre.length != next.length));
+      },
     );
   }
 }

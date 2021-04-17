@@ -13,14 +13,9 @@ import '../routers.dart';
 class NearbyManager extends ChangeNotifier {
   final String serviceId = "tab3";
 
-  List<Article> _articles = [];
+  List<Article> articles = [];
 
-  UnmodifiableListView<Article> get articles => UnmodifiableListView(_articles);
-
-  List<BannerInfo> _banners = [];
-
-  UnmodifiableListView<BannerInfo> get banners =>
-      UnmodifiableListView(_banners);
+  List<BannerInfo> banners = [];
 
   var _page = 0; //当前软文 页数
   static const int _pageSize = 10; //软文每次加载SIZE
@@ -40,8 +35,7 @@ class NearbyManager extends ChangeNotifier {
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
-        _banners.clear();
-        _banners.addAll(news);
+        banners = news;
         callback = PageRefreshStatus.completed;
       }
     } else {
@@ -62,7 +56,7 @@ class NearbyManager extends ChangeNotifier {
         callback = PageLoadStatus.noMore;
       } else {
         _page++;
-        _articles.addAll(news);
+        articles = [...articles]..addAll(news);
         callback = PageLoadStatus.canLoading;
       }
     } else {
@@ -82,8 +76,9 @@ class NearbyManager extends ChangeNotifier {
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
-        _articles.clear();
-        _articles.addAll(news);
+        // _articles.clear();
+        articles = news;
+        // _articles.addAll(news);
         callback = PageRefreshStatus.completed;
       }
     } else {

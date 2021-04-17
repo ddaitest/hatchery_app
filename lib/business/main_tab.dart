@@ -10,6 +10,7 @@ import 'package:hatchery/common/tools.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
+import 'package:hatchery/manager/nearby_manager.dart';
 import 'package:package_info/package_info.dart';
 import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
@@ -68,17 +69,6 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
       case '商务合作':
         // todo
         break;
-      case 'TAB1':
-        // _tabController.animateTo(0);
-        App.manager<HomeManager>().test(1);
-        break;
-      case 'TAB2':
-        App.manager<HomeManager>().test(2);
-        // _tabController.animateTo(1);
-        break;
-      case 'TAB3':
-        _tabController.animateTo(2);
-        break;
     }
   }
 
@@ -93,8 +83,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
             onSelected: handleClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {'关于物业', '商务合作', 'TAB1', 'TAB2', 'TAB3'}
-                  .map((String choice) {
+              return {'关于物业', '商务合作'}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
