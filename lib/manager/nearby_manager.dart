@@ -7,12 +7,11 @@ import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:flutter/material.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:collection';
 import '../routers.dart';
 
 class NearbyManager extends ChangeNotifier {
-  final String serviceId = "tab3";
-
   List<Article> articles = [];
 
   List<BannerInfo> banners = [];
@@ -28,7 +27,8 @@ class NearbyManager extends ChangeNotifier {
   /// 加载 banner
   Future<PageRefreshStatus> refreshBanner() async {
     _page = 0;
-    ApiResult result = await API.getBannerList(_page, _pageSize, serviceId);
+    ApiResult result =
+        await API.getBannerList(_page, _pageSize, Flavors.appId.nearby_page_id);
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => BannerInfo.fromJson(m));
@@ -47,8 +47,8 @@ class NearbyManager extends ChangeNotifier {
 
   /// 页面 load more
   Future<PageLoadStatus> loadMore() async {
-    ApiResult result =
-        await API.getArticleList(_page + 1, _pageSize, serviceId);
+    ApiResult result = await API.getArticleList(
+        _page + 1, _pageSize, Flavors.appId.nearby_page_id);
     var callback = PageLoadStatus.canLoading;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));
@@ -69,7 +69,8 @@ class NearbyManager extends ChangeNotifier {
   /// 页面首次加载 or 刷新
   Future<PageRefreshStatus> refresh() async {
     _page = 0;
-    ApiResult result = await API.getArticleList(_page, _pageSize, serviceId);
+    ApiResult result = await API.getArticleList(
+        _page, _pageSize, Flavors.appId.nearby_page_id);
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));

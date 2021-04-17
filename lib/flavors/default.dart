@@ -45,76 +45,77 @@ class ApiInfo {
 }
 
 class TextStyles {
-  final TextStyle title =
-      const TextStyle(fontSize: 27.0, color: Colors.black87);
+  final TextStyle title = TextStyle(fontSize: 27.0.sp, color: Colors.black87);
 
-  final TextStyle title1 =
-      const TextStyle(fontSize: 20.0, color: Colors.black87);
+  final TextStyle title1 = TextStyle(fontSize: 20.0.sp, color: Colors.black87);
 
-  final TextStyle title2 =
-      const TextStyle(fontSize: 18.0, color: Colors.black87);
+  final TextStyle title2 = TextStyle(fontSize: 18.0.sp, color: Colors.black87);
 
-  final TextStyle content =
-      const TextStyle(fontSize: 16.0, color: Colors.black54);
+  final TextStyle content = TextStyle(fontSize: 16.0.sp, color: Colors.black54);
 
   final TextStyle secondary =
-      const TextStyle(fontSize: 16.0, color: Colors.black38);
+      TextStyle(fontSize: 16.0.sp, color: Colors.black38);
 
-  final TextStyle tabBar = TextStyle(
+  /// mainTab未选中时的字体样式
+  final TextStyle tabBarTextUnSelected = TextStyle(
       fontSize: 10.0.sp, fontWeight: FontWeight.w400, color: Color(0x8A000000));
+
+  /// mainTab选中时的字体样式
+  final TextStyle tabBarTextSelected = TextStyle(
+      fontSize: 10.0.sp, fontWeight: FontWeight.w400, color: Color(0xFF006EE7));
 
   /// 协议title
   final TextStyle agreementTitle = TextStyle(
-      fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
+      fontSize: 19.0.sp, color: Colors.black, fontWeight: FontWeight.w500);
 
   /// 协议提示文字
   final TextStyle agreementText =
-      TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400);
+      TextStyle(fontSize: 17.0.sp, fontWeight: FontWeight.w400);
 
   /// 确认按钮
-  final TextStyle agreementConfirmBtn = TextStyle(fontSize: 18.0);
+  final TextStyle agreementConfirmBtn = TextStyle(fontSize: 18.0.sp);
 
   /// 关闭app按钮
   final TextStyle agreementCloseAppBtn =
-      TextStyle(color: Colors.grey, fontSize: 14);
+      TextStyle(color: Colors.grey, fontSize: 14.0.sp);
 
   /// 开屏倒计时
-  final TextStyle splashFont = const TextStyle(
-      fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.white);
+  final TextStyle splashFont = TextStyle(
+      fontSize: 16.0.sp, fontWeight: FontWeight.w400, color: Colors.white);
 
   /// 分类主标题，如：物业公告
-  final TextStyle sortTitle = const TextStyle(
-      fontWeight: FontWeight.w400, fontSize: 16.0, color: Color(0xFF333333));
+  final TextStyle sortTitle = TextStyle(
+      fontWeight: FontWeight.w400, fontSize: 16.0.sp, color: Color(0xFF333333));
 
   /// 分类更多按钮
-  final TextStyle moreText = const TextStyle(
-      fontWeight: FontWeight.w500, fontSize: 14.0, color: Color(0xFF666666));
+  final TextStyle moreText = TextStyle(
+      fontWeight: FontWeight.w500, fontSize: 14.0.sp, color: Color(0xFF666666));
 
   /// service text
-  final TextStyle serviceTitle = const TextStyle(
-      fontSize: 12.0, fontWeight: FontWeight.w400, color: Color(0xFF666666));
+  final TextStyle serviceTitle = TextStyle(
+      fontSize: 12.0.sp, fontWeight: FontWeight.w400, color: Color(0xFF666666));
 
   /// 软文主标题
   final TextStyle articleTitle =
-      const TextStyle(fontSize: 16.0, color: Color(0xFF333333));
+      TextStyle(fontSize: 16.0.sp, color: Color(0xFF333333));
 
   /// 软文副标题
   final TextStyle articleSummary =
-      const TextStyle(fontSize: 13.0, color: Color(0xFF999999));
+      TextStyle(fontSize: 13.0.sp, color: Color(0xFF999999));
 
   /// 软文日期
   final TextStyle articleDate =
-      const TextStyle(fontSize: 18.0, color: Colors.black38);
+      TextStyle(fontSize: 18.0.sp, color: Colors.black38);
 
-  /// 软文日期
+  /// 通知文字
   final TextStyle noticeText =
-      const TextStyle(fontSize: 14.0, color: Color(0xFF333333));
+      TextStyle(fontSize: 14.0.sp, color: Color(0xFF333333));
 }
 
 class AgreementPageTextStyle {
   /// 协议title
   TextStyle agreementTitle = TextStyle(
-      fontSize: 19.0, color: Colors.black, fontWeight: FontWeight.w500);
+      fontSize: 19.0.sp, color: Colors.black, fontWeight: FontWeight.w500);
 }
 
 class CommonParam {
@@ -140,6 +141,6 @@ class SizesInfo {
 
 class ColorInfo {
   final diver = Colors.black87;
-  final homeTabSelected = Color(0xFF006EE7);
+  final homeTabSelected = const Color(0xFF006EE7);
   final homeTabUnSelected = const Color(0x8A000000);
 }
