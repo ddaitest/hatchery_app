@@ -33,21 +33,15 @@ class MainTab2 extends StatefulWidget {
 
 class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   bool nextKickBackExitApp = false;
-  var bottomBarTitles = Flavors.stringsInfo.main_tab_title;
+  List<String> bottomBarTitles = Flavors.stringsInfo.main_tab_title;
   List<Widget> _tabBodies = [HomeTab(), ServiceTab(), NearbyTab()];
-
-  late TabController _tabController;
+  int selectTabIndex = 0;
+  late PageController _pageController;
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this, length: _tabBodies.length);
-    Future.delayed(Duration(milliseconds: 200), () {
-      MainTabHandler.of(context).setGotoFun((page) {
-        if (_tabController.index != page) {
-          _tabController.animateTo(page);
-        }
-      });
-    });
+    _pageController =
+        PageController(initialPage: this.selectTabIndex, keepPage: true);
     super.initState();
   }
 
@@ -67,7 +61,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
         });
         break;
       case '商务合作':
-      // todo
+        // todo
         break;
     }
   }
@@ -77,48 +71,69 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar:
-        AppBarFactory.getMain(Flavors.stringsInfo.community_name, actions: [
-          PopupMenuButton<String>(
-            onSelected: handleClick,
-            icon: Icon(Icons.more_vert),
-            itemBuilder: (BuildContext context) {
-              return {'关于物业', '商务合作'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
+          appBar: AppBarFactory.getMain(Flavors.stringsInfo.community_name,
+              actions: [
+                PopupMenuButton<String>(
+                  onSelected: handleClick,
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) {
+                    return {'关于物业', '商务合作'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                ),
+              ]),
+          body: SafeArea(
+            child: PageView(
+              controller: _pageController,
+              children: _tabBodies,
+            ),
           ),
-        ]),
-        body: SafeArea(
-          child: TabBarView(
-            controller: _tabController,
-            children: _tabBodies,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        bottomNavigationBar: TabBar(
-          controller: _tabController,
-          labelColor: Colors.black87,
-          tabs: bottomBarTitles.entries
-          // .map((e) => Tab(text: e.key, icon: Icon(e.value)))
-              .map((e) => HomeTabView(e.value, e.key))
-              .toList(),
-        ),
-      ),
+          backgroundColor: Colors.white,
+          bottomNavigationBar: Container(
+              width: Flavors.sizesInfo.screenWidth,
+              child: BottomNavigationBar(
+                selectedLabelStyle: TextStyle(
+                    fontSize: 10.0.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Flavors.colorInfo.homeTabSelected),
+                unselectedLabelStyle: TextStyle(
+                    fontSize: 10.0.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Flavors.colorInfo.homeTabUnSelected),
+                items: <BottomNavigationBarItem>[
+                  _bottomBarTitlesTabBar(Icons.home_outlined, Icons.home, 0),
+                  _bottomBarTitlesTabBar(Icons.home_repair_service_outlined,
+                      Icons.home_repair_service, 1),
+                  _bottomBarTitlesTabBar(
+                      Icons.near_me_outlined, Icons.near_me, 2),
+                ],
+                type: BottomNavigationBarType.fixed,
+                currentIndex: selectTabIndex,
+                iconSize: 30.0,
+                //点击事件
+                onTap: (index) {
+                  setState(() {
+                    print("DEBUG=>$index");
+                    selectTabIndex = index;
+                    _pageController.jumpToPage(index);
+                  });
+                },
+              ))),
     );
   }
 
-  // BottomNavigationBarItem _bottomBarTitlesTabBar(
-  //     IconData unSelectIconName, IconData selectedIconName, int barTitleIndex) {
-  //   return BottomNavigationBarItem(
-  //     icon: Icon(unSelectIconName, size: 30.0),
-  //     activeIcon: Icon(selectedIconName, size: 30.0),
-  //     label: bottomBarTitles[barTitleIndex],
-  //   );
-  // }
+  BottomNavigationBarItem _bottomBarTitlesTabBar(
+      IconData unSelectIconName, IconData selectedIconName, int barTitleIndex) {
+    return BottomNavigationBarItem(
+      icon: Icon(unSelectIconName, size: 30.0),
+      activeIcon: Icon(selectedIconName, size: 30.0),
+      label: bottomBarTitles[barTitleIndex],
+    );
+  }
 
   Future<bool> _onWillPop() async {
     if (nextKickBackExitApp) {
@@ -129,7 +144,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
       nextKickBackExitApp = true;
       Future.delayed(
         const Duration(seconds: 2),
-            () => nextKickBackExitApp = false,
+        () => nextKickBackExitApp = false,
       );
       return false;
     }
@@ -177,7 +192,7 @@ class MainTabHandler extends InheritedWidget {
 
   static MainTabHandler of(BuildContext context) {
     final MainTabHandler? result =
-    context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
+        context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
     assert(result != null, 'No FrogColor found in context');
     return result!;
   }

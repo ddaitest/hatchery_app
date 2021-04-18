@@ -21,11 +21,7 @@ class StringsInfo {
       '欢迎使用本软件！\n在您使用本软件前，请您认真阅读并同意用户协议和隐私政策，以了解我们的服务内容和我们在收集和使用您相关个人信息时的处理规则。我们将严格按照用户协议和隐私政策为您提供服务，保护您的个人信息。';
   final user_agreement_url = 'https://www.baidu.com/';
   final privacy_agreement_url = 'https://www.sina.com.cn/';
-  final main_tab_title = {
-    "首页": Icons.home_outlined,
-    "服务": Icons.home_repair_service_outlined,
-    "周边": Icons.near_me_outlined
-  };
+  final main_tab_title = ["首页", "服务", "周边"];
   final refresh_complete = "刷新成功";
   final refresh_fail = "刷新失败";
   final load_fail = "加载失败";
@@ -122,8 +118,7 @@ class CommonParam {
   final Map<String, dynamic> commonParamMap = getCommonParamMapFromSP() ?? null;
 
   static getCommonParamMapFromSP() {
-    String? _responseResult =
-        SP.getString(SPKey.COMMON_PARAM_KEY);
+    String? _responseResult = SP.getString(SPKey.COMMON_PARAM_KEY);
     if (_responseResult != null) {
       Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
       return _finalParse;
