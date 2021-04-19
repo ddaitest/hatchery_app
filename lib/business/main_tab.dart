@@ -45,7 +45,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   void initState() {
     // _tabController = TabController(vsync: this, length: _tabBodies.length);
     Future.delayed(Duration(milliseconds: 10), () {
-      MainTabHandler.of(context).setGotoFun((page) {
+      MainTabHandler.setGotoFun((page) {
         if (_tabIndex != page) {
           _switchTab(page);
         }
@@ -56,7 +56,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    MainTabHandler.of(context).setGotoFun(null);
+    MainTabHandler.setGotoFun(null);
     super.dispose();
   }
 
@@ -197,8 +197,7 @@ class MainTabHandler extends InheritedWidget {
   final int x;
 
   static MainTabHandler of(BuildContext context) {
-    final MainTabHandler? result =
-        context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
+    final MainTabHandler? result = context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
     assert(result != null, 'No MainTabHandler found in context');
     return result!;
   }
@@ -211,7 +210,7 @@ class MainTabHandler extends InheritedWidget {
   bool updateShouldNotify(MainTabHandler old) => x != old.x;
 
   ///跳转到置顶 Home 的 tab 页。
-  gotoTab(int tab) {
+  static gotoTab(int tab) {
     if (tab >= 0 && tab < 3) {
       if (goto != null) {
         goto!(tab);
@@ -220,7 +219,7 @@ class MainTabHandler extends InheritedWidget {
   }
 
   /// Home 页跳转的回调，应该在initState 时候添加，depose 时候移除
-  setGotoFun(Goto? fun) {
+  static setGotoFun(Goto? fun) {
     goto = fun;
   }
 }
