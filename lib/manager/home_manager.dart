@@ -57,13 +57,12 @@ class HomeManager extends ChangeNotifier {
     return _queryNoticesData();
   }
 
-  clickService(ServiceInfo serviceInfo) {
+  clickService(ServiceInfo serviceInfo, BuildContext context) {
     switch (serviceInfo.serviceId) {
       case "all_service":
-        MainTabHandler.of(App.navState.currentContext!).gotoTab(1);
+        MainTabHandler.of(context).gotoTab(1);
         break;
       default:
-        // 使用统一逻辑处理。
         App.manager<ServiceManager>().clickService(serviceInfo);
         break;
     }

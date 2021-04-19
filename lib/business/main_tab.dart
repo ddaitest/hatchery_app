@@ -3,11 +3,13 @@ import 'package:hatchery/business/home/home_tab.dart';
 import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
 import 'package:hatchery/common/AppContext.dart';
+import 'package:hatchery/common/log.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:hatchery/manager/nearby_manager.dart';
@@ -26,6 +28,9 @@ class MainTab extends StatelessWidget {
   }
 }
 
+typedef BottomNavigationBar TabMaker(
+    String label, IconData icon, IconData activeIcon);
+
 class MainTab2 extends StatefulWidget {
   @override
   MainTabState createState() => MainTabState();
@@ -33,18 +38,20 @@ class MainTab2 extends StatefulWidget {
 
 class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   bool nextKickBackExitApp = false;
-  var bottomBarTitles = Flavors.stringsInfo.main_tab_title;
+  var bottomTabs = mainTabs;
   List<Widget> _tabBodies = [HomeTab(), ServiceTab(), NearbyTab()];
 
-  late TabController _tabController;
+  // late TabController _tabController;
+  var _pageController = PageController();
+  int _tabIndex = 0;
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this, length: _tabBodies.length);
+    // _tabController = TabController(vsync: this, length: _tabBodies.length);
     Future.delayed(Duration(milliseconds: 200), () {
       MainTabHandler.of(context).setGotoFun((page) {
-        if (_tabController.index != page) {
-          _tabController.animateTo(page);
+        if (_tabIndex != page) {
+          _switchTab(page);
         }
       });
     });
@@ -67,7 +74,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
         });
         break;
       case '商务合作':
-      // todo
+        // todo
         break;
     }
   }
@@ -78,7 +85,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar:
-        AppBarFactory.getMain(Flavors.stringsInfo.community_name, actions: [
+            AppBarFactory.getMain(Flavors.stringsInfo.community_name, actions: [
           PopupMenuButton<String>(
             onSelected: handleClick,
             icon: Icon(Icons.more_vert),
@@ -93,32 +100,50 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
           ),
         ]),
         body: SafeArea(
-          child: TabBarView(
-            controller: _tabController,
+          child: PageView(
+            controller: _pageController,
             children: _tabBodies,
+            // onPageChanged: (page) {
+            //   setState(() => _tabIndex = page);
+            // },
           ),
         ),
         backgroundColor: Colors.white,
-        bottomNavigationBar: TabBar(
-          controller: _tabController,
-          labelColor: Colors.black87,
-          tabs: bottomBarTitles.entries
-          // .map((e) => Tab(text: e.key, icon: Icon(e.value)))
-              .map((e) => HomeTabView(e.value, e.key))
-              .toList(),
+        bottomNavigationBar: BottomNavigationBar(
+          selectedLabelStyle: Flavors.textStyles.tabBarTextSelected,
+          unselectedLabelStyle: Flavors.textStyles.tabBarTextUnSelected,
+          currentIndex: _tabIndex,
+          items: bottomTabs.map((e) => _navBarItem(e)).toList(),
+          type: BottomNavigationBarType.fixed,
+          iconSize: 30.0,
+          //点击事件
+          onTap: _switchTab,
         ),
       ),
     );
   }
 
-  // BottomNavigationBarItem _bottomBarTitlesTabBar(
-  //     IconData unSelectIconName, IconData selectedIconName, int barTitleIndex) {
-  //   return BottomNavigationBarItem(
-  //     icon: Icon(unSelectIconName, size: 30.0),
-  //     activeIcon: Icon(selectedIconName, size: 30.0),
-  //     label: bottomBarTitles[barTitleIndex],
-  //   );
-  // }
+  _switchTab(int index) {
+    setState(() {
+      Log.log("DEBUG=>$index", color: LColor.RED);
+      _tabIndex = index;
+      _pageController.jumpToPage(index);
+    });
+  }
+
+  BottomNavigationBarItem _navBarItem(TabInfo info) {
+    return BottomNavigationBarItem(
+      icon: Icon(
+        info.icon,
+        size: 30,
+      ),
+      label: info.label,
+      activeIcon: Icon(
+        info.activeIcon,
+        size: 30,
+      ),
+    );
+  }
 
   Future<bool> _onWillPop() async {
     if (nextKickBackExitApp) {
@@ -129,7 +154,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
       nextKickBackExitApp = true;
       Future.delayed(
         const Duration(seconds: 2),
-            () => nextKickBackExitApp = false,
+        () => nextKickBackExitApp = false,
       );
       return false;
     }
@@ -177,8 +202,8 @@ class MainTabHandler extends InheritedWidget {
 
   static MainTabHandler of(BuildContext context) {
     final MainTabHandler? result =
-    context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
-    assert(result != null, 'No FrogColor found in context');
+        context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
+    assert(result != null, 'No MainTabHandler found in context');
     return result!;
   }
 

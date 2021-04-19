@@ -122,7 +122,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: manager.services
             .map((e) =>
-                ServiceItem(e.image, e.name, () => manager.clickService(e)))
+                ServiceItem(e.image, e.name, () => manager.clickService(e,context)))
             .toList(),
       ),
     );

@@ -50,6 +50,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => ContactManager()),
           ChangeNotifierProvider(create: (_) => FeedbackManager()),
           ChangeNotifierProvider(create: (_) => ListPageManager()),
+          ChangeNotifierProvider(create: (_) => RepairManager()),
         ],
         child: MyApp(),
       ),
