@@ -28,9 +28,6 @@ class MainTab extends StatelessWidget {
   }
 }
 
-typedef BottomNavigationBar TabMaker(
-    String label, IconData icon, IconData activeIcon);
-
 class MainTab2 extends StatefulWidget {
   @override
   MainTabState createState() => MainTabState();

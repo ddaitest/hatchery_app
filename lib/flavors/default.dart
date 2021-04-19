@@ -118,8 +118,7 @@ class CommonParam {
   final Map<String, dynamic> commonParamMap = getCommonParamMapFromSP() ?? null;
 
   static getCommonParamMapFromSP() {
-    String? _responseResult =
-        SP.getString(SPKey.COMMON_PARAM_KEY);
+    String? _responseResult = SP.getString(SPKey.COMMON_PARAM_KEY);
     if (_responseResult != null) {
       Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
       return _finalParse;
