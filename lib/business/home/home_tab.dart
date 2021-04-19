@@ -27,20 +27,16 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
   var _refreshController = RefreshController(initialRefresh: true);
+  final manager = App.manager<HomeManager>();
 
   @override
   void initState() {
-    App.manager<HomeManager>().checkPopAd().then((ad) {
-      Log.log("checkPopAd.then = $ad",color: LColor.YELLOW);
+    manager.checkPopAd().then((ad) {
+      Log.log("checkPopAd.then = $ad", color: LColor.YELLOW);
       if (ad != null) {
         _popAdView(context, ad);
       }
     });
-    // Future.delayed(Duration(seconds: TimeConfig.POP_AD_WAIT_TIME), () async {
-    //   if (_homeManager.popAdList.isNotEmpty) {
-    //     _popAdView(context, _homeManager);
-    //   }
-    // });
     super.initState();
   }
 
@@ -121,8 +117,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: manager.services
-            .map((e) =>
-                ServiceItem(e.image, e.name, () => manager.clickService(e,context)))
+            .map((e) => ServiceItem(
+                e.image, e.name, () => manager.clickService(e, context)))
             .toList(),
       ),
     );
@@ -283,7 +279,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   }
 
   _popAdView(BuildContext context, Advertising advertising) {
-    Log.log("_popAdView",color: LColor.YELLOW);
+    Log.log("_popAdView", color: LColor.YELLOW);
     return showDialog<void>(
         context: context,
         barrierDismissible: false,

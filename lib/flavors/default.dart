@@ -14,11 +14,11 @@ class AppID {
 }
 
 class StringsInfo {
-  final community_name = "玫瑰园";
+  final community_name = "新雅名轩";
   final post_title = "物业公告";
   final articles_title = "便民信息";
   final agreement_card_text =
-      '欢迎使用本软件！\n在您使用本软件前，请您认真阅读并同意用户协议和隐私政策，以了解我们的服务内容和我们在收集和使用您相关个人信息时的处理规则。我们将严格按照用户协议和隐私政策为您提供服务，保护您的个人信息。';
+      '欢迎使用本软件\n在您使用本软件前，请您认真阅读并同意用户协议和隐私政策，我们将严格按照用户协议和隐私政策为您提供服务，保护您的个人信息。';
   final user_agreement_url = 'https://www.baidu.com/';
   final privacy_agreement_url = 'https://www.sina.com.cn/';
 
@@ -65,8 +65,8 @@ class TextStyles {
       fontSize: 19.0.sp, color: Colors.black, fontWeight: FontWeight.w500);
 
   /// 协议提示文字
-  final TextStyle agreementText =
-      TextStyle(fontSize: 17.0.sp, fontWeight: FontWeight.w400);
+  final TextStyle agreementText = TextStyle(
+      fontSize: 15.0.sp, color: Colors.grey, fontWeight: FontWeight.normal);
 
   /// 确认按钮
   final TextStyle agreementConfirmBtn = TextStyle(fontSize: 18.0.sp);

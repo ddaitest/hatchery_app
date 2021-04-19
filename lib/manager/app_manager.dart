@@ -17,7 +17,6 @@ import 'package:jpush_flutter/jpush_flutter.dart';
 import '../config.dart';
 
 class AppManager extends ChangeNotifier {
-
   List<Contact> phoneNumbersList = [];
 
   // UnmodifiableListView<Contact> get phoneNumbersList =>
@@ -30,7 +29,6 @@ class AppManager extends ChangeNotifier {
   final JPush jpush = JPush();
 
   AppManager() {
-
     // _getAgreeAgreementValueForSP().then((value) {
     //   isAgreeAgreementValue = value;
     //   if (isAgreeAgreementValue!) {
@@ -89,7 +87,6 @@ class AppManager extends ChangeNotifier {
   shareFrame(String contents) {
     Share.share(contents);
   }
-
 
   @override
   void dispose() {
