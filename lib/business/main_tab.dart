@@ -45,7 +45,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     // _tabController = TabController(vsync: this, length: _tabBodies.length);
-    Future.delayed(Duration(milliseconds: 200), () {
+    Future.delayed(Duration(milliseconds: 10), () {
       MainTabHandler.of(context).setGotoFun((page) {
         if (_tabIndex != page) {
           _switchTab(page);
