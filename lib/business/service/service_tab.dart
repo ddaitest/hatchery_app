@@ -9,6 +9,7 @@ import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/manager/service_manager.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -46,8 +47,11 @@ class ServiceTabState extends State<ServiceTab>
       footer: getSimpleFooter(),
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      child: ListView(
-        children: [_topPart(context), _listPart()],
+      child: Container(
+        color: Color(0xFFF7F7F7),
+        child: ListView(
+          children: [_topPart(context), _listPart()],
+        ),
       ),
     );
   }
@@ -120,7 +124,7 @@ class ServiceTabState extends State<ServiceTab>
 
   Widget _computeTopServiceView(List<ServiceInfo> data) {
     ServiceManager manager = App.manager<ServiceManager>();
-    var views = <Widget>[];
+    List<Widget> views = <Widget>[];
     //generator first line.
     if (data.length > 3) {
       views.add(Row(
@@ -142,9 +146,16 @@ class ServiceTabState extends State<ServiceTab>
                 ServiceItem(e.image, e.name, () => manager.clickService(e)))
             .toList(),
       ));
+      // views.insert(1, SizedBox(height: 7.0));
     }
     return Container(
+      width: Flavors.sizesInfo.screenWidth,
+      padding: const EdgeInsets.only(bottom: 12.0),
+      decoration: BoxDecoration(
+        color: Color(0xFFFFFFFF),
+      ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: views,
       ),
     );

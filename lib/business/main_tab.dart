@@ -38,7 +38,6 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   var bottomTabs = mainTabs;
   List<Widget> _tabBodies = [HomeTab(), ServiceTab(), NearbyTab()];
 
-  // late TabController _tabController;
   var _pageController = PageController();
   int _tabIndex = 0;
 
