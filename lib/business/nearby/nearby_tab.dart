@@ -8,6 +8,7 @@ import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'package:hatchery/manager/nearby_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NearbyTab extends StatefulWidget {
@@ -32,18 +33,20 @@ class NearbyTabState extends State<NearbyTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SmartRefresher(
-      controller: _refreshController,
-      enablePullDown: true,
-      enablePullUp: true,
-      header: getSimpleHeader(),
-      footer: getSimpleFooter(),
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: ListView(
-        children: [_topPart(), _listPart()],
-      ),
-    );
+    return Container(
+        color: Color(0xFFF7F7F7),
+        child: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          enablePullUp: true,
+          header: getSimpleHeader(),
+          footer: getSimpleFooter(),
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: ListView(
+            children: [_topPart(), _listPart()],
+          ),
+        ));
   }
 
   void _onRefresh() async {
@@ -62,7 +65,13 @@ class NearbyTabState extends State<NearbyTab>
     return Selector<NearbyManager, List<BannerInfo>>(
       builder: (BuildContext context, List<BannerInfo> value, Widget? child) {
         Log.log("_topPart 重绘了。。。。", color: LColor.RED);
-        return BannerCommonView(value);
+        return Container(
+            width: Flavors.sizesInfo.screenWidth,
+            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+            decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+            ),
+            child: BannerCommonView(value));
       },
       selector: (BuildContext context, NearbyManager homeManager) {
         return homeManager.banners;
@@ -81,28 +90,36 @@ class NearbyTabState extends State<NearbyTab>
   }
 
   Widget _listPart() {
-    return Selector<NearbyManager, List<Article>>(
-      builder: (context, value, child) {
-        Log.log("_listPart 重绘了。。。。", color: LColor.YELLOW);
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: value.map((e) => ArticleItem(e)).toList(),
-        );
-      },
-      selector: (BuildContext context, NearbyManager manager) {
-        return manager.articles;
-      },
-      shouldRebuild: (pre, next) {
-        Log.log("pre =${pre.hashCode}; length=${pre.length}",
-            color: LColor.YELLOW);
-        Log.log("next =${next.hashCode}; length=${next.length}",
-            color: LColor.YELLOW);
-        Log.log(
-            "shouldRebuild =${((pre != next) || (pre.length != next.length))}",
-            color: LColor.YELLOW);
-        return ((pre != next) || (pre.length != next.length));
-      },
-    );
+    return Container(
+        padding: const EdgeInsets.only(
+            left: 7.0, right: 7.0, top: 12.0, bottom: 12.0),
+        child: Selector<NearbyManager, List<Article>>(
+          builder: (context, value, child) {
+            Log.log("_listPart 重绘了。。。。", color: LColor.YELLOW);
+            return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  color: Color(0xFFFFFFFF),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: value.map((e) => ArticleItem(e)).toList(),
+                ));
+          },
+          selector: (BuildContext context, NearbyManager manager) {
+            return manager.articles;
+          },
+          shouldRebuild: (pre, next) {
+            Log.log("pre =${pre.hashCode}; length=${pre.length}",
+                color: LColor.YELLOW);
+            Log.log("next =${next.hashCode}; length=${next.length}",
+                color: LColor.YELLOW);
+            Log.log(
+                "shouldRebuild =${((pre != next) || (pre.length != next.length))}",
+                color: LColor.YELLOW);
+            return ((pre != next) || (pre.length != next.length));
+          },
+        ));
   }
 }

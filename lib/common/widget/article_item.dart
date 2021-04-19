@@ -16,7 +16,8 @@ class ArticleItem extends StatelessWidget {
   Widget _getItemContainerView(BuildContext context) {
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => Routers.navWebView(article.redirectUrl,title: article.title),
+        onTap: () =>
+            Routers.navWebView(article.redirectUrl, title: article.title),
         child: _titleView(context));
   }
 
@@ -61,26 +62,12 @@ class ArticleItem extends StatelessWidget {
   Widget _textView(String title, String subtitle) {
     return Expanded(
       child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              textAlign: TextAlign.left,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Flavors.textStyles.articleTitle,
-            ),
-            Container(height: 12.0.w),
-            Text(
-              subtitle,
-              textAlign: TextAlign.left,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Flavors.textStyles.articleSummary,
-            ),
-          ],
+        child: Text(
+          title,
+          textAlign: TextAlign.left,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: Flavors.textStyles.articleTitle,
         ),
       ),
     );

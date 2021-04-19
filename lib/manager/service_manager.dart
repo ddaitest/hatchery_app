@@ -57,7 +57,7 @@ class ServiceManager extends ChangeNotifier {
         callback = PageLoadStatus.noMore;
       } else {
         _page++;
-        articles=(news);
+        articles = (news);
         callback = PageLoadStatus.canLoading;
       }
     } else {

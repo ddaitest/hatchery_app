@@ -93,11 +93,11 @@ class TextStyles {
 
   /// 软文主标题
   final TextStyle articleTitle =
-      TextStyle(fontSize: 16.0.sp, color: Color(0xFF333333));
+      TextStyle(fontSize: 14.0.sp, color: Color(0xDE000000));
 
   /// 软文副标题
   final TextStyle articleSummary =
-      TextStyle(fontSize: 13.0.sp, color: Color(0xFF999999));
+      TextStyle(fontSize: 12.0.sp, color: Color(0x61000000));
 
   /// 软文日期
   final TextStyle articleDate =

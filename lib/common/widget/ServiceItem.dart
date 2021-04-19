@@ -22,7 +22,7 @@ class ServiceItem extends StatelessWidget {
               height: 30.0.h,
               width: 30.0.w,
             ),
-            SizedBox(height: 8.0.h),
+            SizedBox(height: 4.0.h),
             Text(text, style: Flavors.textStyles.serviceTitle)
           ],
         ),

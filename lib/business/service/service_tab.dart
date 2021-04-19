@@ -39,18 +39,21 @@ class ServiceTabState extends State<ServiceTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SmartRefresher(
-      controller: _refreshController,
-      enablePullDown: true,
-      enablePullUp: true,
-      header: getSimpleHeader(),
-      footer: getSimpleFooter(),
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: Container(
-        color: Color(0xFFF7F7F7),
+    return Container(
+      color: Color(0xFFF7F7F7),
+      child: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        enablePullUp: true,
+        header: getSimpleHeader(),
+        footer: getSimpleFooter(),
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
         child: ListView(
-          children: [_topPart(context), _listPart()],
+          children: [
+            _topPart(context),
+            _listPart(),
+          ],
         ),
       ),
     );
@@ -96,30 +99,28 @@ class ServiceTabState extends State<ServiceTab>
   }
 
   Widget _listPart() {
-    // var data = AppContext.getManager<ServiceManager>(listen: true).articles;
-    // var data = Provider.of<ServiceManager>(context, listen: false).articles;
-    // return SliverList(
-    //   delegate: SliverChildBuilderDelegate(
-    //     (BuildContext context, int index) {
-    //       return ArticleItem(data[index]);
-    //     },
-    //     childCount: data.length,
-    //   ),
-    // );
-    return Selector<ServiceManager, List<Article>>(
-      builder: (context, value, child) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: value.map((e) => ArticleItem(e)).toList(),
-        );
-      },
-      selector: (BuildContext context, ServiceManager manager) {
-        return manager.articles;
-      },
-      shouldRebuild: (pre, next) =>
-          ((pre != next) || (pre.length != next.length)),
-    );
+    return Container(
+        padding: const EdgeInsets.only(
+            left: 7.0, right: 7.0, top: 12.0, bottom: 12.0),
+        child: Selector<ServiceManager, List<Article>>(
+          builder: (context, value, child) {
+            return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  color: Color(0xFFFFFFFF),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: value.map((e) => ArticleItem(e)).toList(),
+                ));
+          },
+          selector: (BuildContext context, ServiceManager manager) {
+            return manager.articles;
+          },
+          shouldRebuild: (pre, next) =>
+              ((pre != next) || (pre.length != next.length)),
+        ));
   }
 
   Widget _computeTopServiceView(List<ServiceInfo> data) {
@@ -146,11 +147,11 @@ class ServiceTabState extends State<ServiceTab>
                 ServiceItem(e.image, e.name, () => manager.clickService(e)))
             .toList(),
       ));
-      // views.insert(1, SizedBox(height: 7.0));
+      views.insert(1, SizedBox(height: 12.0));
     }
     return Container(
       width: Flavors.sizesInfo.screenWidth,
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
       ),
