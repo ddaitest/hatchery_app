@@ -16,7 +16,7 @@ class ArticleItem extends StatelessWidget {
   Widget _getItemContainerView(BuildContext context) {
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => Routers.navWebView(article.redirectUrl),
+        onTap: () => Routers.navWebView(article.redirectUrl,title: article.title),
         child: _titleView(context));
   }
 
