@@ -44,7 +44,8 @@ class Routers {
         //跳转 web view, 解析对应参数。
         Map map = settings.arguments as Map<String, String>;
         return CupertinoPageRoute(
-            builder: (_) => WebViewPage(map["url"], map["path"]));
+            builder: (_) =>
+                WebViewPage(map["url"], map["path"], map["title"] ?? ""));
       default:
         return CupertinoPageRoute(
             builder: (_) => Scaffold(
@@ -66,12 +67,15 @@ class Routers {
   }
 
   ///跳转  WebView, 带参数的页面建议单独定义
-  static Future<dynamic> navWebView(String url, {String? path}) {
-    return navigateTo('/web_view', arg: {"url": url, "path": path ?? ""});
+  static Future<dynamic> navWebView(String url, {String? path, String? title}) {
+    return navigateTo('/web_view',
+        arg: {"url": url, "path": path ?? "", "title": title ?? ""});
   }
 
-  static Future<dynamic> navWebViewReplace(String url, {String? path}) {
-    return navigateReplace('/web_view', arg: {"url": url, "path": path ?? ""});
+  static Future<dynamic> navWebViewReplace(String url,
+      {String? path, String? title}) {
+    return navigateReplace('/web_view',
+        arg: {"url": url, "path": path ?? "", "title": title ?? ""});
   }
 
   ///跳转  WebView, 带参数的页面建议单独定义

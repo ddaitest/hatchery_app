@@ -25,11 +25,11 @@ class AgreementManager extends ChangeNotifier {
 
   /// 查看用户协议webview
   void gotoUserAgreementUrl() =>
-      Routers.navWebView(Flavors.stringsInfo.user_agreement_url);
+      Routers.navWebView(Flavors.stringsInfo.user_agreement_url,title: '用户协议');
 
   /// 查看隐私协议webview
   void gotoPrivacyAgreementUrl() =>
-      Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url);
+      Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url,title: '隐私协议');
 
   // Future<void> exitApp() async {
   //   if (Platform.isAndroid) {

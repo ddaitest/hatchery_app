@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hatchery/common/log.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hatchery/flavors/Flavors.dart';
@@ -8,8 +9,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 class WebViewPage extends StatefulWidget {
   final String url;
   final String? pathName;
+  final String title;
 
-  WebViewPage(this.url, this.pathName);
+  WebViewPage(this.url, this.pathName, this.title);
 
   @override
   _WebViewPageState createState() => _WebViewPageState();
@@ -29,16 +31,20 @@ class _WebViewPageState extends State<WebViewPage> {
       ios: IOSInAppWebViewOptions(
         allowsInlineMediaPlayback: true,
       ));
-  String url = "";
+
+  // String url = "";
   double progress = 0;
   PullToRefreshController pullToRefreshController = PullToRefreshController();
-  final urlController = TextEditingController();
-  String _title = "${Flavors.stringsInfo.community_name}";
+
+  // final urlController = TextEditingController();
+  String _title = Flavors.stringsInfo.community_name;
 
   @override
   void initState() {
     super.initState();
-
+    if (widget.title.isNotEmpty) {
+      _title = widget.title;
+    }
     contextMenu = ContextMenu(
         menuItems: [
           ContextMenuItem(
@@ -127,10 +133,10 @@ class _WebViewPageState extends State<WebViewPage> {
             webViewController = controller;
           },
           onLoadStart: (controller, url) {
-            setState(() {
-              this.url = url.toString();
-              urlController.text = this.url;
-            });
+            // setState(() {
+            //   this.url = url.toString();
+            // urlController.text = this.url;
+            // });
           },
           androidOnPermissionRequest: (controller, origin, resources) async {
             return PermissionRequestResponse(
@@ -148,10 +154,11 @@ class _WebViewPageState extends State<WebViewPage> {
               "javascript",
               "about"
             ].contains(uri!.scheme)) {
-              if (await canLaunch(url)) {
+              Log.log("shouldOverrideUrlLoading = ${uri.toString()}");
+              if (await canLaunch(uri.toString())) {
                 // Launch the App
                 await launch(
-                  url,
+                  uri.toString(),
                 );
                 // and cancel the request
                 return NavigationActionPolicy.CANCEL;
@@ -160,15 +167,18 @@ class _WebViewPageState extends State<WebViewPage> {
             return NavigationActionPolicy.ALLOW;
           },
           onLoadStop: (controller, url) async {
-            setState(() {
-              this.url = url.toString();
-              urlController.text = this.url;
-              controller.getTitle().then((value) {
-                if (value != null) {
+            // setState(() {
+            // this.url = url.toString();
+            // urlController.text = this.url;
+            controller.getTitle().then((value) {
+              Log.log("WEBVIEW=$url;title=$value", color: LColor.RED);
+              if (value != null && value.isNotEmpty) {
+                setState(() {
                   this._title = value;
-                }
-              });
+                });
+              }
             });
+            // });
           },
           onLoadError: (controller, url, code, message) {
             pullToRefreshController.endRefreshing();
@@ -179,13 +189,13 @@ class _WebViewPageState extends State<WebViewPage> {
             }
             setState(() {
               this.progress = progress / 100;
-              urlController.text = this.url;
+              // urlController.text = this.url;
             });
           },
           onUpdateVisitedHistory: (controller, url, androidIsReload) {
             setState(() {
-              this.url = url.toString();
-              urlController.text = this.url;
+              // this.url = url.toString();
+              // urlController.text = this.url;
             });
           },
           onConsoleMessage: (controller, consoleMessage) {
