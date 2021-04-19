@@ -29,19 +29,6 @@ class HomeManager extends ChangeNotifier {
   //软文
   List<Article> articlesList = [];
 
-  //弹窗广告
-  // Advertising? popAd;
-
-  // /// 服务器返回弹窗广告次数
-  // int? _popAdShowTotalTimesForResponse;
-
-  // /// 本地存储的弹窗已经弹过的广告次数
-  // int? _popAdShowTotalTimesForLocal;
-
-  // DateTime now = DateTime.now();
-
-  // PageStatus get status => _status;
-
   List<ServiceInfo> services = [
     //TODO fix
     ServiceInfo('images/image1.png', "问题反馈", "feedback"),
@@ -74,21 +61,24 @@ class HomeManager extends ChangeNotifier {
       //判断是否应该显示
       var now = DateTime.now();
       int times = _getLocalPopShowTimes(now);
-      Log.log("checkPopAd.times = $times",color: LColor.YELLOW);
-      if (times <= POP_AD_LIMIT) {
-        Advertising? ad = _getStoredAd();
-        Log.log("checkPopAd.Advertising = $ad",color: LColor.YELLOW);
-        if (ad != null) {
+      int responsePopAdTimes = _getPopAdShowTimes()!;
+      Log.log("checkPopAd.times = $times", color: LColor.YELLOW);
+      if (times <= responsePopAdTimes) {
+        Advertising? popAd = _getStoredForPopAd();
+        Log.log("checkPopAd.Advertising = $popAd", color: LColor.YELLOW);
+        if (popAd != null) {
           setPopShowCount(now, times + 1);
-          return ad;
+          return popAd;
         }
+      } else {
+        return null;
       }
     });
   }
 
-  Advertising? _getStoredAd() {
+  Advertising? _getStoredForPopAd() {
     String? stored = SP.getString(SPKey.popAD);
-    Log.log("SP StoredAd = $stored",color: LColor.YELLOW);
+    Log.log("SP StoredForPopAd = $stored", color: LColor.YELLOW);
     if (stored != null) {
       try {
         return Advertising.fromJson(jsonDecode(stored));
@@ -104,9 +94,10 @@ class HomeManager extends ChangeNotifier {
     try {
       var key = "${now.year}_${now.month}_${now.day}";
       String record = SP.getString(SPKey.popTimes) ?? "";
-      Log.log("SP GET.record = $record",color: LColor.YELLOW);
+      Log.log("SP GET.record = $record", color: LColor.YELLOW);
       if (record.contains(key)) {
         String times = record.substring(key.length + 1);
+        Log.log("SP LC = ${times}", color: LColor.YELLOW);
         return int.parse(times);
       }
     } catch (e) {}
@@ -117,30 +108,26 @@ class HomeManager extends ChangeNotifier {
   setPopShowCount(DateTime now, int times) {
     var key = "${now.year}_${now.month}_${now.day}";
     SP.set(SPKey.popTimes, "$key@$times");
-    Log.log("SP SAVE.record = $key@$times",color: LColor.YELLOW);
-    // Map<String, int> _popAdShowMap = {
-    //   '${formatDate(DateTime(now.year, now.month, now.day), [yyyy, mm, dd])}':
-    //   _popAdShowTotalTimesForLocal! + 1
-    // };
-    // SP.set(SPKey.POP_AD_SHOW_TIMES_KEY, json.encode(_popAdShowMap));
+    Log.log("SP SAVE.record = $key@$times", color: LColor.YELLOW);
   }
 
-  //
-  // /// 获取config中的pop广告弹出次数，如果获取不到则用default.dart中默认的值
-  // _getPopAdShowTimes() {
-  //   String? _responseResult = SP.getString(SPKey.CONFIG_KEY);
-  //   if (_responseResult != null) {
-  //     Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
-  //     _popAdShowTotalTimesForResponse = _finalParse?['popup_ad']['show_times'];
-  //     if (_popAdShowTotalTimesForResponse == null) {
-  //       _popAdShowTotalTimesForResponse = TimeConfig.DEFAULT_SHOW_POP_TIMES;
-  //     }
-  //     print(
-  //         "DEBUG=> _popAdShowTotalTimesForResponse ${_popAdShowTotalTimesForResponse}");
-  //     print(
-  //         "DEBUG=> _popAdShowTotalTimesForLocal ${_popAdShowTotalTimesForLocal}");
-  //   }
-  // }
+  /// 获取config中的pop广告弹出次数，如果获取不到则用default.dart中默认的值
+  int? _getPopAdShowTimes() {
+    String? _responseResult = SP.getString(SPKey.CONFIG_KEY);
+    if (_responseResult != null) {
+      Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
+      int? popAdShowTotalTimesForResponse =
+          _finalParse?['popup_ad']['show_times'] ?? null;
+      Log.log(
+          "popAdShowTotalTimesForResponse = $popAdShowTotalTimesForResponse",
+          color: LColor.RED);
+      if (popAdShowTotalTimesForResponse == null) {
+        return TimeConfig.DEFAULT_SHOW_POP_TIMES;
+      } else {
+        return popAdShowTotalTimesForResponse;
+      }
+    }
+  }
 
   _queryBannerData() {
     API.getBannerList(0, 10, Flavors.appId.home_page_id).then((value) {
