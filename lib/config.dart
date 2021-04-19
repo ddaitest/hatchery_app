@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 const bool TEST = true;
 
-const int POP_AD_LIMIT = 2;
-
 class SPKey {
   static final String showAgreement = 'ShowAgreement';
   static final String splashAD = 'splashAD';
@@ -16,11 +14,10 @@ class SPKey {
 }
 
 class TimeConfig {
-  static final int SPLASH_TIMEOUT = TEST ? 1 : 5;
-  static final int SPLASH_TIME = TEST ? 1 : 4;
+  static final int SPLASH_TIMEOUT = TEST ? 3 : 5;
   static final int POP_AD_WAIT_TIME = TEST ? 1 : 3;
   static final int UPGRADE_LOADING_TIME = TEST ? 1 : 5;
-  static final int DEFAULT_SHOW_POP_TIMES = TEST ? 3 : 1;
+  static final int DEFAULT_SHOW_POP_TIMES = TEST ? 5 : 1;
 }
 
 const mainTabs = [

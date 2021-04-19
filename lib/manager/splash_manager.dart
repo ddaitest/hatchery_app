@@ -38,7 +38,7 @@ class SplashManager extends ChangeNotifier {
         Routers.navigateTo("/agreementPage");
       } else {
         //显示广告
-        _getStoredAd();
+        _getStoredForSplashAd();
         //更新数据
         _queryConfigData();
         _querySplashAd();
@@ -85,7 +85,7 @@ class SplashManager extends ChangeNotifier {
     });
   }
 
-  _getStoredAd() {
+  _getStoredForSplashAd() {
     String? stored = SP.getString(SPKey.splashAD);
     if (stored != null) {
       try {
@@ -108,7 +108,7 @@ class SplashManager extends ChangeNotifier {
         });
       } catch (e) {}
     } else {
-      //没有广告
+      Log.log("没有广告", color: LColor.YELLOW);
       Timer.periodic(Duration(seconds: 1), (timer) {
         _timer?.cancel();
         Routers.navigateReplace('/');
@@ -129,6 +129,21 @@ class SplashManager extends ChangeNotifier {
     _timer?.cancel();
     Routers.navigateReplace('/');
   }
+
+  /// 点击同意协议按钮
+  void clickAgreeAgreementButton(BuildContext context) async {
+    SP.set(SPKey.showAgreement, false); // 设置协议是否同意标识
+    Routers.navigateReplace('/');
+  }
+
+  /// 查看用户协议webview
+  void gotoUserAgreementUrl() =>
+      Routers.navWebView(Flavors.stringsInfo.user_agreement_url, title: '用户协议');
+
+  /// 查看隐私协议webview
+  void gotoPrivacyAgreementUrl() =>
+      Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url,
+          title: '隐私协议');
 
   @override
   void dispose() {

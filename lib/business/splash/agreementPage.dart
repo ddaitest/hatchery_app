@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:hatchery/manager/agreement_manager.dart';
+import 'package:hatchery/manager/splash_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hatchery/flavors/default.dart';
+import 'package:hatchery/common/AppContext.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:launch_review/launch_review.dart';
 
 class AgreementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AgreementManager _agreementManager = AgreementManager();
+    final manager = App.manager<SplashManager>();
     return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
-          body: ChangeNotifierProvider(
-            create: (context) => _agreementManager,
-            child: _agreementMainView(context, _agreementManager),
-          ),
+          body: _agreementMainView(context, manager),
         ));
   }
 
   Widget _agreementMainView(context, manager) {
-    print('DEBUG=> _agreementMainView 重绘了。。。。。。。。。。');
     return Stack(
       children: [
         Container(
@@ -41,7 +35,7 @@ class AgreementPage extends StatelessWidget {
     );
   }
 
-  Widget _agreementDialogView(BuildContext context, AgreementManager manager) {
+  Widget _agreementDialogView(BuildContext context, manager) {
     return Center(
         child: Container(
       width: (Flavors.sizesInfo.screenWidth - 28.0.w).w,
@@ -59,13 +53,13 @@ class AgreementPage extends StatelessWidget {
             style: Flavors.textStyles.agreementTitle,
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 10.0.h),
+          SizedBox(height: 20.0.h),
           Text(
             Flavors.stringsInfo.agreement_card_text,
             style: Flavors.textStyles.agreementText,
             textAlign: TextAlign.start,
           ),
-          SizedBox(height: 10.0.h),
+          SizedBox(height: 30.0.h),
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -77,6 +71,7 @@ class AgreementPage extends StatelessWidget {
                           decoration: TextDecoration.underline,
                           color: Colors.blue)),
                 ),
+                SizedBox(width: 20.0.w),
                 GestureDetector(
                   onTap: () => manager.gotoPrivacyAgreementUrl(),
                   child: Text("隐私政策",
