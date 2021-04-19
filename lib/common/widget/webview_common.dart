@@ -167,9 +167,6 @@ class _WebViewPageState extends State<WebViewPage> {
             return NavigationActionPolicy.ALLOW;
           },
           onLoadStop: (controller, url) async {
-            // setState(() {
-            // this.url = url.toString();
-            // urlController.text = this.url;
             controller.getTitle().then((value) {
               Log.log("WEBVIEW=$url;title=$value", color: LColor.RED);
               if (value != null && value.isNotEmpty) {
@@ -178,7 +175,6 @@ class _WebViewPageState extends State<WebViewPage> {
                 });
               }
             });
-            // });
           },
           onLoadError: (controller, url, code, message) {
             pullToRefreshController.endRefreshing();
@@ -192,12 +188,12 @@ class _WebViewPageState extends State<WebViewPage> {
               // urlController.text = this.url;
             });
           },
-          onUpdateVisitedHistory: (controller, url, androidIsReload) {
-            setState(() {
-              // this.url = url.toString();
-              // urlController.text = this.url;
-            });
-          },
+          // onUpdateVisitedHistory: (controller, url, androidIsReload) {
+          //   setState(() {
+          //     // this.url = url.toString();
+          //     // urlController.text = this.url;
+          //   });
+          // },
           onConsoleMessage: (controller, consoleMessage) {
             print(consoleMessage);
           },
