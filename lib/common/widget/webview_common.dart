@@ -132,12 +132,12 @@ class _WebViewPageState extends State<WebViewPage> {
           onWebViewCreated: (controller) {
             webViewController = controller;
           },
-          onLoadStart: (controller, url) {
+          // onLoadStart: (controller, url) {
             // setState(() {
             //   this.url = url.toString();
             // urlController.text = this.url;
             // });
-          },
+          // },
           androidOnPermissionRequest: (controller, origin, resources) async {
             return PermissionRequestResponse(
                 resources: resources,
