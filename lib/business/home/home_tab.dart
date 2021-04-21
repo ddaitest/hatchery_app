@@ -12,11 +12,13 @@ import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/config.dart';
+import 'package:hatchery/manager/splash_manager.dart';
 import 'package:hatchery/routers.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:hatchery/common/tools.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -28,6 +30,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
   var _refreshController = RefreshController(initialRefresh: true);
   final manager = App.manager<HomeManager>();
+  final splashManager = App.manager<SplashManager>();
 
   @override
   void initState() {
@@ -37,7 +40,23 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         _popAdView(context, popAd, manager);
       }
     });
+    _preloadSplashAdImage();
     super.initState();
+  }
+
+  _preloadSplashAdImage() {
+    Future.delayed(
+        Duration(seconds: 5),
+        () => splashManager.getSplashAdSPValue().then((value) {
+              if (value != null) {
+                Log.log("_preloadSplashAdImage = ${value.image}",
+                    color: LColor.YELLOW);
+                CachedNetworkImage(
+                  imageUrl: value.image,
+                  imageBuilder: (context, imageProvider) => Container(),
+                );
+              }
+            }));
   }
 
   @override

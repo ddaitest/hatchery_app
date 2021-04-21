@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
@@ -40,11 +39,12 @@ class _SplashPageState extends State<SplashPage> {
 
   Widget _adView(Advertising advertising) {
     print('DEBUG=> _adView 重绘了。。。。。。。。。。');
-    var manager = App.manager<SplashManager>();
+    SplashManager manager = App.manager<SplashManager>();
     return CachedNetworkImage(
       imageUrl: advertising.image,
       imageBuilder: (context, imageProvider) {
         print('DEBUG=> imageProvider $imageProvider');
+        manager.splashCountDownTime();
         return Stack(
           children: [
             GestureDetector(

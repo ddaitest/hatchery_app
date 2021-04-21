@@ -67,7 +67,6 @@ class SplashManager extends ChangeNotifier {
         if (news.isNotEmpty) {
           Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.YELLOW);
           SP.set(SPKey.splashAD, jsonEncode(news[0].toJson()));
-          _preloadSplashAdImage();
         }
       }
     });
@@ -93,22 +92,8 @@ class SplashManager extends ChangeNotifier {
       Log.log("stored stored =  $stored", color: LColor.YELLOW);
       try {
         var ad = Advertising.fromJson(jsonDecode(stored));
-        //显示 广告 和 倒计时
-        countDown = TimeConfig.SPLASH_TIMEOUT;
         advertising = ad;
         notifyListeners();
-        // 开始倒计时
-        _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-          var t = countDown! - 1;
-          Log.log("Timer $t", color: LColor.YELLOW);
-          if (t == 0) {
-            _timer?.cancel();
-            Routers.navigateReplace('/');
-            return;
-          }
-          countDown = t;
-          notifyListeners();
-        });
       } catch (e) {}
     } else {
       Log.log("没有广告", color: LColor.YELLOW);
@@ -116,16 +101,29 @@ class SplashManager extends ChangeNotifier {
     }
   }
 
-  Widget _preloadSplashAdImage() {
+  splashCountDownTime() {
+    // 开始倒计时
+    //显示 广告 和 倒计时
+    countDown = TimeConfig.SPLASH_TIMEOUT;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      var t = countDown! - 1;
+      Log.log("_timer $t", color: LColor.YELLOW);
+      if (t == 0) {
+        _timer?.cancel();
+        Routers.navigateReplace('/');
+        return;
+      }
+      countDown = t;
+      notifyListeners();
+    });
+  }
+
+  Future<Advertising?> getSplashAdSPValue() async {
     String? stored = SP.getString(SPKey.splashAD);
     if (stored != null) {
-      Log.log("_preloadSplashAdImage", color: LColor.RED);
-      var ad = Advertising.fromJson(jsonDecode(stored));
-      return CachedNetworkImage(
-        imageUrl: ad.image,
-      );
+      return Advertising.fromJson(jsonDecode(stored));
     } else {
-      return Container();
+      return null;
     }
   }
 
