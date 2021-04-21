@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:hatchery/common/log.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
@@ -66,6 +67,7 @@ class SplashManager extends ChangeNotifier {
         if (news.isNotEmpty) {
           Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.YELLOW);
           SP.set(SPKey.splashAD, jsonEncode(news[0].toJson()));
+          _preloadSplashAdImage();
         }
       }
     });
@@ -88,6 +90,7 @@ class SplashManager extends ChangeNotifier {
   _getStoredForSplashAd() {
     String? stored = SP.getString(SPKey.splashAD);
     if (stored != null) {
+      Log.log("stored stored =  $stored", color: LColor.YELLOW);
       try {
         var ad = Advertising.fromJson(jsonDecode(stored));
         //显示 广告 和 倒计时
@@ -110,6 +113,19 @@ class SplashManager extends ChangeNotifier {
     } else {
       Log.log("没有广告", color: LColor.YELLOW);
       Future.delayed(Duration(seconds: 1), () => Routers.navigateReplace('/'));
+    }
+  }
+
+  Widget _preloadSplashAdImage() {
+    String? stored = SP.getString(SPKey.splashAD);
+    if (stored != null) {
+      Log.log("_preloadSplashAdImage", color: LColor.RED);
+      var ad = Advertising.fromJson(jsonDecode(stored));
+      return CachedNetworkImage(
+        imageUrl: ad.image,
+      );
+    } else {
+      return Container();
     }
   }
 
