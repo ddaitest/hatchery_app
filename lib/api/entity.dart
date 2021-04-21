@@ -206,9 +206,11 @@ class FeedbackInfo {
 }
 
 class ServiceInfo {
-  String image = "";
-  String name = "";
-  String serviceId = "";
+  final String image;
 
-  ServiceInfo(this.image, this.name, this.serviceId);
+  final String name;
+
+  final String serviceId;
+
+  const ServiceInfo(this.image, this.name, this.serviceId);
 }
