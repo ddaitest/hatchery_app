@@ -1,17 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
+import 'package:hatchery/routers.dart';
 
 class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+    //   String version = packageInfo.version;
+    //   String buildNumber = packageInfo.buildNumber;
+    //   showToast(version + '\n' + buildNumber);
+    // });
     return Scaffold(
       appBar: AppBarFactory.getCommon("关于与帮助"),
-      body: Container(
-        color: Colors.white,
-        child: ListView(
-          children: [],
-        ),
+      body: Stack(
+        children: [
+          Container(
+            color: Colors.white,
+            child: ListView(
+              children: [
+                _getItem("软件版本", "v 1.0.0.1"),
+                _getItem("联系微信", "86161190"),
+                _getItem("官方网站", "http://chenings.com",
+                    click: () => Routers.navWebView("http://chenings.com")),
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: () => Routers.navigateTo("/pact"),
+                    child: Text("用户协议")),
+                Container(width: 1, height: 10, color: Colors.black54),
+                TextButton(
+                    onPressed: () => Routers.navigateTo("/privacy"),
+                    child: Text("隐私政策")),
+              ],
+            ),
+          )
+        ],
       ),
+    );
+  }
+
+  _getItem(String title, String content, {VoidCallback? click}) {
+    var child = (click == null)
+        ? ListTile(
+            title: Text(
+              title,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(content),
+          )
+        : ListTile(
+            trailing: Icon(Icons.keyboard_arrow_right),
+            title: Text(
+              title,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(content),
+            onTap: click,
+          );
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
+        BoxShadow(color: Colors.black26),
+      ]),
+      child: child,
     );
   }
 }

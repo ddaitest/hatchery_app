@@ -13,6 +13,7 @@ import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:hatchery/manager/nearby_manager.dart';
+import 'package:hatchery/routers.dart';
 import 'package:package_info/package_info.dart';
 import 'package:hatchery/test/TestSilver.dart';
 import 'package:hatchery/test/test_provider.dart';
@@ -63,17 +64,13 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   void handleClick(String value) {
     switch (value) {
       case '物业介绍':
-        PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-          String version = packageInfo.version;
-          String buildNumber = packageInfo.buildNumber;
-          showToast(version + '\n' + buildNumber);
-        });
+
         break;
       case '商务合作':
         // todo
         break;
       case '关于与帮助':
-      // todo
+        Routers.navigateTo("/about");
         break;
     }
   }
