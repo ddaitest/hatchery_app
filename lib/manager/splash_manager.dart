@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:hatchery/common/log.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
@@ -66,6 +67,7 @@ class SplashManager extends ChangeNotifier {
         if (news.isNotEmpty) {
           Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.YELLOW);
           SP.set(SPKey.splashAD, jsonEncode(news[0].toJson()));
+          _preloadSplashAdImage();
         }
       }
     });
@@ -88,6 +90,7 @@ class SplashManager extends ChangeNotifier {
   _getStoredForSplashAd() {
     String? stored = SP.getString(SPKey.splashAD);
     if (stored != null) {
+      Log.log("stored stored =  $stored", color: LColor.YELLOW);
       try {
         var ad = Advertising.fromJson(jsonDecode(stored));
         //显示 广告 和 倒计时
@@ -113,6 +116,19 @@ class SplashManager extends ChangeNotifier {
     }
   }
 
+  Widget _preloadSplashAdImage() {
+    String? stored = SP.getString(SPKey.splashAD);
+    if (stored != null) {
+      Log.log("_preloadSplashAdImage", color: LColor.RED);
+      var ad = Advertising.fromJson(jsonDecode(stored));
+      return CachedNetworkImage(
+        imageUrl: ad.image,
+      );
+    } else {
+      return Container();
+    }
+  }
+
   /// UI动作 点击广告
   void clickAD() {
     if (advertising != null) {
@@ -124,6 +140,7 @@ class SplashManager extends ChangeNotifier {
   /// UI动作 跳过倒计时
   void skip() {
     _timer?.cancel();
+    //更新数据
     Routers.navigateReplace('/');
   }
 
@@ -131,6 +148,9 @@ class SplashManager extends ChangeNotifier {
   void clickAgreeAgreementButton(BuildContext context) async {
     SP.set(SPKey.showAgreement, false); // 设置协议是否同意标识
     Routers.navigateReplace('/');
+    _queryConfigData();
+    _querySplashAd();
+    // _queryPopAd();
   }
 
   /// 查看用户协议webview

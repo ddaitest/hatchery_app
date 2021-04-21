@@ -36,7 +36,6 @@ class AgreementPage extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15.0))),
       content: Container(
-        padding: const EdgeInsets.all(7.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
@@ -75,7 +74,7 @@ class AgreementPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20.0.h),
+            SizedBox(height: 10.0.h),
             Container(
               width: Flavors.sizesInfo.screenWidth,
               height: 45.0.h,
@@ -87,7 +86,7 @@ class AgreementPage extends StatelessWidget {
                 onPressed: () => manager.clickAgreeAgreementButton(context),
               ),
             ),
-            SizedBox(height: 20.0.h),
+            SizedBox(height: 10.0.h),
             GestureDetector(
               onTap: () {
                 showToast("需要同意才能继续使用");

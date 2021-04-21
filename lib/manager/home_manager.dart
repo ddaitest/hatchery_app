@@ -29,6 +29,10 @@ class HomeManager extends ChangeNotifier {
   //软文
   List<Article> articlesList = [];
 
+  DateTime now = DateTime.now();
+
+  int localSetPopShowTimes = 0;
+
   List<ServiceInfo> services = [
     //TODO fix
     // ServiceInfo('images/image8.png', "问题反馈", "feedback"),
@@ -63,15 +67,16 @@ class HomeManager extends ChangeNotifier {
   Future<Advertising?> checkPopAd() async {
     return Future.delayed(Duration(seconds: TimeConfig.POP_AD_WAIT_TIME), () {
       //判断是否应该显示
-      var now = DateTime.now();
-      int times = _getLocalPopShowTimes(now);
-      int responsePopAdTimes = _getPopAdShowTimes()!;
-      Log.log("checkPopAd.times = $times", color: LColor.YELLOW);
-      if (times <= responsePopAdTimes) {
+      now = DateTime.now();
+      localSetPopShowTimes = _getLocalPopShowTimes(now);
+      int responsePopAdTimes =
+          _getPopAdShowTimes() ?? TimeConfig.DEFAULT_SHOW_POP_TIMES;
+      Log.log("checkPopAd.times = $localSetPopShowTimes $responsePopAdTimes",
+          color: LColor.YELLOW);
+      if (localSetPopShowTimes != responsePopAdTimes) {
         Advertising? popAd = _getStoredForPopAd();
         Log.log("checkPopAd.Advertising = $popAd", color: LColor.YELLOW);
         if (popAd != null) {
-          setPopShowCount(now, times + 1);
           return popAd;
         }
       } else {
