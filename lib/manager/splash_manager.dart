@@ -153,12 +153,13 @@ class SplashManager extends ChangeNotifier {
 
   /// 查看用户协议webview
   void gotoUserAgreementUrl() =>
-      Routers.navWebView(Flavors.stringsInfo.user_agreement_url, title: '用户协议');
+      // Routers.navWebView(Flavors.stringsInfo.user_agreement_url, title: '用户协议');
+  Routers.navigateTo('/pact');
 
   /// 查看隐私协议webview
-  void gotoPrivacyAgreementUrl() =>
-      Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url,
-          title: '隐私协议');
+  void gotoPrivacyAgreementUrl() =>Routers.navigateTo('/privacy');
+      // Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url,
+      //     title: '隐私协议');
 
   @override
   void dispose() {

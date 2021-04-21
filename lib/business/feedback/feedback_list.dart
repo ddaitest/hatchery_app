@@ -96,8 +96,13 @@ class FeedbackItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
+        BoxShadow(
+          color: Colors.black26
+        ),
+      ]),
       child: ListTile(
-        trailing: Icon(Icons.keyboard_arrow_right),
+        // trailing: Icon(Icons.keyboard_arrow_right),
         title: Text(
           info.contents,
           overflow: TextOverflow.ellipsis,

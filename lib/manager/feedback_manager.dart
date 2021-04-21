@@ -25,7 +25,7 @@ typedef T Parser<T>(Map<String, dynamic> value);
 /// 报事报修 Manager
 class RepairManager extends BaseManager {
   static GetData get = (a, b, c) => API.getReports(a, b, c);
-  static PostData post = (a, b, c, d, e) => API.postFeedback(a, b, c, d, e);
+  static PostData post = (a, b, c, d, e) => API.postReport(a, b, c, d, e);
   static Parser<FeedbackInfo> pp = (m) => FeedbackInfo.fromJson(m);
 
   RepairManager() : super(get, post, pp, "/repairs_new");

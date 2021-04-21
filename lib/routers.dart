@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/AppContext.dart';
+import 'business/about/about.dart';
+import 'business/about/pact_page.dart';
 import 'business/contact/contact_page.dart';
 import 'business/feedback/feedback_list.dart';
 import 'business/feedback/feedback_new.dart';
@@ -35,6 +37,13 @@ class Routers {
         return CupertinoPageRoute(builder: (_) => RepairNewPage());
       case '/nearby':
         return CupertinoPageRoute(builder: (_) => NearbyTab());
+      case '/about':
+        return CupertinoPageRoute(builder: (_) => About());
+      case '/privacy':
+        return CupertinoPageRoute(builder: (_) => PactPage(1));
+      case '/pact':
+        return CupertinoPageRoute(builder: (_) => PactPage(0));
+
 
       case '/list_page':
         Map map = settings.arguments as Map<String, String>;
