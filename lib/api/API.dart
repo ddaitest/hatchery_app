@@ -249,10 +249,11 @@ class API {
 
   ///提交报修
   static Future<ApiResult> postReport(
-      String content, String phone, String uid, List<String> photos) async {
+      String title, String content,
+      String phone, String uid, List<String> photos) async {
     init();
     Map<String, Object> query = {
-      "title": "title ${DateTime.now()}",
+      "title": title,
       "contents": content,
       "user_phone": phone,
       "custom_id": uid,

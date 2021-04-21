@@ -62,7 +62,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
 
   void handleClick(String value) {
     switch (value) {
-      case '关于物业':
+      case '物业介绍':
         PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
           String version = packageInfo.version;
           String buildNumber = packageInfo.buildNumber;
@@ -71,6 +71,9 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
         break;
       case '商务合作':
         // todo
+        break;
+      case '关于与帮助':
+      // todo
         break;
     }
   }
@@ -86,7 +89,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
             onSelected: handleClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {'关于物业', '商务合作'}.map((String choice) {
+              return {'物业介绍', '关于与帮助'}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -97,6 +100,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
         ]),
         body: SafeArea(
           child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
             children: _tabBodies,
             // onPageChanged: (page) {
@@ -197,7 +201,8 @@ class MainTabHandler extends InheritedWidget {
   final int x;
 
   static MainTabHandler of(BuildContext context) {
-    final MainTabHandler? result = context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
+    final MainTabHandler? result =
+        context.dependOnInheritedWidgetOfExactType<MainTabHandler>();
     assert(result != null, 'No MainTabHandler found in context');
     return result!;
   }
