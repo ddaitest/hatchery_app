@@ -109,7 +109,6 @@ class SplashManager extends ChangeNotifier {
       } catch (e) {}
     } else {
       Log.log("没有广告", color: LColor.YELLOW);
-      Future.delayed(Duration(seconds: 1), () => Routers.navigateReplace('/'));
     }
   }
 
