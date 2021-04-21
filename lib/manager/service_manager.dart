@@ -8,6 +8,7 @@ import 'package:hatchery/common/PageStatus.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/config.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:collection';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -49,7 +50,7 @@ class ServiceManager extends ChangeNotifier {
 
   /// 页面 load more
   Future<PageLoadStatus> loadMore() async {
-    ApiResult result = await API.getArticleList(_page + 1, _pageSize, "tab1");
+    ApiResult result = await API.getArticleList(_page + 1, _pageSize, Flavors.appId.home_page_id);
     var callback = PageLoadStatus.canLoading;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));

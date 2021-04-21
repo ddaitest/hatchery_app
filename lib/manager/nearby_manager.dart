@@ -70,7 +70,7 @@ class NearbyManager extends ChangeNotifier {
   Future<PageRefreshStatus> refresh() async {
     _page = 0;
     ApiResult result = await API.getArticleList(
-        _page, _pageSize, Flavors.appId.nearby_page_id);
+        _page, _pageSize, Flavors.appId.home_page_id);
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));
