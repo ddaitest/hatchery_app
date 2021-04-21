@@ -17,7 +17,7 @@ class AgreementPage extends StatelessWidget {
         ));
   }
 
-  Widget _agreementMainView(context, manager) {
+  Widget _agreementMainView(context,SplashManager manager) {
     print('DEBUG=> _agreementMainView 重绘了。。。。。。。。。。');
     return Container(
       width: Flavors.sizesInfo.screenWidth,
@@ -31,7 +31,7 @@ class AgreementPage extends StatelessWidget {
     );
   }
 
-  Widget _agreementDialogView(BuildContext context, manager) {
+  Widget _agreementDialogView(BuildContext context,SplashManager manager) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15.0))),
