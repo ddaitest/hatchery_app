@@ -31,10 +31,10 @@ class HomeManager extends ChangeNotifier {
 
   List<ServiceInfo> services = [
     //TODO fix
-    ServiceInfo('images/image1.png', "问题反馈", "feedback"),
-    ServiceInfo('images/image2.png', "报事报修", "repairs"),
-    ServiceInfo('images/image3.png', "联系物业", "contact"),
-    ServiceInfo('images/image4.png', "全部服务", "all_service"),
+    ServiceInfo('images/image8.png', "问题反馈", "feedback"),
+    ServiceInfo('images/image1.png', "房屋租售", "service_3"),
+    ServiceInfo('images/image3.png', "开锁换锁", "service_5"),
+    ServiceInfo('images/image5.png', "便民服务", "service_1"),
   ];
 
   /// 页面首次加载 or 刷新
