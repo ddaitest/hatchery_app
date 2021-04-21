@@ -124,6 +124,7 @@ class SplashManager extends ChangeNotifier {
   /// UI动作 跳过倒计时
   void skip() {
     _timer?.cancel();
+    //更新数据
     Routers.navigateReplace('/');
   }
 
@@ -131,6 +132,9 @@ class SplashManager extends ChangeNotifier {
   void clickAgreeAgreementButton(BuildContext context) async {
     SP.set(SPKey.showAgreement, false); // 设置协议是否同意标识
     Routers.navigateReplace('/');
+    _queryConfigData();
+    _querySplashAd();
+    // _queryPopAd();
   }
 
   /// 查看用户协议webview

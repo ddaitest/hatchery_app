@@ -34,7 +34,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     manager.checkPopAd().then((popAd) {
       Log.log("checkPopAd.then = ${popAd?.image}", color: LColor.YELLOW);
       if (popAd != null) {
-        _popAdView(context, popAd);
+        _popAdView(context, popAd, manager);
       }
     });
     super.initState();
@@ -278,7 +278,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  _popAdView(BuildContext context, Advertising advertising) {
+  _popAdView(BuildContext context, Advertising advertising, manager) {
     Log.log("_popAdView", color: LColor.YELLOW);
     return showDialog<void>(
         context: context,
@@ -288,6 +288,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
           return CachedNetworkImage(
             imageUrl: advertising.image,
             imageBuilder: (context, imageProvider) {
+              manager.setPopShowCount(
+                  manager.now, manager.localSetPopShowTimes + 1);
               return Center(
                 child: Container(
                   padding: const EdgeInsets.only(left: 40.0, right: 40.0),
