@@ -40,23 +40,8 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         _popAdView(context, popAd, manager);
       }
     });
-    _preloadSplashAdImage();
+    splashManager.preloadSplashAdImage();
     super.initState();
-  }
-
-  _preloadSplashAdImage() {
-    Future.delayed(
-        Duration(seconds: 5),
-        () => splashManager.getSplashAdSPValue().then((value) {
-              if (value != null) {
-                Log.log("_preloadSplashAdImage = ${value.image}",
-                    color: LColor.YELLOW);
-                CachedNetworkImage(
-                  imageUrl: value.image,
-                  imageBuilder: (context, imageProvider) => Container(),
-                );
-              }
-            }));
   }
 
   @override

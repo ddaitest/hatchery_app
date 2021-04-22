@@ -45,6 +45,7 @@ class _SplashPageState extends State<SplashPage> {
       imageBuilder: (context, imageProvider) {
         print('DEBUG=> imageProvider $imageProvider');
         manager.splashCountDownTime();
+        manager.timeOutTimer?.cancel();
         return Stack(
           children: [
             GestureDetector(

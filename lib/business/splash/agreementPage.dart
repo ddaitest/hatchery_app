@@ -17,28 +17,37 @@ class AgreementPage extends StatelessWidget {
         ));
   }
 
-  Widget _agreementMainView(context,SplashManager manager) {
+  Widget _agreementMainView(context, SplashManager manager) {
     print('DEBUG=> _agreementMainView 重绘了。。。。。。。。。。');
-    return Container(
-      width: Flavors.sizesInfo.screenWidth,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(
-                "images/splash.jpg",
-              ))),
-      child: _agreementDialogView(context, manager),
+    return Stack(
+      children: [
+        Container(
+          width: Flavors.sizesInfo.screenWidth,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    "images/splash.jpg",
+                  ))),
+        ),
+        _agreementDialogView(context, manager)
+      ],
     );
   }
 
-  Widget _agreementDialogView(BuildContext context,SplashManager manager) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0))),
-      content: Container(
+  Widget _agreementDialogView(BuildContext context, SplashManager manager) {
+    return Center(
+      child: Container(
+        width: Flavors.sizesInfo.screenWidth - 70.0.w,
+        height: 300.0.h,
+        padding: const EdgeInsets.only(
+            left: 24.0, right: 24.0, top: 27.0, bottom: 19.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          color: Color(0xFFFFFFFF),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "服务条款和用户协议提示",
@@ -51,33 +60,29 @@ class AgreementPage extends StatelessWidget {
               style: Flavors.textStyles.agreementText,
               textAlign: TextAlign.start,
             ),
-            SizedBox(height: 20.0.h),
+            SizedBox(height: 11.0.h),
             Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   GestureDetector(
                     onTap: () => manager.gotoUserAgreementUrl(),
-                    child: Text("用户协议",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.blue)),
+                    child:
+                        Text("《用户协议》", style: Flavors.textStyles.agreementLink),
                   ),
-                  SizedBox(width: 20.0.w),
+                  SizedBox(width: 5.0.w),
                   GestureDetector(
                     onTap: () => manager.gotoPrivacyAgreementUrl(),
-                    child: Text("隐私政策",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.blue)),
+                    child:
+                        Text("《隐私政策》", style: Flavors.textStyles.agreementLink),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 10.0.h),
+            SizedBox(height: 18.0.h),
             Container(
               width: Flavors.sizesInfo.screenWidth,
-              height: 45.0.h,
+              height: 44.0.h,
               child: ElevatedButton(
                 child: Text(
                   "确 定",
