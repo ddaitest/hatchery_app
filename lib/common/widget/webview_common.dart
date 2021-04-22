@@ -168,12 +168,12 @@ class _WebViewPageState extends State<WebViewPage> {
           },
           onLoadStop: (controller, url) async {
             controller.getTitle().then((value) {
-              Log.log("WEBVIEW=$url title=$value", color: LColor.RED);
-              // if (value != null && url != value) {
-              //   setState(() {
-              //     this._title = value;
-              //   });
-              // }
+              Log.log("WEBVIEW=$url title=$_title", color: LColor.RED);
+              if (value != null && value != url.toString()) {
+                setState(() {
+                  this._title = value;
+                });
+              }
             });
           },
           onLoadError: (controller, url, code, message) {
