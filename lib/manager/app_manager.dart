@@ -28,25 +28,21 @@ class AppManager extends ChangeNotifier {
 
   final JPush jpush = JPush();
 
-  AppManager() {
-    // _getAgreeAgreementValueForSP().then((value) {
-    //   isAgreeAgreementValue = value;
-    //   if (isAgreeAgreementValue!) {
-    //     _queryConfigData();
-    //     querySplashAdData();
-    //   }
-    // });
+  /// 初始化
+  init() {
     DeviceInfo.init().then((_) {
       DeviceInfo.setDeviceInfoToSP();
     });
+    initPlatformState();
 
     ///todo 先关闭
     FlutterBugly.init(
         androidAppId: "41d23c0115",
         iOSAppId: "7274afdfed",
         autoCheckUpgrade: false);
-    // initPlatformState();
   }
+
+  AppManager() {}
 
   Future<void> initPlatformState() async {
     try {

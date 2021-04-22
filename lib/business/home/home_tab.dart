@@ -85,15 +85,14 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   Widget _noticeContainerMain() {
     return Container(
-      padding:
-          const EdgeInsets.only(left: 7.0, right: 7.0, top: 12.0, bottom: 12.0),
+      padding: const EdgeInsets.all(7.0),
       child: _noticeView(),
     );
   }
 
   Widget _articlesContainerMain(context) {
     return Container(
-      padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 12.0),
+      padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 7.0),
       child: _articlesView(context),
     );
   }
@@ -192,8 +191,9 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                         // return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
                         return GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: () =>
-                              Routers.navWebView(value[index].redirectUrl),
+                          onTap: () => Routers.navWebView(
+                              value[index].redirectUrl,
+                              title: value[index].title),
                           child: _noticeTitle('${value[index].title}'),
                         );
                       }
