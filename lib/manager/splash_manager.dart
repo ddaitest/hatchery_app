@@ -11,7 +11,6 @@ import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:convert' as convert;
-import 'package:hatchery/common/backgroundListenModel.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
 import 'package:hatchery/common/tools.dart';
@@ -25,7 +24,7 @@ class SplashManager extends ChangeNotifier {
 
   int? countDown;
 
-  Timer? _timer;
+  Timer? countDownTimer;
 
   Timer? timeOutTimer;
 
@@ -49,7 +48,6 @@ class SplashManager extends ChangeNotifier {
         _queryPopAd();
       }
     });
-    BackgroundListen().init();
   }
 
   ///更新 配置
@@ -115,11 +113,11 @@ class SplashManager extends ChangeNotifier {
     // 开始倒计时
     //显示 广告 和 倒计时
     countDown = TimeConfig.SPLASH_TIMEOUT;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    countDownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       var t = countDown! - 1;
-      Log.log("_timer $t", color: LColor.YELLOW);
+      Log.log("countDownTimer_timer $t", color: LColor.YELLOW);
       if (t == 0) {
-        _timer?.cancel();
+        countDownTimer?.cancel();
         Routers.navigateReplace('/');
         return;
       }
@@ -171,7 +169,7 @@ class SplashManager extends ChangeNotifier {
   /// UI动作 点击广告
   void clickAD() {
     if (advertising != null) {
-      _timer?.cancel();
+      countDownTimer?.cancel();
       timeOutTimer?.cancel();
       Routers.navWebViewReplace(advertising!.redirectUrl);
     }
@@ -179,7 +177,7 @@ class SplashManager extends ChangeNotifier {
 
   /// UI动作 跳过倒计时
   void skip() {
-    _timer?.cancel();
+    countDownTimer?.cancel();
     timeOutTimer?.cancel();
     //更新数据
     Routers.navigateReplace('/');
@@ -206,7 +204,7 @@ class SplashManager extends ChangeNotifier {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    countDownTimer?.cancel();
     timeOutTimer?.cancel();
     super.dispose();
   }

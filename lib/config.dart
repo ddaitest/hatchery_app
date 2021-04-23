@@ -20,6 +20,7 @@ class TimeConfig {
   static final int POP_AD_WAIT_TIME = TEST ? 1 : 5;
   static final int UPGRADE_LOADING_TIME = TEST ? 1 : 5;
   static final int DEFAULT_SHOW_POP_TIMES = TEST ? 5 : 1;
+  static final int BACKGROUND_SPLASH_WAIT_TIME = TEST ? 3 : 60;
 }
 
 const mainTabs = [

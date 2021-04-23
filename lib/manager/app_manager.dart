@@ -9,7 +9,7 @@ import 'dart:collection';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:share/share.dart';
 import 'package:flutter/services.dart';
-import 'package:hatchery/api/API.dart';
+import 'package:hatchery/common/backgroundListenModel.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
@@ -34,6 +34,7 @@ class AppManager extends ChangeNotifier {
       DeviceInfo.setDeviceInfoToSP();
     });
     initPlatformState();
+    BackgroundListen().init();
 
     ///todo 先关闭
     FlutterBugly.init(
