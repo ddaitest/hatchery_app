@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:hatchery/flavors/default.dart';
 import 'package:package_info/package_info.dart';

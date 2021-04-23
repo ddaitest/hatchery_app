@@ -155,6 +155,7 @@ class HomeManager extends ChangeNotifier {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => BannerInfo.fromJson(m));
         bannerList = news;
+        Log.log("_queryBannerData $news", color: LColor.YELLOW);
         notifyListeners();
       }
     });

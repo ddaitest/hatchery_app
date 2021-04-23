@@ -29,9 +29,7 @@ class ApiResult {
     if (data == null) {
       return <O>[];
     } else {
-      return (data as List<dynamic>)
-          .map((m) => function(m))
-          .toList();
+      return (data as List<dynamic>).map((m) => function(m)).toList();
     }
   }
 }

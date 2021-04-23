@@ -11,7 +11,7 @@ import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:convert' as convert;
-import 'package:flutter/services.dart';
+import 'package:hatchery/common/backgroundListenModel.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
 import 'package:hatchery/common/tools.dart';
@@ -49,6 +49,7 @@ class SplashManager extends ChangeNotifier {
         _queryPopAd();
       }
     });
+    BackgroundListen().init();
   }
 
   ///更新 配置
