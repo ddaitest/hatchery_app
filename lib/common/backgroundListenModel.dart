@@ -41,7 +41,8 @@ class BackgroundListen with WidgetsBindingObserver {
         Log.log("resumed #################", color: LColor.YELLOW);
         backGroundCountDown = TimeConfig.BACKGROUND_SPLASH_WAIT_TIME;
         if (countDownNow == 0) {
-          Routers.navigateTo('/splash');
+          // TODO
+          // Routers.navigateTo('/splash');
         }
         backGroundTimer?.cancel();
         break;
