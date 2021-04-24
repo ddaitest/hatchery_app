@@ -1,10 +1,10 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/splash_manager.dart';
+import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
@@ -15,6 +15,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
+    App.manager<AppManager>().init();
     App.manager<SplashManager>().init();
     super.initState();
   }
@@ -40,11 +41,13 @@ class _SplashPageState extends State<SplashPage> {
 
   Widget _adView(Advertising advertising) {
     print('DEBUG=> _adView 重绘了。。。。。。。。。。');
-    var manager = App.manager<SplashManager>();
+    SplashManager manager = App.manager<SplashManager>();
     return CachedNetworkImage(
       imageUrl: advertising.image,
       imageBuilder: (context, imageProvider) {
         print('DEBUG=> imageProvider $imageProvider');
+        manager.splashCountDownTime();
+        manager.timeOutTimer?.cancel();
         return Stack(
           children: [
             GestureDetector(

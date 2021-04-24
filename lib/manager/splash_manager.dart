@@ -11,7 +11,6 @@ import 'package:hatchery/common/widget/webview_common.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'dart:convert' as convert;
-import 'package:flutter/services.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
 import 'package:hatchery/common/tools.dart';
@@ -25,7 +24,9 @@ class SplashManager extends ChangeNotifier {
 
   int? countDown;
 
-  Timer? _timer;
+  Timer? countDownTimer;
+
+  Timer? timeOutTimer;
 
   /// 初始化
   init() {
@@ -39,6 +40,7 @@ class SplashManager extends ChangeNotifier {
         Routers.navigateTo("/agreementPage");
       } else {
         //显示广告
+        _timeOutCountDownTime();
         _getStoredForSplashAd();
         //更新数据
         _queryConfigData();
@@ -50,7 +52,7 @@ class SplashManager extends ChangeNotifier {
 
   ///更新 配置
   _queryConfigData() async {
-    Log.log("更新 闪屏 广告", color: LColor.Magenta);
+    Log.log("更新 配置", color: LColor.Magenta);
     API.getConfig().then((value) {
       if (value.isSuccess()) {
         SP.set(SPKey.CONFIG_KEY, json.encode(value.getData()));
@@ -67,7 +69,9 @@ class SplashManager extends ChangeNotifier {
         if (news.isNotEmpty) {
           Log.log("存 闪屏 广告 = ${news[0].toJson()}", color: LColor.YELLOW);
           SP.set(SPKey.splashAD, jsonEncode(news[0].toJson()));
-          _preloadSplashAdImage();
+        } else {
+          Log.log("闪屏无广告配置 = ${news}", color: LColor.YELLOW);
+          SP.delete(SPKey.splashAD);
         }
       }
     });
@@ -82,6 +86,9 @@ class SplashManager extends ChangeNotifier {
         if (news.isNotEmpty) {
           Log.log("存 弹框 广告 = ${news[0].toJson()}", color: LColor.YELLOW);
           SP.set(SPKey.popAD, jsonEncode(news[0].toJson()));
+        } else {
+          Log.log("弹框无广告配置 = ${news}", color: LColor.YELLOW);
+          SP.delete(SPKey.popAD);
         }
       }
     });
@@ -93,22 +100,8 @@ class SplashManager extends ChangeNotifier {
       Log.log("stored stored =  $stored", color: LColor.YELLOW);
       try {
         var ad = Advertising.fromJson(jsonDecode(stored));
-        //显示 广告 和 倒计时
-        countDown = TimeConfig.SPLASH_TIMEOUT;
         advertising = ad;
         notifyListeners();
-        // 开始倒计时
-        _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-          var t = countDown! - 1;
-          Log.log("Timer $t", color: LColor.YELLOW);
-          if (t == 0) {
-            _timer?.cancel();
-            Routers.navigateReplace('/');
-            return;
-          }
-          countDown = t;
-          notifyListeners();
-        });
       } catch (e) {}
     } else {
       Log.log("没有广告", color: LColor.YELLOW);
@@ -116,30 +109,76 @@ class SplashManager extends ChangeNotifier {
     }
   }
 
-  Widget _preloadSplashAdImage() {
+  splashCountDownTime() {
+    // 开始倒计时
+    //显示 广告 和 倒计时
+    countDown = TimeConfig.SPLASH_TIMEOUT;
+    countDownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      var t = countDown! - 1;
+      Log.log("countDownTimer_timer $t", color: LColor.YELLOW);
+      if (t == 0) {
+        countDownTimer?.cancel();
+        Routers.navigateReplace('/');
+        return;
+      }
+      countDown = t;
+      notifyListeners();
+    });
+  }
+
+  _timeOutCountDownTime() {
+    // 开始倒计时
+    //显示 广告 和 倒计时
+    int timeOutCountDown = TimeConfig.SPLASH_TIMEOUT + 2;
+    timeOutTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      var t = timeOutCountDown - 1;
+      Log.log("timeOutCountDownTime _timer $t", color: LColor.YELLOW);
+      if (t == 0) {
+        timeOutTimer?.cancel();
+        Routers.navigateReplace('/');
+        return;
+      }
+      timeOutCountDown = t;
+    });
+  }
+
+  Future<Advertising?> getSplashAdSPValue() async {
     String? stored = SP.getString(SPKey.splashAD);
     if (stored != null) {
-      Log.log("_preloadSplashAdImage", color: LColor.RED);
-      var ad = Advertising.fromJson(jsonDecode(stored));
-      return CachedNetworkImage(
-        imageUrl: ad.image,
-      );
+      return Advertising.fromJson(jsonDecode(stored));
     } else {
-      return Container();
+      return null;
     }
+  }
+
+  preloadSplashAdImage() {
+    Future.delayed(
+        Duration(seconds: 3),
+        () => getSplashAdSPValue().then((value) {
+              if (value != null) {
+                Log.log("_preloadSplashAdImage = ${value.image}",
+                    color: LColor.YELLOW);
+                CachedNetworkImage(
+                  imageUrl: value.image,
+                  imageBuilder: (context, imageProvider) => Container(),
+                );
+              }
+            }));
   }
 
   /// UI动作 点击广告
   void clickAD() {
     if (advertising != null) {
-      _timer?.cancel();
+      countDownTimer?.cancel();
+      timeOutTimer?.cancel();
       Routers.navWebViewReplace(advertising!.redirectUrl);
     }
   }
 
   /// UI动作 跳过倒计时
   void skip() {
-    _timer?.cancel();
+    countDownTimer?.cancel();
+    timeOutTimer?.cancel();
     //更新数据
     Routers.navigateReplace('/');
   }
@@ -156,16 +195,17 @@ class SplashManager extends ChangeNotifier {
   /// 查看用户协议webview
   void gotoUserAgreementUrl() =>
       // Routers.navWebView(Flavors.stringsInfo.user_agreement_url, title: '用户协议');
-  Routers.navigateTo('/pact');
+      Routers.navigateTo('/pact');
 
   /// 查看隐私协议webview
-  void gotoPrivacyAgreementUrl() =>Routers.navigateTo('/privacy');
-      // Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url,
-      //     title: '隐私协议');
+  void gotoPrivacyAgreementUrl() => Routers.navigateTo('/privacy');
+  // Routers.navWebView(Flavors.stringsInfo.privacy_agreement_url,
+  //     title: '隐私协议');
 
   @override
   void dispose() {
-    _timer?.cancel();
+    countDownTimer?.cancel();
+    timeOutTimer?.cancel();
     super.dispose();
   }
 }

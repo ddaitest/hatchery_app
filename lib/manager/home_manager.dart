@@ -1,4 +1,6 @@
 import 'dart:collection';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:hatchery/api/entity.dart';
@@ -77,12 +79,23 @@ class HomeManager extends ChangeNotifier {
         Advertising? popAd = _getStoredForPopAd();
         Log.log("checkPopAd.Advertising = $popAd", color: LColor.YELLOW);
         if (popAd != null) {
+          _preloadPopAdImage(popAd);
           return popAd;
         }
       } else {
         return null;
       }
     });
+  }
+
+  _preloadPopAdImage(Advertising? value) {
+    if (value != null) {
+      Log.log("_preloadPopAdImage = ${value.image}", color: LColor.YELLOW);
+      CachedNetworkImage(
+        imageUrl: value.image,
+        imageBuilder: (context, imageProvider) => Container(),
+      );
+    }
   }
 
   Advertising? _getStoredForPopAd() {
@@ -93,7 +106,6 @@ class HomeManager extends ChangeNotifier {
         return Advertising.fromJson(jsonDecode(stored));
       } catch (e) {}
     }
-    return null;
   }
 
   /// 获取SP中的当天弹出次数. 结构为String "2020_11_11@X",X为次数
@@ -126,7 +138,7 @@ class HomeManager extends ChangeNotifier {
     if (_responseResult != null) {
       Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
       int? popAdShowTotalTimesForResponse =
-          _finalParse?['popup_ad']['show_times'] ?? null;
+          _finalParse?['popup_ad']?['show_times'] ?? null;
       Log.log(
           "popAdShowTotalTimesForResponse = $popAdShowTotalTimesForResponse",
           color: LColor.RED);
@@ -143,6 +155,7 @@ class HomeManager extends ChangeNotifier {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => BannerInfo.fromJson(m));
         bannerList = news;
+        Log.log("_queryBannerData $news", color: LColor.YELLOW);
         notifyListeners();
       }
     });

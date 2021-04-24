@@ -100,8 +100,7 @@ class ServiceTabState extends State<ServiceTab>
 
   Widget _listPart() {
     return Container(
-        padding: const EdgeInsets.only(
-            left: 7.0, right: 7.0, top: 12.0, bottom: 12.0),
+        padding: const EdgeInsets.all(7.0),
         child: Selector<ServiceManager, List<Article>>(
           builder: (context, value, child) {
             return Container(
@@ -151,7 +150,7 @@ class ServiceTabState extends State<ServiceTab>
     }
     return Container(
       width: Flavors.sizesInfo.screenWidth,
-      padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+      padding: const EdgeInsets.only(top: 7.0, bottom: 7.0),
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
       ),

@@ -133,10 +133,10 @@ class _WebViewPageState extends State<WebViewPage> {
             webViewController = controller;
           },
           // onLoadStart: (controller, url) {
-            // setState(() {
-            //   this.url = url.toString();
-            // urlController.text = this.url;
-            // });
+          // setState(() {
+          //   this.url = url.toString();
+          // urlController.text = this.url;
+          // });
           // },
           androidOnPermissionRequest: (controller, origin, resources) async {
             return PermissionRequestResponse(
@@ -168,8 +168,8 @@ class _WebViewPageState extends State<WebViewPage> {
           },
           onLoadStop: (controller, url) async {
             controller.getTitle().then((value) {
-              Log.log("WEBVIEW=$url;title=$value", color: LColor.RED);
-              if (value != null && value.isNotEmpty) {
+              Log.log("WEBVIEW=$url title=$_title", color: LColor.RED);
+              if (value != null && value != url.toString()) {
                 setState(() {
                   this._title = value;
                 });

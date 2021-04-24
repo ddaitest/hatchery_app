@@ -62,18 +62,23 @@ class TextStyles {
 
   /// 协议title
   final TextStyle agreementTitle = TextStyle(
-      fontSize: 19.0.sp, color: Colors.black, fontWeight: FontWeight.w500);
+      fontSize: 16.0.sp, color: Color(0xDE000000), fontWeight: FontWeight.w500);
 
   /// 协议提示文字
   final TextStyle agreementText = TextStyle(
-      fontSize: 15.0.sp, color: Colors.grey, fontWeight: FontWeight.normal);
+      fontSize: 14.0.sp, color: Colors.grey, fontWeight: FontWeight.w400);
+
+  /// 协议文字样式
+  final TextStyle agreementLink =
+      TextStyle(decoration: TextDecoration.underline, color: Color(0xFF006EE7));
 
   /// 确认按钮
-  final TextStyle agreementConfirmBtn = TextStyle(fontSize: 18.0.sp);
+  final TextStyle agreementConfirmBtn = TextStyle(
+      fontSize: 16.0.sp, color: Color(0xFFFFFFFF), fontWeight: FontWeight.w500);
 
   /// 关闭app按钮
-  final TextStyle agreementCloseAppBtn =
-      TextStyle(color: Colors.grey, fontSize: 14.0.sp);
+  final TextStyle agreementCloseAppBtn = TextStyle(
+      fontSize: 14.0.sp, color: Color(0x61000000), fontWeight: FontWeight.w400);
 
   /// 开屏倒计时
   final TextStyle splashFont = TextStyle(

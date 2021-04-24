@@ -12,11 +12,13 @@ import 'package:hatchery/common/widget/banner_common_view.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/common/widget/loading_view.dart';
 import 'package:hatchery/config.dart';
+import 'package:hatchery/manager/splash_manager.dart';
 import 'package:hatchery/routers.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/home_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:hatchery/common/tools.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -28,6 +30,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
   var _refreshController = RefreshController(initialRefresh: true);
   final manager = App.manager<HomeManager>();
+  final splashManager = App.manager<SplashManager>();
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         _popAdView(context, popAd, manager);
       }
     });
+    splashManager.preloadSplashAdImage();
     super.initState();
   }
 
@@ -81,15 +85,14 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   Widget _noticeContainerMain() {
     return Container(
-      padding:
-          const EdgeInsets.only(left: 7.0, right: 7.0, top: 12.0, bottom: 12.0),
+      padding: const EdgeInsets.all(7.0),
       child: _noticeView(),
     );
   }
 
   Widget _articlesContainerMain(context) {
     return Container(
-      padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 12.0),
+      padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 7.0),
       child: _articlesView(context),
     );
   }
@@ -188,8 +191,9 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                         // return _noticeTitle('基于屏幕顶部和底部的布局，如弹框，在全面屏上显示会发生位移');
                         return GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: () =>
-                              Routers.navWebView(value[index].redirectUrl),
+                          onTap: () => Routers.navWebView(
+                              value[index].redirectUrl,
+                              title: value[index].title),
                           child: _noticeTitle('${value[index].title}'),
                         );
                       }

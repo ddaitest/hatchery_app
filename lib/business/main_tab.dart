@@ -2,22 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hatchery/business/home/home_tab.dart';
 import 'package:hatchery/business/nearby/nearby_tab.dart';
 import 'package:hatchery/business/service/service_tab.dart';
-import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/log.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/common/utils.dart';
-import 'package:flutter/services.dart';
-import 'package:hatchery/common/tools.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:hatchery/manager/home_manager.dart';
-import 'package:hatchery/manager/nearby_manager.dart';
 import 'package:hatchery/routers.dart';
-import 'package:package_info/package_info.dart';
-import 'package:hatchery/test/TestSilver.dart';
-import 'package:hatchery/test/test_provider.dart';
-import 'package:provider/provider.dart';
 
 class MainTab extends StatelessWidget {
   @override
@@ -64,7 +54,6 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
   void handleClick(String value) {
     switch (value) {
       case '物业介绍':
-
         break;
       case '商务合作':
         // todo
