@@ -114,18 +114,6 @@ class AgreementPageTextStyle {
       fontSize: 19.0.sp, color: Colors.black, fontWeight: FontWeight.w500);
 }
 
-class CommonParam {
-  final Map<String, dynamic> commonParamMap = getCommonParamMapFromSP() ?? null;
-
-  static getCommonParamMapFromSP() {
-    String? _responseResult = SP.getString(SPKey.COMMON_PARAM_KEY);
-    if (_responseResult != null) {
-      Map<String, dynamic>? _finalParse = jsonDecode(_responseResult);
-      return _finalParse;
-    }
-  }
-}
-
 class SizesInfo {
   final articleItemHeight = 120.0;
   final articleThumbnail = 100.0;

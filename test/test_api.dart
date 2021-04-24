@@ -51,7 +51,7 @@ void main() {
   });
   test('提交报修', () async {
     API.skipCheck = true;
-    var response = await API.postReport("content", "18611223344", "uid_test",
+    var response = await API.postReport("title","content", "18611223344", "uid_test",
         ["https://avatars.githubusercontent.com/u/3735867?v=4"]);
     expect(response.isSuccess(), true);
   });

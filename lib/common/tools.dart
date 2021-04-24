@@ -12,7 +12,7 @@ import '../config.dart';
 
 Future compressionImage(filePath) async {
   ImageProperties properties =
-      await FlutterNativeImage.getImageProperties(filePath);
+  await FlutterNativeImage.getImageProperties(filePath);
   final width = properties.width;
   final height = properties.height;
   if (width == null || height == null) {
@@ -67,44 +67,81 @@ class SP {
 }
 
 class DeviceInfo {
-  static late DeviceInfoPlugin deviceInfo;
-  static late PackageInfo packageInfo;
+  static final info = <String, String>{};
 
   static Future init() async {
-    deviceInfo = DeviceInfoPlugin();
-    packageInfo = await PackageInfo.fromPlatform();
+    if (info.isEmpty) {
+      var deviceInfo = DeviceInfo();
+      //info为空，初始化info内容. 先读取SP
+      var storedMap = deviceInfo.readSp();
+      if (storedMap.isNotEmpty) {
+        //使用SP中的值
+        info.addAll(storedMap);
+      } else {
+        //生成info
+        var newInfo = await deviceInfo.createInfo();
+        info.addAll(newInfo);
+        //写入SP
+        deviceInfo.writeSp(newInfo);
+      }
+    }
   }
 
-  static setDeviceInfoToSP() {
-    Map<String, dynamic>? _commonParamMap;
-    if (Platform.isAndroid) {
-      deviceInfo.androidInfo.then((deviceValue) {
-        _commonParamMap = {
-          "device_model": deviceValue.model,
-          "phone_board": deviceValue.brand,
-          "version": packageInfo.version,
-          "vc": packageInfo.buildNumber,
-          "package_name": packageInfo.packageName,
-          "system_version": deviceValue.version.release,
-          "android_id": deviceValue.androidId,
-          "isPhysicalDevice": deviceValue.isPhysicalDevice
-        };
-        SP.set(SPKey.COMMON_PARAM_KEY, json.encode(_commonParamMap));
-      });
-    } else {
-      deviceInfo.iosInfo.then((deviceValue) {
-        _commonParamMap = {
-          "device_model": deviceValue.utsname.machine,
-          "phone_board": deviceValue.model,
-          "version": packageInfo.version,
-          "vc": packageInfo.buildNumber,
-          "package_name": packageInfo.packageName,
-          "system_version": deviceValue.systemVersion,
-          "IDFV": deviceValue.identifierForVendor,
-          "isPhysicalDevice": deviceValue.isPhysicalDevice
-        };
-        SP.set(SPKey.COMMON_PARAM_KEY, json.encode(_commonParamMap));
-      });
+  //从SP读取缓存的值。
+  Map<String, String> readSp() {
+    try {
+      var stored = SP.getString(SPKey.COMMON_PARAM_KEY);
+      if (stored != null) {
+        Map<String, String>? storedMap = jsonDecode(stored);
+        if (storedMap?.isNotEmpty ?? false) {
+          return storedMap!;
+        }
+      }
+    } catch (e) {}
+    return <String, String>{};
+  }
+
+  writeSp(Map<String, String> data) {
+    try {
+      SP.set(SPKey.COMMON_PARAM_KEY, jsonEncode(data));
+    } catch (e) {
+
     }
+  }
+
+  Future<Map<String, String>> createInfo() async {
+    var _commonParamMap = <String, String>{};
+    var deviceInfo = DeviceInfoPlugin();
+    var packageInfo = await PackageInfo.fromPlatform();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo info = await deviceInfo.androidInfo;
+      _commonParamMap.addAll(
+          {
+            "device_model": info.model,
+            "phone_board": info.brand,
+            "version": packageInfo.version,
+            "vc": packageInfo.buildNumber,
+            "package_name": packageInfo.packageName,
+            "system_version": info.version.release,
+            "android_id": info.androidId,
+            "isPhysicalDevice": info.isPhysicalDevice ? "1" : "0"
+          }
+      );
+    } else {
+      IosDeviceInfo info = await deviceInfo.iosInfo;
+      _commonParamMap.addAll(
+          {
+            "device_model": info.utsname.machine,
+            "phone_board": info.model,
+            "version": packageInfo.version,
+            "vc": packageInfo.buildNumber,
+            "package_name": packageInfo.packageName,
+            "system_version": info.systemVersion,
+            "IDFV": info.identifierForVendor,
+            "isPhysicalDevice": info.isPhysicalDevice ? "1" : "0"
+          }
+      );
+    }
+    return _commonParamMap;
   }
 }

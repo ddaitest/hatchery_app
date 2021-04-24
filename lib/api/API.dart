@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'ApiResult.dart';
@@ -38,8 +39,7 @@ class API {
 
   static bool skipCheck = false;
 
-  static Map<String, dynamic> commonParamMap =
-      Flavors.commonParam.commonParamMap;
+  static Map<String, dynamic> commonParamMap = DeviceInfo.info;
 
   static String clientId = Flavors.appId.client_id;
 

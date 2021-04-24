@@ -36,8 +36,8 @@ class AppManager extends ChangeNotifier {
     //     querySplashAdData();
     //   }
     // });
-    DeviceInfo.init().then((_) {
-      DeviceInfo.setDeviceInfoToSP();
+    SP.init().then((sp) {
+      DeviceInfo.init();
     });
 
     ///todo 先关闭
