@@ -30,10 +30,6 @@ class AppManager extends ChangeNotifier {
 
   /// 初始化
   init() {
-    DeviceInfo.init().then((_) {
-      DeviceInfo.setDeviceInfoToSP();
-    });
-    initPlatformState();
     BackgroundListen().init();
   }
 
@@ -41,6 +37,7 @@ class AppManager extends ChangeNotifier {
     SP.init().then((sp) {
       DeviceInfo.init();
     });
+    initPlatformState();
     FlutterBugly.init(
         androidAppId: "41d23c0115",
         iOSAppId: "7274afdfed",
