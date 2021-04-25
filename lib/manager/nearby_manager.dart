@@ -28,7 +28,7 @@ class NearbyManager extends ChangeNotifier {
   Future<PageRefreshStatus> refreshBanner() async {
     _page = 0;
     ApiResult result =
-        await API.getBannerList(_page, _pageSize, Flavors.appId.nearby_page_id);
+        await API.getBannerList(_page, _pageSize, Flavors.appId.serviceTab3);
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => BannerInfo.fromJson(m));
@@ -48,7 +48,7 @@ class NearbyManager extends ChangeNotifier {
   /// 页面 load more
   Future<PageLoadStatus> loadMore() async {
     ApiResult result = await API.getArticleList(
-        _page + 1, _pageSize, Flavors.appId.nearby_page_id);
+        _page + 1, _pageSize, Flavors.appId.serviceTab3);
     var callback = PageLoadStatus.canLoading;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));
@@ -70,7 +70,7 @@ class NearbyManager extends ChangeNotifier {
   Future<PageRefreshStatus> refresh() async {
     _page = 0;
     ApiResult result = await API.getArticleList(
-        _page, _pageSize, Flavors.appId.home_page_id);
+        _page, _pageSize, Flavors.appId.serviceTab3);
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));

@@ -7,10 +7,10 @@ import 'package:hatchery/config.dart';
 
 class AppID {
   final client_id = '36ff662f-3041-5c10-8bde-65e6fb86523b';
-  final splash_page_id = 'tab0';
-  final home_page_id = 'tab1';
-  final service_page_id = 'tab2';
-  final nearby_page_id = 'tab3';
+  final serviceAd = 'tab1';
+  final serviceTab1 = 'tab1';
+  final serviceTab2 = 'tab2';
+  final serviceTab3 = 'tab3';
 }
 
 class StringsInfo {

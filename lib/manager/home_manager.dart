@@ -151,7 +151,7 @@ class HomeManager extends ChangeNotifier {
   }
 
   _queryBannerData() {
-    API.getBannerList(0, 10, Flavors.appId.home_page_id).then((value) {
+    API.getADBannerList(0, 10, Flavors.appId.serviceTab1).then((value) {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => BannerInfo.fromJson(m));
         bannerList = news;
@@ -164,7 +164,7 @@ class HomeManager extends ChangeNotifier {
   Future<PageRefreshStatus> _queryNoticesData() async {
     var callback = PageRefreshStatus.completed;
     ApiResult result =
-        await API.getNoticeList(0, 10, Flavors.appId.home_page_id);
+        await API.getNoticeList(0, 10, Flavors.appId.serviceTab1);
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Notice.fromJson(m));
       noticesList = news;
@@ -176,7 +176,7 @@ class HomeManager extends ChangeNotifier {
   }
 
   _queryArticleData() {
-    API.getArticleList(0, 10, Flavors.appId.home_page_id).then((value) {
+    API.getADArticleList(0, 15, Flavors.appId.serviceTab1).then((value) {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => Article.fromJson(m));
         articlesList = news;

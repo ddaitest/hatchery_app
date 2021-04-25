@@ -36,6 +36,7 @@ class AppManager extends ChangeNotifier {
   AppManager() {
     SP.init().then((sp) {
       DeviceInfo.init();
+      UserId.init();
     });
     initPlatformState();
     FlutterBugly.init(

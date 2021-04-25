@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hatchery/api/API.dart';
+import 'package:hatchery/config.dart';
 
 void main() {
   test('联系人', () async {
@@ -25,6 +26,12 @@ void main() {
   test('获取 banner ', () async {
     API.skipCheck = true;
     var response = await API.getBannerList(0, 10, "tab1");
+    expect(response.isSuccess(), true);
+  });
+
+  test('获取 广告 banner ', () async {
+    API.skipCheck = true;
+    var response = await API.getADBannerList(0, 10, "tab3");
     expect(response.isSuccess(), true);
   });
 
@@ -79,6 +86,11 @@ void main() {
     Response response = await Dio().post(
         "http://106.12.147.150:8080/files/upload", data: formData);
     print("response= ${response.data}");
+  });
+
+  test('1111', () async {
+    var a = ["xxx","yyy"];
+    print("response= ${a.toString()}");
   });
 
   ///

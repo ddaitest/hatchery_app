@@ -63,7 +63,7 @@ class SplashManager extends ChangeNotifier {
   ///更新 闪屏 广告
   _querySplashAd() async {
     Log.log("更新 闪屏 广告", color: LColor.YELLOW);
-    API.getSplashADList(0, 1, Flavors.appId.splash_page_id).then((value) {
+    API.getSplashADList(0, 1, Flavors.appId.serviceAd).then((value) {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => Advertising.fromJson(m));
         if (news.isNotEmpty) {
@@ -80,7 +80,7 @@ class SplashManager extends ChangeNotifier {
   ///更新 弹框 广告
   _queryPopAd() async {
     Log.log("更新 弹框 广告", color: LColor.YELLOW);
-    API.getPopupADList(0, 1, "tab1").then((value) {
+    API.getPopupADList(0, 1, Flavors.appId.serviceAd).then((value) {
       if (value.isSuccess()) {
         var news = value.getDataList((m) => Advertising.fromJson(m));
         if (news.isNotEmpty) {

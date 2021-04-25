@@ -50,7 +50,7 @@ class ServiceManager extends ChangeNotifier {
 
   /// 页面 load more
   Future<PageLoadStatus> loadMore() async {
-    ApiResult result = await API.getArticleList(_page + 1, _pageSize, Flavors.appId.home_page_id);
+    ApiResult result = await API.getArticleList(_page + 1, _pageSize, Flavors.appId.serviceTab2);
     var callback = PageLoadStatus.canLoading;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));
@@ -71,7 +71,7 @@ class ServiceManager extends ChangeNotifier {
   /// 页面首次加载 or 刷新
   Future<PageRefreshStatus> refresh() async {
     _page = 0;
-    ApiResult result = await API.getArticleList(_page, _pageSize, "tab1");
+    ApiResult result = await API.getArticleList(_page, _pageSize, Flavors.appId.serviceTab2);
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
       var news = result.getDataList((m) => Article.fromJson(m));

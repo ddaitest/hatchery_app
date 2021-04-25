@@ -7,6 +7,7 @@ import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
+import 'package:hatchery/common/tools.dart';
 import 'dart:collection';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -58,7 +59,7 @@ class BaseManager extends ChangeNotifier {
 
   /// 页面 load more
   Future<PageLoadStatus> loadMore() async {
-    ApiResult result = await getApi(_page + 1, _pageSize, "uid_test");
+    ApiResult result = await getApi(_page + 1, _pageSize, UserId.id);
     var callback = PageLoadStatus.canLoading;
     if (result.isSuccess()) {
       var news = result.getDataList(parser);
@@ -80,7 +81,7 @@ class BaseManager extends ChangeNotifier {
   /// 页面首次加载 or 刷新
   Future<PageRefreshStatus> refresh() async {
     _page = 0;
-    ApiResult result = await getApi(_page, _pageSize, "uid_test");
+    ApiResult result = await getApi(_page, _pageSize, UserId.id);
     var callback = PageRefreshStatus.completed;
     if (result.isSuccess()) {
       var news = result.getDataList(parser);
@@ -111,7 +112,7 @@ class BaseManager extends ChangeNotifier {
     if (uploadUrl.isNotEmpty) {
       images.add(uploadUrl);
     }
-    ApiResult result = await postApi(title, content, phone, "uid_test", images);
+    ApiResult result = await postApi(title, content, phone, UserId.id, images);
     return result.isSuccess();
   }
 

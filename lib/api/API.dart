@@ -73,6 +73,26 @@ class API {
     }
   }
 
+  ///广告软文列表
+  static Future<ApiResult> getADArticleList(
+      int page, int size, String pageId) async {
+    Map<String, Object> query = {
+      "page_num": page,
+      "page_size": size,
+      "service_id": pageId,
+      "client_id": clientId,
+    };
+    init();
+    try {
+      Response response =
+          await _dio.get("/api/home/post/list", queryParameters: query);
+      return ApiResult.of(response.data);
+    } catch (e) {
+      print("e = $e");
+      return ApiResult.error(e);
+    }
+  }
+
   ///获取配置
   static Future<ApiResult> getConfig() async {
     init();
@@ -248,8 +268,7 @@ class API {
   }
 
   ///提交报修
-  static Future<ApiResult> postReport(
-      String title, String content,
+  static Future<ApiResult> postReport(String title, String content,
       String phone, String uid, List<String> photos) async {
     init();
     Map<String, Object> query = {
@@ -306,6 +325,26 @@ class API {
       Response response = await _dio.post("/feedback/public/add",
           data: query,
           options: Options(contentType: ContentType.json.toString()));
+      return ApiResult.of(response.data);
+    } catch (e) {
+      print("e = $e");
+      return ApiResult.error(e);
+    }
+  }
+
+  ///获取Banner列表
+  static Future<ApiResult> getADBannerList(
+      int page, int size, String pageId) async {
+    Map<String, Object> query = {
+      "page_num": page,
+      "page_size": size,
+      "service_id": pageId,
+      "client_id": clientId,
+    };
+    init();
+    try {
+      Response response =
+          await _dio.get("/api/home/banner/list", queryParameters: query);
       return ApiResult.of(response.data);
     } catch (e) {
       print("e = $e");
