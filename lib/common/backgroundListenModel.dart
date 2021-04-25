@@ -6,9 +6,8 @@ import 'package:hatchery/config.dart';
 import 'package:hatchery/business/main_tab.dart';
 
 class BackgroundListen with WidgetsBindingObserver {
-  // Timer? backGroundTimer;
-  // int? backGroundCountDown = TimeConfig.BACKGROUND_SPLASH_WAIT_TIME;
-  // int? countDownNow;
+  late DateTime? backGroundTime;
+
   void init() {
     WidgetsBinding.instance?.addObserver(this);
   }
@@ -17,18 +16,23 @@ class BackgroundListen with WidgetsBindingObserver {
     WidgetsBinding.instance?.removeObserver(this);
   }
 
-  // backGroundSplashCountDownTime() {
-  //   /// 后台计时器
-  //   backGroundTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-  //     countDownNow = backGroundCountDown! - 1;
-  //     Log.log("backGroundCountDown_timer $countDownNow", color: LColor.YELLOW);
-  //     if (countDownNow == 0) {
-  //       backGroundTimer?.cancel();
-  //       return;
-  //     }
-  //     backGroundCountDown = countDownNow;
-  //   });
-  // }
+  /// 切后台时的时间减回到前台时的时间，大于等于指定时间则跳转至splash
+  Future<bool> checkShowSplash(DateTime? beforeTime) async {
+    if (beforeTime != null) {
+      DateTime frontTime = DateTime.now();
+      Log.log("frontTime $frontTime", color: LColor.YELLOW);
+      int? diffTime = frontTime.difference(beforeTime).inSeconds;
+      int? waitTime = TimeConfig.BACKGROUND_SPLASH_WAIT_TIME;
+      Log.log("diffTime $diffTime", color: LColor.YELLOW);
+      if (diffTime >= waitTime) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -38,9 +42,13 @@ class BackgroundListen with WidgetsBindingObserver {
         break;
       case AppLifecycleState.resumed: // 应用程序可见，前台
         Log.log("resumed #################", color: LColor.YELLOW);
+        checkShowSplash(backGroundTime).then((value) {
+          if (value) Routers.navigateTo('/splash');
+        });
         break;
       case AppLifecycleState.paused: // 应用程序不可见，后台
         Log.log("paused #################", color: LColor.YELLOW);
+        backGroundTime = DateTime.now();
         break;
       case AppLifecycleState.detached:
         Log.log("detached #################", color: LColor.YELLOW);
