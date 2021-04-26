@@ -33,6 +33,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion 29
@@ -57,18 +58,28 @@ android {
             //设置支持的SO库架构
             abiFilters 'armeabi-v7a', 'arm64-v8a'//'x86', 'x86_64'
         }
+        //HUAWEI：在 Huawei 上创建和 JPush 上同包名的待发布应用,创建完成后下载该应用的 agconnect-services.json 配置文件并添加到应用的 module 目录下。
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY : "a1f964ef7fa9723b1a328fec", // NOTE: JPush 上注册的包名对应的 Appkey.
+                JPUSH_APPKEY  : "a1f964ef7fa9723b1a328fec", // NOTE: JPush 上注册的包名对应的 Appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                MEIZU_APPKEY  : "MZ-魅族的APPKEY",
+                MEIZU_APPID   : "MZ-魅族的APPID",
+                XIAOMI_APPID  : "MI-小米的APPID",
+                XIAOMI_APPKEY : "MI-小米的APPKEY",
+                OPPO_APPKEY   : "OP-oppo的APPKEY",
+                OPPO_APPID    : "OP-oppo的APPID",
+                OPPO_APPSECRET: "OP-oppo的APPSECRET",
+                VIVO_APPKEY   : "vivo的APPKEY",
+                VIVO_APPID    : "vivo的APPID"
         ]
     }
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            keyAlias keyPros['keyAlias']
+            keyPassword keyPros['keyPassword']
+            storeFile keyPros['storeFile'] ? file(keyPros['storeFile']) : null
+            storePassword keyPros['storePassword']
         }
     }
     buildTypes {
@@ -84,8 +95,26 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation project(path: ':jpush')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'androidx.multidex:multidex:2.0.1'
+    //接入极光
+    implementation 'cn.jiguang.sdk:jcore:2.7.2'  // 此处以JCore 2.7.2 版本为例。
+    implementation 'cn.jiguang.sdk:jpush:4.0.0'  // 此处以JPush 4.0.0 版本为例
+    // 接入华为厂商
+    implementation 'com.huawei.hms:push:4.0.3.301'
+    implementation 'cn.jiguang.sdk.plugin:huawei:4.0.0'// 极光厂商插件版本与接入 JPush 版本保持一致，下同
+//    // 接入 FCM 厂商
+//    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+//    implementation 'cn.jiguang.sdk.plugin:fcm:4.0.0'
+//    // 接入魅族厂商
+//    implementation 'cn.jiguang.sdk.plugin:meizu:4.0.0'
+    // 接入 VIVO 厂商
+    implementation 'cn.jiguang.sdk.plugin:vivo:4.0.0'
+    // 接入 OPPO 厂商
+    implementation 'cn.jiguang.sdk.plugin:oppo:4.0.0'
+    // 接入小米厂商
+    implementation 'cn.jiguang.sdk.plugin:xiaomi:4.0.0'
 }
