@@ -6,6 +6,15 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+def keyPros = new Properties()
+def keyFile = rootProject.file('keys.properties')
+if (keyFile.exists()) {
+    keyFile.withReader('UTF-8') { reader ->
+        keyPros.load(reader)
+    }
+}
+
+
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
@@ -37,8 +46,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.daivp.hatchery"
+        applicationId "com.daivp.pushcollector"
         minSdkVersion 17
         targetSdkVersion 28
         multiDexEnabled true
@@ -55,12 +63,17 @@ android {
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }
-
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }
