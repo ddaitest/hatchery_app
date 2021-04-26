@@ -111,12 +111,18 @@ class TextStyles {
   /// 通知文字
   final TextStyle noticeText =
       TextStyle(fontSize: 14.0.sp, color: Color(0xFF333333));
-}
 
-class AgreementPageTextStyle {
-  /// 协议title
-  TextStyle agreementTitle = TextStyle(
-      fontSize: 19.0.sp, color: Colors.black, fontWeight: FontWeight.w500);
+  /// 报事报修列表时间
+  final TextStyle feedBackCreateTime = TextStyle(
+      fontSize: 15.0.sp, color: Color(0xFF333333), fontWeight: FontWeight.w400);
+
+  /// 报事报修主标题
+  final TextStyle feedBackTitle = TextStyle(
+      fontSize: 15.0.sp, color: Color(0xFF666666), fontWeight: FontWeight.w400);
+
+  /// 报事报修副标题
+  final TextStyle feedBackSummary = TextStyle(
+      fontSize: 13.0.sp, color: Color(0xFF999999), fontWeight: FontWeight.w400);
 }
 
 class SizesInfo {

@@ -8,6 +8,8 @@ import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/routers.dart';
+import 'package:hatchery/manager/splash_manager.dart';
+import 'package:hatchery/common/AppContext.dart';
 
 class MainTab extends StatelessWidget {
   @override

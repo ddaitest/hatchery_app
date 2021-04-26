@@ -72,20 +72,6 @@ class ServiceTabState extends State<ServiceTab>
   }
 
   Widget _topPart(BuildContext context) {
-    // return SliverToBoxAdapter(
-    //   child: Container(
-    //     child: Selector<ServiceManager, List<ServiceInfo>>(
-    //       builder: (context, value, child) {
-    //         return _computeTopServiceView(value);
-    //       },
-    //       selector: (BuildContext context, ServiceManager manager) {
-    //         return manager.services;
-    //       },
-    //       shouldRebuild: (pre, next) =>
-    //           ((pre != next) || (pre.length != next.length)),
-    //     ),
-    //   ),
-    // );
     return Selector<ServiceManager, List<ServiceInfo>>(
       builder: (context, value, child) {
         return _computeTopServiceView(value);

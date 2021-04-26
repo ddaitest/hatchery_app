@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:hatchery/routers.dart';
 import 'package:provider/provider.dart';
 
 class RepairNewPage extends StatelessWidget {
@@ -164,12 +164,13 @@ class RepairNewPage extends StatelessWidget {
   submit(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       var title = titleController.text;
-      var phone = phoneController.text;
       var content = contentController.text;
-      App.manager<RepairManager>().submit(title, phone, content).then((e) {
+      var phone = phoneController.text;
+      App.manager<RepairManager>().submit(title, content, phone).then((e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('发布成功')));
-        Navigator.pop(context);
+        // Navigator.pop(context, true);
+        Routers.navigateReplace('/repairs_list');
       });
     }
   }

@@ -13,7 +13,7 @@ class ApiResult {
   }
 
   factory ApiResult.error(e) {
-    return ApiResult({'code': "0", 'message': e.toString()});
+    return ApiResult({'code': 0, 'message': e.toString()});
   }
 
   bool isSuccess() {

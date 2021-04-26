@@ -44,7 +44,6 @@ class Routers {
       case '/pact':
         return CupertinoPageRoute(builder: (_) => PactPage(0));
 
-
       case '/list_page':
         Map map = settings.arguments as Map<String, String>;
         return CupertinoPageRoute(

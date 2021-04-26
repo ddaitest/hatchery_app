@@ -186,9 +186,10 @@ class FeedbackInfo {
 
   String contents = "";
 
+  String createTime = "";
+
   @JsonKey(name: 'user_phone')
   String phone = "";
-
   String img1 = "";
   String img2 = "";
   String img3 = "";
@@ -196,8 +197,8 @@ class FeedbackInfo {
   String img5 = "";
   String img6 = "";
 
-  FeedbackInfo(this.id, this.title, this.contents, this.phone, this.img1,
-      this.img2, this.img3, this.img4, this.img5, this.img6);
+  FeedbackInfo(this.id, this.title, this.contents, this.createTime, this.phone,
+      this.img1, this.img2, this.img3, this.img4, this.img5, this.img6);
 
   factory FeedbackInfo.fromJson(Map<String, dynamic> json) =>
       _$FeedbackInfoFromJson(json);
