@@ -7,9 +7,9 @@ import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:hatchery/common/widget/list_item.dart';
 
 class RepairListPage extends StatefulWidget {
-
   @override
   _RepairListPageState createState() => _RepairListPageState();
 }
@@ -21,6 +21,7 @@ class _RepairListPageState extends State<RepairListPage>
 
   @override
   void initState() {
+    print("DEBUG=> RepairListPage");
     super.initState();
   }
 
@@ -29,10 +30,11 @@ class _RepairListPageState extends State<RepairListPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         appBar: AppBarFactory.getCommon("报事报修"),
         body: Container(
-          color: Colors.white,
+          color: Color(0xFFF7F7F7),
           child: SmartRefresher(
             controller: _refreshController,
             enablePullDown: true,
@@ -62,8 +64,11 @@ class _RepairListPageState extends State<RepairListPage>
 
   Widget _topPart() {
     return Container(
-      padding: EdgeInsets.all(10),
-      child: OutlinedButton(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(6.0)),
+        color: Color(0xFFFFFFFF),
+      ),
+      child: TextButton(
         child: Text("新建"),
         onPressed: () => App.manager<RepairManager>().create(),
       ),
@@ -76,7 +81,7 @@ class _RepairListPageState extends State<RepairListPage>
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: value.map((e) => FeedbackItem(e)).toList(),
+          children: value.map((e) => ListItemView(e)).toList(),
         );
       },
       selector: (BuildContext context, RepairManager manager) {
@@ -84,30 +89,6 @@ class _RepairListPageState extends State<RepairListPage>
       },
       shouldRebuild: (pre, next) =>
           ((pre != next) || (pre.length != next.length)),
-    );
-  }
-}
-
-class FeedbackItem extends StatelessWidget {
-  FeedbackInfo info;
-
-  FeedbackItem(this.info);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListTile(
-        trailing: Icon(Icons.keyboard_arrow_right),
-        title: Text(
-          info.contents,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Text("联系方式 ${info.phone}"),
-      ),
     );
   }
 }

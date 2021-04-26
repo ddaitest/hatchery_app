@@ -13,13 +13,13 @@ import 'package:crypto/crypto.dart';
 
 import '../config.dart';
 
-Future compressionImage(filePath) async {
+Future<String> compressionImage(filePath) async {
   ImageProperties properties =
       await FlutterNativeImage.getImageProperties(filePath);
   final width = properties.width;
   final height = properties.height;
   if (width == null || height == null) {
-    return null;
+    return filePath;
   } else {
     File compressedFile = await FlutterNativeImage.compressImage(filePath,
 //      quality: 100,  默认70

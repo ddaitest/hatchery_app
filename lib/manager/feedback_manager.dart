@@ -10,6 +10,7 @@ import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/tools.dart';
 import 'dart:collection';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:hatchery/common/tools.dart';
 
 import '../routers.dart';
 
@@ -88,7 +89,7 @@ class BaseManager extends ChangeNotifier {
       if (news.isEmpty) {
         callback = PageRefreshStatus.completed;
       } else {
-        data=(news);
+        data = (news);
         callback = PageRefreshStatus.completed;
       }
     } else {
@@ -104,7 +105,7 @@ class BaseManager extends ChangeNotifier {
   }
 
   create() {
-    Routers.navigateTo(createPath);
+    Routers.navigateReplace(createPath);
   }
 
   Future<bool> submit(String title, String content, String phone) async {
@@ -117,9 +118,10 @@ class BaseManager extends ChangeNotifier {
   }
 
   Future<bool> uploadImage(String filePath) async {
-    ApiResult result = await API.uploadImage(filePath, (count, total) {
-      print("$count / $total");
-    });
+    ApiResult result = await compressionImage(filePath)
+        .then((value) => API.uploadImage(value, (count, total) {
+              print("$count / $total");
+            }));
     if (result.isSuccess()) {
       final url = result.getData();
       if (url is String) {

@@ -10,6 +10,7 @@ import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:hatchery/routers.dart';
 
 class FeedbackNewPage extends StatelessWidget {
   final titleController = TextEditingController();
@@ -170,7 +171,8 @@ class FeedbackNewPage extends StatelessWidget {
       App.manager<FeedbackManager>().submit(title, phone, content).then((e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('发布成功')));
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        Routers.navigateReplace('/feedback_list');
       });
     }
   }

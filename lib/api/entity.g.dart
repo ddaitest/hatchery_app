@@ -76,7 +76,8 @@ BannerInfo _$BannerInfoFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$BannerInfoToJson(BannerInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$BannerInfoToJson(BannerInfo instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'avatar': instance.image,
       'redirect_url': instance.redirectUrl,
@@ -124,6 +125,7 @@ FeedbackInfo _$FeedbackInfoFromJson(Map<String, dynamic> json) {
     json['id'] as String,
     json['title'] as String,
     json['contents'] as String,
+    json['create_time'] as String,
     json['user_phone'] as String,
     json['img1'] as String,
     json['img2'] as String,
@@ -134,10 +136,12 @@ FeedbackInfo _$FeedbackInfoFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$FeedbackInfoToJson(FeedbackInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$FeedbackInfoToJson(FeedbackInfo instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'contents': instance.contents,
+      'create_time': instance.createTime,
       'user_phone': instance.phone,
       'img1': instance.img1,
       'img2': instance.img2,
