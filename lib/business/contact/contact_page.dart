@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
-import 'package:hatchery/common/widget/ServiceItem.dart';
+import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/contact_item.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/manager/contact_manager.dart';
-import 'package:hatchery/manager/service_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -17,6 +16,7 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
+  ContactManager _contactManager = ContactManager();
   //   with AutomaticKeepAliveClientMixin {
   // @override
   // bool get wantKeepAlive => true;
@@ -74,12 +74,19 @@ class _ContactPageState extends State<ContactPage> {
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: value.isEmpty ? 5 : value.length,
+          itemCount: value.isEmpty ? 3 : value.length,
           itemBuilder: (BuildContext context, int index) {
             if (value.isEmpty) {
               return ArticleItemLoading();
             } else {
-              return ContactItem(value[index]);
+              return GestureDetector(
+                onTap: () => callPhoneNum(value[index].phone),
+                onLongPress: () {
+                  copyData(value[index].phone);
+                  showToast('${value[index].name} 电话复制完毕');
+                },
+                child: ContactItem(value[index]),
+              );
             }
           },
         );

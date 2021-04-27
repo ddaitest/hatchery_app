@@ -8,6 +8,7 @@ import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:hatchery/common/widget/list_item.dart';
+import 'package:hatchery/routers.dart';
 
 class RepairListPage extends StatefulWidget {
   @override
@@ -81,7 +82,11 @@ class _RepairListPageState extends State<RepairListPage>
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: value.map((e) => ListItemView(e)).toList(),
+          children: value
+              .map((e) => GestureDetector(
+                  onTap: () => Routers.navigateTo('/feed_back_detail', arg: e),
+                  child: ListItemView(e)))
+              .toList(),
         );
       },
       selector: (BuildContext context, RepairManager manager) {

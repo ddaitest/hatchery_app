@@ -13,6 +13,7 @@ import 'business/nearby/nearby_tab.dart';
 import 'business/main_tab.dart';
 import 'business/splash/agreementPage.dart';
 import 'business/splash/splash.dart';
+import 'common/widget/feedBackDetail_common.dart';
 import 'common/log.dart';
 import 'common/widget/webview_common.dart';
 
@@ -43,7 +44,8 @@ class Routers {
         return CupertinoPageRoute(builder: (_) => PactPage(1));
       case '/pact':
         return CupertinoPageRoute(builder: (_) => PactPage(0));
-
+      case '/feed_back_detail':
+        return CupertinoPageRoute(builder: (_) => FeedBackDetail());
       case '/list_page':
         Map map = settings.arguments as Map<String, String>;
         return CupertinoPageRoute(
