@@ -117,7 +117,8 @@ class SplashManager extends ChangeNotifier {
       var t = countDown! - 1;
       Log.log("countDownTimer_timer $t", color: LColor.YELLOW);
       if (t == 0) {
-        countDownTimer?.cancel();
+        // countDownTimer?.cancel();
+        timer.cancel();
         Routers.navigateReplace('/');
         return;
       }

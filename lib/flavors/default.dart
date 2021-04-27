@@ -15,6 +15,7 @@ class AppID {
 
 class StringsInfo {
   final community_name = "新雅名轩";
+  final community_info = "智能物业、服务业主";
   final post_title = "物业公告";
   final articles_title = "便民信息";
   final agreement_card_text =

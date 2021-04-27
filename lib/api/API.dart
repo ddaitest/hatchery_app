@@ -218,6 +218,7 @@ class API {
       Response response = await _dio.post("files/upload", data: formData,
           onSendProgress: (a, b) {
         print("send >>> $a/$b");
+        callback(a,b);
       }, onReceiveProgress: (a, b) {
         print("receive <<< $a/$b");
       });

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/AppContext.dart';
+import 'package:hatchery/common/log.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
@@ -21,6 +22,7 @@ class _FeedbackListPageState extends State<FeedbackListPage>
 
   @override
   void initState() {
+    Log.log("FeedbackListPage.initState",color: LColor.RED);
     super.initState();
   }
 
@@ -50,12 +52,14 @@ class _FeedbackListPageState extends State<FeedbackListPage>
   }
 
   void _onRefresh() async {
+    Log.log("FeedbackListPage._onRefresh",color: LColor.RED);
     App.manager<FeedbackManager>()
         .refresh()
         .then((value) => value.handle(_refreshController));
   }
 
   void _onLoading() async {
+    Log.log("FeedbackListPage._onLoading",color: LColor.RED);
     App.manager<FeedbackManager>()
         .loadMore()
         .then((value) => value.handle(_refreshController));

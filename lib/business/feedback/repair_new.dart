@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/common/AppContext.dart';
+import 'package:hatchery/common/backgroundListenModel.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
@@ -103,6 +104,21 @@ class RepairNewPage extends StatelessWidget {
                   SizedBox(width: 20),
                   Text("(可选一张图片上传)")
                 ]),
+                Selector<FeedbackManager, double>(
+                  builder: (context, double value, child) {
+                    if (value <= 0) {
+                      return Container();
+                    } else {
+                      return LinearProgressIndicator(
+                        value: value,
+                        semanticsLabel: 'Linear progress indicator',
+                      );
+                    }
+                  },
+                  selector: (BuildContext context, FeedbackManager manager) {
+                    return manager.uploadProgress;
+                  },
+                ),
                 Selector<RepairManager, String>(
                   builder: (context, String value, child) {
                     if (value.isEmpty) {
@@ -122,14 +138,21 @@ class RepairNewPage extends StatelessWidget {
                                 errorWidget: (context, url, error) =>
                                     Icon(Icons.error),
                               ),
-                              IconButton(
-                                  icon: Icon(
+                              InkWell(
+                                child: Container(
+                                  child: Icon(
                                     Icons.cancel_rounded,
-                                    color: Colors.white,
+                                    color: Color.fromRGBO(0, 0, 0, 100),
                                     size: 50,
                                   ),
-                                  onPressed: () => App.manager<RepairManager>()
-                                      .removeImage()),
+                                  // color: Colors.grey[500],
+                                  height: 50,
+                                  width: 50,
+                                  alignment: Alignment.topCenter,
+                                ),
+                                onTap: () => App.manager<FeedbackManager>()
+                                    .removeImage(),
+                              ),
                             ],
                           )
                         ],
@@ -176,6 +199,7 @@ class RepairNewPage extends StatelessWidget {
   }
 
   _showSheetMenu(BuildContext context) {
+    BackLock.working = true;
     showCupertinoModalPopup<String>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
@@ -206,6 +230,9 @@ class RepairNewPage extends StatelessWidget {
       s = ImageSource.gallery;
     }
     final pickedFile = await ImagePicker().getImage(source: s);
+    Future.delayed(Duration(seconds: 1), () {
+      BackLock.working = false;
+    });
     if (pickedFile == null) {
       return null;
     }

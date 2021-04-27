@@ -63,10 +63,11 @@ class MyApp extends StatelessWidget {
       builder: () => MaterialApp(
         title: Flavors.stringsInfo.community_name,
         navigatorKey: App.navState,
+        debugShowCheckedModeBanner: false,
         initialRoute: '/splash',
         onGenerateRoute: Routers.generateRoute,
         theme: ThemeData(
-          textTheme: GoogleFonts.notoSansTextTheme(),
+          // textTheme: GoogleFonts.notoSansTextTheme(),
           // Define the default brightness and colors.
           brightness: Brightness.light,
           primaryColor: Colors.lightBlue[800],

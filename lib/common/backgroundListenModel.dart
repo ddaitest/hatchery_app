@@ -5,8 +5,13 @@ import 'package:hatchery/routers.dart';
 import 'package:hatchery/config.dart';
 import 'package:hatchery/business/main_tab.dart';
 
+class BackLock {
+  ///当特殊工作时候，进行标记。如选照片。
+  static bool working = false;
+}
+
 class BackgroundListen with WidgetsBindingObserver {
-  late DateTime? backGroundTime;
+  DateTime backGroundTime = DateTime.now();
 
   void init() {
     WidgetsBinding.instance?.addObserver(this);
@@ -18,6 +23,10 @@ class BackgroundListen with WidgetsBindingObserver {
 
   /// 切后台时的时间减回到前台时的时间，大于等于指定时间则跳转至splash
   Future<bool> checkShowSplash(DateTime? beforeTime) async {
+    Log.log("BackLock.working===> ${BackLock.working}", color: LColor.YELLOW);
+    if (BackLock.working) {
+      return false;
+    }
     if (beforeTime != null) {
       DateTime frontTime = DateTime.now();
       Log.log("frontTime $frontTime", color: LColor.YELLOW);

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
@@ -114,13 +116,51 @@ class _SplashPageState extends State<SplashPage> {
 
   Widget _fullScreenBackgroundView() {
     print('DEBUG=> _fullScreenBackgroundView 重绘了。。。。。。。。。。');
-    return Container(
-      child: Image.asset(
-        'images/splash.jpg',
-        width: Flavors.sizesInfo.screenWidth,
-        height: Flavors.sizesInfo.screenHeight,
-        fit: BoxFit.cover,
-      ),
+    return Stack(
+      children: [
+        Container(
+          child: Image.asset(
+            'images/splash.jpg',
+            width: Flavors.sizesInfo.screenWidth,
+            height: Flavors.sizesInfo.screenHeight,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 120),
+          alignment: Alignment.topCenter,
+          child: Column(
+            children: [
+              Text(
+                Flavors.stringsInfo.community_name,
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 40,
+                  decoration: TextDecoration.none,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 5.0,
+                      color: Color.fromARGB(100, 0, 0, 0),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 50),
+              Text(
+                Flavors.stringsInfo.community_info,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 26,
+                  decoration: TextDecoration.none,
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

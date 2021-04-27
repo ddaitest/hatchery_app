@@ -54,6 +54,8 @@ class BaseManager extends ChangeNotifier {
   List<FeedbackInfo> data = [];
 
   String uploadUrl = "";
+  bool needRefresh = false;
+  double uploadProgress = 0.0;
 
   var _page = 0; //当前软文 页数
   static const int _pageSize = 20; //软文每次加载SIZE
@@ -105,7 +107,7 @@ class BaseManager extends ChangeNotifier {
   }
 
   create() {
-    Routers.navigateReplace(createPath);
+    Routers.navigateTo(createPath);
   }
 
   Future<bool> submit(String title, String content, String phone) async {
@@ -114,18 +116,24 @@ class BaseManager extends ChangeNotifier {
       images.add(uploadUrl);
     }
     ApiResult result = await postApi(title, content, phone, UserId.id, images);
+    if (result.isSuccess()) {
+      uploadUrl = "";
+    }
     return result.isSuccess();
   }
 
   Future<bool> uploadImage(String filePath) async {
     ApiResult result = await compressionImage(filePath)
         .then((value) => API.uploadImage(value, (count, total) {
-              print("$count / $total");
+              uploadProgress = count.toDouble() / total.toDouble();
+              print("uploadProgress = $uploadProgress");
+              notifyListeners();
             }));
     if (result.isSuccess()) {
       final url = result.getData();
       if (url is String) {
         uploadUrl = url;
+        uploadProgress = 0.0;
         notifyListeners();
       }
     }
