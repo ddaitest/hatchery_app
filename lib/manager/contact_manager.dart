@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:hatchery/api/API.dart';
 import 'package:hatchery/api/ApiResult.dart';
 import 'package:hatchery/api/entity.dart';
 import 'package:hatchery/common/PageStatus.dart';
 import 'package:flutter/material.dart';
 import 'package:hatchery/api/entity.dart';
-import 'dart:collection';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ContactManager extends ChangeNotifier {
@@ -28,7 +31,7 @@ class ContactManager extends ChangeNotifier {
         callback = PageLoadStatus.noMore;
       } else {
         _page++;
-        contacts=[...contacts]..addAll(news);
+        contacts = [...contacts]..addAll(news);
         // _contacts.addAll(news);
         callback = PageLoadStatus.canLoading;
       }
@@ -57,6 +60,10 @@ class ContactManager extends ChangeNotifier {
     }
     notifyListeners();
     return callback;
+  }
+
+  shareFrame(String contents) {
+    Share.share(contents);
   }
 
   @override

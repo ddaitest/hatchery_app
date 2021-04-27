@@ -32,6 +32,10 @@ Future<void> exitApp() async {
   }
 }
 
+copyData(String text) {
+  Clipboard.setData(ClipboardData(text: text));
+}
+
 callPhoneNum(String number) async {
   if (await canLaunch("tel:${number}")) {
     await launch("tel:${number}");
