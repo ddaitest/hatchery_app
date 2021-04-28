@@ -84,7 +84,7 @@ class _RepairListPageState extends State<RepairListPage>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: value
               .map((e) => GestureDetector(
-                  onTap: () => Routers.navigateTo('/feed_back_detail', arg: e),
+                  onTap: () => Routers.navigateTo('/feed_back_detail'),
                   child: ListItemView(e)))
               .toList(),
         );

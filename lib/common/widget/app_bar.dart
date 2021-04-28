@@ -28,7 +28,7 @@ class AppBarFactory {
       backgroundColor: Colors.white,
       brightness: Brightness.light,
       automaticallyImplyLeading: true,
-      // elevation: 0,
+      elevation: 0.5,
     );
   }
 }
