@@ -21,6 +21,7 @@ class FeedbackNewPage extends StatelessWidget {
   final contentController = TextEditingController();
   final phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  late final File image;
 
   @override
   Widget build(BuildContext context) {
@@ -347,7 +348,7 @@ class FeedbackNewPage extends StatelessWidget {
       var title = titleController.text;
       var phone = phoneController.text;
       var content = contentController.text;
-      App.manager<FeedbackManager>().submit(title, phone, content).then((e) {
+      App.manager<FeedbackManager>().submit(title, content, phone).then((e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('发布成功')));
         // Navigator.pop(context);
@@ -396,14 +397,14 @@ class FeedbackNewPage extends StatelessWidget {
     if (pickedFile == null) {
       return null;
     }
-    File _image = File(pickedFile.path);
-    print("DDAI _image.lengthSync=${_image.lengthSync()}");
-    if (_image.lengthSync() > 2080000) {
-      compressionImage(_image.path).then((value) {
-        _uploadImage(_image.path);
+    image = File(pickedFile.path);
+    print("DDAI _image.lengthSync=${image.lengthSync()}");
+    if (image.lengthSync() > 2080000) {
+      compressionImage(image.path).then((value) {
+        _uploadImage(image.path);
       });
     } else {
-      _uploadImage(_image.path);
+      _uploadImage(image.path);
     }
   }
 }

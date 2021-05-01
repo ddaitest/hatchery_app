@@ -137,20 +137,12 @@ class TextStyles {
   final TextStyle contactSummary = TextStyle(
       fontSize: 14.0.sp, color: Color(0xFF999999), fontWeight: FontWeight.w400);
 
-  /// 反馈&报事报修详情页创建日期
-  final TextStyle feedBackDetailTime = TextStyle(
-      fontSize: 22.0.sp, color: Color(0xFF333333), fontWeight: FontWeight.w500);
+  /// 反馈&报事报修详情页内容
+  final TextStyle feedBackDetailText = TextStyle(
+      fontSize: 16.0.sp, color: Color(0xFF000000), fontWeight: FontWeight.w400);
 
-  /// 反馈&报事报修详情页标题
-  final TextStyle feedBackDetailTitle = TextStyle(
-      fontSize: 18.0.sp, color: Color(0xFF666666), fontWeight: FontWeight.w400);
-
-  /// 反馈&报事报修详情页 分类
+  /// 反馈&报事报修详情页标分类文字
   final TextStyle feedBackDetailSort = TextStyle(
-      fontSize: 16.0.sp, color: Color(0xFF000000), fontWeight: FontWeight.w500);
-
-  /// 反馈&报事报修详情页 描述
-  final TextStyle feedBackDetailDesc = TextStyle(
       fontSize: 16.0.sp, color: Color(0xFF666666), fontWeight: FontWeight.w400);
 
   /// 问题反馈提交按钮文字

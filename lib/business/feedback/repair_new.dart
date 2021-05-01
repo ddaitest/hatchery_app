@@ -215,7 +215,7 @@ class RepairNewPage extends StatelessWidget {
         cancelButton: CupertinoActionSheetAction(
             child: const Text('取消'),
             isDefaultAction: true,
-            onPressed: () => Navigator.pop(context, 'Cancel')),
+            onPressed: () => Navigator.pop(context)),
       ),
     ).then((String? value) {
       if (value != null) {
