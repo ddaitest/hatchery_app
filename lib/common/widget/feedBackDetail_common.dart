@@ -51,7 +51,7 @@ class FeedBackDetail extends StatelessWidget {
             textAlign: TextAlign.left,
             style: Flavors.textStyles.feedBackDetailSort,
           ),
-          Container(width: 4.0.w),
+          Container(width: 8.0.w),
           Text(
             '${feedbackInfo!.createTime}',
             textAlign: TextAlign.left,
@@ -73,12 +73,14 @@ class FeedBackDetail extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Flavors.textStyles.feedBackDetailSort,
           ),
-          Container(width: 4.0.w),
-          Text(
+          Container(width: 8.0.w),
+          Expanded(
+              child: Text(
             '${feedbackInfo!.title}',
+            maxLines: 5,
             textAlign: TextAlign.left,
             style: Flavors.textStyles.feedBackDetailText,
-          )
+          ))
         ],
       ),
     );
@@ -94,15 +96,17 @@ class FeedBackDetail extends StatelessWidget {
               '问题描述：',
               style: Flavors.textStyles.feedBackDetailSort,
             ),
+            Container(width: 8.0.w),
             _descText()
           ],
         ));
   }
 
   Widget _descText() {
-    return Container(
+    return Expanded(
       child: Text(
         '${feedbackInfo!.contents}',
+        maxLines: 10,
         textAlign: TextAlign.left,
         style: Flavors.textStyles.feedBackDetailText,
       ),
@@ -118,6 +122,7 @@ class FeedBackDetail extends StatelessWidget {
           '联系电话：',
           style: Flavors.textStyles.feedBackDetailSort,
         ),
+        Container(width: 8.0.w),
         _phoneText()
       ],
     ));
@@ -144,6 +149,7 @@ class FeedBackDetail extends StatelessWidget {
                 '上传图片：',
                 style: Flavors.textStyles.feedBackDetailSort,
               ),
+              Container(width: 8.0.w),
               _imageView()
             ],
           ));
