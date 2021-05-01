@@ -147,11 +147,15 @@ class TextStyles {
 
   /// 反馈&报事报修详情页 分类
   final TextStyle feedBackDetailSort = TextStyle(
-      fontSize: 18.0.sp, color: Color(0xFF000000), fontWeight: FontWeight.w500);
+      fontSize: 16.0.sp, color: Color(0xFF000000), fontWeight: FontWeight.w500);
 
   /// 反馈&报事报修详情页 描述
   final TextStyle feedBackDetailDesc = TextStyle(
       fontSize: 16.0.sp, color: Color(0xFF666666), fontWeight: FontWeight.w400);
+
+  /// 问题反馈提交按钮文字
+  final TextStyle submitButtonText = TextStyle(
+      fontSize: 15.0.sp, color: Color(0xFFFFFFFF), fontWeight: FontWeight.w500);
 }
 
 class SizesInfo {

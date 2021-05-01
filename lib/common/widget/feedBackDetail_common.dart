@@ -13,7 +13,6 @@ class FeedBackDetail extends StatelessWidget {
   final FeedbackInfo? feedbackInfo;
 
   FeedBackDetail({this.feedbackInfo});
-  List<Widget> imageList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +32,7 @@ class FeedBackDetail extends StatelessWidget {
         children: [
           _topView(),
           _descMainView(),
+          _phoneMainView(),
           _imageMainView(),
         ],
       ),
@@ -46,13 +46,13 @@ class FeedBackDetail extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '2021年04月28日',
+            '${feedbackInfo!.createTime}',
             textAlign: TextAlign.left,
             style: Flavors.textStyles.feedBackDetailTime,
           ),
           Container(height: 2.0.h),
           Text(
-            '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
+            '${feedbackInfo!.title}',
             textAlign: TextAlign.left,
             style: Flavors.textStyles.feedBackDetailTitle,
           )
@@ -71,7 +71,7 @@ class FeedBackDetail extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
-                  Icons.assignment_outlined,
+                  Icons.description_outlined,
                   size: 25.0,
                   color: Color(0xFF000000),
                 ),
@@ -91,7 +91,44 @@ class FeedBackDetail extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 40.0, top: 16.0),
       child: Text(
-        '描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述',
+        '${feedbackInfo!.contents}',
+        textAlign: TextAlign.left,
+        style: Flavors.textStyles.feedBackDetailDesc,
+      ),
+    );
+  }
+
+  Widget _phoneMainView() {
+    return Container(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.phone_in_talk_outlined,
+                  size: 25.0,
+                  color: Color(0xFF000000),
+                ),
+                Container(width: 14.0.w),
+                Text(
+                  '联系电话',
+                  style: Flavors.textStyles.feedBackDetailSort,
+                )
+              ],
+            ),
+            _phoneText()
+          ],
+        ));
+  }
+
+  Widget _phoneText() {
+    return Container(
+      padding: const EdgeInsets.only(left: 40.0, top: 16.0),
+      child: Text(
+        '${feedbackInfo!.phone}',
         textAlign: TextAlign.left,
         style: Flavors.textStyles.feedBackDetailDesc,
       ),

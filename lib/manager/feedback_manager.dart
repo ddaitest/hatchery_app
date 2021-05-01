@@ -126,7 +126,7 @@ class BaseManager extends ChangeNotifier {
     ApiResult result = await compressionImage(filePath)
         .then((value) => API.uploadImage(value, (count, total) {
               uploadProgress = count.toDouble() / total.toDouble();
-              print("uploadProgress = $uploadProgress");
+              print("DEBUG=> uploadProgress = $uploadProgress");
               notifyListeners();
             }));
     if (result.isSuccess()) {

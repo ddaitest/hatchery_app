@@ -9,6 +9,7 @@ import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:hatchery/common/widget/list_item.dart';
+import 'package:hatchery/common/widget/feedBackDetail_common.dart';
 
 class FeedbackListPage extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _FeedbackListPageState extends State<FeedbackListPage>
 
   @override
   void initState() {
-    Log.log("FeedbackListPage.initState",color: LColor.RED);
+    Log.log("FeedbackListPage.initState", color: LColor.RED);
     super.initState();
   }
 
@@ -52,14 +53,14 @@ class _FeedbackListPageState extends State<FeedbackListPage>
   }
 
   void _onRefresh() async {
-    Log.log("FeedbackListPage._onRefresh",color: LColor.RED);
+    Log.log("FeedbackListPage._onRefresh", color: LColor.RED);
     App.manager<FeedbackManager>()
         .refresh()
         .then((value) => value.handle(_refreshController));
   }
 
   void _onLoading() async {
-    Log.log("FeedbackListPage._onLoading",color: LColor.RED);
+    Log.log("FeedbackListPage._onLoading", color: LColor.RED);
     App.manager<FeedbackManager>()
         .loadMore()
         .then((value) => value.handle(_refreshController));
@@ -84,7 +85,16 @@ class _FeedbackListPageState extends State<FeedbackListPage>
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: value.map((e) => ListItemView(e)).toList(),
+          children: value
+              .map((e) => GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => FeedBackDetail(
+                                feedbackInfo: e,
+                              ))),
+                  child: ListItemView(e)))
+              .toList(),
         );
       },
       selector: (BuildContext context, FeedbackManager manager) {
