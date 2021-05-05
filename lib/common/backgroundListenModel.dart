@@ -52,7 +52,10 @@ class BackgroundListen with WidgetsBindingObserver {
       case AppLifecycleState.resumed: // 应用程序可见，前台
         Log.log("resumed #################", color: LColor.YELLOW);
         checkShowSplash(backGroundTime).then((value) {
-          if (value) Routers.navigateTo('/');
+          if (value) {
+            Routers.navigateTo('/splash');
+            WidgetsBinding.instance?.removeObserver(this);
+          }
         });
         break;
       case AppLifecycleState.paused: // 应用程序不可见，后台
