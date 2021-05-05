@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/routers.dart';
+import 'package:hatchery/flavors/Flavors.dart';
+import 'package:hatchery/common/tools.dart';
 
 class About extends StatelessWidget {
+  static Map<String, dynamic> commonParamMap = DeviceInfo.info;
+
   @override
   Widget build(BuildContext context) {
-    // PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-    //   String version = packageInfo.version;
-    //   String buildNumber = packageInfo.buildNumber;
-    //   showToast(version + '\n' + buildNumber);
-    // });
+    String version = commonParamMap['version'] ?? '';
+    String vc = commonParamMap['vc'] ?? '';
+    String homePageUrl = "http://chenings.com";
     return Scaffold(
       appBar: AppBarFactory.getCommon("关于与帮助"),
       body: Stack(
@@ -18,10 +20,10 @@ class About extends StatelessWidget {
             color: Colors.white,
             child: ListView(
               children: [
-                _getItem("软件版本", "v 1.0.0.1"),
+                _getItem("软件版本", "v $version.$vc"),
                 _getItem("联系微信", "86161190"),
-                _getItem("官方网站", "http://chenings.com",
-                    click: () => Routers.navWebView("http://chenings.com")),
+                _getItem("官方网站", homePageUrl,
+                    click: () => Routers.navWebView(homePageUrl)),
               ],
             ),
           ),
@@ -51,10 +53,7 @@ class About extends StatelessWidget {
         ? ListTile(
             title: Text(
               title,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Flavors.textStyles.sortTitle,
             ),
             subtitle: Text(content),
           )
@@ -62,10 +61,7 @@ class About extends StatelessWidget {
             trailing: Icon(Icons.keyboard_arrow_right),
             title: Text(
               title,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Flavors.textStyles.sortTitle,
             ),
             subtitle: Text(content),
             onTap: click,

@@ -127,11 +127,11 @@ class TextStyles {
 
   /// 联系物业title
   final TextStyle contactTitle = TextStyle(
-      fontSize: 16.0.sp, color: Color(0xFF333333), fontWeight: FontWeight.w500);
+      fontSize: 17.0.sp, color: Color(0xFF333333), fontWeight: FontWeight.w500);
 
   /// 联系物业电话
   final TextStyle contactPhone = TextStyle(
-      fontSize: 15.0.sp, color: Color(0xFF333333), fontWeight: FontWeight.w400);
+      fontSize: 15.0.sp, color: Colors.redAccent, fontWeight: FontWeight.w400);
 
   /// 联系物业副标题
   final TextStyle contactSummary = TextStyle(

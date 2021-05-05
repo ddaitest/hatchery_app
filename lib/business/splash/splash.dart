@@ -134,7 +134,7 @@ class _SplashPageState extends State<SplashPage> {
               Text(
                 Flavors.stringsInfo.community_name,
                 style: TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white70,
                   fontStyle: FontStyle.normal,
                   fontSize: 40,
                   decoration: TextDecoration.none,
@@ -151,7 +151,7 @@ class _SplashPageState extends State<SplashPage> {
               Text(
                 Flavors.stringsInfo.community_info,
                 style: TextStyle(
-                  color: Colors.black54,
+                  color: Colors.white70,
                   fontStyle: FontStyle.normal,
                   fontSize: 26,
                   decoration: TextDecoration.none,

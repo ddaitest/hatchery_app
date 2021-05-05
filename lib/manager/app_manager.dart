@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hatchery/api/entity.dart';
 import 'dart:collection';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'package:share/share.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/common/backgroundListenModel.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
@@ -75,14 +74,6 @@ class AppManager extends ChangeNotifier {
     jpush.getRegistrationID().then((rid) {
       print("flutter get registration id : $rid");
     });
-  }
-
-  // copyData(String text) {
-  //   Clipboard.setData(ClipboardData(text: text));
-  // }
-
-  shareFrame(String contents) {
-    Share.share(contents);
   }
 
   @override
