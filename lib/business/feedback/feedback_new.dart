@@ -226,8 +226,9 @@ class FeedbackNewPage extends StatelessWidget {
               color: Colors.white,
             ),
             child: Container(
-              padding: const EdgeInsets.all(15.0),
-              child: CircularProgressIndicator(
+              padding: const EdgeInsets.only(
+                  left: 10.0, right: 10.0, top: 25.0, bottom: 25.0),
+              child: LinearProgressIndicator(
                 backgroundColor: Colors.grey[300],
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
                 // value: value,
@@ -276,8 +277,9 @@ class FeedbackNewPage extends StatelessWidget {
                     },
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      padding: const EdgeInsets.all(15.0),
-                      child: CircularProgressIndicator(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 25.0, bottom: 25.0),
+                      child: LinearProgressIndicator(
                         backgroundColor: Colors.grey[300],
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
                         // value: value,

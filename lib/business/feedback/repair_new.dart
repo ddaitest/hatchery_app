@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hatchery/common/AppContext.dart';
 import 'package:hatchery/common/backgroundListenModel.dart';
+import 'package:hatchery/common/log.dart';
+import 'package:hatchery/flavors/Flavors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/common/widget/app_bar.dart';
+import 'package:hatchery/common/widget/feedBackDetail_common.dart';
 import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:hatchery/routers.dart';
 import 'package:provider/provider.dart';
+import 'package:hatchery/routers.dart';
 
 class RepairNewPage extends StatelessWidget {
   final titleController = TextEditingController();
@@ -21,159 +25,314 @@ class RepairNewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarFactory.getCommon("新报事报修"),
+        backgroundColor: Colors.white,
+        appBar: AppBarFactory.getCommon("新的报事报修"),
         body: Container(
-          width: double.infinity,
-          color: Colors.white,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20.0),
           child: Form(
             key: _formKey,
             child: ListView(
               children: [
-                SizedBox(height: 10),
-                Text("请输入您要反馈的问题"),
-                SizedBox(height: 10),
-                TextFormField(
-                  autofocus: true,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    labelText: "标题",
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(8),
-                    ),
-                  ),
-                  controller: titleController,
-                  // ignore: missing_return
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '请输入内容';
-                    } else if (value.length > 100) {
-                      return '内容太长，请小于100';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  autofocus: true,
-                  maxLines: 1,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    labelText: "联系方式",
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(8),
-                    ),
-                  ),
-                  controller: phoneController,
-                  // ignore: missing_return
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '请输入您的手机号';
-                    } else if (value.length > 20) {
-                      return '格式不正确';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  maxLines: 5,
-                  minLines: 1,
-                  maxLength: 200,
-                  decoration: InputDecoration(
-                    labelText: "内容",
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(8),
-                    ),
-                  ),
-                  controller: contentController,
-                  // ignore: missing_return
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '请输入内容';
-                    }
-                    return null;
-                  },
-                ),
-                //图片
-                Row(children: [
-                  OutlinedButton.icon(
-                      onPressed: () => _showSheetMenu(context),
-                      icon: Icon(Icons.image),
-                      label: Text("上传图片")),
-                  SizedBox(width: 20),
-                  Text("(可选一张图片上传)")
-                ]),
-                Selector<FeedbackManager, double>(
-                  builder: (context, double value, child) {
-                    if (value <= 0) {
-                      return Container();
-                    } else {
-                      return LinearProgressIndicator(
-                        value: value,
-                        semanticsLabel: 'Linear progress indicator',
-                      );
-                    }
-                  },
-                  selector: (BuildContext context, FeedbackManager manager) {
-                    return manager.uploadProgress;
-                  },
-                ),
-                Selector<RepairManager, String>(
-                  builder: (context, String value, child) {
-                    if (value.isEmpty) {
-                      return Container();
-                    } else {
-                      return Row(
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: value,
-                                width: 200,
-                                height: 200,
-                                placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                              ),
-                              InkWell(
-                                child: Container(
-                                  child: Icon(
-                                    Icons.cancel_rounded,
-                                    color: Color.fromRGBO(0, 0, 0, 100),
-                                    size: 50,
-                                  ),
-                                  // color: Colors.grey[500],
-                                  height: 50,
-                                  width: 50,
-                                  alignment: Alignment.topCenter,
-                                ),
-                                onTap: () => App.manager<FeedbackManager>()
-                                    .removeImage(),
-                              ),
-                            ],
-                          )
-                        ],
-                      );
-                    }
-                  },
-                  selector: (BuildContext context, RepairManager manager) {
-                    return manager.uploadUrl;
-                  },
-                  shouldRebuild: (pre, next) =>
-                      ((pre != next) || (pre.length != next.length)),
-                ),
-                ElevatedButton(
-                  onPressed: () => submit(context),
-                  child: Text('提交'),
-                ),
-                SizedBox(height: 10),
+                _titleMainView(),
+                _descMainView(),
+                _phoneMainView(),
+                _imageMainView(context),
+                SizedBox(height: 40.0.h),
+                _submitButtonView(context)
               ],
             ),
           ),
         ));
+  }
+
+  Widget _titleMainView() {
+    return Container(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '标题',
+          style: Flavors.textStyles.feedBackDetailSort,
+        ),
+        _titleInputView()
+      ],
+    ));
+  }
+
+  Widget _titleInputView() {
+    return Container(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: TextFormField(
+        autofocus: false,
+        maxLines: 1,
+        maxLength: 20,
+        decoration: InputDecoration(
+          labelText: "请输入标题",
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          contentPadding: const EdgeInsets.all(10.0),
+        ),
+        controller: titleController,
+        // ignore: missing_return
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return '请输入内容';
+          } else if (value.length > 30) {
+            return '内容太长，请小于30';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _descMainView() {
+    return Container(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '详细内容',
+          style: Flavors.textStyles.feedBackDetailSort,
+        ),
+        _descInputView()
+      ],
+    ));
+  }
+
+  Widget _descInputView() {
+    return Container(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: TextFormField(
+        maxLines: 10,
+        minLines: 1,
+        maxLength: 200,
+        decoration: InputDecoration(
+          labelText: "请输入详细内容",
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          contentPadding: const EdgeInsets.all(10.0),
+        ),
+        controller: contentController,
+        // ignore: missing_return
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return '请输入内容';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _phoneMainView() {
+    return Container(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '联系电话',
+          style: Flavors.textStyles.feedBackDetailSort,
+        ),
+        _phoneInputView()
+      ],
+    ));
+  }
+
+  Widget _phoneInputView() {
+    return Container(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: TextFormField(
+        maxLines: 1,
+        keyboardType: TextInputType.phone,
+        decoration: InputDecoration(
+          labelText: "请输入联系方式",
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          contentPadding: const EdgeInsets.all(10.0),
+        ),
+        controller: phoneController,
+        // ignore: missing_return
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return '请输入您的手机号';
+          } else if (value.length > 20) {
+            return '手机格式不正确';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _imageMainView(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '上传照片',
+              style: Flavors.textStyles.feedBackDetailSort,
+            ),
+            _imageInputView(context)
+          ],
+        ));
+  }
+
+  Widget _imageInputView(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: Column(
+          children: [
+            //图片
+            Row(children: [
+              ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                  child: _imageUploadProgress(context)),
+              SizedBox(width: 20),
+              Text("可选一张图片上传")
+            ]),
+          ],
+        ));
+  }
+
+  Widget _imageAddView(BuildContext context) {
+    return Container(
+        width: 64.0.w,
+        height: 64.0.h,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+        ),
+        child: IconButton(
+          onPressed: () => _showSheetMenu(context),
+          icon: Icon(
+            Icons.add,
+            size: 30.0,
+            color: Color(0xFFD8D8D8),
+          ),
+        ));
+  }
+
+  Widget _imageUploadProgress(BuildContext context) {
+    return Selector<RepairManager, double>(
+      builder: (context, double value, child) {
+        Log.log("progress=$value", color: LColor.YELLOW);
+        if (value <= 0.0) {
+          return _imageShowView(context);
+        } else {
+          return Container(
+            width: 64.0.w,
+            height: 64.0.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Container(
+              padding: const EdgeInsets.only(
+                  left: 10.0, right: 10.0, top: 25.0, bottom: 25.0),
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.grey[300],
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                // value: value,
+                semanticsLabel: 'Linear progress indicator',
+              ),
+            ),
+          );
+        }
+      },
+      selector: (BuildContext context, RepairManager manager) {
+        return manager.uploadProgress;
+      },
+    );
+  }
+
+  Widget _imageShowView(BuildContext context) {
+    return Selector<RepairManager, String>(
+      builder: (context, String value, child) {
+        if (value.isEmpty) {
+          return _imageAddView(context);
+        } else {
+          return Row(
+            children: [
+              Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: value,
+                    width: 64.0.w,
+                    height: 64.0.h,
+                    imageBuilder: (context, imageProvider) {
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => PhotoViewPage(imageProvider))),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 25.0, bottom: 25.0),
+                      child: LinearProgressIndicator(
+                        backgroundColor: Colors.grey[300],
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                        // value: value,
+                        semanticsLabel: 'Linear progress indicator',
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        Icon(Icons.image_not_supported_outlined),
+                  ),
+                  Positioned(
+                    top: 0.0,
+                    right: 0.0,
+                    child: Container(
+                      height: 16.0.h,
+                      width: 16.0.w,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF000000),
+                      ),
+                      child: GestureDetector(
+                        onTap: () => App.manager<RepairManager>().removeImage(),
+                        child: Center(
+                          child: Icon(
+                            Icons.clear,
+                            size: 15.0,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      ),
+                      alignment: Alignment.topCenter,
+                    ),
+                  )
+                ],
+              )
+            ],
+          );
+        }
+      },
+      selector: (BuildContext context, RepairManager manager) {
+        return manager.uploadUrl;
+      },
+      shouldRebuild: (pre, next) =>
+          ((pre != next) || (pre.length != next.length)),
+    );
+  }
+
+  Widget _submitButtonView(BuildContext context) {
+    return Container(
+      height: 44.0.h,
+      padding: const EdgeInsets.only(left: 64.0, right: 64.0),
+      child: ElevatedButton(
+        onPressed: () => submit(context),
+        child: Text('提交反馈', style: Flavors.textStyles.submitButtonText),
+      ),
+    );
   }
 
   ///上传图片

@@ -3,14 +3,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_native_image/flutter_native_image.dart';
-import 'package:hatchery/flavors/default.dart';
+import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info/device_info.dart';
 import 'package:hatchery/flavors/Flavors.dart';
-import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:crypto/crypto.dart';
-
 import '../config.dart';
 
 Future<String> compressionImage(filePath) async {
@@ -22,7 +21,7 @@ Future<String> compressionImage(filePath) async {
     return filePath;
   } else {
     File compressedFile = await FlutterNativeImage.compressImage(filePath,
-//      quality: 100,  默认70
+        quality: 60, // 默认70
         targetWidth: width,
         targetHeight: height);
     return compressedFile.path;
