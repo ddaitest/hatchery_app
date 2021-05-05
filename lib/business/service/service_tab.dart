@@ -136,7 +136,7 @@ class ServiceTabState extends State<ServiceTab>
     }
     return Container(
       width: Flavors.sizesInfo.screenWidth,
-      padding: const EdgeInsets.only(top: 7.0, bottom: 7.0),
+      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
       ),

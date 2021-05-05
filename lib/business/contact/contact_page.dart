@@ -7,7 +7,9 @@ import 'package:hatchery/common/widget/article_item.dart';
 import 'package:hatchery/common/widget/contact_item.dart';
 import 'package:hatchery/common/widget/list_wrapper.dart';
 import 'package:hatchery/manager/contact_manager.dart';
+import 'package:hatchery/flavors/Flavors.dart';
 import 'package:provider/provider.dart';
+import 'package:hatchery/common/backgroundListenModel.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ContactPage extends StatefulWidget {
@@ -80,11 +82,8 @@ class _ContactPageState extends State<ContactPage> {
               return ArticleItemLoading();
             } else {
               return GestureDetector(
-                onTap: () => callPhoneNum(value[index].phone),
-                onLongPress: () {
-                  copyData(value[index].phone);
-                  showToast('${value[index].name} 电话复制完毕');
-                },
+                onTap: () => _showSheetMenu(
+                    context, value[index].phone, value[index].name),
                 child: ContactItem(value[index]),
               );
             }
@@ -96,6 +95,38 @@ class _ContactPageState extends State<ContactPage> {
       },
       shouldRebuild: (pre, next) =>
           ((pre != next) || (pre.length != next.length)),
+    );
+  }
+
+  _showSheetMenu(BuildContext context, String phoneNumber, String name) {
+    BackLock.working = true;
+    showCupertinoModalPopup<String>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text('$name', style: Flavors.textStyles.contactTitle),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+              child: Text('拨打号码: $phoneNumber'),
+              onPressed: () {
+                callPhoneNum(phoneNumber);
+                Navigator.pop(context);
+              }),
+          CupertinoActionSheetAction(
+              child: const Text('复制电话号码'),
+              onPressed: () {
+                copyData('$name $phoneNumber');
+                showToast('$name 电话复制成功');
+                Navigator.pop(context);
+              }),
+          // CupertinoActionSheetAction(
+          //     child: const Text('分享到微信'),
+          //     onPressed: () => Navigator.pop(context, 'Camera')),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+            child: const Text('取消'),
+            isDefaultAction: true,
+            onPressed: () => Navigator.pop(context)),
+      ),
     );
   }
 }

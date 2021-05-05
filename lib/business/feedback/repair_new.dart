@@ -226,7 +226,7 @@ class RepairNewPage extends StatelessWidget {
             ),
             child: Container(
               padding: const EdgeInsets.only(
-                  left: 10.0, right: 10.0, top: 25.0, bottom: 25.0),
+                  left: 10.0, right: 10.0, top: 32.0, bottom: 32.0),
               child: LinearProgressIndicator(
                 backgroundColor: Colors.grey[300],
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
@@ -277,7 +277,7 @@ class RepairNewPage extends StatelessWidget {
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
                       padding: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 25.0, bottom: 25.0),
+                          left: 10.0, right: 10.0, top: 32.0, bottom: 32.0),
                       child: LinearProgressIndicator(
                         backgroundColor: Colors.grey[300],
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
