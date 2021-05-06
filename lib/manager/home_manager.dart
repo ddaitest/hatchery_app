@@ -16,6 +16,7 @@ import 'package:hatchery/routers.dart';
 import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/manager/service_manager.dart';
 import 'package:date_format/date_format.dart';
+import 'package:hatchery/common/backgroundListenModel.dart';
 import 'package:hatchery/api/ApiResult.dart';
 
 class HomeManager extends ChangeNotifier {

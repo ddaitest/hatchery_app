@@ -109,39 +109,39 @@ class SplashManager extends ChangeNotifier {
     }
   }
 
+  /// 开屏广告倒计时
   splashCountDownTime() {
     // 开始倒计时
     //显示 广告 和 倒计时
     countDown = TimeConfig.SPLASH_TIMEOUT;
     countDownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      var t = countDown! - 1;
-      Log.log("countDownTimer_timer $t", color: LColor.YELLOW);
-      if (t == 0) {
+      Log.log("countDownTimer_timer $countDown", color: LColor.YELLOW);
+      countDown = countDown! - 1;
+      if (countDown! < 1) {
         countDownTimer?.cancel();
         timer.cancel();
         Routers.navigateReplace('/');
-        return;
       }
-      countDown = t;
       notifyListeners();
     });
   }
 
+  /// 开屏总超时
   _timeOutCountDownTime() {
-    // 开始倒计时
     //显示 广告 和 倒计时
     int timeOutCountDown = TimeConfig.SPLASH_TIMEOUT + 2;
-    timeOutTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      var t = timeOutCountDown - 1;
-      Log.log("timeOutCountDownTime _timer $t", color: LColor.YELLOW);
-      if (t == 0) {
-        timeOutTimer?.cancel();
-        timer.cancel();
-        Routers.navigateReplace('/');
-        return;
-      }
-      timeOutCountDown = t;
-    });
+    if (timeOutTimer == null) {
+      timeOutTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        timeOutCountDown--;
+        Log.log("timeOutCountDownTime _timer $timeOutCountDown",
+            color: LColor.YELLOW);
+        if (timeOutCountDown == 0) {
+          timeOutTimer?.cancel();
+          timer.cancel();
+          Routers.navigateReplace('/');
+        }
+      });
+    }
   }
 
   Future<Advertising?> getSplashAdSPValue() async {
@@ -179,9 +179,9 @@ class SplashManager extends ChangeNotifier {
 
   /// UI动作 跳过倒计时
   void skip() {
+    Log.log("countDownTimer?.cancel() countDownTimer?.cancel()");
     countDownTimer?.cancel();
     timeOutTimer?.cancel();
-    //更新数据
     Routers.navigateReplace('/');
   }
 

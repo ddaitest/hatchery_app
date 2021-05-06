@@ -17,6 +17,7 @@ import 'manager/contact_manager.dart';
 import 'manager/home_manager.dart';
 import 'manager/nearby_manager.dart';
 import 'manager/service_manager.dart';
+import 'package:hatchery/common/backgroundListenModel.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

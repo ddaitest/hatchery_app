@@ -37,6 +37,7 @@ class _SplashPageState extends State<SplashPage> {
         selector: (BuildContext context, SplashManager splashManager) {
           return splashManager.advertising;
         },
+        shouldRebuild: (pre, next) => (pre != next),
       ),
     );
   }
@@ -79,12 +80,13 @@ class _SplashPageState extends State<SplashPage> {
                                 MaterialStateProperty.all(Colors.black)),
                         child: Text("跳过  $value",
                             style: Flavors.textStyles.splashFont),
-                        onPressed: manager.skip);
+                        onPressed: () => manager.skip());
                   },
                   selector:
                       (BuildContext context, SplashManager splashManager) {
                     return splashManager.countDown;
                   },
+                  shouldRebuild: (pre, next) => (pre != next),
                 ),
               ),
             ),

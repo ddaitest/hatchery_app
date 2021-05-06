@@ -27,7 +27,7 @@ class AppManager extends ChangeNotifier {
 
   final JPush jpush = JPush();
 
-  /// 初始化
+  /// 后台监听初始化
   init() {
     BackgroundListen().init();
   }
