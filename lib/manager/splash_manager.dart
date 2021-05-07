@@ -121,6 +121,7 @@ class SplashManager extends ChangeNotifier {
         countDownTimer?.cancel();
         timer.cancel();
         Routers.navigateReplace('/');
+        advertising = null;
       }
       notifyListeners();
     });
@@ -139,6 +140,7 @@ class SplashManager extends ChangeNotifier {
           timeOutTimer?.cancel();
           timer.cancel();
           Routers.navigateReplace('/');
+          advertising = null;
         }
       });
     }
@@ -174,6 +176,7 @@ class SplashManager extends ChangeNotifier {
       countDownTimer?.cancel();
       timeOutTimer?.cancel();
       Routers.navWebViewReplace(advertising!.redirectUrl);
+      advertising = null;
     }
   }
 
@@ -183,6 +186,7 @@ class SplashManager extends ChangeNotifier {
     countDownTimer?.cancel();
     timeOutTimer?.cancel();
     Routers.navigateReplace('/');
+    advertising = null;
   }
 
   /// 点击同意协议按钮
@@ -208,6 +212,7 @@ class SplashManager extends ChangeNotifier {
   void dispose() {
     countDownTimer?.cancel();
     timeOutTimer?.cancel();
+    advertising = null;
     super.dispose();
   }
 }

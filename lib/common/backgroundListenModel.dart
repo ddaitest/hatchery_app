@@ -53,8 +53,8 @@ class BackgroundListen with WidgetsBindingObserver {
         Log.log("resumed #################", color: LColor.YELLOW);
         checkShowSplash(backGroundTime).then((value) {
           if (value) {
-            Routers.navigateTo('/splash');
-            WidgetsBinding.instance?.removeObserver(this);
+            Routers.navigateReplace('/splash');
+            dispose();
           }
         });
         break;
