@@ -7,7 +7,7 @@ if (localPropertiesFile.exists()) {
 }
 
 def keyPros = new Properties()
-def keyFile = rootProject.file('../keys.properties')
+def keyFile = rootProject.file('keys.properties')
 if (keyFile.exists()) {
     keyFile.withReader('UTF-8') { reader ->
         keyPros.load(reader)
