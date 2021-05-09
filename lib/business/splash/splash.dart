@@ -15,10 +15,13 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  SplashManager _splashManager = App.manager<SplashManager>();
+  AppManager _appManager = App.manager<AppManager>();
+
   @override
   void initState() {
-    App.manager<AppManager>().init();
-    App.manager<SplashManager>().init();
+    _appManager.init();
+    _splashManager.init();
     super.initState();
   }
 
@@ -44,54 +47,50 @@ class _SplashPageState extends State<SplashPage> {
 
   Widget _adView(Advertising advertising) {
     print('DEBUG=> _adView 重绘了。。。。。。。。。。');
-    SplashManager manager = App.manager<SplashManager>();
     return CachedNetworkImage(
       imageUrl: advertising.image,
       imageBuilder: (context, imageProvider) {
-        print('DEBUG=> imageProvider $imageProvider');
-        manager.splashCountDownTime();
-        manager.timeOutTimer?.cancel();
-        return Stack(
-          children: [
-            GestureDetector(
-              onTap: () => manager.clickAD(),
-              child: Container(
-                width: Flavors.sizesInfo.screenWidth,
-                height: Flavors.sizesInfo.screenHeight,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
+        print('DEBUG=> imageProvider ${advertising.image}');
+        _splashManager.stopAllTimer();
+        _splashManager.splashCountDownTime();
+        return Stack(children: [
+          GestureDetector(
+            onTap: () => _splashManager.clickAD(),
+            child: Container(
+              width: Flavors.sizesInfo.screenWidth,
+              height: Flavors.sizesInfo.screenHeight,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            Positioned(
-              top: 50.0,
-              right: 20.0,
-              //控件透明度 0.0完全透明，1.0完全不透明
-              child: Opacity(
-                opacity: 0.5,
-                child: Selector<SplashManager, int?>(
-                  builder: (BuildContext context, int? value, Widget? child) {
-                    return ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.black)),
-                        child: Text("跳过  $value",
-                            style: Flavors.textStyles.splashFont),
-                        onPressed: () => manager.skip());
-                  },
-                  selector:
-                      (BuildContext context, SplashManager splashManager) {
-                    return splashManager.countDown;
-                  },
-                  shouldRebuild: (pre, next) => (pre != next),
+          ),
+          Selector<SplashManager, int?>(
+            builder: (BuildContext context, int? value, Widget? child) {
+              return Positioned(
+                top: 50.0,
+                right: 20.0,
+                //控件透明度 0.0完全透明，1.0完全不透明
+                child: Opacity(
+                  opacity: 0.5,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.black)),
+                      child: Text("$value  | 跳过",
+                          style: Flavors.textStyles.splashFont),
+                      onPressed: () => _splashManager.skip()),
                 ),
-              ),
-            ),
-          ],
-        );
+              );
+            },
+            selector: (BuildContext context, SplashManager splashManager) {
+              return splashManager.countDown;
+            },
+            shouldRebuild: (pre, next) => (pre != next),
+          ),
+        ]);
       },
       filterQuality: FilterQuality.medium,
       fadeOutDuration: const Duration(milliseconds: 300),

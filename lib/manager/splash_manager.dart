@@ -31,7 +31,7 @@ class SplashManager extends ChangeNotifier {
   /// 初始化
   init() {
     Log.log("SplashManager 初始化", color: LColor.YELLOW);
-    SP.init().then((sp) {
+    SP.init().then((sp) async {
       bool spValue = SP.getBool(SPKey.showAgreement) ?? true;
       Log.log("showAgreement = $spValue", color: LColor.YELLOW);
       showAgreement = spValue;
@@ -40,7 +40,7 @@ class SplashManager extends ChangeNotifier {
         Routers.navigateTo("/agreementPage");
       } else {
         //显示广告
-        _timeOutCountDownTime();
+        timeOutCountDownTime();
         _getStoredForSplashAd();
         //更新数据
         _queryConfigData();
@@ -94,7 +94,7 @@ class SplashManager extends ChangeNotifier {
     });
   }
 
-  _getStoredForSplashAd() {
+  _getStoredForSplashAd() async {
     String? stored = SP.getString(SPKey.splashAD);
     if (stored != null) {
       Log.log("stored stored =  $stored", color: LColor.YELLOW);
@@ -118,29 +118,27 @@ class SplashManager extends ChangeNotifier {
       Log.log("countDownTimer_timer $countDown", color: LColor.YELLOW);
       countDown = countDown! - 1;
       if (countDown! < 1) {
-        countDownTimer?.cancel();
+        stopAllTimer();
         timer.cancel();
         Routers.navigateReplace('/');
-        advertising = null;
       }
       notifyListeners();
     });
   }
 
   /// 开屏总超时
-  _timeOutCountDownTime() {
+  timeOutCountDownTime() {
     //显示 广告 和 倒计时
-    int timeOutCountDown = TimeConfig.SPLASH_TIMEOUT + 2;
+    int timeOutCountDown = TimeConfig.SPLASH_TIMEOUT + 3;
     if (timeOutTimer == null) {
       timeOutTimer = Timer.periodic(Duration(seconds: 1), (timer) {
         timeOutCountDown--;
         Log.log("timeOutCountDownTime _timer $timeOutCountDown",
             color: LColor.YELLOW);
         if (timeOutCountDown == 0) {
-          timeOutTimer?.cancel();
+          stopAllTimer();
           timer.cancel();
           Routers.navigateReplace('/');
-          advertising = null;
         }
       });
     }
@@ -170,23 +168,25 @@ class SplashManager extends ChangeNotifier {
             }));
   }
 
+  /// 停止所有计时器
+  void stopAllTimer() {
+    countDownTimer?.cancel();
+    timeOutTimer?.cancel();
+  }
+
   /// UI动作 点击广告
   void clickAD() {
     if (advertising != null) {
-      countDownTimer?.cancel();
-      timeOutTimer?.cancel();
+      stopAllTimer();
       Routers.navWebViewReplace(advertising!.redirectUrl);
-      advertising = null;
     }
   }
 
   /// UI动作 跳过倒计时
   void skip() {
     Log.log("countDownTimer?.cancel() countDownTimer?.cancel()");
-    countDownTimer?.cancel();
-    timeOutTimer?.cancel();
+    stopAllTimer();
     Routers.navigateReplace('/');
-    advertising = null;
   }
 
   /// 点击同意协议按钮
@@ -210,9 +210,7 @@ class SplashManager extends ChangeNotifier {
 
   @override
   void dispose() {
-    countDownTimer?.cancel();
-    timeOutTimer?.cancel();
-    advertising = null;
+    stopAllTimer();
     super.dispose();
   }
 }
