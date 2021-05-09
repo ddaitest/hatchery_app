@@ -15,6 +15,7 @@ import 'package:hatchery/manager/feedback_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:hatchery/routers.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class FeedbackNewPage extends StatelessWidget {
   final titleController = TextEditingController();
@@ -235,11 +236,10 @@ class FeedbackNewPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(
                   left: 10.0, right: 10.0, top: 32.0, bottom: 32.0),
-              child: LinearProgressIndicator(
+              child: LinearPercentIndicator(
                 backgroundColor: Colors.grey[300],
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-                // value: value,
-                semanticsLabel: 'Linear progress indicator',
+                progressColor: Colors.grey[500],
+                percent: value,
               ),
             ),
           );
