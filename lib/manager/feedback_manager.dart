@@ -107,7 +107,7 @@ class BaseManager extends ChangeNotifier {
   }
 
   create() {
-    Routers.navigateTo(createPath);
+    Routers.navigateReplace(createPath);
   }
 
   Future<bool> submit(String title, String content, String phone) async {

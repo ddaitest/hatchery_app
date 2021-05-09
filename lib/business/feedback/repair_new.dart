@@ -24,25 +24,32 @@ class RepairNewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBarFactory.getCommon("新的报事报修"),
-        body: Container(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                _titleMainView(),
-                _descMainView(),
-                _phoneMainView(),
-                _imageMainView(context),
-                SizedBox(height: 40.0.h),
-                _submitButtonView(context)
-              ],
-            ),
-          ),
-        ));
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBarFactory.getRoute("新的报事报修", "/repairs_list"),
+            body: Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    _titleMainView(),
+                    _descMainView(),
+                    _phoneMainView(),
+                    _imageMainView(context),
+                    SizedBox(height: 40.0.h),
+                    _submitButtonView(context)
+                  ],
+                ),
+              ),
+            )));
+  }
+
+  Future<bool> _onWillPop() async {
+    Routers.navigateReplace('/repairs_list');
+    return true;
   }
 
   Widget _titleMainView() {

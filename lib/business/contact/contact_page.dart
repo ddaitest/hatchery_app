@@ -43,7 +43,7 @@ class _ContactPageState extends State<ContactPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         brightness: Brightness.light,
-        elevation: 0,
+        elevation: 0.5,
       ),
       body: SmartRefresher(
         controller: _refreshController,
@@ -76,7 +76,7 @@ class _ContactPageState extends State<ContactPage> {
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: value.isEmpty ? 3 : value.length,
+          itemCount: value.isEmpty ? 6 : value.length,
           itemBuilder: (BuildContext context, int index) {
             if (value.isEmpty) {
               return ArticleItemLoading();
@@ -124,7 +124,7 @@ class _ContactPageState extends State<ContactPage> {
         ],
         cancelButton: CupertinoActionSheetAction(
             child: const Text('取消'),
-            isDefaultAction: true,
+            isDefaultAction: false,
             onPressed: () => Navigator.pop(context)),
       ),
     );

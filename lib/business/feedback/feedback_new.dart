@@ -25,25 +25,32 @@ class FeedbackNewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBarFactory.getCommon("新问题反馈"),
-        body: Container(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                _titleMainView(),
-                _descMainView(),
-                _phoneMainView(),
-                _imageMainView(context),
-                SizedBox(height: 40.0.h),
-                _submitButtonView(context)
-              ],
-            ),
-          ),
-        ));
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBarFactory.getRoute("新问题反馈", "/feedback_list"),
+            body: Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    _titleMainView(),
+                    _descMainView(),
+                    _phoneMainView(),
+                    _imageMainView(context),
+                    SizedBox(height: 40.0.h),
+                    _submitButtonView(context)
+                  ],
+                ),
+              ),
+            )));
+  }
+
+  Future<bool> _onWillPop() async {
+    Routers.navigateReplace('/feedback_list');
+    return true;
   }
 
   Widget _titleMainView() {
