@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -171,7 +172,7 @@ class FeedBackDetail extends StatelessWidget {
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => PhotoViewPage(imageProvider))),
+                        builder: (_) => PhotoViewPage(image: imageProvider))),
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -196,8 +197,9 @@ class FeedBackDetail extends StatelessWidget {
 
 class PhotoViewPage extends StatelessWidget {
   final ImageProvider? image;
+  final File? imageFile;
 
-  PhotoViewPage(this.image);
+  PhotoViewPage({this.image, this.imageFile});
 
   @override
   Widget build(BuildContext context) {
@@ -218,16 +220,20 @@ class PhotoViewPage extends StatelessWidget {
         brightness: Brightness.light,
         elevation: 0,
       ),
-      body: _photoView(image!),
+      body: _photoView(image, file: imageFile),
     );
   }
 
-  Widget _photoView(ImageProvider imageInfo) {
+  Widget _photoView(ImageProvider? imageInfo, {File? file}) {
     return Container(
         width: Flavors.sizesInfo.screenWidth,
         height: Flavors.sizesInfo.screenHeight,
-        child: PhotoView(
-          imageProvider: imageInfo,
-        ));
+        child: imageInfo == null
+            ? PhotoView(
+                imageProvider: FileImage(file!),
+              )
+            : PhotoView(
+                imageProvider: imageInfo,
+              ));
   }
 }

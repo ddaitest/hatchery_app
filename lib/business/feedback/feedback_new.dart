@@ -22,7 +22,7 @@ class FeedbackNewPage extends StatelessWidget {
   final contentController = TextEditingController();
   final phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late final File image;
+  File _imageFile = File('');
 
   @override
   Widget build(BuildContext context) {
@@ -236,10 +236,11 @@ class FeedbackNewPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(
                   left: 10.0, right: 10.0, top: 32.0, bottom: 32.0),
-              child: LinearPercentIndicator(
+              child: LinearProgressIndicator(
                 backgroundColor: Colors.grey[300],
-                progressColor: Colors.grey[500],
-                percent: value,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                // value: value,
+                semanticsLabel: 'Linear progress indicator',
               ),
             ),
           );
@@ -254,7 +255,7 @@ class FeedbackNewPage extends StatelessWidget {
   Widget _imageShowView(BuildContext context) {
     return Selector<FeedbackManager, String>(
       builder: (context, String value, child) {
-        if (value.isEmpty) {
+        if (value.isEmpty || _imageFile.path == '') {
           return _imageAddView(context);
         } else {
           return Row(
@@ -262,39 +263,14 @@ class FeedbackNewPage extends StatelessWidget {
               Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: value,
-                    width: 64.0.w,
-                    height: 64.0.h,
-                    imageBuilder: (context, imageProvider) {
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => PhotoViewPage(imageProvider))),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 32.0, bottom: 32.0),
-                      child: LinearProgressIndicator(
-                        backgroundColor: Colors.grey[300],
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-                        // value: value,
-                        semanticsLabel: 'Linear progress indicator',
-                      ),
-                    ),
-                    errorWidget: (context, url, error) =>
-                        Icon(Icons.image_not_supported_outlined),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                PhotoViewPage(imageFile: _imageFile))),
+                    child: Image.file(_imageFile,
+                        height: 64.0.h, width: 64.0.w, fit: BoxFit.cover),
                   ),
                   Positioned(
                     top: 0.0,
@@ -406,14 +382,14 @@ class FeedbackNewPage extends StatelessWidget {
     if (pickedFile == null) {
       return null;
     }
-    image = File(pickedFile.path);
-    print("DDAI _image.lengthSync=${image.lengthSync()}");
-    if (image.lengthSync() > 2080000) {
-      compressionImage(image.path).then((value) {
-        _uploadImage(image.path);
+    _imageFile = File(pickedFile.path);
+    print("DDAI _image.lengthSync=${_imageFile.lengthSync()}");
+    if (_imageFile.lengthSync() > 2080000) {
+      compressionImage(_imageFile.path).then((value) {
+        _uploadImage(_imageFile.path);
       });
     } else {
-      _uploadImage(image.path);
+      _uploadImage(_imageFile.path);
     }
   }
 }

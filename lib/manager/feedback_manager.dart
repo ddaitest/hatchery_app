@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:hatchery/api/API.dart';
@@ -40,6 +41,13 @@ class FeedbackManager extends BaseManager {
   static Parser<FeedbackInfo> pp = (m) => FeedbackInfo.fromJson(m);
 
   FeedbackManager() : super(get, post, pp, "/feedback_new");
+  File imageFile = File('');
+
+  getImageLocalPath(File file) {
+    imageFile = file;
+    print("DEBUG=> filePath filePath $imageFile");
+    notifyListeners();
+  }
 }
 
 /// 问题反馈 +报事报修 基础Manager
@@ -103,6 +111,8 @@ class BaseManager extends ChangeNotifier {
 
   @override
   void dispose() {
+    uploadUrl = "";
+    uploadProgress = 0.0;
     super.dispose();
   }
 
@@ -142,6 +152,7 @@ class BaseManager extends ChangeNotifier {
 
   removeImage() {
     uploadUrl = "";
+    uploadProgress = 0.0;
     notifyListeners();
   }
 }
