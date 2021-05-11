@@ -19,6 +19,8 @@ import 'package:hatchery/manager/home_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:hatchery/common/tools.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:hatchery/common/widget/upgrade_view.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -34,6 +36,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   @override
   void initState() {
+    _checkUpgrade();
     manager.checkPopAd().then((popAd) {
       Log.log("checkPopAd.then = ${popAd?.image}", color: LColor.YELLOW);
       if (popAd != null) {
@@ -42,6 +45,15 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     });
     splashManager.preloadSplashAdImage();
     super.initState();
+  }
+
+  void _checkUpgrade() {
+    FlutterBugly.getUpgradeInfo().then((value) {
+      if (value != null) {
+        print("DEBUG=> 获取更新中。。。 ${value.upgradeType}");
+        showDialogFunction(value);
+      }
+    });
   }
 
   @override

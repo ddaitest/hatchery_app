@@ -38,10 +38,7 @@ class AppManager extends ChangeNotifier {
       UserId.init();
     });
     initPlatformState();
-    FlutterBugly.init(
-        androidAppId: "41d23c0115",
-        iOSAppId: "7274afdfed",
-        autoCheckUpgrade: false);
+    buglyInit();
   }
 
   Future<void> initPlatformState() async {
@@ -74,6 +71,15 @@ class AppManager extends ChangeNotifier {
     jpush.getRegistrationID().then((rid) {
       print("flutter get registration id : $rid");
     });
+  }
+
+  void buglyInit() {
+    FlutterBugly.init(
+      androidAppId: "41d23c0115",
+      iOSAppId: "7274afdfed",
+      autoInit: true,
+      autoCheckUpgrade: true,
+    );
   }
 
   @override
