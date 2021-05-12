@@ -148,6 +148,14 @@ class TextStyles {
   /// 问题反馈提交按钮文字
   final TextStyle submitButtonText = TextStyle(
       fontSize: 15.0.sp, color: Color(0xFFFFFFFF), fontWeight: FontWeight.w500);
+
+  /// 升级提醒主标题
+  final TextStyle upgradeTitle = TextStyle(
+      fontSize: 18.0.sp, fontWeight: FontWeight.w400, color: Color(0xDE000000));
+
+  /// 升级提醒主标题
+  final TextStyle upgradeDesc =
+      TextStyle(fontSize: 14.0.sp, color: Color(0xFF666666), height: 1.5);
 }
 
 class SizesInfo {

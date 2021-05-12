@@ -19,7 +19,8 @@ class SPKey {
 class TimeConfig {
   static final int SPLASH_TIMEOUT = TEST ? 3 : 5;
   static final int POP_AD_WAIT_TIME = TEST ? 1 : 5;
-  static final int UPGRADE_LOADING_TIME = TEST ? 1 : 5;
+  static final int UPGRADE_SHOW_DELAYE = TEST ? 5 : 10;
+  static final int UPGRADE_WAIT_DAY = TEST ? 1 : 3;
   static final int DEFAULT_SHOW_POP_TIMES = TEST ? 5 : 1;
   static final int BACKGROUND_SPLASH_WAIT_TIME = TEST ? 3 : 60;
 }

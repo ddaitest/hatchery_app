@@ -17,6 +17,9 @@ import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/manager/service_manager.dart';
 import 'package:date_format/date_format.dart';
 import 'package:hatchery/common/backgroundListenModel.dart';
+import 'package:hatchery/common/tools.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:hatchery/common/widget/upgrade_view.dart';
 import 'package:hatchery/api/ApiResult.dart';
 
 class HomeManager extends ChangeNotifier {
@@ -187,6 +190,17 @@ class HomeManager extends ChangeNotifier {
   }
 
   void clickPopAd(Advertising value) => Routers.navWebView(value.redirectUrl);
+
+  /// 升级提醒检查
+  void checkUpgrade() {
+    FlutterBugly.getUpgradeInfo().then((value) {
+      if (value != null) {
+        print("DEBUG=> 获取更新中。。。 ${value.upgradeType}");
+        Future.delayed(Duration(seconds: TimeConfig.UPGRADE_SHOW_DELAYE),
+            () => showDialogFunction(value));
+      }
+    });
+  }
 
   @override
   void dispose() {
