@@ -21,7 +21,7 @@ void showDialogFunction(UpgradeInfo upgradeInfo) async {
             style: Flavors.textStyles.upgradeTitle,
           ),
           titlePadding: const EdgeInsets.only(
-              left: 34.0, right: 34.0, top: 24.0, bottom: 15.0),
+              left: 24.0, right: 24.0, top: 24.0, bottom: 20.0),
           //title 的内边距，默认 left: 24.0,top: 24.0, right 24.0
           content: Container(
             child: Column(
