@@ -3,6 +3,7 @@ import 'package:hatchery/common/widget/app_bar.dart';
 import 'package:hatchery/routers.dart';
 import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/common/tools.dart';
+import 'package:hatchery/common/utils.dart';
 
 class About extends StatelessWidget {
   static Map<String, dynamic> commonParamMap = DeviceInfo.info;
@@ -11,6 +12,7 @@ class About extends StatelessWidget {
   Widget build(BuildContext context) {
     String version = commonParamMap['version'] ?? '';
     String vc = commonParamMap['vc'] ?? '';
+    String wechatNumber = "86161190";
     String homePageUrl = "http://chenings.com";
     return Scaffold(
       appBar: AppBarFactory.getCommon("关于与帮助"),
@@ -21,15 +23,19 @@ class About extends StatelessWidget {
             child: ListView(
               children: [
                 _getItem("软件版本", "v $version.$vc"),
-                _getItem("联系微信", "86161190"),
+                _getItem("联系微信", wechatNumber, click: () {
+                  copyData('$wechatNumber');
+                  showToast('微信号复制成功');
+                }),
                 _getItem("官方网站", homePageUrl,
                     click: () => Routers.navWebView(homePageUrl)),
+                _getItem("检查更新", "点击升级到最新版本", click: () => showUpgrade()),
               ],
             ),
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -53,7 +59,7 @@ class About extends StatelessWidget {
         ? ListTile(
             title: Text(
               title,
-              style: Flavors.textStyles.sortTitle,
+              style: Flavors.textStyles.feedBackCreateTime,
             ),
             subtitle: Text(content),
           )
@@ -61,7 +67,7 @@ class About extends StatelessWidget {
             trailing: Icon(Icons.keyboard_arrow_right),
             title: Text(
               title,
-              style: Flavors.textStyles.sortTitle,
+              style: Flavors.textStyles.feedBackCreateTime,
             ),
             subtitle: Text(content),
             onTap: click,

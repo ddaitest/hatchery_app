@@ -10,6 +10,7 @@ class SPKey {
   static final String popAD = 'popAD';
   static final String popTimes = 'popTimes';
   static final String CONFIG_KEY = 'configKey';
+  static final String upgrade = 'upgrade';
 
   // static final String POP_AD_SHOW_TIMES_KEY = 'popShowTimesKey';
   static final String COMMON_PARAM_KEY = 'commonParamKey';
@@ -17,10 +18,10 @@ class SPKey {
 }
 
 class TimeConfig {
-  static final int SPLASH_TIMEOUT = TEST ? 3 : 5;
+  static final int SPLASH_TIMEOUT = TEST ? 10 : 5;
   static final int POP_AD_WAIT_TIME = TEST ? 1 : 5;
-  static final int UPGRADE_SHOW_DELAYE = TEST ? 5 : 10;
-  static final int UPGRADE_WAIT_DAY = TEST ? 1 : 3;
+  static final int UPGRADE_SHOW_DELAY = TEST ? 5 : 10;
+  static final int UPGRADE_WAIT_DAY = TEST ? 3 : 3;
   static final int DEFAULT_SHOW_POP_TIMES = TEST ? 5 : 1;
   static final int BACKGROUND_SPLASH_WAIT_TIME = TEST ? 3 : 60;
 }

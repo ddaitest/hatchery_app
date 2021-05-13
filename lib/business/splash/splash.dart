@@ -7,6 +7,7 @@ import 'package:hatchery/flavors/Flavors.dart';
 import 'package:hatchery/manager/splash_manager.dart';
 import 'package:hatchery/manager/app_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -78,8 +79,21 @@ class _SplashPageState extends State<SplashPage> {
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.black)),
-                      child: Text("$value  | 跳过",
-                          style: Flavors.textStyles.splashFont),
+                      child: Container(
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text("$value ",
+                                style: Flavors.textStyles.splashFont),
+                            Container(
+                              color: Colors.white,
+                              height: 15.0.h,
+                              width: 1.0.w,
+                            ),
+                            Text(" 跳过", style: Flavors.textStyles.splashFont),
+                          ],
+                        ),
+                      ),
                       onPressed: () => _splashManager.skip()),
                 ),
               );

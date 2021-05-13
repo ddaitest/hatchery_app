@@ -41,7 +41,7 @@ void showDialogFunction(UpgradeInfo upgradeInfo) async {
               ],
             ),
           ),
-          contentPadding: const EdgeInsets.only(left: 34.0, right: 34.0),
+          contentPadding: const EdgeInsets.only(left: 24.0, right: 24.0),
           actions: <Widget>[
             upgradeInfo.upgradeType == 1
                 ? TextButton(

@@ -33,7 +33,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   @override
   void initState() {
-    manager.checkUpgrade();
+    manager.upgradeView();
     manager.checkPopAd().then((popAd) {
       Log.log("checkPopAd.then = ${popAd?.image}", color: LColor.YELLOW);
       if (popAd != null) {

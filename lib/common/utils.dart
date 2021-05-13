@@ -7,6 +7,19 @@ import 'package:url_launcher/url_launcher.dart';
 import 'theme.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:hatchery/common/widget/upgrade_view.dart';
+import 'package:hatchery/config.dart';
+
+showUpgrade({int delayedSecond = 0}) {
+  FlutterBugly.getUpgradeInfo().then((value) {
+    if (value != null) {
+      Future.delayed(Duration(seconds: delayedSecond), () {
+        showDialogFunction(value);
+      });
+    }
+  });
+}
 
 void showToast(String title,
     {Toast toastTime = Toast.LENGTH_SHORT,

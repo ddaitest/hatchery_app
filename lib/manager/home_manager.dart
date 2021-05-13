@@ -17,9 +17,7 @@ import 'package:hatchery/common/tools.dart';
 import 'package:hatchery/manager/service_manager.dart';
 import 'package:date_format/date_format.dart';
 import 'package:hatchery/common/backgroundListenModel.dart';
-import 'package:hatchery/common/tools.dart';
-import 'package:flutter_bugly/flutter_bugly.dart';
-import 'package:hatchery/common/widget/upgrade_view.dart';
+import 'package:hatchery/common/utils.dart';
 import 'package:hatchery/api/ApiResult.dart';
 
 class HomeManager extends ChangeNotifier {
@@ -50,6 +48,8 @@ class HomeManager extends ChangeNotifier {
     serviceinfo3,
     ServiceInfo('images/image5.png', "全部服务", "all_service")
   ];
+
+  DateTime beforeTime = DateTime.now();
 
   /// 页面首次加载 or 刷新
   Future<PageRefreshStatus> refresh() async {
@@ -191,15 +191,46 @@ class HomeManager extends ChangeNotifier {
 
   void clickPopAd(Advertising value) => Routers.navWebView(value.redirectUrl);
 
-  /// 升级提醒检查
-  void checkUpgrade() {
-    FlutterBugly.getUpgradeInfo().then((value) {
-      if (value != null) {
-        print("DEBUG=> 获取更新中。。。 ${value.upgradeType}");
-        Future.delayed(Duration(seconds: TimeConfig.UPGRADE_SHOW_DELAYE),
-            () => showDialogFunction(value));
+  /// 计算升级提醒是否可以弹出，上次展示的时间减去当前时间，大于等于TimeConfig.UPGRADE_WAIT_DAY则弹
+  Future<bool> checkShowUpgradeView(DateTime? beforeDay) async {
+    if (beforeDay != null) {
+      DateTime frontTime = DateTime.now();
+      int? diffDay = frontTime.difference(beforeDay).inDays;
+      int? waitDay = TimeConfig.UPGRADE_WAIT_DAY;
+      Log.log("beforeDay $beforeDay", color: LColor.YELLOW);
+      Log.log("diffDay $diffDay", color: LColor.YELLOW);
+      if (diffDay >= waitDay) {
+        return true;
+      } else {
+        return false;
       }
-    });
+    } else {
+      return true;
+    }
+  }
+
+  /// 记录升级弹窗弹出的日期，结构为String "2020_11_11"
+  setUpgradeDay(DateTime now) {
+    SP.set(SPKey.upgrade, "$now");
+    Log.log("setUpgradeDay = $now", color: LColor.YELLOW);
+  }
+
+  /// 升级提醒检查
+  void upgradeView() {
+    String upgradeDay = SP.getString(SPKey.upgrade) ?? "";
+    if (upgradeDay != '') {
+      Log.log("upgradeDay = $upgradeDay", color: LColor.YELLOW);
+      DateTime newestShowDay = DateTime.parse(upgradeDay);
+      checkShowUpgradeView(newestShowDay).then((value) {
+        if (value) {
+          showUpgrade(delayedSecond: TimeConfig.UPGRADE_SHOW_DELAY);
+          setUpgradeDay(beforeTime);
+        }
+      });
+    } else {
+      showUpgrade(delayedSecond: TimeConfig.UPGRADE_SHOW_DELAY);
+      setUpgradeDay(beforeTime);
+    }
   }
 
   @override
