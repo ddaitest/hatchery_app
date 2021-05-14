@@ -18,7 +18,7 @@ class SPKey {
 }
 
 class TimeConfig {
-  static final int SPLASH_TIMEOUT = TEST ? 10 : 5;
+  static final int SPLASH_TIMEOUT = TEST ? 3 : 5;
   static final int POP_AD_WAIT_TIME = TEST ? 1 : 5;
   static final int UPGRADE_SHOW_DELAY = TEST ? 5 : 10;
   static final int UPGRADE_WAIT_DAY = TEST ? 3 : 3;

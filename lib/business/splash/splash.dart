@@ -83,14 +83,14 @@ class _SplashPageState extends State<SplashPage> {
                         child: Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text("$value ",
+                            Text("$value  ",
                                 style: Flavors.textStyles.splashFont),
                             Container(
                               color: Colors.white,
                               height: 15.0.h,
                               width: 1.0.w,
                             ),
-                            Text(" 跳过", style: Flavors.textStyles.splashFont),
+                            Text("  跳过", style: Flavors.textStyles.splashFont),
                           ],
                         ),
                       ),
