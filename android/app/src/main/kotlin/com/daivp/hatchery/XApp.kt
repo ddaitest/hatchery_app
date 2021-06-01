@@ -8,5 +8,6 @@ class XApp : Application() {
         super.onCreate()
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        android.util.Log.d("DDAI","XApp.onCreate");
     }
 }

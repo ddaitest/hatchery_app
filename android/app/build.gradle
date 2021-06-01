@@ -47,7 +47,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.daivp.pushcollector"
+        applicationId "com.linding.xymx"
         minSdkVersion 17
         targetSdkVersion 28
         multiDexEnabled true
@@ -61,12 +61,12 @@ android {
         //HUAWEI：在 Huawei 上创建和 JPush 上同包名的待发布应用,创建完成后下载该应用的 agconnect-services.json 配置文件并添加到应用的 module 目录下。
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY  : "a1f964ef7fa9723b1a328fec", // NOTE: JPush 上注册的包名对应的 Appkey.
+                JPUSH_APPKEY  : "1cb625b386d929f321c42709", // NOTE: JPush 上注册的包名对应的 Appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
                 MEIZU_APPKEY  : "MZ-魅族的APPKEY",
                 MEIZU_APPID   : "MZ-魅族的APPID",
-                XIAOMI_APPID  : "MI-小米的APPID",
-                XIAOMI_APPKEY : "MI-小米的APPKEY",
+                XIAOMI_APPID  : "2882303761519891857",
+                XIAOMI_APPKEY : "5461989111857",
                 OPPO_APPKEY   : "OP-oppo的APPKEY",
                 OPPO_APPID    : "OP-oppo的APPID",
                 OPPO_APPSECRET: "OP-oppo的APPSECRET",
