@@ -21,7 +21,7 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   @override
   void initState() {

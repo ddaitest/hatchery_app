@@ -23,6 +23,9 @@ class ListPageManager extends ChangeNotifier {
   ListPageManager();
 
   void init(String id) {
+    if(serviceId!=id){
+      data = [];
+    }
     serviceId = id;
     refresh();
   }
