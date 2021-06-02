@@ -32,7 +32,7 @@ class StringsInfo {
 }
 
 class ApiInfo {
-  final String API_HOST = 'http://106.12.147.150:8080/';
+  final String API_HOST = 'http://api.xymxsh.com/';
   final int RESPONSE_STATUS_CODE = 100000;
   final int API_CONNECT_TIMEOUT = 60000;
   final int API_RECEIVE_TIMEOUT = 60000;
