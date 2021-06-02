@@ -77,7 +77,7 @@ class MainTabState extends State<MainTab2> with SingleTickerProviderStateMixin {
             onSelected: handleClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {'物业介绍', '关于与帮助'}.map((String choice) {
+              return {'关于与帮助'}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),

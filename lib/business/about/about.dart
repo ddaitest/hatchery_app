@@ -27,9 +27,9 @@ class About extends StatelessWidget {
                   copyData('$wechatNumber');
                   showToast('微信号复制成功');
                 }),
-                _getItem("官方网站", homePageUrl,
-                    click: () => Routers.navWebView(homePageUrl)),
-                _getItem("检查更新", "点击升级到最新版本", click: () => showUpgrade()),
+                // _getItem("官方网站", homePageUrl,
+                //     click: () => Routers.navWebView(homePageUrl)),
+                // _getItem("检查更新", "点击升级到最新版本", click: () => showUpgrade()),
               ],
             ),
           ),

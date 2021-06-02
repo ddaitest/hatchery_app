@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'api/entity.dart';
 
-const bool TEST = true;
+const bool TEST = false;
 
 class SPKey {
   static final String showAgreement = 'ShowAgreement';
@@ -22,8 +22,8 @@ class TimeConfig {
   static final int POP_AD_WAIT_TIME = TEST ? 1 : 5;
   static final int UPGRADE_SHOW_DELAY = TEST ? 5 : 10;
   static final int UPGRADE_WAIT_DAY = TEST ? 3 : 3;
-  static final int DEFAULT_SHOW_POP_TIMES = TEST ? 5 : 1;
-  static final int BACKGROUND_SPLASH_WAIT_TIME = TEST ? 3 : 60;
+  static final int DEFAULT_SHOW_POP_TIMES = TEST ? 5 : 0;
+  static final int BACKGROUND_SPLASH_WAIT_TIME = TEST ? 3 : 120;
 }
 
 const mainTabs = [
