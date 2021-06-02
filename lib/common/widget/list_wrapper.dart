@@ -43,7 +43,7 @@ Widget getSimpleHeader() {
 
 Widget getSimpleFooter() {
   return CustomFooter(
-    builder: (BuildContext context, LoadStatus mode) {
+    builder: (BuildContext context, LoadStatus? mode) {
       Widget body;
       if (mode == LoadStatus.idle) {
         body = Text("上拉加载更多");
